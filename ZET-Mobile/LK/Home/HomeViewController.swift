@@ -253,7 +253,7 @@ extension HomeViewController: CellBalanceActionDelegate {
     func didSettingTapped(for cell: BalanceSliderCollectionViewCell) {
         print("bbjbjj")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(SearchNumberViewController(), animated: true)
+        navigationController?.pushViewController(CallCenterViewController(), animated: true)
         
         //AlertViewController().modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
              //   AlertViewController().modalTransitionStyle = UIModalTransitionStyle.crossDissolve

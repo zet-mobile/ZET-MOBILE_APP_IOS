@@ -18,7 +18,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     var support_view = SupportView()
     let table = UITableView()
     
-//    var mapView = YMKMapView()
+    var mapView = YMKMapView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,11 +75,13 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.isUserInteractionEnabled = true
         support_view.icon2.addGestureRecognizer(tapGestureRecognizer4)
         
-        //mapView = YMKMapView(frame: CGRect(x: 0, y: 200, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        mapView = YMKMapView(frame: CGRect(x: 0, y: 200, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(support_view)
-        //scrollView.addSubview(mapView)
+        scrollView.addSubview(mapView)
+        setMapView()
+        //scrollView.sendSubviewToBack(mapView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Поддержка"
@@ -97,6 +99,15 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
     }
+    
+    func setMapView() {
+        mapView.mapWindow.map.move(
+              with: YMKCameraPosition.init(target: YMKPoint(latitude: 38.85818, longitude: 71.24798), zoom: 10, azimuth: 0, tilt: 0),
+              animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
+              cameraCallback: nil)
+          let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: 38.85818, longitude: 71.24798))
+          myPlace.setIconWith(UIImage(named: "myLL.png")!)
+    }
 
     @objc func mapClick() {
         support_view.icon1.image = UIImage(named: "Pin_alt_light")
@@ -104,6 +115,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.image = UIImage(named: "list_map")
         support_view.title2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         table.isHidden = true
+        mapView.isHidden = false
     }
     
     @objc func listClick() {
@@ -112,7 +124,43 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.image = UIImage(named: "list_map_orange")
         support_view.title2.textColor = .black
         table.isHidden = false
+        mapView.isHidden = true
     }
+    
+    func onObjectAdded(with view: YMKUserLocationView) {
+        view.arrow.setIconWith(UIImage(named:"UserArrow")!)
+        
+        let pinPlacemark = view.pin.useCompositeIcon()
+        
+        pinPlacemark.setIconWithName("icon",
+                                     image: UIImage(named:"Icon")!,
+                                     style:YMKIconStyle(
+                                        anchor: CGPoint(x: 0, y: 0) as NSValue,
+                                        rotationType:YMKRotationType.rotate.rawValue as NSNumber,
+                                        zIndex: 0,
+                                        flat: true,
+                                        visible: true,
+                                        scale: 1.5,
+                                        tappableArea: nil))
+        
+        pinPlacemark.setIconWithName(
+            "pin",
+            image: UIImage(named:"SearchResult")!,
+            style:YMKIconStyle(
+                anchor: CGPoint(x: 0.5, y: 0.5) as NSValue,
+                rotationType:YMKRotationType.rotate.rawValue as NSNumber,
+                zIndex: 1,
+                flat: true,
+                visible: true,
+                scale: 1,
+                tappableArea: nil))
+        
+        view.accuracyCircle.fillColor = UIColor.blue
+    }
+    
+    func onObjectRemoved(with view: YMKUserLocationView) {}
+    
+    func onObjectUpdated(with view: YMKUserLocationView, event: YMKObjectEvent) {}
 }
 
 extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
@@ -136,5 +184,51 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
        
     }
     
+}
+
+extension CallCenterViewController: YMKMapObjectTapListener {
+    func onMapObjectTap(with mapObject: YMKMapObject, point: YMKPoint) -> Bool {
     
+        
+       /* mapView.mapWindow.map.move(
+            with: YMKCameraPosition.init(target: YMKPoint(latitude: point.latitude, longitude: point.longitude), zoom: 15, azimuth: 0, tilt: 0),
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
+            cameraCallback: nil)*/
+ 
+        var message = mapObject.userData as? String
+        
+        message = message!.replacingOccurrences(of: ";", with: "\n")
+       // message = (message! as? String)!.replacingOccurrences(of: ";", with: "\n")
+       
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        alert.view.backgroundColor = UIColor.darkGray
+        alert.view.alpha = 0.8
+        alert.view.layer.cornerRadius = 15
+        
+        let close = UIAlertAction(title: "Закрыть", style:.default){ (action) in
+            alert.dismiss(animated: false, completion: nil)
+           /* self.mapView.mapWindow.map.move(
+                with: YMKCameraPosition.init(target: YMKPoint(latitude: point.latitude, longitude: point.longitude), zoom: 15, azimuth: 0, tilt: 0),
+                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
+                cameraCallback: nil)*/
+                
+        }
+        alert.addAction(close)
+        self.present(alert, animated: true)
+        
+       /* DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            alert.dismiss(animated: true)
+        }*/
+        
+        return true
+    }
+    
+    
+}
+
+extension Float {
+    func sign() -> Int {
+        return (self < Self(0) ? -1 : 1)
+    }
 }
