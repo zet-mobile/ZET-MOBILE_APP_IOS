@@ -1,0 +1,30 @@
+/* 
+  Localizable.strings
+  ZET-Mobile
+
+  Created by ScrumTJ on 11/16/21.
+  
+*/
+
+// tab bar icon
+"home" = "Асосӣ";
+"wallet" = "Хамен";
+"usage" = "Харочотт";
+"support" = "Дастгирӣ";
+"profiles" = "Профилхо";
+
+//HomePageData
+"topUpBalance" = "+ Пур кардан";
+"view_all" = "Дигархо  >";
+"all_services" = "Хама хизматрасонихо >";
+"services_title" = "Хизматрасонихо";
+
+//Services
+"connect" = "Пайваст кардан";
+"disable" = "Хомуш кардан";
+
+//Tarif
+"reconnect" = "Аз нав пайваст кардани тарофа";
+
+//Usages
+"callHistory" = "Зангхо";

@@ -1,0 +1,32 @@
+/* 
+  Localizable.strings
+  ZET-Mobile
+
+  Created by ScrumTJ on 11/16/21.
+  
+*/
+
+// tab bar icon
+"home" = "Home";
+"wallet" = "Wallet";
+"usage" = "Usages";
+"support" = "Support";
+"profiles" = "Profiles";
+
+//homePageData
+"welcome" = "Welcome";
+"topUpBalance" = "+ Top Up";
+"view_all" = "View all  >";
+"all_services" = "All services  >";
+"services_title" = "Services";
+
+
+//Services
+"connect" = "Connect";
+"disable" = "Disable";
+
+//Tarif
+"reconnect" = "Reconnect tariff";
+
+//Usages
+"callHistory" = "Call history";
