@@ -61,7 +61,7 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
     }()
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
+//        super.init(frame: frame)
         setupView()
     }
     
