@@ -7,7 +7,7 @@
 
 import UIKit
 import FSCalendar
-//teeeest
+//hjdhfjdhfjdfhjdhfjd
 class CalendarViewController: UIViewController {
 
     let calendar_view = CalendarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
@@ -61,7 +61,7 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
     }()
     
     override init(frame: CGRect) {
-//        super.init(frame: frame)
+     super.init(frame: frame)
         setupView()
     }
     
