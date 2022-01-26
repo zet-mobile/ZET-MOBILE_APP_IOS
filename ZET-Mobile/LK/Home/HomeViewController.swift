@@ -14,12 +14,15 @@ let cellID4 = "uslugiCell"
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
 
+    
     private let scrollView = UIScrollView()
     var MyTarifPage = MyTarifViewController()
     
     var toolbar = Toolbar()
     var home_view = HomeView()
     let remainderView = RemainderStackView()
+    
+    var hot_services = ["Трафик трансфер", "Обмен трафика", "Money Transfer", "Помощь при нуле", "Поиск номера"]
     
     let BalanceSliderView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -196,6 +199,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == BalanceSliderView {
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -216,7 +220,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return 2
         }
         else {
-            return 5
+            return hot_services.count
         }
 
     }
@@ -237,7 +241,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID3, for: indexPath) as! HotServicesCollectionViewCell
             print(indexPath.row)
-           
+            cell.titleOne.text = hot_services[indexPath.row]
+            
             return cell
         }
         
@@ -245,7 +250,29 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
+        if indexPath.row == 0 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(TraficTransferViewController(), animated: true)
+        }
+        else if indexPath.row == 1 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(ChangeTransferViewController(), animated: true)
+        }
+        else if indexPath.row == 2 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(MobileTransferViewController(), animated: true)
+        }
+        else if indexPath.row == 3 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(ZeroHelpViewController(), animated: true)
+        }
+        else { 
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(SearchNumberViewController(), animated: true)
+        }
+        
     }
+    
  
 }
 
@@ -253,12 +280,11 @@ extension HomeViewController: CellBalanceActionDelegate {
     func didSettingTapped(for cell: BalanceSliderCollectionViewCell) {
         print("bbjbjj")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(CallCenterViewController(), animated: true)
+        navigationController?.pushViewController(MyTarifViewController(), animated: true)
         
         //AlertViewController().modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
              //   AlertViewController().modalTransitionStyle = UIModalTransitionStyle.crossDissolve
              //   present(AlertViewController(), animated: true, completion: nil)
     }
-    
-    
 }
+

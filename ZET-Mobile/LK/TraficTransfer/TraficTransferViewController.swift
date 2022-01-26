@@ -77,7 +77,7 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(traficView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Перевод трафика"
+        toolbar.number_user_name.text = "Трафик трансфер"
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
     }

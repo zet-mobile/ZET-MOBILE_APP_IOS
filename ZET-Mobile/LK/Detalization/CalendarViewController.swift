@@ -8,7 +8,6 @@
 import UIKit
 import FSCalendar
 
-
 class CalendarViewController: UIViewController {
 
     let calendar_view = CalendarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
@@ -52,18 +51,6 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
         return title
     }()
     
-    lazy var about: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 20, y: 70 + (UIScreen.main.bounds.size.width), width: UIScreen.main.bounds.size.width - 40, height: 60)
-        title.text = """
- С 12 октября по 31 января действуют 50% СКИДКИ на пакеты Хаматарафа+120, Хаматарафа+95, Хаматарафа+75.
- """
-        title.numberOfLines = 4
-        title.textColor = .darkGray
-        title.font = UIFont.systemFont(ofSize: 16)
-        title.textAlignment = .left
-        return title
-    }()
     
     lazy var connect: UIButton = {
         let button = UIButton()
@@ -97,7 +84,6 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
         
         self.addSubview(title_calendar)
         self.addSubview(close)
-        self.addSubview(about)
         self.addSubview(connect)
 
     }

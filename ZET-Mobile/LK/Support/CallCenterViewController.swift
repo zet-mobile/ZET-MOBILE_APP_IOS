@@ -75,12 +75,12 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.isUserInteractionEnabled = true
         support_view.icon2.addGestureRecognizer(tapGestureRecognizer4)
         
-        mapView = YMKMapView(frame: CGRect(x: 0, y: 200, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        mapView = YMKMapView(frame: CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(support_view)
         scrollView.addSubview(mapView)
-        setMapView()
+        //setMapView()
         //scrollView.sendSubviewToBack(mapView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
@@ -94,6 +94,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.isHidden = true
+        support_view.white_back.isHidden = true
         scrollView.addSubview(table)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
@@ -106,7 +107,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
               animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
               cameraCallback: nil)
           let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: 38.85818, longitude: 71.24798))
-          myPlace.setIconWith(UIImage(named: "myLL.png")!)
+          //myPlace.setIconWith(UIImage(named: "")!)
     }
 
     @objc func mapClick() {
@@ -116,6 +117,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.title2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         table.isHidden = true
         mapView.isHidden = false
+        support_view.white_back.isHidden = true
     }
     
     @objc func listClick() {
@@ -125,6 +127,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.title2.textColor = .black
         table.isHidden = false
         mapView.isHidden = true
+        support_view.white_back.isHidden = false
     }
     
     func onObjectAdded(with view: YMKUserLocationView) {
