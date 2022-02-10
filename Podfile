@@ -10,6 +10,7 @@ pod "Pulsator"
 pod 'MultiSlider'
 pod 'FSCalendar'
 pod ‘YandexMapKit’, ’3.4’
+pod "Koyomi"
 
   target 'ZET-MobileTests' do
     inherit! :search_paths

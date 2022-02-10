@@ -6,18 +6,27 @@
 //
 
 import UIKit
-import FSCalendar
-//hjdhfjdhfjdfhjdhfjd
-class CalendarViewController: UIViewController {
+import Koyomi
 
-    let calendar_view = CalendarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
+class CalendarViewController: UIViewController, UICollectionViewDelegate {
+
+    var calendar_view = CalendarView()
+    var koyomi = Koyomi()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        modalPresentationCapturesStatusBarAppearance = true
-       
+        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        
+        calendar_view = CalendarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 896))
+        
+        let frame = CGRect(x: 10, y : 60, width: 250, height: 300)
+        koyomi = Koyomi(frame: frame, sectionSpace: 1.5, cellSpace: 0.5, inset: .zero, weekCellHeight: 25)
+        koyomi.delegate = self
+        calendar_view.addSubview(koyomi)
         calendar_view.layer.cornerRadius = 10
+        
         view.addSubview(calendar_view)
     }
 
@@ -26,9 +35,23 @@ class CalendarViewController: UIViewController {
     }
 }
 
-class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
-    
-    fileprivate weak var calendar: FSCalendar!
+extension CalendarViewController: KoyomiDelegate {
+    func koyomi(_ koyomi: Koyomi, didSelect date: Date?, forItemAt indexPath: IndexPath) {
+        print("You Selected: \(date)")
+    }
+
+    func koyomi(_ koyomi: Koyomi, currentDateString dateString: String) {
+        //currentDateLabel.text = dateString
+    }
+
+    @objc(koyomi:shouldSelectDates:to:withPeriodLength:)
+    func koyomi(_ koyomi: Koyomi, shouldSelectDates date: Date?, to toDate: Date?, withPeriodLength length: Int) -> Bool {
+        
+        return true
+    }
+}
+
+class CalendarView: UIView {
     
     lazy var close: UIButton = {
         let button = UIButton()
@@ -61,7 +84,7 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
     }()
     
     override init(frame: CGRect) {
-     super.init(frame: frame)
+        super.init(frame: frame)
         setupView()
     }
     
@@ -78,8 +101,8 @@ class CalendarView: UIView, FSCalendarDataSource, FSCalendarDelegate {
         calendar.dataSource = self
         calendar.delegate = self*/
         
-        let calendar = CalendarView(frame: CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 300))
-        self.addSubview(calendar)
+       // let calendar = CalendarView(frame: CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 300))
+        //self.addSubview(calendar)
         //self.calendar = calendar
         
         self.addSubview(title_calendar)

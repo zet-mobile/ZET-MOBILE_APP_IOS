@@ -186,7 +186,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table.rowHeight = 130
             table.estimatedRowHeight = 130
             table.alwaysBounceVertical = false
-            
+            table.showsVerticalScrollIndicator = false
             cell.addSubview(table)
         }
         else if indexPath.row == 1 {
@@ -197,7 +197,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table2.rowHeight = 130
             table2.estimatedRowHeight = 130
             table2.alwaysBounceVertical = false
-         
+            table2.showsVerticalScrollIndicator = false
             cell.addSubview(table2)
         }
         else if indexPath.row == 2 {
@@ -208,7 +208,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.rowHeight = 130
             table3.estimatedRowHeight = 130
             table3.alwaysBounceVertical = false
-     
+            table3.showsVerticalScrollIndicator = false
             cell.addSubview(table3)
         }
         else if indexPath.row == 3 {
@@ -219,7 +219,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table4.rowHeight = 130
             table4.estimatedRowHeight = 130
             table4.alwaysBounceVertical = false
-          
+            table4.showsVerticalScrollIndicator = false
             cell.addSubview(table4)
         }
         return cell

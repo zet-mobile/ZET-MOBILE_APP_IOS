@@ -99,7 +99,7 @@ class CircularProgressView: UIView {
         innerCircleLayer.fillColor = color1.cgColor
         innerCircleLayer.strokeColor = UIColor.clear.cgColor
         innerCircleLayer.lineCap = .round
-        innerCircleLayer.lineWidth = 5.0
+        innerCircleLayer.lineWidth = 6.5
         innerCircleLayer.shadowColor = UIColor.clear.cgColor
         innerCircleLayer.shadowRadius = 2
         innerCircleLayer.shadowOpacity = 0.3
@@ -109,14 +109,14 @@ class CircularProgressView: UIView {
         circleLayer.path = circularPath.cgPath
         circleLayer.fillColor = UIColor.clear.cgColor
         circleLayer.lineCap = .round
-        circleLayer.lineWidth = 5.0
+        circleLayer.lineWidth = 6.5
         circleLayer.strokeColor = color2.cgColor
 
         progressLayer.path = circularPath.cgPath
         progressLayer.fillColor = UIColor.clear.cgColor
-        progressLayer.strokeColor = UIColor.lightGray.cgColor
+        progressLayer.strokeColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00).cgColor
         progressLayer.lineCap = .round
-        progressLayer.lineWidth = 5.0
+        progressLayer.lineWidth = 6.5
         progressLayer.strokeEnd = 0
     
         

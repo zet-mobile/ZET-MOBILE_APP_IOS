@@ -99,7 +99,7 @@ class HomeView: UIView {
         let white_view_back = UIView(frame: CGRect(x: 0, y: 80, width: UIScreen.main.bounds.size.width, height: 440))
         white_view_back.backgroundColor = .white
         
-        let white_view_back2 = UIView(frame: CGRect(x: 0, y: 710, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        let white_view_back2 = UIView(frame: CGRect(x: 0, y: 710, width: UIScreen.main.bounds.size.width, height: 500))
         white_view_back2.backgroundColor = .white
         
         self.addSubview(white_view_back)

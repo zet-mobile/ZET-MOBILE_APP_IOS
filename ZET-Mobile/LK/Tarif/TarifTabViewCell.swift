@@ -50,10 +50,22 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.textAlignment = .left
     
     titleThree.frame = CGRect(x: 300, y: 10, width: 200, height: 50)
-    titleThree.text = "100 с/месяц"
-    titleThree.numberOfLines = 2
-    titleThree.textColor = .darkGray
-    titleThree.font = UIFont.systemFont(ofSize: 15)
+    let cost: NSString = "100" as NSString
+    let range = (cost).range(of: cost as String)
+    let costString = NSMutableAttributedString.init(string: cost as String)
+    costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+    costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+    
+    let title_cost = " с/месяц" as NSString
+    let titleString = NSMutableAttributedString.init(string: title_cost as String)
+    let range2 = (title_cost).range(of: title_cost as String)
+    titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+    titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+    
+    costString.append(titleString)
+    
+    titleThree.attributedText = costString
+    
     titleThree.textAlignment = .left
     
 }

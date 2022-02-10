@@ -9,6 +9,7 @@ import UIKit
 
 protocol CellBalanceActionDelegate{
     func didSettingTapped(for cell: BalanceSliderCollectionViewCell)
+    func didAddBalance(for cell: BalanceSliderCollectionViewCell)
 }
 
 class BalanceSliderCollectionViewCell: UICollectionViewCell {
@@ -65,8 +66,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         popolnit.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 180, y: 20, width: 120, height: 33)
         popolnit.layer.cornerRadius = popolnit.frame.height / 2
-     
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        popolnit.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
         return popolnit
     }()
     
@@ -86,7 +86,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     lazy var settings: UIButton = {
         let settings = UIButton()
         settings.setImage(#imageLiteral(resourceName: "Setting"), for: UIControl.State.normal)
-        settings.frame = CGRect(x: 200, y: 100, width: 20, height: 20)
+        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 100, width: 20, height: 20)
         settings.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
         settings.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return settings
@@ -100,7 +100,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleNumber.font = UIFont(name: "", size: 10)
         titleNumber.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleNumber.textAlignment = .left
-        titleNumber.frame = CGRect(x: 20, y: 130, width: 200, height: 20)
+        titleNumber.frame = CGRect(x: 20, y: 165, width: 200, height: 20)
         titleNumber.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleNumber
     }()
@@ -113,16 +113,19 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         spisanie.font = UIFont(name: "", size: 10)
         spisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
         spisanie.textAlignment = .left
-        spisanie.frame = CGRect(x: 20, y: 165, width: 300, height: 20)
+        spisanie.frame = CGRect(x: 20, y: 130, width: 300, height: 20)
         spisanie.autoresizesSubviews = true
         spisanie.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return spisanie
     }()
     
+    
     @objc func openTarifView(){
-        print("hjdsfkjshdfk")
         actionDelegate?.didSettingTapped(for: self)
-        
+    }
+    
+    @objc func addBalanceOption(){
+        actionDelegate?.didAddBalance(for: self)
     }
     
     override init(frame: CGRect) {

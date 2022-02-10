@@ -157,16 +157,21 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate, FSCal
 }
 
 extension DetalizationViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, CellDetalizationDelegate  {
+    
     func didCalendarTapped(for cell: TapDetalizationCollectionCell) {
         
-        let next = CalendarViewController()
+       /*  let next = CalendarViewController()
         next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 434, left: 0, bottom: 0, right: 0)))
         self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
         next.modalPresentationStyle = .custom
         next.modalPresentationCapturesStatusBarAppearance = true
         
         next.transitioningDelegate = self.halfModalTransitioningDelegate
-        present(next, animated: true, completion: nil)
+        present(next, animated: true, completion: nil)*/
+        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(CalendarViewController(), animated: true)
+        
     }
     
     

@@ -55,7 +55,7 @@ class TarifView: UIView {
         title.numberOfLines = 0
         title.textColor = .black
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 195, width: 200, height: 30)
@@ -67,9 +67,9 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "“Супер-15”"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 18)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
         
@@ -82,12 +82,12 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "Минут внутри сети"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 230, width: 150, height: 25)
+        title.frame = CGRect(x: 20, y: 240, width: 150, height: 25)
         title.backgroundColor = .clear
         
         return title
@@ -95,8 +95,8 @@ class TarifView: UIView {
     
     lazy var title2Line: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 170, y: 242, width: UIScreen.main.bounds.size.width - title2Res.frame.size.width - title2.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.frame = CGRect(x: 170, y: 252, width: UIScreen.main.bounds.size.width - title2Res.frame.size.width - title2.frame.size.width - 40, height: 1)
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -108,7 +108,7 @@ class TarifView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 230, width: title.text!.count * 10, height: 25)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 240, width: title.text!.count * 10, height: 25)
         title.backgroundColor = .clear
         return title
     }()
@@ -117,20 +117,20 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "Минут на другие сети"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 260, width: 180, height: 25)
+        title.frame = CGRect(x: 20, y: 270, width: 180, height: 25)
         
         return title
     }()
     
     lazy var title3Line: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 200, y: 272, width: UIScreen.main.bounds.size.width - title3Res.frame.size.width - title3.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.frame = CGRect(x: 200, y: 282, width: UIScreen.main.bounds.size.width - title3Res.frame.size.width - title3.frame.size.width - 40, height: 1)
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -142,7 +142,7 @@ class TarifView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 260, width: title.text!.count * 10, height: 25)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 270, width: title.text!.count * 10, height: 25)
         title.backgroundColor = .clear
         return title
     }()
@@ -151,20 +151,20 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "Интернет (мб)"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 290, width: 100, height: 25)
+        title.frame = CGRect(x: 20, y: 300, width: 100, height: 25)
         
         return title
     }()
     
     lazy var title4Line: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 120, y: 302, width: UIScreen.main.bounds.size.width - title4Res.frame.size.width - title4.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.frame = CGRect(x: 120, y: 312, width: UIScreen.main.bounds.size.width - title4Res.frame.size.width - title4.frame.size.width - 40, height: 1)
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -176,7 +176,7 @@ class TarifView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 290, width: title.text!.count * 10, height: 25)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 300, width: title.text!.count * 10, height: 25)
         title.backgroundColor = .clear
         return title
     }()
@@ -185,20 +185,20 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "SMS"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 320, width: 60, height: 25)
+        title.frame = CGRect(x: 20, y: 330, width: 60, height: 25)
         
         return title
     }()
     
     lazy var title5Line: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 80, y: 332, width: UIScreen.main.bounds.size.width - title5Res.frame.size.width - title5.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.frame = CGRect(x: 80, y: 342, width: UIScreen.main.bounds.size.width - title5Res.frame.size.width - title5.frame.size.width - 40, height: 1)
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -210,7 +210,7 @@ class TarifView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 320, width: title.text!.count * 10, height: 25)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 330, width: title.text!.count * 10, height: 25)
         title.backgroundColor = .clear
         return title
     }()
@@ -219,20 +219,20 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "Сумма за 30 дней (сомони)"
         title.numberOfLines = 0
-        title.textColor = .darkGray
+        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 350, width: 200, height: 25)
+        title.frame = CGRect(x: 20, y: 360, width: 200, height: 25)
         
         return title
     }()
     
     lazy var title6Line: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 220, y: 362, width: UIScreen.main.bounds.size.width - title6Res.frame.size.width - title6.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.frame = CGRect(x: 220, y: 372, width: UIScreen.main.bounds.size.width - title6Res.frame.size.width - title6.frame.size.width - 40, height: 1)
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -244,7 +244,7 @@ class TarifView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 350, width: title.text!.count * 10, height: 25)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 360, width: title.text!.count * 10, height: 25)
         title.backgroundColor = .clear
         return title
     }()
@@ -273,7 +273,7 @@ class TarifView: UIView {
         let title = UILabel()
         title.text = "Конструктор"
         title.numberOfLines = 0
-        title.textColor = .gray
+        title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping

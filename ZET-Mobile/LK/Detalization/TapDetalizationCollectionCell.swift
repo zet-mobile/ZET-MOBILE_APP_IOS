@@ -29,7 +29,7 @@ class TapDetalizationCollectionCell: UICollectionViewCell {
         return titleOne
     }()
     
-    lazy var user_to_number: UITextField = {
+    lazy var period: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 80, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
@@ -105,7 +105,7 @@ class TapDetalizationCollectionCell: UICollectionViewCell {
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         contentView.addSubview(titleOne)
-        contentView.addSubview(user_to_number)
+        contentView.addSubview(period)
         
         contentView.addSubview(title_commission)
         contentView.addSubview(title_info)

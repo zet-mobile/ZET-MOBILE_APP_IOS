@@ -27,7 +27,7 @@ class AddionalTraficsView: UIView {
     lazy var title2Line: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 170, y: 202, width: UIScreen.main.bounds.size.width - title2Res.frame.size.width - title2.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -61,7 +61,7 @@ class AddionalTraficsView: UIView {
     lazy var title3Line: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 200, y: 232, width: UIScreen.main.bounds.size.width - title3Res.frame.size.width - title3.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -95,7 +95,7 @@ class AddionalTraficsView: UIView {
     lazy var title4Line: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 120, y: 262, width: UIScreen.main.bounds.size.width - title4Res.frame.size.width - title4.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -129,7 +129,7 @@ class AddionalTraficsView: UIView {
     lazy var title5Line: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 80, y: 292, width: UIScreen.main.bounds.size.width - title5Res.frame.size.width - title5.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     
@@ -163,7 +163,7 @@ class AddionalTraficsView: UIView {
     lazy var title6Line: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 220, y: 322, width: UIScreen.main.bounds.size.width - title6Res.frame.size.width - title6.frame.size.width - 40, height: 1)
-        title.backgroundColor = .lightGray
+        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         return title
     }()
     

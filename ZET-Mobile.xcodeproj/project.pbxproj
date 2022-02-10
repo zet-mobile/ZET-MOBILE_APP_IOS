@@ -26,6 +26,9 @@
 		B80929D3278D4A9500CF5824 /* RoumingTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */; };
 		B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929EF279283C300CF5824 /* ChangeCodeController.swift */; };
 		B80929F8279283E200CF5824 /* ChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929F7279283E200CF5824 /* ChangeView.swift */; };
+		B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */; };
+		B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */; };
+		B82B7D5927B4449000570AC0 /* HalfModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D5827B4449000570AC0 /* HalfModal.swift */; };
 		B853D6B42741121F00FBE1F1 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D6B32741121F00FBE1F1 /* Styles.swift */; };
 		B853D6FF2743B29000FBE1F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B853D7012743B29000FBE1F1 /* Localizable.strings */; };
 		B853D70E2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D70D2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift */; };
@@ -146,6 +149,9 @@
 		B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTableCell.swift; sourceTree = "<group>"; };
 		B80929EF279283C300CF5824 /* ChangeCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCodeController.swift; sourceTree = "<group>"; };
 		B80929F7279283E200CF5824 /* ChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeView.swift; sourceTree = "<group>"; };
+		B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewController.swift; sourceTree = "<group>"; };
+		B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewCell.swift; sourceTree = "<group>"; };
+		B82B7D5827B4449000570AC0 /* HalfModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModal.swift; sourceTree = "<group>"; };
 		B853D6B32741121F00FBE1F1 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		B853D6EC2743B12200FBE1F1 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B853D6F32743B21600FBE1F1 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -346,6 +352,7 @@
 		B80929D72791435500CF5824 /* LK */ = {
 			isa = PBXGroup;
 			children = (
+				B82B7D3F27B4351900570AC0 /* AddBalance */,
 				B86428E02732996E000C159E /* Home */,
 				B86429102734EEA8000C159E /* Tarif */,
 				B86429422739056E000C159E /* Services */,
@@ -376,11 +383,28 @@
 			path = ChangeCode;
 			sourceTree = "<group>";
 		};
+		B82B7D3B27B4311A00570AC0 /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
+		B82B7D3F27B4351900570AC0 /* AddBalance */ = {
+			isa = PBXGroup;
+			children = (
+				B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */,
+				B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */,
+			);
+			path = AddBalance;
+			sourceTree = "<group>";
+		};
 		B853D6E72743AF7700FBE1F1 /* HelperFiles */ = {
 			isa = PBXGroup;
 			children = (
 				B853D6B32741121F00FBE1F1 /* Styles.swift */,
 				B864297A273B8583000C159E /* HalfModalPresentationController.swift */,
+				B82B7D5827B4449000570AC0 /* HalfModal.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -569,6 +593,7 @@
 		B87F472927311A1100BAEDFA /* ZET-Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				B82B7D3B27B4311A00570AC0 /* Authorization */,
 				B80929D72791435500CF5824 /* LK */,
 				B853D6EB2743AFC100FBE1F1 /* Languages */,
 				B853D6E72743AF7700FBE1F1 /* HelperFiles */,
@@ -894,6 +919,7 @@
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
 				B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */,
 				B864297B273B8584000C159E /* HalfModalPresentationController.swift in Sources */,
+				B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */,
 				B80929AD278B5FA000CF5824 /* SettingsView.swift in Sources */,
 				B8642980273B8626000C159E /* PushMoreViewController.swift in Sources */,
 				B853D7C327562E6500FBE1F1 /* TabPeriodCollectionViewCell.swift in Sources */,
@@ -906,6 +932,7 @@
 				B864293E27384773000C159E /* ChangeTarifViewController.swift in Sources */,
 				B853D7D22757949900FBE1F1 /* TapDetalizationCollectionCell.swift in Sources */,
 				B853D7B4275628D300FBE1F1 /* DetalizationView.swift in Sources */,
+				B82B7D5927B4449000570AC0 /* HalfModal.swift in Sources */,
 				B809297E2789600D00CF5824 /* AboutAppViewController.swift in Sources */,
 				B853D7582754CD2400FBE1F1 /* ChangeTransferView.swift in Sources */,
 				B80929F8279283E200CF5824 /* ChangeView.swift in Sources */,
@@ -925,6 +952,7 @@
 				B853D78A2755067B00FBE1F1 /* ZeroHelpViewController.swift in Sources */,
 				B853D7412754CCB500FBE1F1 /* ChangeHistoryViewCell.swift in Sources */,
 				B809298D278B59E100CF5824 /* SupportListCell.swift in Sources */,
+				B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */,
 				B853D7AC2756289100FBE1F1 /* DetalizationViewController.swift in Sources */,
 				B864291F27350703000C159E /* TarifView.swift in Sources */,
 				B864289E27313B4A000C159E /* CallCenterViewController.swift in Sources */,

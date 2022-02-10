@@ -14,6 +14,7 @@ let cellID4 = "uslugiCell"
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
 
+    var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
     
     private let scrollView = UIScrollView()
     var MyTarifPage = MyTarifViewController()
@@ -113,13 +114,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        home_view = HomeView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height + 700))
+        home_view = HomeView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(home_view)
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 110)
+        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
     }
 
     func setupBalanceSliderSection() {
@@ -134,12 +135,67 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     func setupRemaindersSection(){
         scrollView.addSubview(remainderView)
         remainderView.frame = CGRect(x: 0, y: 230, width: UIScreen.main.bounds.size.width, height: 140)
-        remainderView.internetRemainder.serviceTitle = "\(19) \n\("mb")"
-        remainderView.messagesRemainder.serviceTitle = "\(10) \n\("sms")"
-        remainderView.minutesRemainder.serviceTitle = "\(0) \n\("min")"
-        remainderView.internetRemainder.spentProgress = CGFloat(0.1)
-        remainderView.messagesRemainder.spentProgress = CGFloat(0.5)
-        remainderView.minutesRemainder.spentProgress = CGFloat(0.7)
+        
+        var textColor = UIColor.black
+        var textColor2 = UIColor.lightGray
+        
+        var number_label: NSString = "356" as NSString
+        var range = (number_label).range(of: number_label as String)
+        var number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        var title_label = "\n МИНУТ" as NSString
+        var titleString = NSMutableAttributedString.init(string: title_label as String)
+        var range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.minutesRemainder.text.attributedText = number_label_String
+       
+        number_label = "7060" as NSString
+        title_label = "\n МЕГАБАЙТ" as NSString
+        range = (number_label).range(of: number_label as String)
+        number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        titleString = NSMutableAttributedString.init(string: title_label as String)
+        range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.internetRemainder.text.attributedText = number_label_String
+        
+        let b = "0"
+        if b == "0" {
+            textColor = .red
+        }
+        number_label = "0" as NSString
+        title_label = "\n SMS" as NSString
+        range = (number_label).range(of: number_label as String)
+        number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        titleString = NSMutableAttributedString.init(string: title_label as String)
+        range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value:textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.messagesRemainder.text.attributedText = number_label_String
+        
+        
+        //remainderView.internetRemainder.serviceTitle = "\(19) \n\("mb")"
+        //remainderView.messagesRemainder.serviceTitle = "\(10) \n\("sms")"
+        //remainderView.minutesRemainder.serviceTitle = "\(0) \n\("min")"
+        
+        remainderView.internetRemainder.spentProgress = CGFloat(0.8)
+        remainderView.messagesRemainder.spentProgress = CGFloat(0)
+        remainderView.minutesRemainder.spentProgress = CGFloat(0.4)
         
         remainderView.messagesRemainder.plusText.addTarget(self, action: #selector(openAddionalTraficsView), for: .touchUpInside)
         
@@ -277,6 +333,17 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 }
 
 extension HomeViewController: CellBalanceActionDelegate {
+    func didAddBalance(for cell: BalanceSliderCollectionViewCell) {
+        let next = AddBalanceOptionViewController()
+        next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
+        next.modalPresentationStyle = .custom
+        //next.modalPresentationCapturesStatusBarAppearance = true
+        
+        next.transitioningDelegate = self.halfModalTransitioningDelegate
+        present(next, animated: true, completion: nil)
+    }
+    
     func didSettingTapped(for cell: BalanceSliderCollectionViewCell) {
         print("bbjbjj")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
