@@ -11,8 +11,6 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
-    let scrollView = UIScrollView()
-    
     var toolbar = Toolbar()
     var pincode_view = PinCodeView()
     
@@ -23,41 +21,16 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .white
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
-        
         setupView()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if #available(iOS 11.0, *) {
-            scrollView.scrollIndicatorInsets = view.safeAreaInsets
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
-        } else {
-            // Fallback on earlier versions
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
-        }
-    }
-    
-    @objc func goBack() {
-        navigationController?.popViewController(animated: true)
     }
     
     func setupView() {
         view.backgroundColor = .white
   
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        pincode_view = PinCodeView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        pincode_view = PinCodeView(frame: CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
+        toolbar.openmenu.isHidden = true
         enterPlace.append(pincode_view.number1)
         enterPlace.append(pincode_view.number2)
         enterPlace.append(pincode_view.number3)
@@ -71,12 +44,10 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         toolbar.icon_more.isHidden = true
         
         self.view.addSubview(toolbar)
-        scrollView.addSubview(pincode_view)
+        self.view.addSubview(pincode_view)
         
         toolbar.backgroundColor = .white
       
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
-        
     }
     
     @objc func clickButton(sender: UIButton){

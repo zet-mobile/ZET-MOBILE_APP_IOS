@@ -111,6 +111,14 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         servicesView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 10, height: 3)
         servicesView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 10, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 10, height: 3)
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        servicesView.tab1.isUserInteractionEnabled = true
+        servicesView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        servicesView.tab2.isUserInteractionEnabled = true
+        servicesView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
         scrollView.addSubview(TabCollectionServiceView)
         TabCollectionServiceView.backgroundColor = .white
         TabCollectionServiceView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
@@ -143,6 +151,22 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                
             }
         }
+    }
+    
+    @objc func tab1Click() {
+        servicesView.tab1.textColor = .black
+        servicesView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        servicesView.tab1Line.backgroundColor = .orange
+        servicesView.tab2Line.backgroundColor = .clear
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        servicesView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        servicesView.tab2.textColor = .black
+        servicesView.tab1Line.backgroundColor = .clear
+        servicesView.tab2Line.backgroundColor = .orange
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
 }
 
@@ -191,8 +215,8 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
                 table2.delegate = self
                 table2.dataSource = self
-                table2.rowHeight = 130
-                table2.estimatedRowHeight = 130
+                table2.rowHeight = 140
+                table2.estimatedRowHeight = 140
                 table2.alwaysBounceVertical = false
                 cell.addSubview(table2)
             }

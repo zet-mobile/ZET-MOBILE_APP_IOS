@@ -219,12 +219,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupServicesTableView() {
         scrollView.addSubview(ServicesTableView)
-        ServicesTableView.frame = CGRect(x: 10, y: 770, width: UIScreen.main.bounds.size.width - 10, height: 3 * 130)
+        ServicesTableView.frame = CGRect(x: 10, y: 770, width: UIScreen.main.bounds.size.width - 10, height: 3 * 140)
         ServicesTableView.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
         ServicesTableView.delegate = self
         ServicesTableView.dataSource = self
-        ServicesTableView.rowHeight = 130
-        ServicesTableView.estimatedRowHeight = 130
+        ServicesTableView.rowHeight = 140
+        ServicesTableView.estimatedRowHeight = 140
         ServicesTableView.isScrollEnabled = false
       }
     

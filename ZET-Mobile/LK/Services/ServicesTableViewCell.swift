@@ -68,11 +68,11 @@ class ServicesTableViewCell: UITableViewCell {
         titleThree.textAlignment = .left
         
        // getButton.setImage(#imageLiteral(resourceName: "get_button"), for: UIControl.State.normal)
-        getButton.frame = CGRect(x: UIScreen.main.bounds.size.width  - 180, y: 90, width: 150, height: 30)
+        getButton.frame = CGRect(x: UIScreen.main.bounds.size.width  - 190, y: 90, width: 160, height: 40)
         getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         getButton.setTitle(defaultLocalizer.stringForKey(key: "connect"), for: .normal)
         getButton.setTitleColor(.white, for: .normal)
-        getButton.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+        getButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         getButton.layer.cornerRadius = getButton.frame.height / 2
     }
     

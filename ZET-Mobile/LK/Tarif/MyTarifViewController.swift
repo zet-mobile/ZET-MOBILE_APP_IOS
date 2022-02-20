@@ -174,13 +174,12 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         
         y_pozition = y_pozition + 50
         let ReconnectBut = UIButton(frame: CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        ReconnectBut.addTarget(self, action: #selector(goToChangeTarif), for: UIControl.Event.touchUpInside)
         ReconnectBut.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         ReconnectBut.setTitle(defaultLocalizer.stringForKey(key: "reconnect"), for: .normal)
         ReconnectBut.setTitleColor(.white, for: .normal)
         ReconnectBut.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         ReconnectBut.layer.cornerRadius = ReconnectBut.frame.height / 2
-        
         scrollView.addSubview(ReconnectBut)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
@@ -197,11 +196,19 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     func setupTabCollectionView() {
         y_pozition = y_pozition + 55
         
-        tarifView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
-        tarifView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2 - 20, height: 45)
+        tarifView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
+        tarifView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 45)
         
-        tarifView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 3)
-        tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 40, height: 3)
+        tarifView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 20, height: 3)
+        tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 20, height: 3)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        tarifView.tab1.isUserInteractionEnabled = true
+        tarifView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        tarifView.tab2.isUserInteractionEnabled = true
+        tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)
         
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = .white
@@ -209,6 +216,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         TabCollectionView.delegate = self
         TabCollectionView.dataSource = self
         TabCollectionView.alwaysBounceVertical = false
+        TabCollectionView.showsVerticalScrollIndicator = false
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -255,7 +263,27 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         }
     }
     
-   
+
+    @objc func goToChangeTarif() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(ChangeTarifViewController(), animated: true)
+    }
+    
+    @objc func tab1Click() {
+        tarifView.tab1.textColor = .black
+        tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        tarifView.tab1Line.backgroundColor = .orange
+        tarifView.tab2Line.backgroundColor = .clear
+        TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        tarifView.tab2.textColor = .black
+        tarifView.tab1Line.backgroundColor = .clear
+        tarifView.tab2Line.backgroundColor = .orange
+        TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
 }
 
 extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {

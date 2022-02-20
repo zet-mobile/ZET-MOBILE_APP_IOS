@@ -96,9 +96,59 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     func setupRemaindersSection(){
         scrollView.addSubview(remainderView)
         remainderView.frame = CGRect(x: 0, y: 10, width: UIScreen.main.bounds.size.width, height: 140)
-        remainderView.internetRemainder.serviceTitle = "\(19) \n\("mb")"
-        remainderView.messagesRemainder.serviceTitle = "\(10) \n\("sms")"
-        remainderView.minutesRemainder.serviceTitle = "\(0) \n\("min")"
+        
+        var textColor = UIColor.black
+        var textColor2 = UIColor.lightGray
+        
+        var number_label: NSString = "356" as NSString
+        var range = (number_label).range(of: number_label as String)
+        var number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        var title_label = "\n минут из 350" as NSString
+        var titleString = NSMutableAttributedString.init(string: title_label as String)
+        var range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.minutesRemainder.text.attributedText = number_label_String
+       
+        number_label = "7060" as NSString
+        title_label = "\n мегабайт из 4500" as NSString
+        range = (number_label).range(of: number_label as String)
+        number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        titleString = NSMutableAttributedString.init(string: title_label as String)
+        range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.internetRemainder.text.attributedText = number_label_String
+        
+        let b = "0"
+        if b == "0" {
+            textColor = .red
+        }
+        number_label = "0" as NSString
+        title_label = "\n SMS из 150" as NSString
+        range = (number_label).range(of: number_label as String)
+        number_label_String = NSMutableAttributedString.init(string: number_label as String)
+        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        
+        titleString = NSMutableAttributedString.init(string: title_label as String)
+        range2 = (title_label).range(of: title_label as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value:textColor2, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+        
+        number_label_String.append(titleString)
+        remainderView.messagesRemainder.text.attributedText = number_label_String
+        
         remainderView.internetRemainder.spentProgress = CGFloat(0.1)
         remainderView.messagesRemainder.spentProgress = CGFloat(0.5)
         remainderView.minutesRemainder.spentProgress = CGFloat(0.7)
@@ -115,6 +165,22 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3.frame = CGRect(x: (Int(addional_view.tab1.frame.width) * 2) + 20, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 4, height: 40)
         addional_view.tab4.frame = CGRect(x: (addional_view.tab1.frame.width * 3) + 30, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 40)
         
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        addional_view.tab1.isUserInteractionEnabled = true
+        addional_view.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        addional_view.tab2.isUserInteractionEnabled = true
+        addional_view.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
+        let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(tab3Click))
+        addional_view.tab3.isUserInteractionEnabled = true
+        addional_view.tab3.addGestureRecognizer(tapGestureRecognizer3)
+        
+        let tapGestureRecognizer4 = UITapGestureRecognizer(target: self, action: #selector(tab4Click))
+        addional_view.tab4.isUserInteractionEnabled = true
+        addional_view.tab4.addGestureRecognizer(tapGestureRecognizer4)
         
         addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) - 40) / 4, height: 3)
         addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 3)
@@ -162,6 +228,54 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
             }
         }
     }
+    
+    @objc func tab1Click() {
+        addional_view.tab1.textColor = .black
+        addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab1Line.backgroundColor = .orange
+        addional_view.tab2Line.backgroundColor = .clear
+        addional_view.tab3Line.backgroundColor = .clear
+        addional_view.tab4Line.backgroundColor = .clear
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab2.textColor = .black
+        addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab1Line.backgroundColor = .clear
+        addional_view.tab2Line.backgroundColor = .orange
+        addional_view.tab3Line.backgroundColor = .clear
+        addional_view.tab4Line.backgroundColor = .clear
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
+    
+    @objc func tab3Click() {
+        addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab3.textColor = .black
+        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab1Line.backgroundColor = .clear
+        addional_view.tab2Line.backgroundColor = .clear
+        addional_view.tab3Line.backgroundColor = .orange
+        addional_view.tab4Line.backgroundColor = .clear
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
+    
+    @objc func tab4Click() {
+        addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        addional_view.tab4.textColor = .black
+        addional_view.tab1Line.backgroundColor = .clear
+        addional_view.tab2Line.backgroundColor = .clear
+        addional_view.tab3Line.backgroundColor = .clear
+        addional_view.tab4Line.backgroundColor = .orange
+        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 3, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
 }
 
 extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -183,8 +297,8 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
             table.delegate = self
             table.dataSource = self
-            table.rowHeight = 130
-            table.estimatedRowHeight = 130
+            table.rowHeight = 140
+            table.estimatedRowHeight = 140
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
             cell.addSubview(table)
@@ -194,8 +308,8 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
             table2.delegate = self
             table2.dataSource = self
-            table2.rowHeight = 130
-            table2.estimatedRowHeight = 130
+            table2.rowHeight = 140
+            table2.estimatedRowHeight = 140
             table2.alwaysBounceVertical = false
             table2.showsVerticalScrollIndicator = false
             cell.addSubview(table2)
@@ -205,8 +319,8 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
             table3.delegate = self
             table3.dataSource = self
-            table3.rowHeight = 130
-            table3.estimatedRowHeight = 130
+            table3.rowHeight = 140
+            table3.estimatedRowHeight = 140
             table3.alwaysBounceVertical = false
             table3.showsVerticalScrollIndicator = false
             cell.addSubview(table3)
@@ -216,8 +330,8 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table4.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
             table4.delegate = self
             table4.dataSource = self
-            table4.rowHeight = 130
-            table4.estimatedRowHeight = 130
+            table4.rowHeight = 140
+            table4.estimatedRowHeight = 140
             table4.alwaysBounceVertical = false
             table4.showsVerticalScrollIndicator = false
             cell.addSubview(table4)

@@ -91,6 +91,14 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         mobileView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 3)
         mobileView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 3)
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        mobileView.tab1.isUserInteractionEnabled = true
+        mobileView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        mobileView.tab2.isUserInteractionEnabled = true
+        mobileView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = .white
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
@@ -128,6 +136,22 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
             }
         }
     }
+    
+    @objc func tab1Click() {
+        mobileView.tab1.textColor = .black
+        mobileView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        mobileView.tab1Line.backgroundColor = .orange
+        mobileView.tab2Line.backgroundColor = .clear
+        TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        mobileView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        mobileView.tab2.textColor = .black
+        mobileView.tab1Line.backgroundColor = .clear
+        mobileView.tab2Line.backgroundColor = .orange
+        TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
 }
 
 extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -158,6 +182,7 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.estimatedRowHeight = 90
             table.alwaysBounceVertical = false
             table.separatorStyle = .none
+            table.showsVerticalScrollIndicator = false
             cell.addSubview(table)
             
         }
@@ -188,7 +213,7 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
 
 extension MobileTransferViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 15
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -17,7 +17,7 @@ class PinCodeView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .center
-        titleOne.frame = CGRect(x: 20, y: 80, width: UIScreen.main.bounds.size.width - 40, height: 20)
+        titleOne.frame = CGRect(x: (UIScreen.main.bounds.size.width * 20) / 428, y: (UIScreen.main.bounds.size.height * 80) / 926, width: UIScreen.main.bounds.size.width - (UIScreen.main.bounds.size.width * 40) / 428, height: (UIScreen.main.bounds.size.height * 20) / 926)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -26,7 +26,7 @@ class PinCodeView: UIView {
     lazy var number1: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - 85, y: 120, width: 20, height: 20)
+        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 85) / 428, y: (UIScreen.main.bounds.size.height * 120) / 926, width: (UIScreen.main.bounds.size.height * 20) / 926, height: (UIScreen.main.bounds.size.height * 20) / 926)
         view.layer.cornerRadius = view.frame.size.height / 2
         return view
     }()
@@ -34,7 +34,7 @@ class PinCodeView: UIView {
     lazy var number2: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - 35, y: 120, width: 20, height: 20)
+        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 35) / 428, y: (UIScreen.main.bounds.size.height * 120) / 926, width: (UIScreen.main.bounds.size.height * 20) / 926, height: (UIScreen.main.bounds.size.height * 20) / 926)
         view.layer.cornerRadius = view.frame.size.height / 2
         return view
     }()
@@ -42,7 +42,7 @@ class PinCodeView: UIView {
     lazy var number3: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 15, y: 120, width: 20, height: 20)
+        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 15) / 428, y: (UIScreen.main.bounds.size.height * 120) / 926, width: (UIScreen.main.bounds.size.height * 20) / 926, height: (UIScreen.main.bounds.size.height * 20) / 926)
         view.layer.cornerRadius = view.frame.size.height / 2
         return view
     }()
@@ -50,13 +50,13 @@ class PinCodeView: UIView {
     lazy var number4: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 65, y: 120, width: 20, height: 20)
+        view.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 65) / 428, y: (UIScreen.main.bounds.size.height * 120) / 926, width: (UIScreen.main.bounds.size.height * 20) / 926, height: (UIScreen.main.bounds.size.height * 20) / 926)
         view.layer.cornerRadius = view.frame.size.height / 2
         return view
     }()
     
     lazy var button1: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 160, y: 250, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 160) / 428, y: (UIScreen.main.bounds.size.height * 250) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("1", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -71,7 +71,7 @@ class PinCodeView: UIView {
     }()
 
     lazy var button2: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 40, y: 250, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 40) / 428, y: (UIScreen.main.bounds.size.height * 250) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("2", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -85,7 +85,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button3: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + 80, y: 250, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 80) / 428, y: (UIScreen.main.bounds.size.height * 250) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("3", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -99,7 +99,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button4: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 160, y: 380, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 160) / 428, y: (UIScreen.main.bounds.size.height * 380) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("4", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -113,7 +113,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button5: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 40, y: 380, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 40) / 428, y: (UIScreen.main.bounds.size.height * 380) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("5", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -127,7 +127,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button6: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + 80, y: 380, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 80) / 428, y: (UIScreen.main.bounds.size.height * 380) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("6", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -141,7 +141,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button7: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 160, y: 510, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 160) / 428, y: (UIScreen.main.bounds.size.height * 510) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("7", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -155,7 +155,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button8: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 40, y: 510, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 40) / 428, y: (UIScreen.main.bounds.size.height * 510) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("8", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -169,7 +169,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button9: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + 80, y: 510, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 80) / 428, y: (UIScreen.main.bounds.size.height * 510) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("9", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -183,7 +183,7 @@ class PinCodeView: UIView {
     }()
     
     lazy var button0: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 40, y: 640, width: 80, height: 80))
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 40) / 428, y: (UIScreen.main.bounds.size.height * 640) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("0", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -196,6 +196,17 @@ class PinCodeView: UIView {
         return button
     }()
     
+    lazy var forget_but: UIButton = {
+        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 150) / 428, y: (UIScreen.main.bounds.size.height * 640) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
+        button.backgroundColor = .clear
+        button.setTitle("Забыли пароль?", for: .normal)
+        button.setTitleColor(UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.numberOfLines = 2
+        button.showsTouchWhenHighlighted = true
+        return button
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -231,5 +242,6 @@ class PinCodeView: UIView {
         self.addSubview(button8)
         self.addSubview(button9)
         self.addSubview(button0)
+        self.addSubview(forget_but)
     }
 }

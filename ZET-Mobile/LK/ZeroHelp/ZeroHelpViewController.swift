@@ -92,6 +92,14 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 3)
         zeroView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 3)
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        zeroView.tab1.isUserInteractionEnabled = true
+        zeroView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        zeroView.tab2.isUserInteractionEnabled = true
+        zeroView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = .white
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
@@ -129,6 +137,22 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
             }
         }
     }
+    
+    @objc func tab1Click() {
+        zeroView.tab1.textColor = .black
+        zeroView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        zeroView.tab1Line.backgroundColor = .orange
+        zeroView.tab2Line.backgroundColor = .clear
+        TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        zeroView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        zeroView.tab2.textColor = .black
+        zeroView.tab1Line.backgroundColor = .clear
+        zeroView.tab2Line.backgroundColor = .orange
+        TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
 }
 
 extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -154,6 +178,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table.rowHeight = 80
             table.estimatedRowHeight = 80
             table.alwaysBounceVertical = false
+            table.showsVerticalScrollIndicator = false
             cell.addSubview(table)
            
         }
@@ -166,6 +191,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table2.estimatedRowHeight = 90
             table2.alwaysBounceVertical = false
             table2.separatorStyle = .none
+            table.showsVerticalScrollIndicator = false
             cell.addSubview(table2)
             
         }

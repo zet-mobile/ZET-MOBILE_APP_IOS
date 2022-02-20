@@ -49,7 +49,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     
-    titleThree.frame = CGRect(x: 300, y: 10, width: 200, height: 50)
+    titleThree.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 10, width: 200, height: 50)
     let cost: NSString = "100" as NSString
     let range = (cost).range(of: cost as String)
     let costString = NSMutableAttributedString.init(string: cost as String)
@@ -66,7 +66,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     titleThree.attributedText = costString
     
-    titleThree.textAlignment = .left
+    titleThree.textAlignment = .right
     
 }
 

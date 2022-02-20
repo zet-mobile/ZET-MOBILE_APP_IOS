@@ -38,8 +38,8 @@ class TraficTransferView: UIView {
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         user_name.font = UIFont.boldSystemFont(ofSize: 24)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
-        user_name.textAlignment = .left
-        user_name.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 170, width: 200, height: 28)
+        user_name.textAlignment = .right
+        user_name.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 170, width: 200, height: 28)
         user_name.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return user_name
     }()
@@ -72,7 +72,7 @@ class TraficTransferView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 0, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -112,7 +112,7 @@ class TraficTransferView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 47, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -152,7 +152,7 @@ class TraficTransferView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 94, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 94, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -192,7 +192,7 @@ class TraficTransferView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 141, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 141, width: (title.text!.count * 15), height: 45)
         
         return title
     }()

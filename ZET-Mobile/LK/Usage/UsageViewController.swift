@@ -71,6 +71,18 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         toolbar = ToolbarUsage(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        usage_view.tab1.isUserInteractionEnabled = true
+        usage_view.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        usage_view.tab2.isUserInteractionEnabled = true
+        usage_view.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
+        let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(tab3Click))
+        usage_view.tab3.isUserInteractionEnabled = true
+        usage_view.tab3.addGestureRecognizer(tapGestureRecognizer3)
+        
         view.addSubview(toolbar)
         scrollView.addSubview(usage_view)
         
@@ -100,11 +112,42 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = false
+        table.showsVerticalScrollIndicator = false
       }
     
     @objc func openDetalazition() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(DetalizationViewController(), animated: true)
+    }
+    
+    @objc func tab1Click() {
+        usage_view.tab1.textColor = .black
+        usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab1Line.backgroundColor = .orange
+        usage_view.tab2Line.backgroundColor = .clear
+        usage_view.tab3Line.backgroundColor = .clear
+        UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab2.textColor = .black
+        usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab1Line.backgroundColor = .clear
+        usage_view.tab2Line.backgroundColor = .orange
+        usage_view.tab3Line.backgroundColor = .clear
+        UsageCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    }
+    
+    @objc func tab3Click() {
+        usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        usage_view.tab3.textColor = .black
+        usage_view.tab1Line.backgroundColor = .clear
+        usage_view.tab2Line.backgroundColor = .clear
+        usage_view.tab3Line.backgroundColor = .orange
+        UsageCollectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
 }
 

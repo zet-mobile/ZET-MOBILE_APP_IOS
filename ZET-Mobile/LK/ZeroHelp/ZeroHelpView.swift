@@ -38,8 +38,8 @@ class ZeroHelpView: UIView {
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         user_name.font = UIFont.boldSystemFont(ofSize: 24)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
-        user_name.textAlignment = .left
-        user_name.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 170, width: 200, height: 28)
+        user_name.textAlignment = .right
+        user_name.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 170, width: 200, height: 28)
         user_name.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return user_name
     }()
@@ -58,9 +58,9 @@ class ZeroHelpView: UIView {
         title.text = "Расходы за 3 месяца (сомони)"
         title.numberOfLines = 1
         title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 14)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 0, width: 100, height: 45)
+        title.frame = CGRect(x: 60, y: 0, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -72,7 +72,7 @@ class ZeroHelpView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 0, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -98,9 +98,9 @@ class ZeroHelpView: UIView {
         title.text = "Дней внутри сети"
         title.numberOfLines = 1
         title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 14)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 47, width: 200, height: 45)
+        title.frame = CGRect(x: 60, y: 47, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -112,7 +112,7 @@ class ZeroHelpView: UIView {
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 47, width: 100, height: 45)
+        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
         
         return title
     }()

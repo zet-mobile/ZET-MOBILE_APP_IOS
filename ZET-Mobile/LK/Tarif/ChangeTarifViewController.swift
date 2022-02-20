@@ -182,6 +182,14 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         tarifView.tab1Line.frame = CGRect(x: 0, y: y_pozition + 55, width: Int(UIScreen.main.bounds.size.width) / 2, height: 50)
         tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition + 55), width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)
         
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        tarifView.tab1.isUserInteractionEnabled = true
+        tarifView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        tarifView.tab2.isUserInteractionEnabled = true
+        tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = .white
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 60, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
@@ -202,12 +210,13 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
                 tarifView.title4.isHidden = true
                 tarifView.title5.isHidden = true
                 tarifView.title6.isHidden = true
+                tarifView.backgroundColor = .white
                 self.scrollView.contentOffset.y = 0
                 tarifView.tab1.frame.origin.y = 0
                 tarifView.tab2.frame.origin.y = 0
-                tarifView.tab1Line.frame.origin.y = 50
-                tarifView.tab2Line.frame.origin.y = 50
-                TabCollectionView.frame.origin.y = 55
+                tarifView.tab1Line.frame.origin.y = 40
+                tarifView.tab2Line.frame.origin.y = 40
+                TabCollectionView.frame.origin.y = 45
             }
             if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
                 tarifView.zetImage.isHidden = false
@@ -219,17 +228,34 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
                 tarifView.title4.isHidden = false
                 tarifView.title5.isHidden = false
                 tarifView.title6.isHidden = false
+                tarifView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
                 self.scrollView.contentOffset.y = 104
                 tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
                 tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
-                tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 55)
-                tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 55)
-                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 60)
+                tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
                
             }
         }
     }
     
+    @objc func tab1Click() {
+        tarifView.tab1.textColor = .black
+        tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        tarifView.tab1Line.backgroundColor = .orange
+        tarifView.tab2Line.backgroundColor = .clear
+        TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+    }
+    
+    @objc func tab2Click() {
+        tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        tarifView.tab2.textColor = .black
+        tarifView.tab1Line.backgroundColor = .clear
+        tarifView.tab2Line.backgroundColor = .orange
+        TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
+
     func getLabelsInView(view: UIView) -> [UILabel] {
         var results = [UILabel]()
         for subview in view.subviews as [UIView] {
@@ -264,11 +290,15 @@ extension ChangeTarifViewController: UICollectionViewDelegateFlowLayout, UIColle
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-            tarifView.tab1Line.backgroundColor = .orange
-            tarifView.tab2Line.backgroundColor = .clear
-          } else {
-            tarifView.tab1Line.backgroundColor = .clear
-            tarifView.tab2Line.backgroundColor = .orange
+                tarifView.tab1.textColor = .black
+                tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                tarifView.tab1Line.backgroundColor = .orange
+                tarifView.tab2Line.backgroundColor = .clear
+            } else {
+                tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                tarifView.tab2.textColor = .black
+                tarifView.tab1Line.backgroundColor = .clear
+                tarifView.tab2Line.backgroundColor = .orange
           }
        }
     }

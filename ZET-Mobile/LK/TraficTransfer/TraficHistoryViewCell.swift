@@ -50,18 +50,18 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     
-    titleThree.frame = CGRect(x: 280, y: 10, width: 100, height: 30)
     titleThree.text = "1024"
     titleThree.textColor = .black
     titleThree.font = UIFont.systemFont(ofSize: 18)
     titleThree.textAlignment = .right
+    titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleThree.text!.count * 15) - 30, y: 10, width: (titleThree.text!.count * 15), height: 30)
     
-    titleFour.frame = CGRect(x: 180, y: 40, width: 200, height: 30)
     titleFour.text = "21-10-2021 13:48"
     titleFour.numberOfLines = 2
     titleFour.textColor = .gray
     titleFour.font = UIFont.systemFont(ofSize: 15)
     titleFour.textAlignment = .right
+    titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleFour.text!.count * 15) - 30, y: 40, width: (titleFour.text!.count * 15), height: 30)
     
 }
 

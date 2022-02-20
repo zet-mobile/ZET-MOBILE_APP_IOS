@@ -50,19 +50,20 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     
-    titleThree.frame = CGRect(x: 280, y: 10, width: 100, height: 50)
+    
     titleThree.text = "+ 24 С"
     titleThree.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
     titleThree.font = UIFont.systemFont(ofSize: 18)
     titleThree.textAlignment = .right
+    titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleThree.text!.count * 15) - 40, y: 10, width: (titleThree.text!.count * 15), height: 50)
     
-    titleFour.frame = CGRect(x: 180, y: 60, width: 200, height: 30)
+    
     titleFour.text = "21-10-2021 13:48"
     titleFour.numberOfLines = 2
     titleFour.textColor = .gray
     titleFour.font = UIFont.systemFont(ofSize: 15)
     titleFour.textAlignment = .right
-    
+    titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleFour.text!.count * 15) - 40, y: 60, width: (titleFour.text!.count * 15), height: 30)
 }
 
 override func layoutSubviews() {
