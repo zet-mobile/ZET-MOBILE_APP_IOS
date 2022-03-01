@@ -13,7 +13,7 @@ class AddBalanceOptionViewController: UIViewController {
     
     let tableData = [["icon1", "Временный платеж"], ["iconn2", "Оплата Корти Милли"], ["icon3", "Попросить у друга"]]
     
-    let add_balance_option = AddBalanceOptionView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height / 4))
+    let add_balance_option = AddBalanceOptionView(frame: CGRect(x: 5, y: UIScreen.main.bounds.size.height - (3 * 80) - 60, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height / 4))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,7 @@ class AddBalanceOptionViewController: UIViewController {
         view.addSubview(add_balance_option)
         
         view.addSubview(table)
-        table.frame = CGRect(x: 0, y: 100, width: Int(UIScreen.main.bounds.size.width) - 10, height: tableData.count * 80)
+        table.frame = CGRect(x:5, y: Int(UIScreen.main.bounds.size.height) - tableData.count * 80, width: Int(UIScreen.main.bounds.size.width) - 10, height: tableData.count * 80)
         table.register(AddBalanceOptionViewCell.self, forCellReuseIdentifier: "add_balance_cell")
         table.delegate = self
         table.dataSource = self
@@ -54,7 +54,6 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
         //cell.textLabel?.text = characters[indexPath.row]
         return cell
     }
-    
     
 }
 

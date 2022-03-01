@@ -43,8 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         window?.makeKeyAndVisible()
-        window?.rootViewController = ContainerViewController() as UIViewController
-        
+        let navController = UINavigationController(rootViewController: SplashViewController())
+        window?.rootViewController = navController
+      
         YMKMapKit.setApiKey("c60358d9-a157-4952-b448-7b1aea6c5e54")
         
         

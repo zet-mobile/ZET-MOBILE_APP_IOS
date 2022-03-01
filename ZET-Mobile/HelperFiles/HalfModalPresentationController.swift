@@ -13,6 +13,7 @@ enum ModalScaleState {
 }
 
 var statusBar = "lightContent"
+var positionPresentView = "small"
 
 class HalfModalPresentationController : UIPresentationController {
     
@@ -72,7 +73,6 @@ class HalfModalPresentationController : UIPresentationController {
     
     @objc func onPan(pan: UIPanGestureRecognizer) -> Void {
         let endPoint = pan.translation(in: pan.view?.superview)
-        //presentedViewController.dismiss(animated: true, completion: nil)
         
         switch pan.state {
         case .began:
@@ -88,11 +88,13 @@ class HalfModalPresentationController : UIPresentationController {
                 presentedView!.frame.origin.y = (containerView!.bounds.height / 2) / 2
                 dimmingView.backgroundColor = .white
                 statusBar = "darkContent"
+                positionPresentView = "big"
             case .adjustedOnce:
                 print("adjusted")
                 presentedView!.frame.origin.y = endPoint.y
                 dimmingView.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.68)
                 statusBar = "lightContent"
+                positionPresentView = "small"
             }
             direction = velocity.y
             

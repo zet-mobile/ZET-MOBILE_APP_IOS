@@ -29,6 +29,18 @@
 		B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */; };
 		B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */; };
 		B82B7D5927B4449000570AC0 /* HalfModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D5827B4449000570AC0 /* HalfModal.swift */; };
+		B82B7D7A27C2B00300570AC0 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D7927C2B00300570AC0 /* SplashViewController.swift */; };
+		B82B7D7F27C2B02500570AC0 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D7E27C2B02500570AC0 /* AuthorizationViewController.swift */; };
+		B82B7D8427C2B07500570AC0 /* AuthorizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D8327C2B07500570AC0 /* AuthorizationView.swift */; };
+		B82B7D8927C39D0500570AC0 /* AuthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D8827C39D0400570AC0 /* AuthData.swift */; };
+		B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */; };
+		B82B7DA427C4005600570AC0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7DA327C4005600570AC0 /* APIClient.swift */; };
+		B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852979B27C55AA000B68F36 /* ConditionViewController.swift */; };
+		B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A127C6AD9100B68F36 /* MenuViewController.swift */; };
+		B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A927C6ADD100B68F36 /* MenuViewCell.swift */; };
+		B85297E927C7548700B68F36 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297E827C7548700B68F36 /* MenuView.swift */; };
+		B852980627C7A24B00B68F36 /* ProfilesMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852980527C7A24B00B68F36 /* ProfilesMenuViewController.swift */; };
+		B852980E27C7A40800B68F36 /* ProfileMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852980D27C7A40800B68F36 /* ProfileMenuCell.swift */; };
 		B853D6B42741121F00FBE1F1 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D6B32741121F00FBE1F1 /* Styles.swift */; };
 		B853D6FF2743B29000FBE1F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B853D7012743B29000FBE1F1 /* Localizable.strings */; };
 		B853D70E2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D70D2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift */; };
@@ -152,6 +164,22 @@
 		B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewController.swift; sourceTree = "<group>"; };
 		B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewCell.swift; sourceTree = "<group>"; };
 		B82B7D5827B4449000570AC0 /* HalfModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModal.swift; sourceTree = "<group>"; };
+		B82B7D7927C2B00300570AC0 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		B82B7D7E27C2B02500570AC0 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
+		B82B7D8327C2B07500570AC0 /* AuthorizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationView.swift; sourceTree = "<group>"; };
+		B82B7D8827C39D0400570AC0 /* AuthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthData.swift; sourceTree = "<group>"; };
+		B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestObservable.swift; sourceTree = "<group>"; };
+		B82B7DA327C4005600570AC0 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		B82B7DA827C4EC3200570AC0 /* RxCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B82B7DAE27C4EC3A00570AC0 /* RxCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B82B7DB327C4EC4100570AC0 /* RxRelay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxRelay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B82B7DB827C4EC4600570AC0 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B852979B27C55AA000B68F36 /* ConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionViewController.swift; sourceTree = "<group>"; };
+		B85297A127C6AD9100B68F36 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		B85297A927C6ADD100B68F36 /* MenuViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
+		B85297E827C7548700B68F36 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		B852980527C7A24B00B68F36 /* ProfilesMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesMenuViewController.swift; sourceTree = "<group>"; };
+		B852980D27C7A40800B68F36 /* ProfileMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMenuCell.swift; sourceTree = "<group>"; };
 		B853D6B32741121F00FBE1F1 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		B853D6EC2743B12200FBE1F1 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B853D6F32743B21600FBE1F1 /* tg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tg; path = tg.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -271,6 +299,10 @@
 		1D977C4F1B31AD889ECB482F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B82B7DB827C4EC4600570AC0 /* RxSwift.framework */,
+				B82B7DB327C4EC4100570AC0 /* RxRelay.framework */,
+				B82B7DAE27C4EC3A00570AC0 /* RxCocoa.framework */,
+				B82B7DA827C4EC3200570AC0 /* RxCocoa.framework */,
 				41715B731154ADE36F11692E /* Pods_ZET_Mobile.framework */,
 				8E114B37D589EA2D44588A5D /* Pods_ZET_Mobile_ZET_MobileUITests.framework */,
 				573FDFC5387FAE5585F585A6 /* Pods_ZET_MobileTests.framework */,
@@ -352,6 +384,8 @@
 		B80929D72791435500CF5824 /* LK */ = {
 			isa = PBXGroup;
 			children = (
+				B852980427C7A20400B68F36 /* ProfilesMenu */,
+				B85297A027C6AD7C00B68F36 /* Menu */,
 				B82B7D3F27B4351900570AC0 /* AddBalance */,
 				B86428E02732996E000C159E /* Home */,
 				B86429102734EEA8000C159E /* Tarif */,
@@ -386,6 +420,11 @@
 		B82B7D3B27B4311A00570AC0 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
+				B82B7D7927C2B00300570AC0 /* SplashViewController.swift */,
+				B82B7D7E27C2B02500570AC0 /* AuthorizationViewController.swift */,
+				B82B7D8327C2B07500570AC0 /* AuthorizationView.swift */,
+				B82B7D8827C39D0400570AC0 /* AuthData.swift */,
+				B852979B27C55AA000B68F36 /* ConditionViewController.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";
@@ -397,6 +436,25 @@
 				B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */,
 			);
 			path = AddBalance;
+			sourceTree = "<group>";
+		};
+		B85297A027C6AD7C00B68F36 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				B85297A127C6AD9100B68F36 /* MenuViewController.swift */,
+				B85297A927C6ADD100B68F36 /* MenuViewCell.swift */,
+				B85297E827C7548700B68F36 /* MenuView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		B852980427C7A20400B68F36 /* ProfilesMenu */ = {
+			isa = PBXGroup;
+			children = (
+				B852980527C7A24B00B68F36 /* ProfilesMenuViewController.swift */,
+				B852980D27C7A40800B68F36 /* ProfileMenuCell.swift */,
+			);
+			path = ProfilesMenu;
 			sourceTree = "<group>";
 		};
 		B853D6E72743AF7700FBE1F1 /* HelperFiles */ = {
@@ -609,6 +667,8 @@
 				B86429C6273FD16E000C159E /* AlertViewController.swift */,
 				B87F472A27311A1100BAEDFA /* AppDelegate.swift */,
 				B87F472C27311A1100BAEDFA /* SceneDelegate.swift */,
+				B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */,
+				B82B7DA327C4005600570AC0 /* APIClient.swift */,
 			);
 			path = "ZET-Mobile";
 			sourceTree = "<group>";
@@ -909,6 +969,7 @@
 			files = (
 				B86428E527329A0D000C159E /* SliderCollectionViewCell.swift in Sources */,
 				B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */,
+				B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */,
 				B853D8382762F17900FBE1F1 /* ZeroTableViewCell.swift in Sources */,
 				B853D6B42741121F00FBE1F1 /* Styles.swift in Sources */,
 				B86428C827326AAE000C159E /* RemainderStackView.swift in Sources */,
@@ -924,10 +985,13 @@
 				B8642980273B8626000C159E /* PushMoreViewController.swift in Sources */,
 				B853D7C327562E6500FBE1F1 /* TabPeriodCollectionViewCell.swift in Sources */,
 				B80929A3278B5E3800CF5824 /* ReplyToZetViewController.swift in Sources */,
+				B852980627C7A24B00B68F36 /* ProfilesMenuViewController.swift in Sources */,
 				B853D84B27632FBF00FBE1F1 /* SearchNumberView.swift in Sources */,
 				B87F472F27311A1100BAEDFA /* HomeViewController.swift in Sources */,
 				B864295127392D7F000C159E /* TabCollectionServiceViewCell.swift in Sources */,
 				B853D71C274B5D2700FBE1F1 /* TraficTransferView.swift in Sources */,
+				B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */,
+				B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */,
 				B86428B0273165D4000C159E /* HomeView.swift in Sources */,
 				B864293E27384773000C159E /* ChangeTarifViewController.swift in Sources */,
 				B853D7D22757949900FBE1F1 /* TapDetalizationCollectionCell.swift in Sources */,
@@ -936,6 +1000,7 @@
 				B809297E2789600D00CF5824 /* AboutAppViewController.swift in Sources */,
 				B853D7582754CD2400FBE1F1 /* ChangeTransferView.swift in Sources */,
 				B80929F8279283E200CF5824 /* ChangeView.swift in Sources */,
+				B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */,
 				B86429092733B7E3000C159E /* ServicesTableViewCell.swift in Sources */,
 				B864295927393132000C159E /* ServicesConnectTableViewCell.swift in Sources */,
 				B8092988278962D100CF5824 /* AboutViewCell.swift in Sources */,
@@ -943,15 +1008,18 @@
 				B86428F62732B6B6000C159E /* HotServicesCollectionView.swift in Sources */,
 				B86429B4273CFCB8000C159E /* HistoryUsageViewCell.swift in Sources */,
 				B87F472B27311A1100BAEDFA /* AppDelegate.swift in Sources */,
+				B85297E927C7548700B68F36 /* MenuView.swift in Sources */,
 				B86428A827313B90000C159E /* ContainerViewController.swift in Sources */,
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
 				B853D74E2754CCEB00FBE1F1 /* ChangeTransferViewController.swift in Sources */,
+				B82B7D7A27C2B00300570AC0 /* SplashViewController.swift in Sources */,
 				B864295F273A36C0000C159E /* PushViewController.swift in Sources */,
 				B87F472D27311A1100BAEDFA /* SceneDelegate.swift in Sources */,
 				B87F475E27311E8300BAEDFA /* Toolbar.swift in Sources */,
 				B853D78A2755067B00FBE1F1 /* ZeroHelpViewController.swift in Sources */,
 				B853D7412754CCB500FBE1F1 /* ChangeHistoryViewCell.swift in Sources */,
 				B809298D278B59E100CF5824 /* SupportListCell.swift in Sources */,
+				B82B7D8427C2B07500570AC0 /* AuthorizationView.swift in Sources */,
 				B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */,
 				B853D7AC2756289100FBE1F1 /* DetalizationViewController.swift in Sources */,
 				B864291F27350703000C159E /* TarifView.swift in Sources */,
@@ -967,6 +1035,7 @@
 				B853D721274B639B00FBE1F1 /* TabTraficCollectionViewCell.swift in Sources */,
 				B864292E27358F50000C159E /* TarifTabViewCell.swift in Sources */,
 				B853D726274CAD2D00FBE1F1 /* TraficHistoryViewCell.swift in Sources */,
+				B82B7DA427C4005600570AC0 /* APIClient.swift in Sources */,
 				B86428A327313B58000C159E /* ProfileViewController.swift in Sources */,
 				B853D8462763013900FBE1F1 /* SearchTableViewCell.swift in Sources */,
 				B853D70E2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift in Sources */,
@@ -975,7 +1044,9 @@
 				B864289927313B39000C159E /* UsageViewController.swift in Sources */,
 				B86428BE27325047000C159E /* BalanceSliderCollectionView.swift in Sources */,
 				B80929D3278D4A9500CF5824 /* RoumingTableCell.swift in Sources */,
+				B82B7D8927C39D0500570AC0 /* AuthData.swift in Sources */,
 				B80929B7278B5FCE00CF5824 /* ReplyToZetView.swift in Sources */,
+				B82B7D7F27C2B02500570AC0 /* AuthorizationViewController.swift in Sources */,
 				B864289427313B29000C159E /* WalletViewController.swift in Sources */,
 				B864294C27390622000C159E /* ServicesView.swift in Sources */,
 				B86429122734EEE1000C159E /* MyTarifViewController.swift in Sources */,
@@ -994,6 +1065,7 @@
 				B853D7EC2758D92700FBE1F1 /* CalendarViewController.swift in Sources */,
 				B853D7702754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift in Sources */,
 				B86429A3273C3678000C159E /* ToolbarUsage.swift in Sources */,
+				B852980E27C7A40800B68F36 /* ProfileMenuCell.swift in Sources */,
 				B853D797275506AD00FBE1F1 /* TabZeroCollectionViewCell.swift in Sources */,
 				B853D7922755069000FBE1F1 /* ZeroHelpView.swift in Sources */,
 			);

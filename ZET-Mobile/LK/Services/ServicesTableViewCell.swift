@@ -72,7 +72,7 @@ class ServicesTableViewCell: UITableViewCell {
         getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         getButton.setTitle(defaultLocalizer.stringForKey(key: "connect"), for: .normal)
         getButton.setTitleColor(.white, for: .normal)
-        getButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        getButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         getButton.layer.cornerRadius = getButton.frame.height / 2
     }
     

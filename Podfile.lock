@@ -6,6 +6,17 @@ PODS:
     - AvailableHapticFeedback
     - SweeterSwift
   - Pulsator (0.6.0)
+  - RxBlocking (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxCocoa (6.5.0):
+    - RxRelay (= 6.5.0)
+    - RxSwift (= 6.5.0)
+  - RxRelay (6.5.0):
+    - RxSwift (= 6.5.0)
+  - RxSwift (6.5.0)
+  - RxTest (6.5.0):
+    - RxSwift (= 6.5.0)
+  - SideMenu (6.5.0)
   - SweeterSwift (1.1.4)
   - YandexMapKit (3.4):
     - YandexRuntime (= 3.4)
@@ -16,6 +27,11 @@ DEPENDENCIES:
   - Koyomi
   - MultiSlider
   - Pulsator
+  - RxBlocking
+  - RxCocoa
+  - RxSwift
+  - RxTest
+  - SideMenu
   - YandexMapKit (= 3.4)
 
 SPEC REPOS:
@@ -25,6 +41,12 @@ SPEC REPOS:
     - Koyomi
     - MultiSlider
     - Pulsator
+    - RxBlocking
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - RxTest
+    - SideMenu
     - SweeterSwift
     - YandexMapKit
     - YandexRuntime
@@ -35,10 +57,16 @@ SPEC CHECKSUMS:
   Koyomi: f03615b8d2bb5a5a4752c6404a9794ed7ef7b327
   MultiSlider: 944d00877d371bbb5ce0a512fec517de87958775
   Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  RxBlocking: 04b5fd28bb5ea49f7d64b80db8bbfe50d9cc1c7d
+  RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
+  RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
+  RxSwift: 5710a9e6b17f3c3d6e40d6e559b9fa1e813b2ef8
+  RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SweeterSwift: 8a90cf3156f5a1b6f39785c479369a16633b5ea9
   YandexMapKit: f222923561fe159dd8480d927f61950fc5ff3b8d
   YandexRuntime: 2547d72a3ce4757f16ad188cfbe8a124ae13d806
 
-PODFILE CHECKSUM: 3a15e8ad471b561e499563d5a1700221d116bbc6
+PODFILE CHECKSUM: a6597f4dba53e575d9ba754a2615153bf5420c95
 
 COCOAPODS: 1.11.2

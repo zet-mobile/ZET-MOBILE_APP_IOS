@@ -75,7 +75,7 @@ class HalfModalPresentationControllerTwo : UIPresentationController {
                 presentedView.frame = containerView.frame
                 let containerFrame = containerView.frame
                 let halfFrame = CGRect(origin: CGPoint(x: 0, y: containerFrame.height / 2),
-                                       size: CGSize(width: containerFrame.width, height: containerFrame.height / 4))
+                                       size: CGSize(width: containerFrame.width, height: containerFrame.height / (UIScreen.main.bounds.size.height * 4) / 926))
                 let frame = state == .adjustedOnce ? containerView.frame : halfFrame
                 
                 presentedView.frame = frame
@@ -96,7 +96,7 @@ class HalfModalPresentationControllerTwo : UIPresentationController {
     }
     
     override var frameOfPresentedViewInContainerView: CGRect {
-        return CGRect(x: 0, y: (containerView!.bounds.height / 2) + 100, width: containerView!.bounds.width, height: containerView!.bounds.height / 4)
+        return CGRect(x: 0, y: 0, width: containerView!.bounds.width, height: containerView!.bounds.height)
     }
     
     override func presentationTransitionWillBegin() {

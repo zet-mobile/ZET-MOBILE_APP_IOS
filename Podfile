@@ -11,6 +11,9 @@ pod 'MultiSlider'
 pod 'FSCalendar'
 pod ‘YandexMapKit’, ’3.4’
 pod "Koyomi"
+pod 'RxSwift'
+pod 'RxCocoa'
+pod 'SideMenu'
 
   target 'ZET-MobileTests' do
     inherit! :search_paths
@@ -20,6 +23,8 @@ pod "Koyomi"
 
   target 'ZET-MobileUITests' do
     # Pods for testing
+    pod 'RxBlocking'
+    pod 'RxTest'
   end
 
 end

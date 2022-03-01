@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SideMenu
 
 let cellID = "BalanceSliderCell"
 let cellID2 = "sliderCell"
@@ -116,6 +117,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         home_view = HomeView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
+        toolbar.openmenu.addTarget(self, action: #selector(openMenu), for: .touchUpInside)
+        toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
         
         self.view.addSubview(toolbar)
@@ -231,6 +234,25 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     @objc func openAddionalTraficsView() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
+    }
+    
+    @objc func openMenu() {
+        // Define the menu
+        let menu = SideMenuNavigationController(rootViewController: MenuViewController())
+        menu.menuWidth = UIScreen.main.bounds.size.width - 50
+        menu.presentationStyle = .menuSlideIn
+        present(menu, animated: true, completion: nil)
+    }
+    
+    @objc func openProfileMenu() {
+        let next = ProfilesMenuViewController()
+        next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
+        next.modalPresentationStyle = .custom
+        //next.modalPresentationCapturesStatusBarAppearance = true
+        
+        next.transitioningDelegate = self.halfModalTransitioningDelegate
+        present(next, animated: true, completion: nil)
     }
 }
 

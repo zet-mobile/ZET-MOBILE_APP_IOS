@@ -56,6 +56,8 @@ class Toolbar: UIView {
         icon_more.setImage(#imageLiteral(resourceName: "more"), for: UIControl.State.normal)
         
         icon_more.frame = CGRect(x: 210, y: 38, width: 11, height: 6)
+        icon_more.isUserInteractionEnabled = true
+        icon_more.isEnabled = true
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
     }()

@@ -20,7 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
                 window = UIWindow(frame: windowScene.coordinateSpace.bounds)
                 window?.windowScene = windowScene
-                window?.rootViewController = ContainerViewController()
+                let navController = UINavigationController(rootViewController: SplashViewController())
+                window?.rootViewController = navController
                 window?.makeKeyAndVisible()
         
         YMKMapKit.setApiKey("c60358d9-a157-4952-b448-7b1aea6c5e54")
