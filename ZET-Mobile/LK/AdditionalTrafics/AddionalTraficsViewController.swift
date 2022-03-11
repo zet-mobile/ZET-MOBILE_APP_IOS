@@ -19,7 +19,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     let remainderView = RemainderStackView()
     
     var x_pozition = 20
-    var y_pozition = 310
+    var y_pozition = 150
     
     let table = UITableView()
     let table2 = UITableView()
@@ -60,6 +60,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         setupView()
         setupRemaindersSection()
         setupTabCollectionView()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -160,10 +161,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     func setupTabCollectionView() {
         y_pozition = y_pozition + 55
         
-        addional_view.tab1.frame = CGRect(x: 10, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 4, height: 40)
-        addional_view.tab2.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 4, height: 40)
-        addional_view.tab3.frame = CGRect(x: (Int(addional_view.tab1.frame.width) * 2) + 20, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 4, height: 40)
-        addional_view.tab4.frame = CGRect(x: (addional_view.tab1.frame.width * 3) + 30, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 40)
+        addional_view.tab1.frame = CGRect(x: 10, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 40)
+        addional_view.tab2.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 40)
+        addional_view.tab3.frame = CGRect(x: (Int(addional_view.tab1.frame.width) * 2) + 20, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 40)
         
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
@@ -178,14 +178,10 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3.isUserInteractionEnabled = true
         addional_view.tab3.addGestureRecognizer(tapGestureRecognizer3)
         
-        let tapGestureRecognizer4 = UITapGestureRecognizer(target: self, action: #selector(tab4Click))
-        addional_view.tab4.isUserInteractionEnabled = true
-        addional_view.tab4.addGestureRecognizer(tapGestureRecognizer4)
         
-        addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) - 40) / 4, height: 3)
-        addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 3)
-        addional_view.tab3Line.frame = CGRect(x: CGFloat((Int(addional_view.tab1.frame.width) * 2) + 20), y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 3)
-        addional_view.tab4Line.frame = CGRect(x: (addional_view.tab1.frame.width * 3) + 30, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 4, height: 3)
+        addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 3)
+        addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 3, height: 3)
+        addional_view.tab3Line.frame = CGRect(x: CGFloat((Int(addional_view.tab1.frame.width) * 2) + 20), y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 3, height: 3)
         
         scrollView.addSubview(TabCollectionServiceView)
         TabCollectionServiceView.backgroundColor = .white
@@ -206,9 +202,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 addional_view.tab1Line.frame.origin.y = 40
                 addional_view.tab2Line.frame.origin.y = 40
                 addional_view.tab3.frame.origin.y = 0
-                addional_view.tab4.frame.origin.y = 0
                 addional_view.tab3Line.frame.origin.y = 40
-                addional_view.tab4Line.frame.origin.y = 40
                 TabCollectionServiceView.frame.origin.y = 45
             }
             if scrollView.contentOffset.y < -10 && remainderView.isHidden == true {
@@ -220,9 +214,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 addional_view.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
                 addional_view.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
                 addional_view.tab3.frame.origin.y = CGFloat(y_pozition)
-                addional_view.tab4.frame.origin.y = CGFloat(y_pozition)
                 addional_view.tab3Line.frame.origin.y = CGFloat(y_pozition + 40)
-                addional_view.tab4Line.frame.origin.y = CGFloat(y_pozition + 40)
                 TabCollectionServiceView.frame.origin.y = CGFloat(y_pozition + 45)
                
             }
@@ -233,11 +225,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab1.textColor = .black
         addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab1Line.backgroundColor = .orange
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = .clear
-        addional_view.tab4Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
     
@@ -245,11 +235,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab2.textColor = .black
         addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab1Line.backgroundColor = .clear
         addional_view.tab2Line.backgroundColor = .orange
         addional_view.tab3Line.backgroundColor = .clear
-        addional_view.tab4Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
     
@@ -257,11 +245,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab3.textColor = .black
-        addional_view.tab4.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab1Line.backgroundColor = .clear
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = .orange
-        addional_view.tab4Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
     
@@ -269,11 +255,10 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab4.textColor = .black
+       
         addional_view.tab1Line.backgroundColor = .clear
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = .clear
-        addional_view.tab4Line.backgroundColor = .orange
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 3, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
 }
@@ -345,39 +330,31 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab1.textColor = .black
             addional_view.tab2.textColor = .gray
             addional_view.tab3.textColor = .gray
-            addional_view.tab4.textColor = .gray
             addional_view.tab1Line.backgroundColor = .orange
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .clear
-            addional_view.tab4Line.backgroundColor = .clear
         } else if indexPath.row == 2 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = .gray
             addional_view.tab3.textColor = .black
-            addional_view.tab4.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .orange
-            addional_view.tab4Line.backgroundColor = .clear
         }
        if indexPath.row == 1 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = .black
             addional_view.tab3.textColor = .gray
-            addional_view.tab4.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .orange
             addional_view.tab3Line.backgroundColor = .clear
-            addional_view.tab4Line.backgroundColor = .clear
         } else if indexPath.row == 3 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = .gray
             addional_view.tab3.textColor = .gray
-            addional_view.tab4.textColor = .black
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .clear
-            addional_view.tab4Line.backgroundColor = .orange
         }
           
     }
@@ -389,21 +366,17 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = .black
             addional_view.tab3.textColor = .gray
-            addional_view.tab4.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .orange
             addional_view.tab3Line.backgroundColor = .clear
-            addional_view.tab4Line.backgroundColor = .clear
         }
         else if indexPath.row == 3 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = .gray
             addional_view.tab3.textColor = .black
-            addional_view.tab4.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .orange
-            addional_view.tab4Line.backgroundColor = .clear
         }
     }
 }

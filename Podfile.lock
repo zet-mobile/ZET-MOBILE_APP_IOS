@@ -18,6 +18,7 @@ PODS:
     - RxSwift (= 6.5.0)
   - SideMenu (6.5.0)
   - SweeterSwift (1.1.4)
+  - Toast-Swift (5.0.1)
   - YandexMapKit (3.4):
     - YandexRuntime (= 3.4)
   - YandexRuntime (3.4)
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - RxSwift
   - RxTest
   - SideMenu
+  - Toast-Swift
   - YandexMapKit (= 3.4)
 
 SPEC REPOS:
@@ -48,6 +50,7 @@ SPEC REPOS:
     - RxTest
     - SideMenu
     - SweeterSwift
+    - Toast-Swift
     - YandexMapKit
     - YandexRuntime
 
@@ -64,9 +67,10 @@ SPEC CHECKSUMS:
   RxTest: eb2d23adefc5a5ebf5779c7792fa3edfe6ebcc17
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SweeterSwift: 8a90cf3156f5a1b6f39785c479369a16633b5ea9
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   YandexMapKit: f222923561fe159dd8480d927f61950fc5ff3b8d
   YandexRuntime: 2547d72a3ce4757f16ad188cfbe8a124ae13d806
 
-PODFILE CHECKSUM: a6597f4dba53e575d9ba754a2615153bf5420c95
+PODFILE CHECKSUM: 5d704e5014a2b4d5c55ff07a03c546b0932bf075
 
 COCOAPODS: 1.11.2

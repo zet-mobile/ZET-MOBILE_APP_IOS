@@ -6,9 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import Toast_Swift
 
 class UsageViewController: UIViewController, UIScrollViewDelegate {
 
+    let disposeBag = DisposeBag()
+    
     let scrollView = UIScrollView()
     var toolbar = ToolbarUsage()
     var usage_view = UsageView()
@@ -29,6 +34,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var usages_data = [[String]]()
+    var history_data = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,6 +53,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         setupView()
         setupUsages()
         setupHistoryUsagesTableView()
+        sendRequest()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,7 +104,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         
         UsageCollectionView.backgroundColor = .white
         UsageCollectionView.layer.cornerRadius = 10
-        UsageCollectionView.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 300)
+        UsageCollectionView.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 250)
         UsageCollectionView.delegate = self
         UsageCollectionView.dataSource = self
         scrollView.addSubview(UsageCollectionView)
@@ -103,12 +112,14 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     
     func setupHistoryUsagesTableView() {
         scrollView.addSubview(table)
-        table.frame = CGRect(x: 20, y: 480, width: UIScreen.main.bounds.size.width - 20, height: 10 * 100)
+        table.frame = CGRect(x: 20, y: 430, width: Int(UIScreen.main.bounds.size.width) - 20, height: 5 * 100)
         table.register(HistoryUsageViewCell.self, forCellReuseIdentifier: "history_usage")
+        table.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         table.delegate = self
         table.dataSource = self
         table.rowHeight = 100
         table.estimatedRowHeight = 100
+        table.sectionHeaderHeight = 35
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = false
@@ -149,6 +160,46 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         usage_view.tab3Line.backgroundColor = .orange
         UsageCollectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.usageGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        self.usages_data.removeAll()
+                        self.usages_data.append([String(result.lastDay.offnetMin!) , String(result.lastDay.onnetMin!), String(result.lastDay.internetMb!), String(result.lastDay.sms!), String(result.lastDay.tjs!)])
+                        
+                        self.usages_data.append([String(result.lastWeek.offnetMin!), String(result.lastWeek.onnetMin!), String(result.lastWeek.internetMb!), String(result.lastWeek.sms!), String(result.lastWeek.tjs!)])
+                        
+                        self.usages_data.append([String(result.lastMonth.offnetMin!), String(result.lastMonth.onnetMin!), String(result.lastMonth.internetMb!), String(result.lastMonth.sms!), String(result.lastMonth.tjs!)])
+                        
+                        if result.history.count != 0 {
+                            for i in 0 ..< result.history.count {
+                                self.history_data.append([String(result.history[i].serviceName!), String(result.history[i].balanceChange!), String(result.history[i].transactionDate!)])
+                            }
+                        }
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                        self.UsageCollectionView.reloadData()
+                        self.table.reloadData()
+                        self.table.reloadSectionIndexTitles()
+                        self.table.beginUpdates()
+                        self.table.endUpdates()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
 }
 
 extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
@@ -163,7 +214,14 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "usages", for: indexPath) as! UsageCollectionViewCell
-        //cell.actionDelegate = (self as CellBalanceActionDelegate)
+        if usages_data.count != 0 {
+            cell.rez1.text = usages_data[indexPath.row][0]
+            cell.rez2.text = usages_data[indexPath.row][1]
+            cell.rez3.text = usages_data[indexPath.row][2]
+            cell.rez4.text = usages_data[indexPath.row][3]
+            cell.rez5.text = usages_data[indexPath.row][4]
+        }
+        
         return cell
     }
     
@@ -224,14 +282,46 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
 }
 
 extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if history_data.count != 0 {
+            return 5
+        }
+        else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
+        view.title.text = history_data[section][2]
+        
+       return view
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if history_data.count != 0 {
+            return 1
+        }
+        else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history_usage", for: indexPath) as! HistoryUsageViewCell
         
-        //cell.textLabel?.text = characters[indexPath.row]
+        cell.titleOne.text = history_data[indexPath.section][0]
+        cell.titleThree.text = history_data[indexPath.section][1]
+        
+        if Double(history_data[indexPath.section][1])! > 0 {
+            cell.titleThree.textColor = UIColor(red: 0.15, green: 0.68, blue: 0.38, alpha: 1.00)
+            cell.titleTwo.text = "Пополнение"
+        }
+        else {
+            cell.titleThree.textColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
+            cell.titleTwo.text = "Списание"
+        }
         return cell
     }
     

@@ -75,7 +75,7 @@ class UsageView: UIView {
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "button"), for: UIControl.State.normal)
         
-        button.frame = CGRect(x: 5, y: 400, width: UIScreen.main.bounds.size.width - 10, height: 45)
+        button.frame = CGRect(x: 5, y: 350, width: UIScreen.main.bounds.size.width - 10, height: 45)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return button
     }()

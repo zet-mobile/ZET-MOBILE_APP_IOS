@@ -24,6 +24,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     var home_view = HomeView()
     let remainderView = RemainderStackView()
     
+    var zero_help_view_show = false
+    
     var hot_services = ["Трафик трансфер", "Обмен трафика", "Money Transfer", "Помощь при нуле", "Поиск номера"]
     
     let BalanceSliderView: UICollectionView = {
@@ -115,7 +117,30 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        home_view = HomeView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        home_view = HomeView(frame: CGRect(x: 0, y: 360, width: UIScreen.main.bounds.size.width, height: 896))
+        
+        if zero_help_view_show == false {
+            home_view.zero_help_view.isHidden = true
+            home_view.titleOne.frame.origin.y = 0
+            home_view.titleTwo.frame.origin.y = 170
+            home_view.titleThree.frame.origin.y = 370
+            home_view.icon_more.frame.origin.y = 320
+            home_view.icon_more_services.frame.origin.y = 420
+            home_view.white_view_back.frame.size.height = 440
+            home_view.white_view_back2.frame.size.height = 500
+            home_view.white_view_back2.frame.origin.y = 350
+        }
+        else {
+            home_view.zero_help_view.isHidden = false
+            home_view.titleOne.frame.origin.y = 170
+            home_view.titleTwo.frame.origin.y = 340
+            home_view.titleThree.frame.origin.y = 540
+            home_view.icon_more.frame.origin.y = 490
+            home_view.icon_more_services.frame.origin.y = 590
+            home_view.white_view_back.frame.size.height = 610
+            home_view.white_view_back2.frame.size.height = 670
+            home_view.white_view_back2.frame.origin.y = 520
+        }
         
         toolbar.openmenu.addTarget(self, action: #selector(openMenu), for: .touchUpInside)
         toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
@@ -206,23 +231,39 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupSliderSection() {
         scrollView.addSubview(SliderView)
+        
+        if zero_help_view_show == false {
+            SliderView.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width, height: 120)
+        }
+        else {
+            SliderView.frame = CGRect(x: 0, y: 720, width: UIScreen.main.bounds.size.width, height: 120)
+        }
         SliderView.backgroundColor = .clear
-        SliderView.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width, height: 120)
         SliderView.delegate = self
         SliderView.dataSource = self
     }
     
     func setupHotServicesSection() {
         scrollView.addSubview(HotServicesView)
+        if zero_help_view_show == false {
+            HotServicesView.frame = CGRect(x: 0, y: 400, width: UIScreen.main.bounds.size.width, height: 120)
+        }
+        else {
+            HotServicesView.frame = CGRect(x: 0, y: 570, width: UIScreen.main.bounds.size.width, height: 120)
+        }
         HotServicesView.backgroundColor = .clear
-        HotServicesView.frame = CGRect(x: 0, y: 400, width: UIScreen.main.bounds.size.width, height: 120)
         HotServicesView.delegate = self
         HotServicesView.dataSource = self
     }
     
     func setupServicesTableView() {
         scrollView.addSubview(ServicesTableView)
-        ServicesTableView.frame = CGRect(x: 10, y: 770, width: UIScreen.main.bounds.size.width - 10, height: 3 * 140)
+        if zero_help_view_show == false {
+            ServicesTableView.frame = CGRect(x: 10, y: 770, width: UIScreen.main.bounds.size.width - 10, height: 3 * 140)
+        }
+        else {
+            ServicesTableView.frame = CGRect(x: 10, y: 940, width: UIScreen.main.bounds.size.width - 10, height: 3 * 140)
+        }
         ServicesTableView.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
         ServicesTableView.delegate = self
         ServicesTableView.dataSource = self

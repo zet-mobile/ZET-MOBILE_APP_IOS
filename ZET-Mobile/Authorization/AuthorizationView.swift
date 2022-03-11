@@ -81,7 +81,7 @@ class AuthorizationView: UIView {
     }()
     
     lazy var lang_set: UIButton = {
-        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - 70, width: 70, height: 50))
+        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 70) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("RU 🇷🇺", for: .normal)
         button.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         button.setTitleColor(.black, for: .normal)
@@ -126,7 +126,7 @@ class AuthorizationView: UIView {
     lazy var time_symbol: UIImageView = {
         let im = UIImageView()
         im.image = UIImage(named: "clock.png")
-        im.frame = CGRect(x: 180, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 20, height: 20)
+        im.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 20, height: 20)
         im.isHidden = true
         return im
     }()
@@ -181,10 +181,10 @@ class AuthorizationView: UIView {
         title.text = "Отправить ещё раз"
         title.numberOfLines = 1
         title.textColor = .orange
-        title.font = UIFont.systemFont(ofSize: (UIScreen.main.bounds.size.width * 14) / 926)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 180, y: (UIScreen.main.bounds.size.height * 500) / 926, width: 200, height: 20)
+        title.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 485) / 926, width: (UIScreen.main.bounds.size.width * 200) / 428, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true

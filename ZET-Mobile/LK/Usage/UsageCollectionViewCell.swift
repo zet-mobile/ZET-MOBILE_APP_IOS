@@ -32,7 +32,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var rez1: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
@@ -72,7 +72,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var rez2: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
@@ -112,7 +112,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var rez3: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
@@ -152,7 +152,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var rez4: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
@@ -169,9 +169,16 @@ class UsageCollectionViewCell: UICollectionViewCell {
         return title
     }()
     
+    lazy var Line5: UILabel = {
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 188, width: UIScreen.main.bounds.size.width - 50, height: 2)
+        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
+        return title
+    }()
+    
     let image5: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "More Square")
+        iv.image = UIImage(named: "Wallet2")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         iv.frame = CGRect(x: 20, y: 198, width: 25, height: 25)
@@ -180,73 +187,25 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title5: UILabel = {
         let title = UILabel()
-        title.text = "Звонки на короткие номера"
+        title.text = "Сомони"
         title.numberOfLines = 1
         title.textColor = .black
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 188, width: 200, height: 45)
+        title.frame = CGRect(x: 60, y: 188, width: 100, height: 45)
         
         return title
     }()
     
     lazy var rez5: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
         title.frame = CGRect(x: 280, y: 188, width: 100, height: 45)
         
-        return title
-    }()
-    
-    lazy var Line5: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 20, y: 188, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
-        return title
-    }()
-    
-    let image6: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "Wallet2")
-        iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .clear
-        iv.frame = CGRect(x: 20, y: 245, width: 25, height: 25)
-        return iv
-    }()
-    
-    lazy var title6: UILabel = {
-        let title = UILabel()
-        title.text = "Сомони"
-        title.numberOfLines = 1
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 16)
-        title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 235, width: 100, height: 45)
-        
-        return title
-    }()
-    
-    lazy var rez6: UILabel = {
-        let title = UILabel()
-        title.text = "23"
-        title.numberOfLines = 1
-        title.textColor = .orange
-        title.font = UIFont.boldSystemFont(ofSize: 18)
-        title.textAlignment = .right
-        title.frame = CGRect(x: 280, y: 235, width: 100, height: 45)
-        
-        return title
-    }()
-
-    
-    lazy var Line6: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 20, y: 235, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
         return title
     }()
     
@@ -278,10 +237,6 @@ class UsageCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(Line5)
         contentView.addSubview(rez5)
         
-        contentView.addSubview(image6)
-        contentView.addSubview(title6)
-        contentView.addSubview(Line6)
-        contentView.addSubview(rez6)
         
         //image.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingLeft: 16)
         

@@ -25,30 +25,33 @@ class APIClient {
   static var shared = APIClient()
   lazy var requestObservable = RequestObservable(config: .default)
     
-  func getRecipes() throws -> Observable<[AuthData]> {
-    var request = URLRequest(url:
-          URL(string:"https://jsonplaceholder.typicode.com/posts")!)
-    request.httpMethod = "GET"
-    request.addValue("application/json", forHTTPHeaderField:
-              "Content-Type")
-    return requestObservable.callAPI(request: request)
-  }
-  
-  func sendPost() -> Observable<AuthData> {
-    /*let queryItems = [URLQueryItem(name: "ctn", value: "992919110474")]
-    var urlComps = URLComponents(string: "http://app.zet-mobile.com:1481/v1/auth/from/outside")!
-    urlComps.queryItems = queryItems
-    let result = urlComps.url!
-    let url = result*/
+    func authPost(jsonBody: [String: Any]) -> Observable<AuthData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/from/outside")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+   }
     
-     var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/from/outside")!)
-     request.httpMethod = "POST"
-     request.addValue("application/json", forHTTPHeaderField:
-      "Content-Type")
-     request.addValue("application/json", forHTTPHeaderField:
-     "Accept")
-     //let body: [String: AnyHashable] = ["ctn" = "992919000944"]
-     //request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
+
+    func checkSmsCode(jsonBody: [String: Any]) -> Observable<CheckCodeData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/login")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+   }
+    
+    func usageGetRequest() throws -> Observable<UsageData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/consumptions/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
    }
 }

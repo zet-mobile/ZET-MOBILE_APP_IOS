@@ -14,6 +14,7 @@ pod "Koyomi"
 pod 'RxSwift'
 pod 'RxCocoa'
 pod 'SideMenu'
+pod 'Toast-Swift'
 
   target 'ZET-MobileTests' do
     inherit! :search_paths

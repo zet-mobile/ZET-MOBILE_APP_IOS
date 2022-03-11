@@ -8,6 +8,9 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast_Swift
+
+var style = ToastStyle()
 
 class AuthorizationViewController: UIViewController, UITextFieldDelegate {
 
@@ -22,12 +25,16 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     var seconds = 59
     
     var timer = Timer()
+    var user_code = ""
+    var secretCode = ""
+    var hashString = ""
+    var accessToken = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         auth_view = AuthorizationView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        auth_view.get_sms.addTarget(self, action: #selector(get_Code_Request), for: .touchUpInside)
+        auth_view.get_sms.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
         auth_view.check_condition.addTarget(self, action: #selector(check_Condition), for: .touchUpInside)
         auth_view.lang_set.addTarget(self, action: #selector(chooseLanguage), for: .touchUpInside)
         auth_view.numberField.delegate = self
@@ -47,6 +54,10 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(auth_view)
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -63,6 +74,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             auth_view.numberField.textColor = .black
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
         }
+        else if textField.tag == 2 {
+            auth_view.code_field.text! = ""
+            auth_view.code_field.textColor = .black
+            auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
+        }
         
     }
     
@@ -72,6 +88,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             auth_view.numberField.textColor = .black
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
         }
+        else if textField.tag == 2 {
+            auth_view.code_field.text! = user_code
+            auth_view.code_field.textColor = .black
+            auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
+        }
         
     }
     
@@ -79,22 +100,31 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
         let tag = textField.tag
         
-        user_phone = user_phone + string
         if string  == "" {
-            if textField.tag == 1 {
+            if tag == 1 {
                 user_phone = (user_phone as String).substring(to: user_phone.index(before: user_phone.endIndex))
+            }
+            else {
+                user_code = (user_code as String).substring(to: user_code.index(before: user_code.endIndex))
             }
         }
         
         if tag == 1 && string != "" && auth_view.numberField.text!.count == 14 {
             return false
         }
+        else if tag == 1 {
+            user_phone = user_phone + string
+            print(user_phone)
+        }
         
         
         if tag == 2 && string != "" && auth_view.code_field.text!.count == 6 {
             return false
         }
-        
+        else if tag == 2 {
+            user_code = user_code + string
+            print(user_code)
+        }
         
         return true
     }
@@ -155,75 +185,94 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.view_lang.isHidden = true
     }
     
+    @objc func buttonClick() {
+        if user_code == "" {
+            print(user_phone)
+            let length = user_phone.count
+            let str = user_phone.prefix(3)
+            let str2 = user_phone.prefix(2)
+            
+            if Int(user_phone) == nil || length < 9 {
+              self.view.makeToast("Ошибка, введите номер", duration: 5.0, position: .bottom, style: style); return
+             }
+            else
+             if str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" {
+                 print("i am here")
+              get_Code_Request()
+            }
+            else {
+              self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
+            }
+        }
+        else {
+            checkCode()
+        }
+    }
+    
     @objc func get_Code_Request() {
         
         print(user_phone)
-        auth_view.title_info.isHidden = true
-        auth_view.check_condition.isHidden = true
-        auth_view.title_condition.isHidden = true
+       
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)"]
         
-        auth_view.title_code_info.isHidden = true
-        auth_view.send_again.isHidden = true
-        
-        auth_view.code_field.isHidden = false
-        auth_view.time_symbol.isHidden = false
-        auth_view.timer_label.isHidden = false
-        auth_view.second_label.isHidden = false
-        auth_view.symbol_label.isHidden = false
-        auth_view.get_sms.setTitle("Подтвердить", for: .normal)
-        auth_view.numberField.isEnabled = false
-        
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
-      
-        let queryItems = [URLQueryItem(name: "ctn", value: "992919000944")]
-        var urlComps = URLComponents(string: "http://app.zet-mobile.com:1481/v1/auth/from/outside")!
-        urlComps.queryItems = queryItems
-        let result = urlComps.url!
-        
-        var request = URLRequest(url: result)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField:
-         "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField:
-        "Accept")
-        
-        request.httpMethod = "POST"
-                 
-        let session = URLSession(configuration: URLSessionConfiguration.default)
-           
-        let task = session.dataTask(with: request) { (data, response, error) in
-               
-        if let data = data {
-            do {
-                   
-            }  catch let error as NSError {
-             
-                print(error.localizedDescription)
-                }
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-            if let response = response {
-                
-                let httpStatus = response as! HTTPURLResponse
-                   
-                if httpStatus.statusCode == 200  {
-                    DispatchQueue.main.async {
-
-                    }
-                }
-                else {
-                }
-            }
-        }
-        task.resume()
-        
-      /*  let client = APIClient.shared
+        let client = APIClient.shared
             do{
-              try client.sendPost().subscribe(
+                try client.authPost(jsonBody: parametr).subscribe (
+                onNext: { result in
+                    self.secretCode = String(result.code)
+                    self.hashString = result.hashString
+                    
+                    DispatchQueue.main.async {
+                        self.auth_view.title_info.isHidden = true
+                        self.auth_view.check_condition.isHidden = true
+                        self.auth_view.title_condition.isHidden = true
+                        
+                        self.auth_view.title_code_info.isHidden = true
+                        self.auth_view.send_again.isHidden = true
+                        
+                        self.auth_view.code_field.isHidden = false
+                        self.auth_view.time_symbol.isHidden = false
+                        self.auth_view.timer_label.isHidden = false
+                        self.auth_view.second_label.isHidden = false
+                        self.auth_view.symbol_label.isHidden = false
+                        self.auth_view.get_sms.setTitle("Подтвердить", for: .normal)
+                        self.auth_view.numberField.isEnabled = false
+                        
+                        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                   
+                },
+                onCompleted: {
+                   print("Completed event.")
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+         
+     }
+    
+    func checkCode() {
+        
+        print(user_code)
+        print(user_phone)
+        print(hashString)
+     
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString]
+        
+        let client = APIClient.shared
+            do{
+                try client.checkSmsCode(jsonBody: parametr).subscribe (
                 onNext: { result in
                     print("hello")
-                   //MARK: display in UITableView
+                    self.accessToken = String(result.accessToken!)
+                    DispatchQueue.main.async {
+                        UserDefaults.standard.set("Bearer \(self.accessToken)", forKey: "token")
+                        UserDefaults.standard.set("\(self.user_phone)", forKey: "mobPhone")
+                        self.goHome()
+                    }
                 },
                 onError: { error in
                    print(error.localizedDescription)
@@ -233,24 +282,9 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 }).disposed(by: disposeBag)
               }
               catch{
-            }*/
-        
-        
-        /*guard let window = UIApplication.shared.keyWindow else {
-            return
-        }
-
-        guard let rootViewController = window.rootViewController else {
-            return
-        }
-        let vc = ContainerViewController()
-        vc.view.frame = rootViewController.view.frame
-        vc.view.layoutIfNeeded()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-                window.rootViewController = vc
-          }, completion: nil)
-         */
-     }
+            }
+       
+    }
     
     @objc func updateTimer() {
         if seconds < 1 && minute != 0{
@@ -270,18 +304,47 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     
     @objc func sendAgain() {
+        
+        auth_view.numberField.isEnabled = false
+        
+        minute = 01
+        seconds = 59
+        
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)"]
+        
+        let client = APIClient.shared
+            do{
+                try client.authPost(jsonBody: parametr).subscribe(
+                onNext: { result in
+                    print("hello")
+                    self.secretCode = String(result.code)
+                    self.hashString = result.hashString
+                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                   print("Completed event.")
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    func goHome() {
         guard let window = UIApplication.shared.keyWindow else {
-              return
-          }
+            return
+        }
 
-          guard let rootViewController = window.rootViewController else {
-              return
-          }
-          let vc = ContainerViewController()
-          vc.view.frame = rootViewController.view.frame
-          vc.view.layoutIfNeeded()
-          UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-                  window.rootViewController = vc
-            }, completion: nil)
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        let vc = ContainerViewController()
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                window.rootViewController = vc
+          }, completion: nil)
     }
 }
