@@ -19,13 +19,13 @@ class TarifBalanceCollectionViewCell: UICollectionViewCell {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Трафик трансфер"
-        titleOne.numberOfLines = 2
-        titleOne.textColor = .black
-        titleOne.font = UIFont.systemFont(ofSize: 10)
+        titleOne.text = ""
+        titleOne.numberOfLines = 1
+        titleOne.textColor = .orange
+        titleOne.font = UIFont.boldSystemFont(ofSize: 16)
         //titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .center
-        titleOne.frame = CGRect(x: 20, y: 60, width: 60, height: 60)
+        titleOne.frame = CGRect(x: 20, y: 50, width: 80, height: 30)
         
         return titleOne
     }()
@@ -34,8 +34,9 @@ class TarifBalanceCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
         contentView.addSubview(image)
-        //contentView.addSubview(titleOne)
-        image.frame = CGRect(x: 20, y: 5, width: 70, height: 70)
+        contentView.sendSubviewToBack(image)
+        contentView.addSubview(titleOne)
+        image.frame = CGRect(x: 20, y: 5, width: 80, height: 80)
         //image.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingLeft: 16)
         
     }

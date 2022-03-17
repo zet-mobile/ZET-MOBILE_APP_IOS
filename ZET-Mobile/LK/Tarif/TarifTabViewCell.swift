@@ -43,28 +43,13 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.textAlignment = .left
     
     titleTwo.frame = CGRect(x: 80, y: 35, width: 300, height: 60)
-    titleTwo.text = "Безлимитный доступ к социальным сетям и 300 минут внутри сети"
+    titleTwo.text = ""
     titleTwo.numberOfLines = 2
     titleTwo.textColor = .darkGray
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     
     titleThree.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 10, width: 200, height: 50)
-    let cost: NSString = "100" as NSString
-    let range = (cost).range(of: cost as String)
-    let costString = NSMutableAttributedString.init(string: cost as String)
-    costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-    costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-    
-    let title_cost = " с/месяц" as NSString
-    let titleString = NSMutableAttributedString.init(string: title_cost as String)
-    let range2 = (title_cost).range(of: title_cost as String)
-    titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-    titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
-    
-    costString.append(titleString)
-    
-    titleThree.attributedText = costString
     
     titleThree.textAlignment = .right
     

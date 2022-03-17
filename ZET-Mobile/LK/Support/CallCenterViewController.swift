@@ -7,9 +7,12 @@
 
 import UIKit
 import YandexMapKit
+import RxSwift
+import RxCocoa
 
 class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     
+    let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     let scrollView = UIScrollView()
@@ -34,6 +37,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
+        sendRequest()
         setupView()
     }
 
@@ -128,6 +132,30 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.isHidden = false
         mapView.isHidden = true
         support_view.white_back.isHidden = false
+    }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.supportGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                       
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
     
     func onObjectAdded(with view: YMKUserLocationView) {

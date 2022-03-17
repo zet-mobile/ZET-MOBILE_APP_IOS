@@ -112,13 +112,13 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     
     func setupHistoryUsagesTableView() {
         scrollView.addSubview(table)
-        table.frame = CGRect(x: 20, y: 430, width: Int(UIScreen.main.bounds.size.width) - 20, height: 5 * 100)
+        table.frame = CGRect(x: 0, y: 470, width: UIScreen.main.bounds.size.width, height: 700)
         table.register(HistoryUsageViewCell.self, forCellReuseIdentifier: "history_usage")
         table.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         table.delegate = self
         table.dataSource = self
-        table.rowHeight = 100
-        table.estimatedRowHeight = 100
+        table.rowHeight = 80
+        table.estimatedRowHeight = 80
         table.sectionHeaderHeight = 35
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
@@ -285,7 +285,7 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if history_data.count != 0 {
-            return 5
+            return history_data.count
         }
         else {
             return 0
@@ -294,7 +294,13 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
-        view.title.text = history_data[section][2]
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let date = dateFormatter1.date(from: history_data[section][2])
+        dateFormatter1.dateFormat = "dd MMMM"
+        dateFormatter1.locale = Locale(identifier: "ru_RU")
+        view.title.text = dateFormatter1.string(from: date!)
         
        return view
     }
@@ -312,7 +318,7 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history_usage", for: indexPath) as! HistoryUsageViewCell
         
         cell.titleOne.text = history_data[indexPath.section][0]
-        cell.titleThree.text = history_data[indexPath.section][1]
+        cell.titleThree.text = history_data[indexPath.section][1] + " с"
         
         if Double(history_data[indexPath.section][1])! > 0 {
             cell.titleThree.textColor = UIColor(red: 0.15, green: 0.68, blue: 0.38, alpha: 1.00)
@@ -322,6 +328,13 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
             cell.titleThree.textColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
             cell.titleTwo.text = "Списание"
         }
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let date = dateFormatter1.date(from: history_data[indexPath.section][2])
+        dateFormatter1.dateFormat = "HH:mm"
+        
+        cell.titleFour.text = dateFormatter1.string(from: date!)
         return cell
     }
     

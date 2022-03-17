@@ -89,11 +89,16 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
         }
         else if textField.tag == 2 {
-            auth_view.code_field.text! = user_code
-            auth_view.code_field.textColor = .black
-            auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
+           // auth_view.code_field.text! = user_code
+            //auth_view.code_field.textColor = .black
+            //auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
         }
         
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        auth_view.numberField.resignFirstResponder()
+        auth_view.code_field.resignFirstResponder()
+        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -282,6 +287,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 }).disposed(by: disposeBag)
               }
               catch{
+                  
             }
        
     }

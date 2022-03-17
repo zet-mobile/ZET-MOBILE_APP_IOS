@@ -1,4 +1,7 @@
 PODS:
+  - Alamofire (5.5.0)
+  - AlamofireImage (4.2.0):
+    - Alamofire (~> 5.4)
   - AvailableHapticFeedback (1.0.2)
   - FSCalendar (2.8.2)
   - Koyomi (1.2.7)
@@ -24,6 +27,7 @@ PODS:
   - YandexRuntime (3.4)
 
 DEPENDENCIES:
+  - AlamofireImage (~> 4.1)
   - FSCalendar
   - Koyomi
   - MultiSlider
@@ -38,6 +42,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AlamofireImage
     - AvailableHapticFeedback
     - FSCalendar
     - Koyomi
@@ -55,6 +61,8 @@ SPEC REPOS:
     - YandexRuntime
 
 SPEC CHECKSUMS:
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   AvailableHapticFeedback: 9b21b9f6d3e4566015988b5de35b40abefe6c09a
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
   Koyomi: f03615b8d2bb5a5a4752c6404a9794ed7ef7b327
@@ -71,6 +79,6 @@ SPEC CHECKSUMS:
   YandexMapKit: f222923561fe159dd8480d927f61950fc5ff3b8d
   YandexRuntime: 2547d72a3ce4757f16ad188cfbe8a124ae13d806
 
-PODFILE CHECKSUM: 5d704e5014a2b4d5c55ff07a03c546b0932bf075
+PODFILE CHECKSUM: cf4276efa7f3a0a60a1e3e542262aa1b77cd2da4
 
 COCOAPODS: 1.11.2

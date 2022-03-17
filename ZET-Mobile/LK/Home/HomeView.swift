@@ -70,7 +70,7 @@ class HomeView: UIView {
         let icon_more = UIButton()
         //icon_more.setImage(#imageLiteral(resourceName: "icon_more_services"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 420, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 1800, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle(defaultLocalizer.stringForKey(key: "all_services"), for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)

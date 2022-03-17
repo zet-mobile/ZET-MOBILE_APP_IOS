@@ -70,6 +70,14 @@
 		B853D8462763013900FBE1F1 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D8452763013900FBE1F1 /* SearchTableViewCell.swift */; };
 		B853D84B27632FBF00FBE1F1 /* SearchNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B853D84A27632FBF00FBE1F1 /* SearchNumberView.swift */; };
 		B858A2BB27DB278300D190CE /* HistoryHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2BA27DB278300D190CE /* HistoryHeaderCell.swift */; };
+		B858A2BE27DB780A00D190CE /* PostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2BD27DB780A00D190CE /* PostData.swift */; };
+		B858A2C027DB7CBA00D190CE /* PricePlansData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2BF27DB7CBA00D190CE /* PricePlansData.swift */; };
+		B858A2C227DB9BF300D190CE /* ServicesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2C127DB9BF300D190CE /* ServicesData.swift */; };
+		B858A2C427DBAF4B00D190CE /* AboutAppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2C327DBAF4B00D190CE /* AboutAppData.swift */; };
+		B858A2C627DBAFE200D190CE /* RoumingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2C527DBAFE200D190CE /* RoumingData.swift */; };
+		B858A2C827DBB0C200D190CE /* RoumingCountryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2C727DBB0C200D190CE /* RoumingCountryData.swift */; };
+		B858A2CA27DBB1C100D190CE /* SupportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2C927DBB1C100D190CE /* SupportData.swift */; };
+		B858A2CC27DBB2EA00D190CE /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B858A2CB27DBB2EA00D190CE /* SettingsData.swift */; };
 		B864289427313B29000C159E /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B864289327313B29000C159E /* WalletViewController.swift */; };
 		B864289927313B39000C159E /* UsageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B864289827313B39000C159E /* UsageViewController.swift */; };
 		B864289E27313B4A000C159E /* CallCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B864289D27313B4A000C159E /* CallCenterViewController.swift */; };
@@ -117,10 +125,10 @@
 		B87F474227311A1500BAEDFA /* ZET_MobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F474127311A1500BAEDFA /* ZET_MobileTests.swift */; };
 		B87F474D27311A1500BAEDFA /* ZET_MobileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F474C27311A1500BAEDFA /* ZET_MobileUITests.swift */; };
 		B87F475E27311E8300BAEDFA /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F475D27311E8300BAEDFA /* Toolbar.swift */; };
+		B8819E3927DFADC700AA2CEF /* HomeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8819E3827DFADC700AA2CEF /* HomeData.swift */; };
 		B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */; };
 		B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8B27D52755007D189F /* PacketsData.swift */; };
 		B8CD5A8E27D6721E007D189F /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8D27D6721E007D189F /* UsageData.swift */; };
-		B8CD5A9027D67442007D189F /* TarifData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8F27D67442007D189F /* TarifData.swift */; };
 		E5312EEAE85F1C75BD17F53E /* Pods_ZET_Mobile_ZET_MobileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E114B37D589EA2D44588A5D /* Pods_ZET_Mobile_ZET_MobileUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -218,6 +226,14 @@
 		B853D8452763013900FBE1F1 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		B853D84A27632FBF00FBE1F1 /* SearchNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNumberView.swift; sourceTree = "<group>"; };
 		B858A2BA27DB278300D190CE /* HistoryHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHeaderCell.swift; sourceTree = "<group>"; };
+		B858A2BD27DB780A00D190CE /* PostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostData.swift; sourceTree = "<group>"; };
+		B858A2BF27DB7CBA00D190CE /* PricePlansData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricePlansData.swift; sourceTree = "<group>"; };
+		B858A2C127DB9BF300D190CE /* ServicesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesData.swift; sourceTree = "<group>"; };
+		B858A2C327DBAF4B00D190CE /* AboutAppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppData.swift; sourceTree = "<group>"; };
+		B858A2C527DBAFE200D190CE /* RoumingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingData.swift; sourceTree = "<group>"; };
+		B858A2C727DBB0C200D190CE /* RoumingCountryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingCountryData.swift; sourceTree = "<group>"; };
+		B858A2C927DBB1C100D190CE /* SupportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportData.swift; sourceTree = "<group>"; };
+		B858A2CB27DBB2EA00D190CE /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 		B864289327313B29000C159E /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		B864289827313B39000C159E /* UsageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageViewController.swift; sourceTree = "<group>"; };
 		B864289D27313B4A000C159E /* CallCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallCenterViewController.swift; sourceTree = "<group>"; };
@@ -270,10 +286,10 @@
 		B87F474C27311A1500BAEDFA /* ZET_MobileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZET_MobileUITests.swift; sourceTree = "<group>"; };
 		B87F474E27311A1500BAEDFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B87F475D27311E8300BAEDFA /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		B8819E3827DFADC700AA2CEF /* HomeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeData.swift; sourceTree = "<group>"; };
 		B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCodeData.swift; sourceTree = "<group>"; };
 		B8CD5A8B27D52755007D189F /* PacketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketsData.swift; sourceTree = "<group>"; };
 		B8CD5A8D27D6721E007D189F /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
-		B8CD5A8F27D67442007D189F /* TarifData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarifData.swift; sourceTree = "<group>"; };
 		BD7353AFFD29CB667BFC193B /* Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile-ZET-MobileUITests/Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DC63A82C91D2FD4051CC9F79 /* Pods-ZET-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile.release.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile/Pods-ZET-Mobile.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -558,8 +574,17 @@
 			children = (
 				B82B7D8827C39D0400570AC0 /* AuthData.swift */,
 				B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */,
+				B8819E3827DFADC700AA2CEF /* HomeData.swift */,
 				B8CD5A8D27D6721E007D189F /* UsageData.swift */,
 				B8CD5A8B27D52755007D189F /* PacketsData.swift */,
+				B858A2BD27DB780A00D190CE /* PostData.swift */,
+				B858A2BF27DB7CBA00D190CE /* PricePlansData.swift */,
+				B858A2C127DB9BF300D190CE /* ServicesData.swift */,
+				B858A2C327DBAF4B00D190CE /* AboutAppData.swift */,
+				B858A2C527DBAFE200D190CE /* RoumingData.swift */,
+				B858A2C727DBB0C200D190CE /* RoumingCountryData.swift */,
+				B858A2C927DBB1C100D190CE /* SupportData.swift */,
+				B858A2CB27DBB2EA00D190CE /* SettingsData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -600,7 +625,6 @@
 				B864292827351E78000C159E /* TabCollectionViewCell.swift */,
 				B864292D27358F50000C159E /* TarifTabViewCell.swift */,
 				B864293D27384773000C159E /* ChangeTarifViewController.swift */,
-				B8CD5A8F27D67442007D189F /* TarifData.swift */,
 			);
 			path = Tarif;
 			sourceTree = "<group>";
@@ -992,6 +1016,7 @@
 			files = (
 				B86428E527329A0D000C159E /* SliderCollectionViewCell.swift in Sources */,
 				B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */,
+				B858A2C827DBB0C200D190CE /* RoumingCountryData.swift in Sources */,
 				B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */,
 				B853D8382762F17900FBE1F1 /* ZeroTableViewCell.swift in Sources */,
 				B853D6B42741121F00FBE1F1 /* Styles.swift in Sources */,
@@ -1007,6 +1032,7 @@
 				B80929AD278B5FA000CF5824 /* SettingsView.swift in Sources */,
 				B8642980273B8626000C159E /* PushMoreViewController.swift in Sources */,
 				B853D7C327562E6500FBE1F1 /* TabPeriodCollectionViewCell.swift in Sources */,
+				B858A2C627DBAFE200D190CE /* RoumingData.swift in Sources */,
 				B80929A3278B5E3800CF5824 /* ReplyToZetViewController.swift in Sources */,
 				B852980627C7A24B00B68F36 /* ProfilesMenuViewController.swift in Sources */,
 				B853D84B27632FBF00FBE1F1 /* SearchNumberView.swift in Sources */,
@@ -1032,6 +1058,7 @@
 				B858A2BB27DB278300D190CE /* HistoryHeaderCell.swift in Sources */,
 				B86429B4273CFCB8000C159E /* HistoryUsageViewCell.swift in Sources */,
 				B87F472B27311A1100BAEDFA /* AppDelegate.swift in Sources */,
+				B858A2C027DB7CBA00D190CE /* PricePlansData.swift in Sources */,
 				B85297E927C7548700B68F36 /* MenuView.swift in Sources */,
 				B86428A827313B90000C159E /* ContainerViewController.swift in Sources */,
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
@@ -1040,14 +1067,17 @@
 				B864295F273A36C0000C159E /* PushViewController.swift in Sources */,
 				B87F472D27311A1100BAEDFA /* SceneDelegate.swift in Sources */,
 				B87F475E27311E8300BAEDFA /* Toolbar.swift in Sources */,
+				B858A2CA27DBB1C100D190CE /* SupportData.swift in Sources */,
 				B853D78A2755067B00FBE1F1 /* ZeroHelpViewController.swift in Sources */,
 				B853D7412754CCB500FBE1F1 /* ChangeHistoryViewCell.swift in Sources */,
+				B8819E3927DFADC700AA2CEF /* HomeData.swift in Sources */,
 				B809298D278B59E100CF5824 /* SupportListCell.swift in Sources */,
 				B82B7D8427C2B07500570AC0 /* AuthorizationView.swift in Sources */,
 				B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */,
 				B853D7AC2756289100FBE1F1 /* DetalizationViewController.swift in Sources */,
 				B864291F27350703000C159E /* TarifView.swift in Sources */,
 				B864289E27313B4A000C159E /* CallCenterViewController.swift in Sources */,
+				B858A2BE27DB780A00D190CE /* PostData.swift in Sources */,
 				B853D7652754CD6900FBE1F1 /* TabChangeCollectionViewCell.swift in Sources */,
 				B853D7492754CCCA00FBE1F1 /* MobileHistoryViewCell.swift in Sources */,
 				B86429C2273E3D8F000C159E /* AddionalTraficsView.swift in Sources */,
@@ -1079,10 +1109,10 @@
 				B80929C1278B612500CF5824 /* TabRoumingCollectionCell.swift in Sources */,
 				B864292927351E78000C159E /* TabCollectionViewCell.swift in Sources */,
 				B864291A2734EF04000C159E /* TarifToolbarView.swift in Sources */,
-				B8CD5A9027D67442007D189F /* TarifData.swift in Sources */,
 				B864294427390590000C159E /* ServicesViewController.swift in Sources */,
 				B853D714274B5D0500FBE1F1 /* TraficTransferViewController.swift in Sources */,
 				B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */,
+				B858A2CC27DBB2EA00D190CE /* SettingsData.swift in Sources */,
 				B86428EA27329A48000C159E /* SliderCollectionView.swift in Sources */,
 				B8642997273BF4AB000C159E /* UsageView.swift in Sources */,
 				B86429BA273E3D6D000C159E /* AddionalTraficsViewController.swift in Sources */,
@@ -1091,7 +1121,9 @@
 				B80929A8278B5E4D00CF5824 /* RoumingViewController.swift in Sources */,
 				B853D7EC2758D92700FBE1F1 /* CalendarViewController.swift in Sources */,
 				B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */,
+				B858A2C427DBAF4B00D190CE /* AboutAppData.swift in Sources */,
 				B853D7702754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift in Sources */,
+				B858A2C227DB9BF300D190CE /* ServicesData.swift in Sources */,
 				B86429A3273C3678000C159E /* ToolbarUsage.swift in Sources */,
 				B852980E27C7A40800B68F36 /* ProfileMenuCell.swift in Sources */,
 				B853D797275506AD00FBE1F1 /* TabZeroCollectionViewCell.swift in Sources */,

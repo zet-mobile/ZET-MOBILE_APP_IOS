@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 class SettingsViewController: UIViewController, UIScrollViewDelegate {
     
+    let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     let scrollView = UIScrollView()
@@ -30,6 +33,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
+        sendRequest()
         setupView()
     }
     
@@ -75,5 +79,29 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         print("hello")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationController?.pushViewController(ChangeCodeController(), animated: true)
+    }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.settingsGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                       
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
 }

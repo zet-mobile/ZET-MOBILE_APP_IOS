@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class RoumingViewController: UIViewController, UIScrollViewDelegate {
     
+    let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     let scrollView = UIScrollView()
@@ -45,6 +48,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
+        sendRequest()
         setupView()
     }
 
@@ -94,6 +98,30 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
+    }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.roumingGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                       
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
 
 }

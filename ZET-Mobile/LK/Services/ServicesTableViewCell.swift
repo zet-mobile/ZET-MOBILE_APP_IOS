@@ -37,34 +37,20 @@ class ServicesTableViewCell: UITableViewCell {
         ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         
         titleOne.frame = CGRect(x: 70, y: 10, width: UIScreen.main.bounds.size.width  - 100, height: 50)
-        titleOne.text = "Переадресация вызова"
+        titleOne.text = ""
         titleOne.numberOfLines = 1
         titleOne.textColor = .black
         titleOne.font = UIFont.boldSystemFont(ofSize: 16)
         titleOne.textAlignment = .left
         
         titleTwo.frame = CGRect(x: 70, y: 35, width: UIScreen.main.bounds.size.width  - 100, height: 60)
-        titleTwo.text = "Переадресация вызова позволит Вам переадресовать все входящие звон ..."
+        titleTwo.text = ""
         titleTwo.numberOfLines = 2
         titleTwo.textColor = .darkGray
         titleTwo.font = UIFont.systemFont(ofSize: 15)
         titleTwo.textAlignment = .left
         
         titleThree.frame = CGRect(x: 70, y: 80, width: 200, height: 60)
-        let cost: NSString = "10" as NSString
-        let range = (cost).range(of: cost as String)
-        let costString = NSMutableAttributedString.init(string: cost as String)
-        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-        costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-        
-        let title_cost = " с/месяц" as NSString
-        let titleString = NSMutableAttributedString.init(string: title_cost as String)
-        let range2 = (title_cost).range(of: title_cost as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
-        
-        costString.append(titleString)
-        titleThree.attributedText = costString
         titleThree.textAlignment = .left
         
        // getButton.setImage(#imageLiteral(resourceName: "get_button"), for: UIControl.State.normal)

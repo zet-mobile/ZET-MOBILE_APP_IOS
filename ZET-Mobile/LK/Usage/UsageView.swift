@@ -80,6 +80,19 @@ class UsageView: UIView {
         return button
     }()
     
+    lazy var titleTable: UILabel = {
+        let title = UILabel()
+        title.text = "История расходов"
+        title.numberOfLines = 0
+        title.textColor = .black
+        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.textAlignment = .left
+        title.frame = CGRect(x: 20, y: 440, width: 200, height: 30)
+            
+        return title
+    }()
     var white_view_back = UIView()
     
     override init(frame: CGRect) {
@@ -96,7 +109,7 @@ class UsageView: UIView {
     private func setupView() {
         backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
      
-        white_view_back = UIView(frame: CGRect(x: 0, y: 480, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        white_view_back = UIView(frame: CGRect(x: 0, y: 420, width: UIScreen.main.bounds.size.width, height: 650))
         white_view_back.backgroundColor = .white
         
         self.addSubview(white_view_back)
@@ -109,6 +122,7 @@ class UsageView: UIView {
         self.addSubview(tab2Line)
         self.addSubview(tab3Line)
         self.addSubview(get_Detaization)
+        self.addSubview(titleTable)
 
     }
 }

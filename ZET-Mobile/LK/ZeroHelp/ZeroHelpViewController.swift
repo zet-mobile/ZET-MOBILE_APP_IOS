@@ -80,7 +80,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Помощь при нуле"
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 500)
     }
 
     func setupTabCollectionView() {

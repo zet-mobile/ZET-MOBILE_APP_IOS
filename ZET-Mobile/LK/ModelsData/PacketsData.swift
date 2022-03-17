@@ -25,11 +25,11 @@ struct balances_data: Decodable {
 }
 
 struct details_data: Decodable {
-    let unitName: String
+    //let unitName: String
     let unitId: Int
     let now: Int
     let start: Int
-    let unlimConditions: unlimConditions_data
+    //let unlimConditions: unlimConditions_data
     let unlim: Bool
 }
 

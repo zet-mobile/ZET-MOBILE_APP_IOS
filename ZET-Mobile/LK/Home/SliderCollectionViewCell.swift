@@ -11,7 +11,7 @@ class SliderCollectionViewCell: UICollectionViewCell {
     
     let image: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "sale-item")
+        iv.image = UIImage(named: "")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         return iv

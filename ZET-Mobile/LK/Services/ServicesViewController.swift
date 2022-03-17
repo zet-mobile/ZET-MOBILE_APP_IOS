@@ -6,9 +6,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ServicesViewController: UIViewController, UIScrollViewDelegate {
 
+    let disposeBag = DisposeBag()
+    
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
@@ -59,6 +63,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
+        sendRequest()
         setupView()
         setupSliderSection()
         setupTabCollectionView()
@@ -167,6 +172,30 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         servicesView.tab1Line.backgroundColor = .clear
         servicesView.tab2Line.backgroundColor = .orange
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.servicesGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                       
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
 }
 

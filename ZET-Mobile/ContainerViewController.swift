@@ -20,7 +20,7 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
         
         UserDefaults.standard.set(3, forKey: "language")
         UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
-        self.defaultLocalizer.setSelectedLanguage(lang: .tj)
+        self.defaultLocalizer.setSelectedLanguage(lang: .ru)
     }
     
     override func viewWillAppear(_ animated: Bool) {

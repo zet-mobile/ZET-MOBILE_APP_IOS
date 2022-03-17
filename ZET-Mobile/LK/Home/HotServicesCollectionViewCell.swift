@@ -14,7 +14,7 @@ class HotServicesCollectionViewCell: UICollectionViewCell {
     
     let image: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "hot_icon1")
+        iv.image = UIImage(named: "")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         return iv
@@ -27,7 +27,7 @@ class HotServicesCollectionViewCell: UICollectionViewCell {
         titleOne.textColor = .black
         titleOne.font = UIFont.systemFont(ofSize: 11)
         titleOne.textAlignment = .center
-        titleOne.frame = CGRect(x: 20, y: 65, width: 70, height: 60)
+        titleOne.frame = CGRect(x: 20, y: 65, width: 75, height: 60)
      
         return titleOne
     }()

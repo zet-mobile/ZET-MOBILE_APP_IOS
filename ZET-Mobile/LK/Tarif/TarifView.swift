@@ -24,7 +24,7 @@ class TarifView: UIView {
     
     lazy var welcome: UILabel = {
         let welcome = UILabel()
-        welcome.text = "Тариф “Супер-15”"
+        welcome.text = ""
         welcome.numberOfLines = 0
         welcome.textColor = .black
         welcome.font = UIFont.systemFont(ofSize: 22)
@@ -37,7 +37,7 @@ class TarifView: UIView {
     
     lazy var user_name: UILabel = {
         let user_name = UILabel()
-        user_name.text = "Следующее списание 13 november"
+        user_name.text = ""
         user_name.numberOfLines = 0
         user_name.textColor = .darkGray
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -65,7 +65,7 @@ class TarifView: UIView {
     
     lazy var titleOneRes: UILabel = {
         let title = UILabel()
-        title.text = "“Супер-15”"
+        title.text = "”"
         title.numberOfLines = 0
         title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)

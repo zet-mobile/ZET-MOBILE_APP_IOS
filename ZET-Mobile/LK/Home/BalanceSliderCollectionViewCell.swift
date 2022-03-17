@@ -45,7 +45,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     lazy var balance: UILabel = {
         let user_name = UILabel()
-        user_name.text = "45 somoni"
+        user_name.text = ""
         user_name.numberOfLines = 0
         user_name.textColor = .white
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -72,7 +72,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     lazy var titleTarif: UILabel = {
         let titleTarif = UILabel()
-        titleTarif.text = "Тариф “Супер-15"
+        titleTarif.text = ""
         titleTarif.numberOfLines = 0
         titleTarif.textColor = .white
         titleTarif.font = UIFont.boldSystemFont(ofSize: 18)
@@ -94,7 +94,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     lazy var titleNumber: UILabel = {
         let titleNumber = UILabel()
-        titleNumber.text = "+992 (91) 900 09 44"
+        titleNumber.text = ""
         titleNumber.numberOfLines = 0
         titleNumber.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         titleNumber.font = UIFont(name: "", size: 10)

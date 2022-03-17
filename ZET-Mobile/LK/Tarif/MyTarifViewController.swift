@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 let cellTarBalV = "cellTarBalV"
 
@@ -15,8 +17,9 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(ChangeTarifViewController(), animated: true)
     }
-    
 
+    let disposeBag = DisposeBag()
+    
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     let scrollView = UIScrollView()
@@ -24,11 +27,13 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     var toolbar = TarifToolbarView()
     var tarifView = TarifView()
     
-    var icon_count = 2
-    var icon_count2 = 1
+    var icon_count = 0
+    var icon_count2 = 0
     
     var x_pozition = 20
     var y_pozition = 400
+    
+    let table = UITableView()
     
     let TarifBalanceView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -55,6 +60,10 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         return cv
     }()
     
+    var balances_data = [[String]]()
+    var overChargings_data = [[String]]()
+    var availables_data = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -69,6 +78,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
+        sendRequest()
         setupView()
         setupTarifBalanceViewSection()
         setupTabCollectionView()
@@ -171,6 +181,20 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         title2.textAlignment = .left
         
         scrollView.addSubview(title2)
+        
+        if icon_count != 0 {
+            title.isHidden = false
+        }
+        else {
+            title.isHidden = true
+        }
+        
+        if icon_count2 != 0 {
+            title2.isHidden = false
+        }
+        else {
+            title2.isHidden = true
+        }
         
         y_pozition = y_pozition + 50
         let ReconnectBut = UIButton(frame: CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
@@ -284,6 +308,59 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         tarifView.tab2Line.backgroundColor = .orange
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.pricePlansGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        self.tarifView.welcome.text = String(result.connected.priceplanName)
+                        let dateFormatter1 = DateFormatter()
+                        dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                        let date = dateFormatter1.date(from: String(result.connected.nextApplyDate))
+                        dateFormatter1.dateFormat = "dd MMMM"
+                        dateFormatter1.locale = Locale(identifier: "ru_RU")
+                        self.tarifView.user_name.text = "Следующее списание \(dateFormatter1.string(from: date!))"
+                        
+                        if result.connected.balances.count != 0 {
+                            for i in 0 ..< result.connected.balances.count {
+                                self.balances_data.append([String(result.connected.balances[i].start)])
+                            }
+                        }
+                        
+                        if result.connected.unlimOptions.count != 0 {
+                            self.icon_count = result.connected.unlimOptions.count
+                            self.icon_count2 = result.connected.unlimOptions.count
+                            
+                        }
+                        
+                        if result.available.count != 0 {
+                            for i in 0 ..< result.available.count {
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].priceplanName), String(result.available[i].price), String(result.available[i].currencyAndPeriod)])
+                            }
+                        }
+                    }
+                },  
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                        print(self.balances_data.count)
+                        self.TarifBalanceView.reloadData()
+                        self.table.reloadData()
+                        self.table.beginUpdates()
+                        self.table.endUpdates()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
 }
 
 extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -300,18 +377,27 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
         if collectionView == TabCollectionView {
             return 2
         } else {
-            return 5
+            return balances_data.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == TarifBalanceView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellTarBalV, for: indexPath) as! TarifBalanceCollectionViewCell
-            print(indexPath.row)
+            print(balances_data[indexPath.row][0])
+            cell.titleOne.text = balances_data[indexPath.row][0]
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionViewCell
-            cell.actionDelegate = (self as CellTarifiActionDelegate)
+            table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
+            table.register(TarifTabViewCell.self, forCellReuseIdentifier: "tarif_tab_cell")
+            table.delegate = self
+            table.dataSource = self
+            table.rowHeight = 100
+            table.estimatedRowHeight = 100
+            table.alwaysBounceVertical = false
+            
+            cell.addSubview(table)
             return cell
         }
     }
@@ -333,3 +419,39 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
 }
 
+extension MyTarifViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if availables_data.count != 0 {
+            return availables_data.count
+        }
+        else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tarif_tab_cell", for: indexPath) as! TarifTabViewCell
+        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+     
+        cell.titleOne.text = availables_data[indexPath.row][1]
+        
+        let cost: NSString = availables_data[indexPath.row][2] as NSString
+        let range = (cost).range(of: cost as String)
+        let costString = NSMutableAttributedString.init(string: cost as String)
+        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+        costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+        
+        let title_cost = " \(availables_data[indexPath.row][3])" as NSString
+        let titleString = NSMutableAttributedString.init(string: title_cost as String)
+        let range2 = (title_cost).range(of: title_cost as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+        
+        costString.append(titleString)
+        
+        cell.titleThree.attributedText = costString
+        return cell
+    }
+    
+    
+}
