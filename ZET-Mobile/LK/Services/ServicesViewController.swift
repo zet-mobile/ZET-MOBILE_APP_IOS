@@ -49,24 +49,16 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var slider_data = [[String]]()
+    var connected_data = [[String]]()
+    var availables_data = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
-        
+        view.backgroundColor = .white
         sendRequest()
-        setupView()
-        setupSliderSection()
-        setupTabCollectionView()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,6 +77,17 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
@@ -181,14 +184,33 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async {
+                        if result.offers.count != 0 {
+                            for i in 0 ..< result.offers.count {
+                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name)])
+                            }
+                        }
+                        
+                        if result.connected.count != 0 {
+                            for i in 0 ..< result.connected.count {
+                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price),  String(result.available[i].period)])
+                            }
+                        }
+                        
+                        if result.available.count != 0 {
+                            for i in 0 ..< result.available.count {
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price),  String(result.available[i].period)])
+                            }
+                        }
                     }
                 },
                 onError: { error in
                    print(error.localizedDescription)
                 },
                 onCompleted: {
-                    DispatchQueue.main.async {
-                       
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupSliderSection()
+                        setupTabCollectionView()
                     }
                    print("Completed event.")
                     
@@ -212,7 +234,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == SliderView {
-            return 2
+            return slider_data.count
         }
         else {
             return 2
@@ -223,8 +245,13 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == SliderView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID2, for: indexPath) as! SliderCollectionViewCell
-            print(indexPath.row)
            
+            if slider_data.count != 0 {
+                cell.image.af_setImage(withURL: URL(string: self.slider_data[indexPath.row][1])!)
+            }
+            else {
+               cell.image.image = nil
+            }
             return cell
         }
         else {
@@ -255,7 +282,9 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
+        if collectionView == SliderView {
+            open(scheme: slider_data[indexPath.row][2])
+        }
     }
  
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -278,22 +307,63 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
 
 extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if tableView == table {
+            return connected_data.count
+        }
+        else {
+            return availables_data.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == table {
             let cell = tableView.dequeueReusableCell(withIdentifier: "serv_connect", for: indexPath) as! ServicesConnectTableViewCell
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-     
-        //cell.textLabel?.text = characters[indexPath.row]
+            
+            if indexPath.row == 2 {
+                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            cell.titleOne.text = connected_data[indexPath.row][1]
+            let cost: NSString = "\(connected_data[indexPath.row][2])c/" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            let title_cost = connected_data[indexPath.row][3] as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
+            
             return cell
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
+            
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-         
-            //cell.textLabel?.text = characters[indexPath.row]
+            
+            if indexPath.row == 2 {
+                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            cell.titleOne.text = availables_data[indexPath.row][1]
+            let cost: NSString = "\(availables_data[indexPath.row][2])c/" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            let title_cost = availables_data[indexPath.row][3] as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
             return cell
         }
     }

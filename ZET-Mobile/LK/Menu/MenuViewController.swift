@@ -63,6 +63,35 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(PushViewController(), animated: true)
+        }
+        else if indexPath.row == 1  {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(ChangeTransferViewController(), animated: true)
+        }
+        else if indexPath.row == 2  {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(SettingsViewController(), animated: true)
+        }
+        else if indexPath.row == 3  {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(RoumingViewController(), animated: true)
+        }
+        else if indexPath.row == 4 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(ReplyToZetViewController(), animated: true)
+        }
+        else if indexPath.row == 5 {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(AboutAppViewController(), animated: true)
+        }
+        else if indexPath.row == 6 {
+            UserDefaults.standard.set("", forKey: "mobPhone")
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(SplashViewController(), animated: true)
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

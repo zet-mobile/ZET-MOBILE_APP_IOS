@@ -8,6 +8,10 @@
 import Foundation
 
 struct AboutAppData: Decodable {
+    let data: [data_data]
+}
+
+struct data_data: Decodable {
     let id: Int
     let title: String
     let description: String

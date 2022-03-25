@@ -4,6 +4,7 @@ PODS:
     - Alamofire (~> 5.4)
   - AvailableHapticFeedback (1.0.2)
   - FSCalendar (2.8.2)
+  - iOSDropDown (0.3.4)
   - Koyomi (1.2.7)
   - MultiSlider (1.11.2):
     - AvailableHapticFeedback
@@ -29,6 +30,7 @@ PODS:
 DEPENDENCIES:
   - AlamofireImage (~> 4.1)
   - FSCalendar
+  - iOSDropDown
   - Koyomi
   - MultiSlider
   - Pulsator
@@ -46,6 +48,7 @@ SPEC REPOS:
     - AlamofireImage
     - AvailableHapticFeedback
     - FSCalendar
+    - iOSDropDown
     - Koyomi
     - MultiSlider
     - Pulsator
@@ -65,6 +68,7 @@ SPEC CHECKSUMS:
   AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
   AvailableHapticFeedback: 9b21b9f6d3e4566015988b5de35b40abefe6c09a
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
+  iOSDropDown: c10a761f9a00c3f1cc9d3bce43ae504628e2f692
   Koyomi: f03615b8d2bb5a5a4752c6404a9794ed7ef7b327
   MultiSlider: 944d00877d371bbb5ce0a512fec517de87958775
   Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
@@ -79,6 +83,6 @@ SPEC CHECKSUMS:
   YandexMapKit: f222923561fe159dd8480d927f61950fc5ff3b8d
   YandexRuntime: 2547d72a3ce4757f16ad188cfbe8a124ae13d806
 
-PODFILE CHECKSUM: cf4276efa7f3a0a60a1e3e542262aa1b77cd2da4
+PODFILE CHECKSUM: 871ad2af66ff4959a02e16345ffaef01f2da5f58
 
 COCOAPODS: 1.11.2

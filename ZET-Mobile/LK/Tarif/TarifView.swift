@@ -65,7 +65,7 @@ class TarifView: UIView {
     
     lazy var titleOneRes: UILabel = {
         let title = UILabel()
-        title.text = "”"
+        title.text = ""
         title.numberOfLines = 0
         title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -78,176 +78,6 @@ class TarifView: UIView {
         return title
     }()
     
-    lazy var title2: UILabel = {
-        let title = UILabel()
-        title.text = "Минут внутри сети"
-        title.numberOfLines = 0
-        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 240, width: 150, height: 25)
-        title.backgroundColor = .clear
-        
-        return title
-    }()
-    
-    lazy var title2Line: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 170, y: 252, width: UIScreen.main.bounds.size.width - title2Res.frame.size.width - title2.frame.size.width - 40, height: 1)
-        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        return title
-    }()
-    
-    lazy var title2Res: UILabel = {
-        let title = UILabel()
-        title.text = "150"
-        title.numberOfLines = 0
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 240, width: title.text!.count * 10, height: 25)
-        title.backgroundColor = .clear
-        return title
-    }()
-    
-    lazy var title3: UILabel = {
-        let title = UILabel()
-        title.text = "Минут на другие сети"
-        title.numberOfLines = 0
-        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 270, width: 180, height: 25)
-        
-        return title
-    }()
-    
-    lazy var title3Line: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 200, y: 282, width: UIScreen.main.bounds.size.width - title3Res.frame.size.width - title3.frame.size.width - 40, height: 1)
-        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        return title
-    }()
-    
-    lazy var title3Res: UILabel = {
-        let title = UILabel()
-        title.text = "10"
-        title.numberOfLines = 0
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 270, width: title.text!.count * 10, height: 25)
-        title.backgroundColor = .clear
-        return title
-    }()
-    
-    lazy var title4: UILabel = {
-        let title = UILabel()
-        title.text = "Интернет (мб)"
-        title.numberOfLines = 0
-        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 300, width: 100, height: 25)
-        
-        return title
-    }()
-    
-    lazy var title4Line: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 120, y: 312, width: UIScreen.main.bounds.size.width - title4Res.frame.size.width - title4.frame.size.width - 40, height: 1)
-        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        return title
-    }()
-    
-    lazy var title4Res: UILabel = {
-        let title = UILabel()
-        title.text = "4200"
-        title.numberOfLines = 0
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 300, width: title.text!.count * 10, height: 25)
-        title.backgroundColor = .clear
-        return title
-    }()
-    
-    lazy var title5: UILabel = {
-        let title = UILabel()
-        title.text = "SMS"
-        title.numberOfLines = 0
-        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 330, width: 60, height: 25)
-        
-        return title
-    }()
-    
-    lazy var title5Line: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 80, y: 342, width: UIScreen.main.bounds.size.width - title5Res.frame.size.width - title5.frame.size.width - 40, height: 1)
-        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        return title
-    }()
-    
-    lazy var title5Res: UILabel = {
-        let title = UILabel()
-        title.text = "0.3c / 1 SMS"
-        title.numberOfLines = 0
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 330, width: title.text!.count * 10, height: 25)
-        title.backgroundColor = .clear
-        return title
-    }()
-    
-    lazy var title6: UILabel = {
-        let title = UILabel()
-        title.text = "Сумма за 30 дней (сомони)"
-        title.numberOfLines = 0
-        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 360, width: 200, height: 25)
-        
-        return title
-    }()
-    
-    lazy var title6Line: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 220, y: 372, width: UIScreen.main.bounds.size.width - title6Res.frame.size.width - title6.frame.size.width - 40, height: 1)
-        title.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        return title
-    }()
-    
-    lazy var title6Res: UILabel = {
-        let title = UILabel()
-        title.text = "50"
-        title.numberOfLines = 0
-        title.textColor = .black
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 10 + 15), y: 360, width: title.text!.count * 10, height: 25)
-        title.backgroundColor = .clear
-        return title
-    }()
     
     lazy var tab1: UILabel = {
         let title = UILabel()
@@ -329,11 +159,6 @@ class TarifView: UIView {
         self.addSubview(welcome)
         self.addSubview(user_name)
         self.addSubview(titleOne)
-        self.addSubview(title2)
-        self.addSubview(title3)
-        self.addSubview(title4)
-        self.addSubview(title5)
-        self.addSubview(title6)
         self.addSubview(tab1)
         self.addSubview(tab2)
         self.addSubview(tab1Line)
@@ -341,17 +166,6 @@ class TarifView: UIView {
         
         
         self.addSubview(titleOneRes)
-        self.addSubview(title2Res)
-        self.addSubview(title2Line)
-        self.addSubview(title3Res)
-        self.addSubview(title3Line)
-        self.addSubview(title4Res)
-        self.addSubview(title4Line)
-        self.addSubview(title5Res)
-        self.addSubview(title5Line)
-        self.addSubview(title6Res)
-        self.addSubview(title6Line)
-        //self.addSubview(unlimits)
     }
 }
 

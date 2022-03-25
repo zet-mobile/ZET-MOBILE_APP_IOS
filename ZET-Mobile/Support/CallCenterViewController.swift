@@ -38,7 +38,6 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(scrollView)
         
         sendRequest()
-        setupView()
     }
 
 
@@ -61,7 +60,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        support_view = SupportView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        support_view = SupportView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(mapClick))
         support_view.title1.isUserInteractionEnabled = true
@@ -79,7 +78,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.isUserInteractionEnabled = true
         support_view.icon2.addGestureRecognizer(tapGestureRecognizer4)
         
-        mapView = YMKMapView(frame: CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        mapView = YMKMapView(frame: CGRect(x: 0, y: 220, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(support_view)
@@ -148,7 +147,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
-                       
+                        self.setupView()
                     }
                    print("Completed event.")
                     

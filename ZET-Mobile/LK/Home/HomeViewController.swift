@@ -89,6 +89,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         color1 = UIColor.white
         
         sendRequest()
+        print(UserDefaults.standard.string(forKey: "token")!)
+        print(UserDefaults.standard.string(forKey: "mobPhone"))
+                
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -330,7 +333,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     func setupServicesTableView() {
         scrollView.addSubview(ServicesTableView)
         if zero_help_view_show == false {
-            ServicesTableView.frame = CGRect(x: 10, y: 770, width: Int(UIScreen.main.bounds.size.width) - 10, height: (services_data.count * 140))
+            ServicesTableView.frame = CGRect(x: 0, y: 770, width: Int(UIScreen.main.bounds.size.width), height: (services_data.count * 140))
         }
         else {
             ServicesTableView.frame = CGRect(x: 0, y: 940, width: Int(UIScreen.main.bounds.size.width), height: 1400)
@@ -376,12 +379,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async {
                         self.balance_credit = String(result.subscriberBalance)
                         self.tarif_name = String(result.priceplan.priceplanName)
-                        let dateFormatter1 = DateFormatter()
-                        dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                        let date = dateFormatter1.date(from: String(result.priceplan.nextApplyDate))
-                        dateFormatter1.dateFormat = "dd MMMM"
-                        dateFormatter1.locale = Locale(identifier: "ru_RU")
-                        self.next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                        if result.priceplan.nextApplyDate != nil {
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                            let date = dateFormatter1.date(from: String(result.priceplan.nextApplyDate!))
+                            dateFormatter1.dateFormat = "dd MMMM"
+                            dateFormatter1.locale = Locale(identifier: "ru_RU")
+                            self.next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                        }
                         
                         self.remainders_data.append([String(result.balances.offnet.start), String(result.balances.offnet.now), String(result.balances.offnet.unlim)])
                         self.remainders_data.append([String(result.balances.mb.start), String(result.balances.mb.now), String(result.balances.mb.unlim)])
@@ -498,7 +503,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
             
-            cell.settings.frame = CGRect(x: cell.titleTarif.text!.count * 10 + 30, y: 100, width: 20, height: 20)
+            cell.settings.frame = CGRect(x: tarif_name.count * 10 + 30, y: 100, width: 20, height: 20)
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
             let third = String(String(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(5))).prefix(2)

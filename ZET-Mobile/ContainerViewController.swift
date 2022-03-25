@@ -48,7 +48,7 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
         tabUsage.tabBarItem = tabUsageBarItem3
         
         // Create Tab 4
-        let tabCallCenter = HomeViewController()
+        let tabCallCenter = CallCenterViewController()
         let tabCallCenterBarItem4 = UITabBarItem(title: defaultLocalizer.stringForKey(key: "support"), image: UIImage(named: "Call")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "Call_orange")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         
         tabCallCenter.tabBarItem = tabCallCenterBarItem4

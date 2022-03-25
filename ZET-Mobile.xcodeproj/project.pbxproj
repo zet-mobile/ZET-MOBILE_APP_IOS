@@ -35,6 +35,7 @@
 		B82B7D8927C39D0500570AC0 /* AuthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D8827C39D0400570AC0 /* AuthData.swift */; };
 		B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */; };
 		B82B7DA427C4005600570AC0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7DA327C4005600570AC0 /* APIClient.swift */; };
+		B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF227EA40A7001A6696 /* TransferData.swift */; };
 		B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852979B27C55AA000B68F36 /* ConditionViewController.swift */; };
 		B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A127C6AD9100B68F36 /* MenuViewController.swift */; };
 		B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A927C6ADD100B68F36 /* MenuViewCell.swift */; };
@@ -187,6 +188,7 @@
 		B82B7DAE27C4EC3A00570AC0 /* RxCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B82B7DB327C4EC4100570AC0 /* RxRelay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxRelay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B82B7DB827C4EC4600570AC0 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8358EF227EA40A7001A6696 /* TransferData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferData.swift; sourceTree = "<group>"; };
 		B852979B27C55AA000B68F36 /* ConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionViewController.swift; sourceTree = "<group>"; };
 		B85297A127C6AD9100B68F36 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B85297A927C6ADD100B68F36 /* MenuViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
@@ -425,7 +427,6 @@
 				B853D7872755058B00FBE1F1 /* ZeroHelp */,
 				B853D7AA2756285400FBE1F1 /* Detalization */,
 				B809294F277AEB2A00CF5824 /* AboutApp */,
-				B8092950277AEC9900CF5824 /* Support */,
 				B853D83C276300C800FBE1F1 /* SearchNumber */,
 				B8092991278B5C4200CF5824 /* Settings */,
 				B8092993278B5C8E00CF5824 /* ReplyToZet */,
@@ -585,6 +586,7 @@
 				B858A2C727DBB0C200D190CE /* RoumingCountryData.swift */,
 				B858A2C927DBB1C100D190CE /* SupportData.swift */,
 				B858A2CB27DBB2EA00D190CE /* SettingsData.swift */,
+				B8358EF227EA40A7001A6696 /* TransferData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -705,6 +707,7 @@
 				B86429042733B715000C159E /* Wallet */,
 				B80929EE2792838600CF5824 /* ChangeCode */,
 				B8092994278B5CAC00CF5824 /* PinCodeInput */,
+				B8092950277AEC9900CF5824 /* Support */,
 				B87F473527311A1400BAEDFA /* LaunchScreen.storyboard */,
 				B87F473827311A1400BAEDFA /* Info.plist */,
 				B87F473327311A1400BAEDFA /* Assets.xcassets */,
@@ -1062,6 +1065,7 @@
 				B85297E927C7548700B68F36 /* MenuView.swift in Sources */,
 				B86428A827313B90000C159E /* ContainerViewController.swift in Sources */,
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
+				B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */,
 				B853D74E2754CCEB00FBE1F1 /* ChangeTransferViewController.swift in Sources */,
 				B82B7D7A27C2B00300570AC0 /* SplashViewController.swift in Sources */,
 				B864295F273A36C0000C159E /* PushViewController.swift in Sources */,

@@ -110,8 +110,8 @@ class APIClient {
     }
     
     // Get information about subscriber priceplana nd available priceplans.
-    func pricePlanIDGetRequest(parametr: String) throws -> Observable<PricePlansData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/priceplans" + "&\(parametr)")!)
+    func pricePlanIDGetRequest(parametr: String) throws -> Observable<PricePlansIDData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/priceplans/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -168,6 +168,7 @@ class APIClient {
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/about")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("IOS", forHTTPHeaderField: "Device")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
@@ -203,7 +204,7 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
-    // Get information about our support
+    // Get settings information
     func settingsGetRequest() throws -> Observable<SettingsData> {
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/settings")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -212,7 +213,21 @@ class APIClient {
         request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
     }
+    
+    // Change settings information
+    func settingsPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/settings/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
 }
+
 
 extension UIViewController {
     func open(scheme: String) {

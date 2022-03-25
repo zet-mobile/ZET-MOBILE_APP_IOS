@@ -36,9 +36,6 @@ class SplashViewController: UIViewController {
     }
     
     @objc func touches() {
-//        print(UserDefaults.standard.string(forKey: "token")!)
-    //    print(UserDefaults.standard.string(forKey: "mobPhone"))
-        
         if (UserDefaults.standard.string(forKey: "mobPhone") != nil) {
             guard let window = UIApplication.shared.keyWindow else {
                 return

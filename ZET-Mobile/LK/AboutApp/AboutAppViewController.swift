@@ -20,6 +20,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     var about_view = AboutAppView()
     let table = UITableView()
 
+    var table_data = [[String]]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +36,6 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         view.addSubview(scrollView)
         
         sendRequest()
-        setupView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,12 +79,20 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     }
 
     func sendRequest() {
+        
         let client = APIClient.shared
             do{
-              try client.aboutGetRequest().subscribe(
+                try client.aboutGetRequest().subscribe(
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async {
+                        
+                        if result.data.count != 0 {
+                            for i in 0 ..< result.data.count {
+                                self.table_data.append([String(result.data[i].id), String(result.data[i].title), String(result.data[i].description), String(result.data[i].url)])
+                            }
+                        }
+                        
                     }
                 },
                 onError: { error in
@@ -92,7 +100,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
-                       
+                        self.setupView()
                     }
                    print("Completed event.")
                     
@@ -105,25 +113,39 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
 
 extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return 3
+        return table_data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "about_cell", for: indexPath) as! AboutViewCell
+        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+            
+        if indexPath.row == table_data.count - 1 {
+            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+        }
         
-            let cell = tableView.dequeueReusableCell(withIdentifier: "about_cell", for: indexPath) as! AboutViewCell
-            
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-            
-            if indexPath.row == 2 {
-                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-            
-            }
-                        
-            return cell
+        cell.titleOne.text = table_data[indexPath.row][1]
+        cell.titleTwo.text = table_data[indexPath.row][2]
+        
+        return cell
         
        
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if table_data[indexPath.row][0] == "1" {
+            open(scheme: table_data[indexPath.row][3])
+        }
+        else if table_data[indexPath.row][0] == "2"  {
+            open(scheme: table_data[indexPath.row][3])
+        }
+        else if table_data[indexPath.row][0] == "3"  {
+            open(scheme: table_data[indexPath.row][3])
+        }
+        else if table_data[indexPath.row][0] == "4"  {
+            open(scheme: table_data[indexPath.row][3])
+        }
+    }
     
 }
 

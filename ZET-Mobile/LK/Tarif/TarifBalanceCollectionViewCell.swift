@@ -11,7 +11,7 @@ class TarifBalanceCollectionViewCell: UICollectionViewCell {
     
     let image: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "img-5")
+        iv.image = UIImage(named: "")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         return iv

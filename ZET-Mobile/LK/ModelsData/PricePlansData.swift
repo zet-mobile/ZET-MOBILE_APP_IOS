@@ -12,16 +12,34 @@ struct PricePlansData: Decodable {
     let available: [available_data]
 }
 
-struct connected_data: Decodable {
+struct PricePlansIDData: Decodable {
+    let selected: selected_data
+    let available: [available_data]
+}
+
+struct connected_data {
     let id: Int
     let priceplanName: String
-    let nextApplyDate: String
+    let nextApplyDate: String?
+    let description: String?
+    let price: String?
+    let period: String?
+    let balances: [details_data]
+    let discount: discount_data?
+    let overCharging: [overCharging_data]
+    let unlimOptions: [unlimOptions_data]
+}
+
+struct selected_data: Decodable {
+    let id: Int
+    let priceplanName: String
+    //let nextApplyDate: String
     //let description: String
     let price: String
     let period: String
     let balances: [details_data]
     //let discount: discount_data
-    //let overCharging: [overCharging_data]
+    let overCharging: [overCharging_data]
     let unlimOptions: [unlimOptions_data]
 }
 
@@ -37,7 +55,8 @@ struct available_data: Decodable{
 
 struct overCharging_data: Decodable {
     let description: String
-    let directionPrice: Int
+    let directionPrice: Double
+    let priceAndUnit: String
 }
 
 struct unlimOptions_data: Decodable {
@@ -48,4 +67,65 @@ struct unlimOptions_data: Decodable {
 struct dpiUnlimElements_data: Decodable {
     let elementName: String
     let iconUrl: String
+}
+
+extension connected_data: Decodable {
+    
+    private enum connected_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case priceplanName = "priceplanName"
+        case nextApplyDate = "nextApplyDate"
+        case description = "description"
+        case price = "price"
+        case period = "period"
+        case balances = "balances"
+        case discount = "discount"
+        case overCharging = "overCharging"
+        case unlimOptions = "unlimOptions"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: connected_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        priceplanName = try container.decode(String.self, forKey: .priceplanName)
+        do {
+            nextApplyDate = try container.decode(String.self, forKey: .nextApplyDate)
+        }
+        catch {
+            nextApplyDate = nil
+        }
+       
+        do {
+            description = try container.decode(String.self, forKey: .description)
+        }
+        catch {
+            description = nil
+        }
+        
+        do {
+            price = try container.decode(String.self, forKey: .price)
+        }
+        catch {
+            price = nil
+        }
+        
+        do {
+            period = try container.decode(String.self, forKey: .period)
+        }
+        catch {
+            period = nil
+        }
+        
+        balances = try container.decode([details_data].self, forKey: .balances)
+        
+        do {
+            discount = try container.decode(discount_data.self, forKey: .discount)
+        }
+        catch {
+            discount = nil
+        }
+        
+        overCharging = try container.decode([overCharging_data].self, forKey: .overCharging)
+        unlimOptions = try container.decode([unlimOptions_data].self, forKey: .unlimOptions)
+    }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import iOSDropDown
 
 class SettingsView: UIView {
 
@@ -37,8 +38,8 @@ class SettingsView: UIView {
         return titleOne
     }()
     
-    lazy var lang: UITextField = {
-        let textfield = UITextField()
+    lazy var lang: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 80, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
@@ -61,8 +62,8 @@ class SettingsView: UIView {
         return titleOne
     }()
     
-    lazy var app_theme: UITextField = {
-        let textfield = UITextField()
+    lazy var app_theme: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 200, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
@@ -87,7 +88,6 @@ class SettingsView: UIView {
     
     lazy var switch_push: UISwitch = {
         let switch_ = UISwitch()
-        switch_.isOn = true
         switch_.onTintColor = .orange
         switch_.frame = CGRect(x: 20, y: 350, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)
@@ -110,7 +110,6 @@ class SettingsView: UIView {
     
     lazy var switch_sales: UISwitch = {
         let switch_ = UISwitch()
-        switch_.isOn = true
         switch_.onTintColor = .orange
         switch_.frame = CGRect(x: 20, y: 400, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)
@@ -133,7 +132,6 @@ class SettingsView: UIView {
 
     lazy var switch_email: UISwitch = {
         let switch_ = UISwitch()
-        switch_.isOn = true
         switch_.onTintColor = .orange
         switch_.frame = CGRect(x: 20, y: 450, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)
@@ -156,7 +154,6 @@ class SettingsView: UIView {
     
     lazy var switch_sms: UISwitch = {
         let switch_ = UISwitch()
-        switch_.isOn = false
         switch_.onTintColor = .orange
         switch_.frame = CGRect(x: 20, y: 500, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)

@@ -16,6 +16,7 @@ pod 'RxCocoa'
 pod 'SideMenu'
 pod 'Toast-Swift'
 pod 'AlamofireImage', '~> 4.1'
+pod 'iOSDropDown'
 
   target 'ZET-MobileTests' do
     inherit! :search_paths

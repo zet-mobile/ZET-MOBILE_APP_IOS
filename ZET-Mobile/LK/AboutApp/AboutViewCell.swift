@@ -37,14 +37,14 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     button.setImage(#imageLiteral(resourceName: "next_arrow"), for: UIControl.State.normal)
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
-    titleOne.text = "ZET-Music"
+    titleOne.text = ""
     titleOne.numberOfLines = 1
     titleOne.textColor = .black
     titleOne.font = UIFont.systemFont(ofSize: 20)
     titleOne.textAlignment = .left
     
     titleTwo.frame = CGRect(x: 80, y: 40, width: 340, height: 30)
-    titleTwo.text = "Музыка и аудио"
+    titleTwo.text = ""
     titleTwo.numberOfLines = 1
     titleTwo.textColor = .lightGray
     titleTwo.font = UIFont.systemFont(ofSize: 15)
