@@ -33,11 +33,11 @@ class AddBalanceOptionViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = false
-        
+        table.backgroundColor = .white
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+        return .lightContent
     }
 
 }

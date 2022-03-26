@@ -124,7 +124,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         table.separatorStyle = .none
         table.isScrollEnabled = false
         table.showsVerticalScrollIndicator = false
+        table.backgroundColor = .white
       }
+    
     
     @objc func openDetalazition() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)

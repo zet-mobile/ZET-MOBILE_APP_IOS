@@ -94,6 +94,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -127,7 +131,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat((services_data.count * 140)) - 100)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat((services_data.count * (Int(UIScreen.main.bounds.size.height) * 140) / 580)))
         view.addSubview(scrollView)
         
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
@@ -336,7 +340,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             ServicesTableView.frame = CGRect(x: 0, y: 770, width: Int(UIScreen.main.bounds.size.width), height: (services_data.count * 140))
         }
         else {
-            ServicesTableView.frame = CGRect(x: 0, y: 940, width: Int(UIScreen.main.bounds.size.width), height: 1400)
+            ServicesTableView.frame = CGRect(x: 0, y: 940, width: Int(UIScreen.main.bounds.size.width), height: (services_data.count * 140))
         }
         ServicesTableView.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
         ServicesTableView.delegate = self
@@ -344,6 +348,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         ServicesTableView.rowHeight = 140
         ServicesTableView.estimatedRowHeight = 140
         ServicesTableView.isScrollEnabled = false
+        ServicesTableView.backgroundColor = .white
       }
     
     @objc func openAddionalTraficsView() {

@@ -77,6 +77,10 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         sendRequest()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if #available(iOS 11.0, *) {
@@ -475,7 +479,7 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
             table.rowHeight = 100
             table.estimatedRowHeight = 100
             table.alwaysBounceVertical = false
-            
+            table.backgroundColor = .white
             cell.addSubview(table)
             return cell
         }

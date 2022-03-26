@@ -22,6 +22,7 @@ class MenuViewController: UIViewController {
         tableView.reloadData()
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -36,13 +37,12 @@ class MenuViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MenuViewCell.self, forCellReuseIdentifier: reuseIdentifer)
-        tableView.backgroundColor = .clear
         tableView.rowHeight = (UIScreen.main.bounds.size.height * 70) / 926
         tableView.separatorStyle = .none
         tableView.frame = CGRect(x: 0, y: 10, width: UIScreen.main.bounds.size.width - 50, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
+        tableView.backgroundColor = .white
         view.addSubview(tableView)
-        
-    
+
     }
     
 }

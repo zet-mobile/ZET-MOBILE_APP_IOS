@@ -72,6 +72,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         table.rowHeight = 80
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
+        table.backgroundColor = .white
         scrollView.addSubview(table)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)

@@ -88,7 +88,7 @@ class MenuView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .clear
+        backgroundColor = .white
        
         self.addSubview(title)
         self.addSubview(vk)

@@ -183,6 +183,7 @@ extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.alwaysBounceVertical = false
             table.separatorStyle = .none
             table.showsVerticalScrollIndicator = false
+            table.backgroundColor = .white
             cell.addSubview(table)
             
         }

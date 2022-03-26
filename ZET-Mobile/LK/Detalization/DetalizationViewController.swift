@@ -257,6 +257,7 @@ extension DetalizationViewController: UICollectionViewDelegateFlowLayout, UIColl
                 table.estimatedRowHeight = 90
                 table.alwaysBounceVertical = false
                 table.separatorStyle = .none
+                table.backgroundColor = .white
                 cell.addSubview(table)
                 
             }

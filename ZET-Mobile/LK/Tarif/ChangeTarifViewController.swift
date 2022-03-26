@@ -370,7 +370,7 @@ extension ChangeTarifViewController: UICollectionViewDelegateFlowLayout, UIColle
         table.rowHeight = 100
         table.estimatedRowHeight = 100
         table.alwaysBounceVertical = false
-        
+        table.backgroundColor = .white
         cell.addSubview(table)
         return cell
     }

@@ -25,7 +25,7 @@ class AddionalTraficsView: UIView {
     
     lazy var balance: UILabel = {
         let user_name = UILabel()
-        user_name.text = "45 somoni"
+        user_name.text = ""
         user_name.numberOfLines = 0
         user_name.textColor = .black
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)

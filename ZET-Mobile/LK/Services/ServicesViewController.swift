@@ -61,6 +61,10 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if #available(iOS 11.0, *) {
@@ -264,6 +268,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table.rowHeight = 160
                 table.estimatedRowHeight = 160
                 table.alwaysBounceVertical = false
+                table.backgroundColor = .white
                 cell.addSubview(table)
             }
             else {
@@ -274,6 +279,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table2.rowHeight = 140
                 table2.estimatedRowHeight = 140
                 table2.alwaysBounceVertical = false
+                table2.backgroundColor = .white
                 cell.addSubview(table2)
             }
             return cell

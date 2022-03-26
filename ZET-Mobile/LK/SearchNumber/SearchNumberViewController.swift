@@ -71,6 +71,7 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.showsVerticalScrollIndicator = false
+        table.backgroundColor = .white
         scrollView.addSubview(table)
     }
 

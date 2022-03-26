@@ -33,6 +33,8 @@ class MenuViewCell: UITableViewCell {
         addSubview(ico_image)
         addSubview(descriptionLabel)
         
+        backgroundColor = .white
+        
         ico_image.frame = CGRect(x: 25, y: 20, width: 20, height: 20)
         descriptionLabel.frame = CGRect(x: 65, y: 20, width: UIScreen.main.bounds.size.width  - 150, height: 20)
         descriptionLabel.numberOfLines = 1

@@ -150,6 +150,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             table.estimatedRowHeight = 80
             table.alwaysBounceVertical = false
             table.backgroundColor = .clear
+            table.backgroundColor = .white
             cell.addSubview(table)
            
         }

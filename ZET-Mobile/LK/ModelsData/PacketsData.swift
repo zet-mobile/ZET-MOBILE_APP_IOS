@@ -40,15 +40,15 @@ struct unlimConditions_data: Decodable {
 
 struct connectedPackets_data: Decodable {
     let packetName: String
-    let iconUrl: String
-    let description: String
-    let price: Double
-    let period: String
+    //let iconUrl: String
+    //let description: String
+    let price: String
+    //let period: String
     let unitType: Double
     let packetStatus: Double
-    let nextApplyDate: Date
+    //let nextApplyDate: Date
     let id: Int
-    let discount: discount_data
+    //let discount: discount_data
 }
 
 struct discount_data: Decodable {

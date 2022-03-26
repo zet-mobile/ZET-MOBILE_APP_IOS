@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 var color1 = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
 var color2 = UIColor.white
 
 class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
 
+    let disposeBag = DisposeBag()
+    
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
@@ -24,7 +28,6 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     let table = UITableView()
     let table2 = UITableView()
     let table3 = UITableView()
-    let table4 = UITableView()
     
     let TabCollectionServiceView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -40,26 +43,21 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var balance_credit = ""
+    var remainders_data = [[String]]()
+    var internet_data = [[String]]()
+    var minuti_data = [[String]]()
+    var sms_data = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        
+        view.backgroundColor = .white
         
         color1 = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         color2 = UIColor.white
         
-        setupView()
-        setupRemaindersSection()
-        setupTabCollectionView()
+        sendRequest()
         
     }
     
@@ -81,10 +79,22 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         addional_view = AddionalTraficsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         toolbar.number_user_name.text = "Подключить пакеты"
+        addional_view.balance.text = balance_credit + " сомони"
         self.view.addSubview(toolbar)
         scrollView.addSubview(addional_view)
         
@@ -100,14 +110,32 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         
         var textColor = UIColor.black
         var textColor2 = UIColor.lightGray
+        var number_data = ""
         
-        var number_label: NSString = "356" as NSString
+        if remainders_data[0][1] == "0" {
+            textColor = .red
+            textColor2 = .red
+        }
+        else {
+            textColor = .black
+            textColor2 = .lightGray
+        }
+        
+        if remainders_data[0][2] == "true" {
+            number_data = "∞"
+            textColor = .orange
+            textColor2 = .lightGray
+        }
+        else {
+            number_data = remainders_data[0][1]
+        }
+        var number_label: NSString = number_data as NSString
         var range = (number_label).range(of: number_label as String)
         var number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
         number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
         
-        var title_label = "\n минут из 350" as NSString
+        var title_label = "\n минут из \(remainders_data[0][0])" as NSString
         var titleString = NSMutableAttributedString.init(string: title_label as String)
         var range2 = (title_label).range(of: title_label as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
@@ -116,13 +144,32 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         number_label_String.append(titleString)
         remainderView.minutesRemainder.text.attributedText = number_label_String
        
-        number_label = "7060" as NSString
-        title_label = "\n мегабайт из 4500" as NSString
+        if remainders_data[1][1] == "0" {
+            textColor = .red
+            textColor2 = .red
+        }
+        else {
+            textColor = .black
+            textColor2 = .lightGray
+        }
+        
+        if remainders_data[1][2] == "true" {
+            number_data = "∞"
+            textColor = .orange
+            textColor2 = .lightGray
+        }
+        else {
+            number_data = remainders_data[1][1]
+        }
+        number_label = number_data as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
         number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
         
+        number_label = "7060" as NSString
+        
+        title_label = "\n мегабайт из \(remainders_data[1][0])" as NSString
         titleString = NSMutableAttributedString.init(string: title_label as String)
         range2 = (title_label).range(of: title_label as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
@@ -131,17 +178,29 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         number_label_String.append(titleString)
         remainderView.internetRemainder.text.attributedText = number_label_String
         
-        let b = "0"
-        if b == "0" {
+        if remainders_data[2][1] == "0" {
             textColor = .red
+            textColor2 = .red
         }
-        number_label = "0" as NSString
-        title_label = "\n SMS из 150" as NSString
+        else {
+            textColor = .black
+            textColor2 = .lightGray
+        }
+        if remainders_data[2][2] == "true" {
+            number_data = "∞"
+            textColor = .orange
+            textColor2 = .lightGray
+        }
+        else {
+            number_data = remainders_data[2][1]
+        }
+        number_label = number_data as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
         number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
         
+        title_label = "\n SMS из \(remainders_data[2][0])" as NSString
         titleString = NSMutableAttributedString.init(string: title_label as String)
         range2 = (title_label).range(of: title_label as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value:textColor2, range: range2)
@@ -150,12 +209,28 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         number_label_String.append(titleString)
         remainderView.messagesRemainder.text.attributedText = number_label_String
         
-        remainderView.internetRemainder.spentProgress = CGFloat(0.1)
-        remainderView.messagesRemainder.spentProgress = CGFloat(0.5)
-        remainderView.minutesRemainder.spentProgress = CGFloat(0.7)
         remainderView.messagesRemainder.plusText.isHidden = true
         remainderView.messagesRemainder.backgroundColor = .clear
-       // remainderView.
+        if remainders_data[0][2] == "true" || Double(remainders_data[0][0])! < Double(remainders_data[0][1])! {
+            remainderView.minutesRemainder.spentProgress = CGFloat(1)
+        }
+        else {
+            remainderView.minutesRemainder.spentProgress = CGFloat(Double(remainders_data[0][1])! / Double(remainders_data[0][0])!)
+        }
+        
+        if remainders_data[1][2] == "true" || Double(remainders_data[1][0])! < Double(remainders_data[1][1])! {
+            remainderView.internetRemainder.spentProgress = CGFloat(1)
+        }
+        else {
+            remainderView.internetRemainder.spentProgress = CGFloat(Double(remainders_data[1][1])! / Double(remainders_data[1][0])!)
+        }
+        
+        if remainders_data[2][2] == "true" || Double(remainders_data[2][0])! < Double(remainders_data[2][1])! {
+            remainderView.messagesRemainder.spentProgress = CGFloat(1)
+        }
+        else {
+            remainderView.messagesRemainder.spentProgress = CGFloat(Double(remainders_data[2][1])! / Double(remainders_data[2][0])!)
+        }
     }
 
     func setupTabCollectionView() {
@@ -261,6 +336,56 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 3, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.packetsGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        self.balance_credit = String(result.subscriberBalance)
+                        
+                        self.remainders_data.append([String(result.balances.offnet.start), String(result.balances.offnet.now), String(result.balances.offnet.unlim)])
+                        self.remainders_data.append([String(result.balances.mb.start), String(result.balances.mb.now), String(result.balances.mb.unlim)])
+                        self.remainders_data.append([String(result.balances.sms.start), String(result.balances.sms.now), String(result.balances.sms.unlim)])
+                        
+                        if result.internetAvailablePackets.count != 0 {
+                            for i in 0 ..< result.internetAvailablePackets.count {
+                                self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus)])
+                            }
+                        }
+                        
+                        if result.offnetAvailablePackets.count != 0 {
+                            for i in 0 ..< result.offnetAvailablePackets.count {
+                                self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus)])
+                            }
+                        }
+                        
+                        if result.smsAvailablePackets.count != 0 {
+                            for i in 0 ..< result.smsAvailablePackets.count {
+                                self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus)])
+                            }
+                        }
+
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupRemaindersSection()
+                        setupTabCollectionView()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
 }
 
 extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -286,6 +411,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table.estimatedRowHeight = 140
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
+            table.backgroundColor = .white
             cell.addSubview(table)
         }
         else if indexPath.row == 1 {
@@ -297,6 +423,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table2.estimatedRowHeight = 140
             table2.alwaysBounceVertical = false
             table2.showsVerticalScrollIndicator = false
+            table2.backgroundColor = .white
             cell.addSubview(table2)
         }
         else if indexPath.row == 2 {
@@ -308,19 +435,10 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.estimatedRowHeight = 140
             table3.alwaysBounceVertical = false
             table3.showsVerticalScrollIndicator = false
+            table3.backgroundColor = .white
             cell.addSubview(table3)
         }
-        else if indexPath.row == 3 {
-            table4.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table4.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
-            table4.delegate = self
-            table4.dataSource = self
-            table4.rowHeight = 140
-            table4.estimatedRowHeight = 140
-            table4.alwaysBounceVertical = false
-            table4.showsVerticalScrollIndicator = false
-            cell.addSubview(table4)
-        }
+        
         return cell
     }
     
@@ -383,15 +501,76 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
 
 extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        if tableView == table {
+            return internet_data.count
+        } else if tableView == table2 {
+            return minuti_data.count
+        } else {
+            return sms_data.count
+        }
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-         
-            return cell
+       let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
+        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        if tableView == table {
+            cell.titleOne.text = internet_data[indexPath.row][1]
+            let cost: NSString = "\(internet_data[indexPath.row][2])c/" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            let title_cost = internet_data[indexPath.row][3] as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
+        }
+        else if tableView == table2 {
+            cell.titleOne.text = minuti_data[indexPath.row][1]
+            let cost: NSString = "\(minuti_data[indexPath.row][2])c/" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            let title_cost = minuti_data[indexPath.row][3] as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
+        }
+        else {
+            cell.titleOne.text = sms_data[indexPath.row][1]
+            let cost: NSString = "\(sms_data[indexPath.row][2])c/" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            let title_cost = sms_data[indexPath.row][3] as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
+        }
+        
+        if indexPath.row == 2 {
+            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+        }
+        
+        return cell
         
     }
     

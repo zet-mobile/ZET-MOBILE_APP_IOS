@@ -179,6 +179,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table.estimatedRowHeight = 80
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
+            table.backgroundColor = .white
             cell.addSubview(table)
            
         }
@@ -191,7 +192,8 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table2.estimatedRowHeight = 90
             table2.alwaysBounceVertical = false
             table2.separatorStyle = .none
-            table.showsVerticalScrollIndicator = false
+            table2.showsVerticalScrollIndicator = false
+            table2.backgroundColor = .white
             cell.addSubview(table2)
             
         }
