@@ -11,6 +11,7 @@ class RoumingTableCell: UITableViewCell {
         
         let button = UIButton()
         let titleOne = UILabel()
+        let opisanie = UILabel()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,6 +24,7 @@ class RoumingTableCell: UITableViewCell {
         
         contentView.addSubview(button)
         contentView.addSubview(titleOne)
+        contentView.addSubview(opisanie)
         
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 80)
         
@@ -30,12 +32,21 @@ class RoumingTableCell: UITableViewCell {
         button.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
         
         titleOne.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 90, height: 60)
-        titleOne.text = "Что такое CAMEL-роуминг и в чем его преимущества?"
+        titleOne.text = ""
         titleOne.numberOfLines = 0
         titleOne.textColor = .black
         titleOne.font = UIFont.systemFont(ofSize: 20)
         titleOne.textAlignment = .left
         
+        opisanie.numberOfLines = 0
+        opisanie.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+        opisanie.font = UIFont(name: "", size: 10)
+        opisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
+        opisanie.textAlignment = .left
+        opisanie.frame = CGRect(x: 20, y: 80, width: UIScreen.main.bounds.size.width - 40, height: 0)
+        opisanie.autoresizesSubviews = true
+        opisanie.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+      
         
     }
 

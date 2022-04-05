@@ -145,7 +145,7 @@ class APIClient {
     
     // Disable any service to subscriber.
     func disableService(parametr: String) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/services" + "&\(parametr)")!)
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/services/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -176,7 +176,7 @@ class APIClient {
     
     // Get information about roaming.
     func roumingGetRequest() throws -> Observable<RoumingData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/roiming")!)
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/roaming")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")

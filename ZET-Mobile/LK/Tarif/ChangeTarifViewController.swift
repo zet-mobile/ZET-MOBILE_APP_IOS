@@ -8,6 +8,8 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Alamofire
+import AlamofireImage
 
 class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     
@@ -19,7 +21,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     var toolbar = TarifToolbarView()
     var tarifView = TarifView()
     
-    var icon_count = 0
+    var icon_row_count = 0
     var icon_count2 = 0
     
     var x_pozition = 20
@@ -38,13 +40,17 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
-    var tarif_name = ""
-    var spisanie = ""
+    var discount_id = ""
+    var info_data = [[String]]()
     var balances_data = [[String]]()
     var overChargings_data = [[String]]()
     var availables_data = [[String]]()
     var unlim_data = [[String]]()
+    var options_element = [[String]]()
     
+    var twoDimensionalArray = [
+        unlimOptions_data(optionName: "", dpiUnlimElements: [dpiUnlimElements_data(elementName: "", iconUrl: "")])
+    ]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -91,10 +97,11 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         tarifView.titleOne.isHidden = true
         tarifView.titleOneRes.isHidden = true
         tarifView.white_view_back.frame.origin.y = 85
-        tarifView.welcome.text = tarif_name
-        tarifView.user_name.text = spisanie
         
-        tarifView.titleOneRes.text = tarif_name
+        tarifView.welcome.text = info_data[0][1]
+        tarifView.user_name.text = info_data[0][2]
+        
+        tarifView.titleOneRes.text = info_data[0][1]
         
         y_pozition = 100
         
@@ -129,89 +136,47 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
             y_pozition = y_pozition + 30
         }
         
-        if icon_count != 0 {
-            y_pozition = y_pozition + 20
-        }
-        
-        for i in 0 ..< icon_count {
-            let unlimits = UIImageView()
-            unlimits.image = UIImage(named: "VK_black")
-            
-            if x_pozition > 378 {
-                x_pozition = 20
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                y_pozition = y_pozition + 40
-            }
-            else {
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                x_pozition = x_pozition + 45
-            }
-            scrollView.addSubview(unlimits)
-        
-        }
-        
-        if 428 - x_pozition < 250 {
-            y_pozition = y_pozition + 45
+        for i in 0 ..< unlim_data.count {
+            print(options_element[i].count)
             x_pozition = 20
-        }
-        
-        let title = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: 250, height: 35))
-        title.text = "Безлимит на социальные сети"
-        title.numberOfLines = 0
-        title.textColor = .darkGray
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        
-        if icon_count != 0  {
-            scrollView.addSubview(title)
-        }
-        
-        if icon_count2 != 0  {
-            x_pozition = 20
-            y_pozition = y_pozition + 55
-        }
-        
-        for i in 0 ..< icon_count2 {
-            let unlimits = UIImageView()
-            unlimits.image = UIImage(named: "VK_black")
+            y_pozition += 40
+            for j in 0 ..< options_element[i].count {
+                let unlimits = UIImageView()
+                unlimits.image = UIImage(named: "VK_black")
+                    
+                if Int(UIScreen.main.bounds.size.width) - x_pozition < 55 {
+                    x_pozition = 20
+                    y_pozition = y_pozition + 40
+                    unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
+                }
+                else {
+                    unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
+                    x_pozition = x_pozition + 45
+                }
+                scrollView.addSubview(unlimits)
+            }
             
-            if x_pozition > 378 {
-                x_pozition = 20
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
+            if Int(UIScreen.main.bounds.size.width) - x_pozition < unlim_data[i][0].count * 10 {
                 y_pozition = y_pozition + 45
+                x_pozition = 20
             }
-            else {
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                x_pozition = x_pozition + 45
-            }
-            scrollView.addSubview(unlimits)
-        
+            
+            let title = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: unlim_data[i][0].count * 10, height: 35))
+            title.text = unlim_data[i][0]
+            title.numberOfLines = 0
+            title.textColor = .darkGray
+            title.font = UIFont.systemFont(ofSize: 15)
+            title.lineBreakMode = NSLineBreakMode.byWordWrapping
+            title.textAlignment = .left
+            
+            scrollView.addSubview(title)
+            
         }
         
-        if 428 - x_pozition < 200 {
-            y_pozition = y_pozition + 45
-            x_pozition = 20
-        }
-        
-        let title2 = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: 200, height: 35))
-        title2.text = "Ночной безлимит"
-        title2.numberOfLines = 0
-        title2.textColor = .darkGray
-        title2.font = UIFont.systemFont(ofSize: 15)
-        title2.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title2.textAlignment = .left
-        
-        if icon_count2 != 0 {
-            scrollView.addSubview(title2)
-        }
-        
-        if icon_count != 0 && icon_count2 != 0 {
-            y_pozition = y_pozition + 50
-        }
-        
+        y_pozition += 45
+  
         let ReconnectBut = UIButton(frame: CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
-        //ReconnectBut.addTarget(self, action: #selector(goToChangeTarif), for: UIControl.Event.touchUpInside)
+        ReconnectBut.addTarget(self, action: #selector(goToChangeTarif), for: UIControl.Event.touchUpInside)
         ReconnectBut.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         ReconnectBut.setTitle(defaultLocalizer.stringForKey(key: "reconnect"), for: .normal)
         ReconnectBut.setTitleColor(.white, for: .normal)
@@ -297,31 +262,89 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
+    @objc func goToChangeTarif() {
+        let parametr: [String: Any] = ["priceplanForUserId": info_data[0][0], "discountId": discount_id]
+        
+        let client = APIClient.shared
+            do{
+              try client.changePricepPlan(jsonBody: parametr).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    //sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+        
+    }
+    
     func sendRequest() {
         let client = APIClient.shared
             do{
                 try client.pricePlanIDGetRequest(parametr: id_tarif_choosed).subscribe(
                 onNext: { result in
-                  print(result)
                     DispatchQueue.main.async {
-                        self.tarif_name = String(result.selected.priceplanName)
-                        self.spisanie = String(result.selected.price) + " / " + String(result.selected.period)
+                        var spisanie_data = ""
+                        if result.selected.nextApplyDate != nil {
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                            let date = dateFormatter1.date(from: String(result.selected.nextApplyDate!))
+                            dateFormatter1.dateFormat = "dd MMMM"
+                            dateFormatter1.locale = Locale(identifier: "ru_RU")
+                            spisanie_data = "Активен до \(dateFormatter1.string(from: date!))"
+                         }
+                        else {
+                            spisanie_data = ""
+                        }
                         
-                        if result.selected.balances.count != 0 {
-                            for i in 0 ..< result.selected.balances.count {
-                                self.balances_data.append([String(result.selected.balances[i].unitId), String(result.selected.balances[i].start), String(result.selected.balances[i].unlim)])
+                        if result.selected.discount != nil {
+                            self.discount_id = String(result.selected.discount!.discountServiceId)
+                         }
+                        else {
+                            self.discount_id = ""
+                        }
+                        
+                        self.info_data.append([String(result.selected.id), String(result.selected.priceplanName), spisanie_data])
+                        
+                        if result.selected.balances != nil {
+                            for i in 0 ..< result.selected.balances!.count {
+                                self.balances_data.append([String(result.selected.balances![i].unitId), String(result.selected.balances![i].start), String(result.selected.balances![i].unlim)])
                             }
                         }
                         
-                        if result.selected.unlimOptions.count != 0 {
-                            self.icon_count = result.selected.unlimOptions.count
-                            self.icon_count2 = result.selected.unlimOptions.count
+                        if result.selected.unlimOptions != nil {
+                            
+                            self.options_element = [[String]](repeating: [String](repeating: "hh", count: 1), count: result.selected.unlimOptions!.count)
+                            
+                            for i in 0 ..< result.selected.unlimOptions!.count {
+                                self.options_element[i] = [String](repeating: "", count: result.selected.unlimOptions![i].dpiUnlimElements.count)
+                            }
+                            
+                            for i in 0 ..< result.selected.unlimOptions!.count {
+                                
+                                self.unlim_data.append([result.selected.unlimOptions![i].optionName])
+                               
+                                for j in 0 ..< result.selected.unlimOptions![i].dpiUnlimElements.count {
+                                    
+                                    self.options_element[i][j] = result.selected.unlimOptions![i].dpiUnlimElements[j].iconUrl
+                                }
+                                print(self.options_element)
+                                
+                            }
                             
                         }
                         
-                        if result.selected.overCharging.count != 0 {
-                            for i in 0 ..< result.selected.overCharging.count {
-                                self.overChargings_data.append([String(result.selected.overCharging[i].description), String(result.selected.overCharging[i].directionPrice), String(result.selected.overCharging[i].priceAndUnit)])
+                        if result.selected.overCharging != nil {
+                            for i in 0 ..< result.selected.overCharging!.count {
+                                self.overChargings_data.append([String(result.selected.overCharging![i].description), String(result.selected.overCharging![i].directionPrice), String(result.selected.overCharging![i].priceAndUnit)])
                             }
                         }
                         

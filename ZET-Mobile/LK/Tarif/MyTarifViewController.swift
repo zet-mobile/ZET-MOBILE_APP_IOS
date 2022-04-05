@@ -8,6 +8,8 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import Alamofire
+import AlamofireImage
 
 let cellTarBalV = "cellTarBalV"
 
@@ -62,8 +64,8 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         return cv
     }()
     
-    var tarif_name = ""
-    var spisanie = ""
+    var discount_id = ""
+    var info_data = [[String]]()
     var balances_data = [[String]]()
     var overChargings_data = [[String]]()
     var availables_data = [[String]]()
@@ -93,7 +95,17 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     }
     
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+        UIView.animate(withDuration: 0.100, animations: {
+            self.toolbar.icon_back.titleLabel?.alpha = 0.5
+            self.toolbar.icon_back.alpha = 0.5
+        }) { (true) in
+            
+            self.toolbar.icon_back.titleLabel?.alpha = 1
+            self.toolbar.icon_back.alpha = 1
+           
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
     
     func setupView() {
@@ -120,16 +132,10 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         
-        tarifView.welcome.text = tarif_name
+        tarifView.welcome.text = info_data[0][1]
+        tarifView.user_name.text = info_data[0][2]
         
-        let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let date = dateFormatter1.date(from: spisanie)
-        dateFormatter1.dateFormat = "dd MMMM"
-        dateFormatter1.locale = Locale(identifier: "ru_RU")
-        tarifView.user_name.text = "Следующее списание \(dateFormatter1.string(from: date!))"
-        
-        tarifView.titleOneRes.text = tarif_name
+        tarifView.titleOneRes.text = info_data[0][1]
         
         y_pozition = 240
         
@@ -330,25 +336,26 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     
 
     @objc func goToChangeTarif() {
+        let parametr: [String: Any] = ["priceplanForUserId": info_data[0][0], "discountId": discount_id]
         
         let client = APIClient.shared
             do{
-              try client.pricePlansGetRequest().subscribe(
-                onNext: { result in
+              try client.changePricepPlan(jsonBody: parametr).subscribe(
+                onNext: { [self] result in
                   print(result)
+                    //sendRequest()
                 },
                 onError: { error in
                    print(error.localizedDescription)
                 },
                 onCompleted: { [self] in
-                    sendRequest()
+                    
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
               }
               catch{
             }
-        
     }
     
     @objc func tab1Click() {
@@ -372,28 +379,49 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
             do{
               try client.pricePlansGetRequest().subscribe(
                 onNext: { result in
-                  print(result)
                     DispatchQueue.main.async {
-                        self.tarif_name = String(result.connected.priceplanName)
+                        var spisanie_data = ""
                         if result.connected.nextApplyDate != nil {
-                            self.spisanie = String(result.connected.nextApplyDate!)
+                            let dateFormatter1 = DateFormatter()
+                            dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                            let date = dateFormatter1.date(from: String(result.connected.nextApplyDate!))
+                            dateFormatter1.dateFormat = "dd MMMM"
+                            dateFormatter1.locale = Locale(identifier: "ru_RU")
+                            spisanie_data = "Активен до \(dateFormatter1.string(from: date!))"
+                         }
+                        else {
+                            spisanie_data = ""
                         }
                         
-                        if result.connected.balances.count != 0 {
-                            for i in 0 ..< result.connected.balances.count {
-                                self.balances_data.append([String(result.connected.balances[i].unitId), String(result.connected.balances[i].start), String(result.connected.balances[i].unlim)])
+                        if result.connected.discount != nil {
+                            self.discount_id = String(result.connected.discount!.discountServiceId)
+                         }
+                        else {
+                            self.discount_id = ""
+                        }
+                        
+                        self.info_data.append([String(result.connected.id), String(result.connected.priceplanName), spisanie_data])
+                        
+                        if result.connected.balances != nil {
+                            if result.connected.balances!.count != 0 {
+                                for i in 0 ..< result.connected.balances!.count {
+                                    self.balances_data.append([String(result.connected.balances![i].unitId), String(result.connected.balances![i].start), String(result.connected.balances![i].unlim)])
+                                }
                             }
                         }
                         
-                        if result.connected.unlimOptions.count != 0 {
-                            self.icon_count = result.connected.unlimOptions.count
-                            self.icon_count2 = result.connected.unlimOptions.count
-                            
+                        if result.connected.unlimOptions != nil {
+                            if result.connected.unlimOptions!.count != 0 {
+                                self.icon_count = result.connected.unlimOptions!.count
+                                self.icon_count2 = result.connected.unlimOptions!.count
+                            }
                         }
                         
-                        if result.connected.overCharging.count != 0 {
-                            for i in 0 ..< result.connected.overCharging.count {
-                                self.overChargings_data.append([String(result.connected.overCharging[i].description), String(result.connected.overCharging[i].directionPrice), String(result.connected.overCharging[i].priceAndUnit)])
+                        if result.connected.overCharging != nil {
+                            if result.connected.overCharging!.count != 0 {
+                                for i in 0 ..< result.connected.overCharging!.count {
+                                    self.overChargings_data.append([String(result.connected.overCharging![i].description), String(result.connected.overCharging![i].directionPrice), String(result.connected.overCharging![i].priceAndUnit)])
+                                }
                             }
                         }
                         

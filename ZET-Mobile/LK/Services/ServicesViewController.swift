@@ -49,6 +49,8 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var discount_id = ""
+    var serviceId = ""
     var slider_data = [[String]]()
     var connected_data = [[String]]()
     var availables_data = [[String]]()
@@ -196,13 +198,13 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.connected.count != 0 {
                             for i in 0 ..< result.connected.count {
-                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price),  String(result.available[i].period)])
+                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price ?? ""),  String(result.available[i].period ?? "")])
                             }
                         }
                         
                         if result.available.count != 0 {
                             for i in 0 ..< result.available.count {
-                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price),  String(result.available[i].period)])
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? "")])
                             }
                         }
                     }
@@ -216,6 +218,52 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         setupSliderSection()
                         setupTabCollectionView()
                     }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    @objc func connectService(_ sender: UIButton) {
+        let parametr: [String: Any] = ["serviceId": sender.tag, "discountId": discount_id]
+        print(sender.tag)
+        let client = APIClient.shared
+            do{
+              try client.connectService(jsonBody: parametr).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    //sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+        
+    }
+    
+    @objc func disableService(_ sender: UIButton) {
+     
+        let client = APIClient.shared
+            do{
+              try client.disableService(parametr: String(sender.tag)).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
@@ -345,6 +393,9 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             costString.append(titleString)
             cell.titleThree.attributedText = costString
             
+            cell.getButton.tag = Int(connected_data[indexPath.row][0])!
+            cell.getButton.addTarget(self, action: #selector(disableService(_:)), for: .touchUpInside)
+            
             return cell
         }
         else {
@@ -370,6 +421,10 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
+            
+            cell.getButton.tag = Int(availables_data[indexPath.row][0])!
+            cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+            
             return cell
         }
     }

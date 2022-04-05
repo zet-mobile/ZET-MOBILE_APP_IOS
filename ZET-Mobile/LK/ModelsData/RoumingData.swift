@@ -18,8 +18,38 @@ struct questions_data: Decodable {
     let answer: String
 }
 
-struct countries_data: Decodable {
+struct countries_data {
     let id: Int
-    let countryName: String
-    let iconUrl: String
+    let countryName: String?
+    let iconUrl: String?
 }
+
+
+extension countries_data: Decodable {
+    
+    private enum connected_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case iconUrl = "iconUrl"
+        case countryName = "countryName"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: connected_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        do {
+            iconUrl = try container.decode(String.self, forKey: .iconUrl)
+        }
+        catch {
+            iconUrl = nil
+        }
+       
+        do {
+            countryName = try container.decode(String.self, forKey: .countryName)
+        }
+        catch {
+            countryName = nil
+        }
+    
+    }
+}
+

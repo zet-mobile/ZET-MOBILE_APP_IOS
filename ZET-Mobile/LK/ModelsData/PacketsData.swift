@@ -14,7 +14,7 @@ struct PacketsData {
     let onnetAvailablePackets: [connectedPackets_data]
     let offnetAvailablePackets: [connectedPackets_data]
     let internetAvailablePackets: [connectedPackets_data]
-    let subscriberBalance: Int
+    let subscriberBalance: Double
 }
 
 struct balances_data: Decodable {
@@ -54,7 +54,7 @@ struct connectedPackets_data: Decodable {
 struct discount_data: Decodable {
     let discountName: String
     let discountPercent: Int
-    let discountServiceId: Int
+    let discountServiceId: String
 }
 
 extension PacketsData: Decodable {
@@ -78,7 +78,7 @@ extension PacketsData: Decodable {
         onnetAvailablePackets = try container.decode([connectedPackets_data].self, forKey: .onnetAvailablePackets)
         offnetAvailablePackets = try container.decode([connectedPackets_data].self, forKey: .offnetAvailablePackets)
         internetAvailablePackets = try container.decode([connectedPackets_data].self, forKey: .internetAvailablePackets)
-        subscriberBalance = try container.decode(Int.self, forKey: .subscriberBalance)
+        subscriberBalance = try container.decode(Double.self, forKey: .subscriberBalance)
     }
 }
 

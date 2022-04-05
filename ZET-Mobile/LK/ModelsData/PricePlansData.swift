@@ -24,23 +24,23 @@ struct connected_data {
     let description: String?
     let price: String?
     let period: String?
-    let balances: [details_data]
+    let balances: [details_data]?
     let discount: discount_data?
-    let overCharging: [overCharging_data]
-    let unlimOptions: [unlimOptions_data]
+    let overCharging: [overCharging_data]?
+    let unlimOptions: [unlimOptions_data]?
 }
 
-struct selected_data: Decodable {
+struct selected_data {
     let id: Int
     let priceplanName: String
-    //let nextApplyDate: String
-    //let description: String
-    let price: String
-    let period: String
-    let balances: [details_data]
-    //let discount: discount_data
-    let overCharging: [overCharging_data]
-    let unlimOptions: [unlimOptions_data]
+    let nextApplyDate: String?
+    let description: String?
+    let price: String?
+    let period: String?
+    let balances: [details_data]?
+    let discount: discount_data?
+    let overCharging: [overCharging_data]?
+    let unlimOptions: [unlimOptions_data]?
 }
 
 struct available_data: Decodable{
@@ -116,7 +116,12 @@ extension connected_data: Decodable {
             period = nil
         }
         
-        balances = try container.decode([details_data].self, forKey: .balances)
+        do {
+            balances = try container.decode([details_data].self, forKey: .balances)
+        }
+        catch {
+            balances = nil
+        }
         
         do {
             discount = try container.decode(discount_data.self, forKey: .discount)
@@ -125,7 +130,96 @@ extension connected_data: Decodable {
             discount = nil
         }
         
-        overCharging = try container.decode([overCharging_data].self, forKey: .overCharging)
-        unlimOptions = try container.decode([unlimOptions_data].self, forKey: .unlimOptions)
+        do {
+            overCharging = try container.decode([overCharging_data].self, forKey: .overCharging)
+        }
+        catch {
+            overCharging = nil
+        }
+        
+        do {
+            unlimOptions = try container.decode([unlimOptions_data].self, forKey: .unlimOptions)
+        }
+        catch {
+            unlimOptions = nil
+        }
+    }
+}
+
+
+extension selected_data: Decodable {
+    
+    private enum connected_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case priceplanName = "priceplanName"
+        case nextApplyDate = "nextApplyDate"
+        case description = "description"
+        case price = "price"
+        case period = "period"
+        case balances = "balances"
+        case discount = "discount"
+        case overCharging = "overCharging"
+        case unlimOptions = "unlimOptions"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: connected_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        priceplanName = try container.decode(String.self, forKey: .priceplanName)
+        do {
+            nextApplyDate = try container.decode(String.self, forKey: .nextApplyDate)
+        }
+        catch {
+            nextApplyDate = nil
+        }
+       
+        do {
+            description = try container.decode(String.self, forKey: .description)
+        }
+        catch {
+            description = nil
+        }
+        
+        do {
+            price = try container.decode(String.self, forKey: .price)
+        }
+        catch {
+            price = nil
+        }
+        
+        do {
+            period = try container.decode(String.self, forKey: .period)
+        }
+        catch {
+            period = nil
+        }
+        
+        do {
+            balances = try container.decode([details_data].self, forKey: .balances)
+        }
+        catch {
+            balances = nil
+        }
+        
+        do {
+            discount = try container.decode(discount_data.self, forKey: .discount)
+        }
+        catch {
+            discount = nil
+        }
+        
+        do {
+            overCharging = try container.decode([overCharging_data].self, forKey: .overCharging)
+        }
+        catch {
+            overCharging = nil
+        }
+        
+        do {
+            unlimOptions = try container.decode([unlimOptions_data].self, forKey: .unlimOptions)
+        }
+        catch {
+            unlimOptions = nil
+        }
     }
 }

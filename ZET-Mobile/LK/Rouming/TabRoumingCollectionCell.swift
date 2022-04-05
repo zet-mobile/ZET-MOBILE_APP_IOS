@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import iOSDropDown
 
 class TabRoumingCollectionCell: UICollectionViewCell {
     
@@ -23,8 +24,8 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         return titleOne
     }()
     
-    lazy var country: UITextField = {
-        let textfield = UITextField()
+    lazy var country: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 50, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
@@ -47,8 +48,8 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         return titleOne
     }()
     
-    lazy var operator_type: UITextField = {
-        let textfield = UITextField()
+    lazy var operator_type: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 170, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor

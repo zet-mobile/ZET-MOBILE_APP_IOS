@@ -67,6 +67,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 180, y: 20, width: 120, height: 33)
         popolnit.layer.cornerRadius = popolnit.frame.height / 2
         popolnit.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
+        
         return popolnit
     }()
     

@@ -75,6 +75,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     var tarif_name = ""
     var next_apply_date = ""
     
+    var discount_id = ""
+    var serviceId = ""
     var services_data = [[String]]()
     var slider_data = [[String]]()
     var hot_services_data = [[String]]()
@@ -116,6 +118,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func openServices() {
         print("services")
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(ServicesViewController(), animated: true)
         
@@ -412,9 +415,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.services.count != 0 {
                             for i in 0 ..< result.services.count {
-                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price),  String(result.services[i].period)])
+                                if result.services[i].discount != nil {
+                                    self.discount_id = String(result.services[i].discount!.discountServiceId)
+                                }
+                                
+                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), self.discount_id])
                             }
                         }
+                    
 
                     }
                 },
@@ -437,6 +445,31 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
               catch{
             }
     }
+    
+    @objc func connectService(_ sender: UIButton) {
+        let parametr: [String: Any] = ["serviceId": sender.tag, "discountId": discount_id]
+        print(sender.tag)
+        let client = APIClient.shared
+            do{
+              try client.connectService(jsonBody: parametr).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    //sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+        
+    }
+
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -468,6 +501,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         
         costString.append(titleString)
         cell.titleThree.attributedText = costString
+        
+        cell.getButton.tag = Int(services_data[indexPath.row][0])!
+        cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
         return cell
   }
 }
@@ -507,16 +543,14 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.balance.text = balance_credit + " сомони"
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
-            
-            cell.settings.frame = CGRect(x: tarif_name.count * 10 + 30, y: 100, width: 20, height: 20)
+            cell.titleTarif.frame = CGRect(x: 20, y: 100, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
+            cell.settings.frame.origin.x = CGFloat(cell.titleTarif.text!.count * 10 + 40)
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
             let third = String(String(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(5))).prefix(2)
 
             print(UserDefaults.standard.string(forKey: "mobPhone"))
-            print(first)
-            print(second)
-            print(third)
+           
             cell.titleNumber.text = "(+992) \(first)-\(second)-\(third)-\(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(7))"
             cell.actionDelegate = (self as CellBalanceActionDelegate)
             return cell
