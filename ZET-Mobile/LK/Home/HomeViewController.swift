@@ -90,7 +90,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         color2 = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         color1 = UIColor.white
         
-        sendRequest()
+        sendMapRequest()
         print(UserDefaults.standard.string(forKey: "token")!)
         print(UserDefaults.standard.string(forKey: "mobPhone"))
                 
@@ -468,6 +468,42 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
               catch{
             }
         
+    }
+    
+    func sendMapRequest() {
+        let client = APIClient.shared
+            do{
+              try client.supportGetRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async { [self] in
+                        if result.offices.count != 0 {
+                            for i in 0 ..< result.offices.count {
+                               officesdata.append([String(result.offices[i].information), String(result.offices[i].title), String(result.offices[i].iconUrl), String(result.offices[i].officeType), String(result.offices[i].latitude), String(result.offices[i].longitude), String(result.offices[i].officeTypeId)])
+                            }
+                        }
+                        
+                        if result.support.count != 0 {
+                            for i in 0 ..< result.support.count {
+                               supportdata.append([String(result.support[i].id), String(result.support[i].description), String(result.support[i].url), String(result.support[i].iconUrl)])
+                            }
+                        }
+
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async {
+                        self.sendRequest()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
 
 }

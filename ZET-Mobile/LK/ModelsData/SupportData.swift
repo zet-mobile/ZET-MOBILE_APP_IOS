@@ -26,4 +26,5 @@ struct offices_data: Decodable {
     let officeType: String
     let latitude: String
     let longitude: String
+    let officeTypeId: Int
 }

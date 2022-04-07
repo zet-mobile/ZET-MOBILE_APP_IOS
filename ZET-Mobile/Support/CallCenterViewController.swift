@@ -10,10 +10,14 @@ import YandexMapKit
 import RxSwift
 import RxCocoa
 
+var officesdata = [[String]]()
+var supportdata = [[String]]()
+
 class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
     
     let scrollView = UIScrollView()
     
@@ -21,23 +25,28 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     var support_view = SupportView()
     let table = UITableView()
     
+    let SupportCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.register(SupportCollectionViewCell.self, forCellWithReuseIdentifier: "SupportCollectionCell")
+        cv.showsHorizontalScrollIndicator = false
+        
+        return cv
+    }()
+    
+    var x_pozition = 25
+    var long = ""
+    var lat = ""
     var mapView = YMKMapView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        view.backgroundColor = .white
+        setupView()
         
-        sendRequest()
     }
 
 
@@ -59,6 +68,17 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         support_view = SupportView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
@@ -83,11 +103,27 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         self.view.addSubview(toolbar)
         scrollView.addSubview(support_view)
         scrollView.addSubview(mapView)
-        //setMapView()
-        //scrollView.sendSubviewToBack(mapView)
+        
+        setMapView()
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Поддержка"
+        
+        support_view.number.text = supportdata[0][1]
+        
+        /* if let url = URL(string: "tel://800"), UIApplication.shared.canOpenURL(url) {
+         if #available(iOS 10, *) {
+             UIApplication.shared.open(url)
+         } else {
+             UIApplication.shared.openURL(url)
+         }
+     }*/
+        SupportCollectionView.backgroundColor = .clear
+        SupportCollectionView.frame = CGRect(x: 0, y: 80, width: Int(UIScreen.main.bounds.size.width), height: 50)
+        SupportCollectionView.delegate = self
+        SupportCollectionView.dataSource = self
+        SupportCollectionView.alwaysBounceVertical = false
+        scrollView.addSubview(SupportCollectionView)
         
         table.register(SupportListCell.self, forCellReuseIdentifier: "support_list_cell")
         table.frame = CGRect(x: 10, y: 230, width: UIScreen.main.bounds.size.width - 20, height: 7 * 80)
@@ -97,6 +133,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.isHidden = true
+        table.backgroundColor = .white
         support_view.white_back.isHidden = true
         scrollView.addSubview(table)
         
@@ -106,13 +143,36 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     
     func setMapView() {
         mapView.mapWindow.map.move(
-              with: YMKCameraPosition.init(target: YMKPoint(latitude: 38.85818, longitude: 71.24798), zoom: 10, azimuth: 0, tilt: 0),
-              animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
-              cameraCallback: nil)
-          let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: 38.85818, longitude: 71.24798))
-          //myPlace.setIconWith(UIImage(named: "")!)
-    }
-
+            with: YMKCameraPosition.init(target: YMKPoint(latitude: 38.53575, longitude: 68.77905), zoom: 10, azimuth: 0, tilt: 0),
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
+            cameraCallback: nil)
+        
+       // let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: 38.85818, longitude: 71.24798))
+       // myPlace.setIconWith(UIImage(named: "myLL.png")!)
+        
+        let mapObjects = self.mapView.mapWindow.map.mapObjects
+        //mapObjects.clear()
+        if (officesdata.count != 0) {
+            var placeMark = mapObjects.addPlacemark(with: YMKPoint(latitude: Double(officesdata[0][4])!, longitude: Double(officesdata[0][5])!))
+          
+            placeMark.userData = officesdata[0][0] + "&" + officesdata[0][1]
+            placeMark.setIconWith(UIImage(named: "Location.png")!)
+            placeMark.addTapListener(with: self)
+          
+            for i in 1 ..< officesdata.count - 1 {
+                placeMark = mapObjects.addPlacemark(with: YMKPoint(latitude: Double(officesdata[i][4])!, longitude: Double(officesdata[i][5])!))
+                if ((officesdata[i][6]) == "2") {
+                    placeMark.setIconWith(UIImage(named: "Location.png")!)
+                }
+                else {
+                    placeMark.setIconWith(UIImage(named: "ecc.png")!)
+                }
+                placeMark.addTapListener(with: self)
+                placeMark.userData = officesdata[i][0] + "&" + officesdata[i][1]
+        }
+      }
+   }
+    
     @objc func mapClick() {
         support_view.icon1.image = UIImage(named: "Pin_alt_light")
         support_view.title1.textColor = .black
@@ -131,30 +191,6 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.isHidden = false
         mapView.isHidden = true
         support_view.white_back.isHidden = false
-    }
-    
-    func sendRequest() {
-        let client = APIClient.shared
-            do{
-              try client.supportGetRequest().subscribe(
-                onNext: { result in
-                  print(result)
-                    DispatchQueue.main.async {
-                    }
-                },
-                onError: { error in
-                   print(error.localizedDescription)
-                },
-                onCompleted: {
-                    DispatchQueue.main.async {
-                        self.setupView()
-                    }
-                   print("Completed event.")
-                    
-                }).disposed(by: disposeBag)
-              }
-              catch{
-            }
     }
     
     func onObjectAdded(with view: YMKUserLocationView) {
@@ -193,64 +229,92 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     func onObjectUpdated(with view: YMKUserLocationView, event: YMKObjectEvent) {}
 }
 
+extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+       
+        return CGSize(width: collectionView.frame.width * 0.2, height: collectionView.frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return supportdata.count - 1
+
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SupportCollectionCell", for: indexPath) as! SupportCollectionViewCell
+        cell.button.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       open(scheme: supportdata[indexPath.row + 1][2])
+    }
+    
+    @objc func buttonClick(_ sender: UIButton) {
+        open(scheme: supportdata[sender.tag + 1][2])
+    }
+}
+
 extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-         return 7
+        return officesdata.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-            let cell = tableView.dequeueReusableCell(withIdentifier: "support_list_cell", for: indexPath) as! SupportListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "support_list_cell", for: indexPath) as! SupportListCell
             
-            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            if indexPath.row == 6 {
-                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-            
-            }
-                        
-            return cell
+        if indexPath.row == officesdata.count - 1 {
+            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
         
-       
+        }
+        
+        cell.titleOne.text = officesdata[indexPath.row][1]
+        cell.titleTwo.text = officesdata[indexPath.row][0]
+        return cell
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        mapView.mapWindow.map.move(
+            with: YMKCameraPosition.init(target: YMKPoint(latitude: Double(officesdata[indexPath.row][4])!, longitude: Double(officesdata[indexPath.row][5])!), zoom: 15, azimuth: 0, tilt: 0),
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
+            cameraCallback: nil)
+        
+        support_view.icon1.image = UIImage(named: "Pin_alt_light")
+        support_view.title1.textColor = .black
+        support_view.icon2.image = UIImage(named: "list_map")
+        support_view.title2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        table.isHidden = true
+        mapView.isHidden = false
+        support_view.white_back.isHidden = true
     }
     
 }
 
 extension CallCenterViewController: YMKMapObjectTapListener {
     func onMapObjectTap(with mapObject: YMKMapObject, point: YMKPoint) -> Bool {
-    
-        
        /* mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: YMKPoint(latitude: point.latitude, longitude: point.longitude), zoom: 15, azimuth: 0, tilt: 0),
             animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
             cameraCallback: nil)*/
  
-        var message = mapObject.userData as? String
+        var office_choosed = mapObject.userData as? String
+        var office_choosed_array = office_choosed!.components(separatedBy: "&")
+        choosed_office_name = office_choosed_array[0]
+        choosed_office_time = office_choosed_array[1]
+
+        let next = DialogOfficesViewController()
+        next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+        self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
+        next.modalPresentationStyle = .custom
+        //next.modalPresentationCapturesStatusBarAppearance = true
         
-        message = message!.replacingOccurrences(of: ";", with: "\n")
-       // message = (message! as? String)!.replacingOccurrences(of: ";", with: "\n")
-       
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        
-        alert.view.backgroundColor = UIColor.darkGray
-        alert.view.alpha = 0.8
-        alert.view.layer.cornerRadius = 15
-        
-        let close = UIAlertAction(title: "Закрыть", style:.default){ (action) in
-            alert.dismiss(animated: false, completion: nil)
-           /* self.mapView.mapWindow.map.move(
-                with: YMKCameraPosition.init(target: YMKPoint(latitude: point.latitude, longitude: point.longitude), zoom: 15, azimuth: 0, tilt: 0),
-                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
-                cameraCallback: nil)*/
-                
-        }
-        alert.addAction(close)
-        self.present(alert, animated: true)
-        
-       /* DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            alert.dismiss(animated: true)
-        }*/
-        
+        next.transitioningDelegate = self.halfModalTransitioningDelegate
+        present(next, animated: true, completion: nil)
         return true
     }
     

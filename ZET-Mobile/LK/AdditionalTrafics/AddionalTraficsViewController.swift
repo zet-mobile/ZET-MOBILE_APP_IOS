@@ -15,7 +15,7 @@ var color2 = UIColor.white
 class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
 
     let disposeBag = DisposeBag()
-    
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
@@ -43,11 +43,18 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var discount_id = ""
+    var packetId = ""
     var balance_credit = ""
     var remainders_data = [[String]]()
+    
     var internet_data = [[String]]()
     var minuti_data = [[String]]()
     var sms_data = [[String]]()
+    
+    var internet_data_c = [[String]]()
+    var minuti_data_c = [[String]]()
+    var sms_data_c = [[String]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -350,21 +357,35 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         self.remainders_data.append([String(result.balances.mb.start), String(result.balances.mb.now), String(result.balances.mb.unlim)])
                         self.remainders_data.append([String(result.balances.sms.start), String(result.balances.sms.now), String(result.balances.sms.unlim)])
                         
+                        if result.connectedPackets.count != 0 {
+                            for i in 0 ..< result.connectedPackets.count {
+                                if result.connectedPackets[i].unitType == 1 {
+                                    self.internet_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                }
+                                else if result.connectedPackets[i].unitType == 3 {
+                                    self.minuti_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                }
+                                else if result.connectedPackets[i].unitType == 4 {
+                                    self.sms_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                }
+                            }
+                        }
+                        
                         if result.internetAvailablePackets.count != 0 {
                             for i in 0 ..< result.internetAvailablePackets.count {
-                                self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus)])
+                                self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus), String(result.internetAvailablePackets[i].nextApplyDate ?? ""), String(result.internetAvailablePackets[i].description ?? "")])
                             }
                         }
                         
                         if result.offnetAvailablePackets.count != 0 {
                             for i in 0 ..< result.offnetAvailablePackets.count {
-                                self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus)])
+                                self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus), String(result.offnetAvailablePackets[i].nextApplyDate ?? "") , String(result.offnetAvailablePackets[i].description ?? "") ])
                             }
                         }
                         
                         if result.smsAvailablePackets.count != 0 {
                             for i in 0 ..< result.smsAvailablePackets.count {
-                                self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus)])
+                                self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus), String(result.smsAvailablePackets[i].nextApplyDate ?? ""), String(result.smsAvailablePackets[i].description ?? "")])
                             }
                         }
 
@@ -379,6 +400,52 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         setupRemaindersSection()
                         setupTabCollectionView()
                     }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    @objc func connectPackets(_ sender: UIButton) {
+        let parametr: [String: Any] = ["packetId": sender.tag, "discountId": discount_id]
+        print(sender.tag)
+        let client = APIClient.shared
+            do{
+              try client.connectService(jsonBody: parametr).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    //sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+        
+    }
+    
+    @objc func disablePackets(_ sender: UIButton) {
+     
+        let client = APIClient.shared
+            do{
+              try client.disableService(parametr: String(sender.tag)).subscribe(
+                onNext: { [self] result in
+                  print(result)
+                    sendRequest()
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: { [self] in
+                    
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
@@ -515,7 +582,39 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         if tableView == table {
+            if internet_data[indexPath.row][4] != "" {
+                table.rowHeight = 160
+                cell.contentView.frame.size.height = 160
+                let dateFormatter1 = DateFormatter()
+                dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                let date = dateFormatter1.date(from: internet_data[indexPath.row][4])
+                dateFormatter1.dateFormat = "dd MMMM"
+                dateFormatter1.locale = Locale(identifier: "ru_RU")
+                let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                
+                cell.titleTwo.text = internet_data[indexPath.row][1] + "\n" + next_apply_date
+                cell.getButton.backgroundColor = .clear
+                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "disable"), for: .normal)
+                cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
+                cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
+                cell.getButton.layer.borderWidth = 1
+                cell.getButton.frame.origin.y = 110
+                cell.titleThree.frame.origin.y = 100
+                cell.getButton.addTarget(self, action: #selector(disablePackets(_:)), for: .touchUpInside)
+            }
+            else {
+                table.rowHeight = 140
+                cell.contentView.frame.size.height = 140
+                cell.titleTwo.text = internet_data[indexPath.row][1]
+                cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "connect"), for: .normal)
+                cell.getButton.setTitleColor(.white, for: .normal)
+                cell.getButton.frame.origin.y = 90
+                cell.titleThree.frame.origin.y = 80
+                cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
+            }
             cell.titleOne.text = internet_data[indexPath.row][1]
+            
             let cost: NSString = "\(internet_data[indexPath.row][2])c/" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
@@ -530,6 +629,9 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
+            
+            cell.getButton.tag = Int(internet_data[indexPath.row][0])!
+            
         }
         else if tableView == table2 {
             cell.titleOne.text = minuti_data[indexPath.row][1]
@@ -547,6 +649,9 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
+            
+            cell.getButton.tag = Int(minuti_data[indexPath.row][0])!
+            cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         else {
             cell.titleOne.text = sms_data[indexPath.row][1]
@@ -564,6 +669,9 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
+            
+            cell.getButton.tag = Int(sms_data[indexPath.row][0])!
+            cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         
         if indexPath.row == 2 {

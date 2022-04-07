@@ -25,7 +25,7 @@ class SupportView: UIView {
     
     lazy var number: UILabel = {
         let label = UILabel()
-        label.text = "+992 (80) 800-800"
+        label.text = ""
         label.numberOfLines = 0
         label.textColor = .black
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -37,35 +37,6 @@ class SupportView: UIView {
         return label
     }()
     
-    lazy var button1: UIButton = {
-        let button = UIButton(frame: CGRect(x: 25, y: 80, width: 50, height: 50))
-        button.setImage(#imageLiteral(resourceName: "telegram"), for: UIControl.State.normal)
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
-        return button
-    }()
-    
-    lazy var button2: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - 80, y: 80, width: 50, height: 50))
-        button.setImage(#imageLiteral(resourceName: "instagram"), for: UIControl.State.normal)
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
-
-        return button
-    }()
-    
-    lazy var button3: UIButton = {
-        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + 35, y: 80, width: 50, height: 50))
-        button.setImage(#imageLiteral(resourceName: "vk"), for: UIControl.State.normal)
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
-        return button
-    }()
-    
-    lazy var button4: UIButton = {
-        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 70, y: 80, width: 50, height: 50))
-        button.setImage(#imageLiteral(resourceName: "facebook"), for: UIControl.State.normal)
-        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
-        return button
-    }()
-
     var white_view_back = UIView()
     
     let icon1: UIImageView = {
@@ -160,10 +131,7 @@ class SupportView: UIView {
         self.addSubview(title_info)
         self.addSubview(number)
         
-        self.addSubview(button1)
-        self.addSubview(button2)
-        self.addSubview(button3)
-        self.addSubview(button4)
+       
     }
 
 }

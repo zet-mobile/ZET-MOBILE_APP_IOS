@@ -38,17 +38,17 @@ struct unlimConditions_data: Decodable {
     let speed: String
 }
 
-struct connectedPackets_data: Decodable {
+struct connectedPackets_data {
     let packetName: String
-    //let iconUrl: String
-    //let description: String
+    let iconUrl: String?
+    let description: String?
     let price: String
-    //let period: String
+    let period: String?
     let unitType: Double
     let packetStatus: Double
-    //let nextApplyDate: Date
+    let nextApplyDate: String?
     let id: Int
-    //let discount: discount_data
+    let discount: discount_data?
 }
 
 struct discount_data: Decodable {
@@ -79,6 +79,70 @@ extension PacketsData: Decodable {
         offnetAvailablePackets = try container.decode([connectedPackets_data].self, forKey: .offnetAvailablePackets)
         internetAvailablePackets = try container.decode([connectedPackets_data].self, forKey: .internetAvailablePackets)
         subscriberBalance = try container.decode(Double.self, forKey: .subscriberBalance)
+    }
+}
+
+extension connectedPackets_data: Decodable {
+    
+    private enum connectedPackets_dataCodingKeys: String, CodingKey {
+        
+        case packetName = "packetName"
+        case iconUrl = "iconUrl"
+        case description = "description"
+        case price = "price"
+        case period = "period"
+        case unitType = "unitType"
+        case packetStatus = "packetStatus"
+        case id = "id"
+        case nextApplyDate = "nextApplyDate"
+        case discount = "discount"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: connectedPackets_dataCodingKeys.self)
+        
+        packetName = try container.decode(String.self, forKey: .packetName)
+        price = try container.decode(String.self, forKey: .price)
+        unitType = try container.decode(Double.self, forKey: .unitType)
+        packetStatus = try container.decode(Double.self, forKey: .packetStatus)
+        id = try container.decode(Int.self, forKey: .id)
+        
+        do {
+            iconUrl = try container.decode(String.self, forKey: .iconUrl)
+        }
+        catch {
+            iconUrl = nil
+        }
+        
+        do {
+            description = try container.decode(String.self, forKey: .description)
+        }
+        catch {
+            description = nil
+        }
+        
+        do {
+            period = try container.decode(String.self, forKey: .period)
+        }
+        catch {
+            period = nil
+        }
+        
+        do {
+            nextApplyDate = try container.decode(String.self, forKey: .nextApplyDate)
+        }
+        catch {
+            nextApplyDate = nil
+        }
+        
+        do {
+            discount = try container.decode(discount_data.self, forKey: .discount)
+        }
+        catch {
+            discount = nil
+        }
+        
+     
     }
 }
 

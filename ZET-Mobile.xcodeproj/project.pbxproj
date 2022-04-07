@@ -36,6 +36,9 @@
 		B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */; };
 		B82B7DA427C4005600570AC0 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7DA327C4005600570AC0 /* APIClient.swift */; };
 		B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF227EA40A7001A6696 /* TransferData.swift */; };
+		B8358EF527FDAA54001A6696 /* SupportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF427FDAA53001A6696 /* SupportCollectionViewCell.swift */; };
+		B8358EF727FE0A36001A6696 /* DialogOfficesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF627FE0A36001A6696 /* DialogOfficesViewController.swift */; };
+		B8358EF927FE11B8001A6696 /* DialogOfficesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF827FE11B7001A6696 /* DialogOfficesViewCell.swift */; };
 		B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852979B27C55AA000B68F36 /* ConditionViewController.swift */; };
 		B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A127C6AD9100B68F36 /* MenuViewController.swift */; };
 		B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A927C6ADD100B68F36 /* MenuViewCell.swift */; };
@@ -189,6 +192,9 @@
 		B82B7DB327C4EC4100570AC0 /* RxRelay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxRelay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B82B7DB827C4EC4600570AC0 /* RxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8358EF227EA40A7001A6696 /* TransferData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferData.swift; sourceTree = "<group>"; };
+		B8358EF427FDAA53001A6696 /* SupportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportCollectionViewCell.swift; sourceTree = "<group>"; };
+		B8358EF627FE0A36001A6696 /* DialogOfficesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogOfficesViewController.swift; sourceTree = "<group>"; };
+		B8358EF827FE11B7001A6696 /* DialogOfficesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogOfficesViewCell.swift; sourceTree = "<group>"; };
 		B852979B27C55AA000B68F36 /* ConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionViewController.swift; sourceTree = "<group>"; };
 		B85297A127C6AD9100B68F36 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B85297A927C6ADD100B68F36 /* MenuViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
@@ -367,6 +373,9 @@
 				B864289D27313B4A000C159E /* CallCenterViewController.swift */,
 				B8092951277AECDB00CF5824 /* SupportView.swift */,
 				B809298C278B59E100CF5824 /* SupportListCell.swift */,
+				B8358EF427FDAA53001A6696 /* SupportCollectionViewCell.swift */,
+				B8358EF627FE0A36001A6696 /* DialogOfficesViewController.swift */,
+				B8358EF827FE11B7001A6696 /* DialogOfficesViewCell.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -428,7 +437,6 @@
 				B853D7AA2756285400FBE1F1 /* Detalization */,
 				B809294F277AEB2A00CF5824 /* AboutApp */,
 				B853D83C276300C800FBE1F1 /* SearchNumber */,
-				B8092991278B5C4200CF5824 /* Settings */,
 				B8092993278B5C8E00CF5824 /* ReplyToZet */,
 				B86429B8273E3D09000C159E /* AdditionalTrafics */,
 				B8092992278B5C7200CF5824 /* Rouming */,
@@ -708,6 +716,7 @@
 				B80929EE2792838600CF5824 /* ChangeCode */,
 				B8092994278B5CAC00CF5824 /* PinCodeInput */,
 				B8092950277AEC9900CF5824 /* Support */,
+				B8092991278B5C4200CF5824 /* Settings */,
 				B87F473527311A1400BAEDFA /* LaunchScreen.storyboard */,
 				B87F473827311A1400BAEDFA /* Info.plist */,
 				B87F473327311A1400BAEDFA /* Assets.xcassets */,
@@ -1107,6 +1116,7 @@
 				B80929B7278B5FCE00CF5824 /* ReplyToZetView.swift in Sources */,
 				B82B7D7F27C2B02500570AC0 /* AuthorizationViewController.swift in Sources */,
 				B864289427313B29000C159E /* WalletViewController.swift in Sources */,
+				B8358EF927FE11B8001A6696 /* DialogOfficesViewCell.swift in Sources */,
 				B864294C27390622000C159E /* ServicesView.swift in Sources */,
 				B86429122734EEE1000C159E /* MyTarifViewController.swift in Sources */,
 				B86428FB2732B6D9000C159E /* HotServicesCollectionViewCell.swift in Sources */,
@@ -1123,7 +1133,9 @@
 				B864292427350A9E000C159E /* TarifBalanceCollectionViewCell.swift in Sources */,
 				B80929B2278B5FB600CF5824 /* PinCodeView.swift in Sources */,
 				B80929A8278B5E4D00CF5824 /* RoumingViewController.swift in Sources */,
+				B8358EF527FDAA54001A6696 /* SupportCollectionViewCell.swift in Sources */,
 				B853D7EC2758D92700FBE1F1 /* CalendarViewController.swift in Sources */,
+				B8358EF727FE0A36001A6696 /* DialogOfficesViewController.swift in Sources */,
 				B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */,
 				B858A2C427DBAF4B00D190CE /* AboutAppData.swift in Sources */,
 				B853D7702754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift in Sources */,
