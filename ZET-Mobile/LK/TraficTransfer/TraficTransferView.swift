@@ -11,7 +11,7 @@ class TraficTransferView: UIView {
 
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "image16")
+        image.image = UIImage(named: "transfer_mini")
         image.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
         return image
     }()
@@ -32,7 +32,6 @@ class TraficTransferView: UIView {
     
     lazy var balance: UILabel = {
         let user_name = UILabel()
-        user_name.text = "45 somoni"
         user_name.numberOfLines = 0
         user_name.textColor = .black
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -67,12 +66,11 @@ class TraficTransferView: UIView {
     
     lazy var rez1: UILabel = {
         let title = UILabel()
-        title.text = "23"
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -107,12 +105,11 @@ class TraficTransferView: UIView {
     
     lazy var rez2: UILabel = {
         let title = UILabel()
-        title.text = "23"
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
+       //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -147,12 +144,11 @@ class TraficTransferView: UIView {
     
     lazy var rez3: UILabel = {
         let title = UILabel()
-        title.text = "23"
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 94, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 94, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
@@ -187,12 +183,11 @@ class TraficTransferView: UIView {
     
     lazy var rez4: UILabel = {
         let title = UILabel()
-        title.text = "23"
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 141, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 141, width: (title.text!.count * 15), height: 45)
         
         return title
     }()

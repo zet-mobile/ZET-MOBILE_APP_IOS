@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ChangeTransferViewController: UIViewController, UIScrollViewDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    let disposeBag = DisposeBag()
     
     let scrollView = UIScrollView()
     
@@ -34,22 +37,21 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var balances_data = [[String]]()
+    var settings_data = [[String]]()
+    var history_data = [[String]]()
+    
+    var balance = ""
+    var trasfer_type_choosed = ""
+    var trasfer_type_choosed_id = 0
+    var to_trasfer_type_choosed = ""
+    var to_trasfer_type_choosed_id = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        view.backgroundColor = .white
         
-        setupView()
-        setupTabCollectionView()
+        sendRequest()
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +72,17 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         changeView = ChangeTransferView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
@@ -78,6 +91,18 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Обмен трафика"
+        
+        self.changeView.balance.text = balance
+        
+        changeView.rez1.text = balances_data[0][0]
+        changeView.rez2.text = balances_data[0][1]
+        changeView.rez3.text = balances_data[0][2]
+        changeView.rez4.text = balances_data[0][3]
+        
+        changeView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez1.text!.count * 10) - 50, y: 0, width: (changeView.rez1.text!.count * 10), height: 45)
+        changeView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez2.text!.count * 10) - 50, y: 47, width: (changeView.rez2.text!.count * 10), height: 45)
+        changeView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez3.text!.count * 10) - 50, y: 94, width: (changeView.rez3.text!.count * 10), height: 45)
+        changeView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez4.text!.count * 10) - 50, y: 141, width: (changeView.rez4.text!.count * 10), height: 45)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
     }
@@ -152,6 +177,42 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate {
         changeView.tab2Line.backgroundColor = .orange
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.getExchangeRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        
+                        self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
+                        
+                        self.balance = String(result.subscriberBalance) + " сомони"
+                        
+                        if result.settings.count != 0 {
+                            for i in 0 ..< result.settings.count {
+                                self.settings_data.append([String(result.settings[i].minValue), String(result.settings[i].maxValue), String(result.settings[i].midValue), String(result.settings[i].midPrice), String(result.settings[i].price), String(result.settings[i].costPrice), String(result.settings[i].quantityLimit), String(result.settings[i].volumeLimitA), String(result.settings[i].volumeLimitB), String(result.settings[i].conversationRateTrafficA), String(result.settings[i].conversationRateTrafficB), String(result.settings[i].discountPercent), String(result.settings[i].exchangeRate), String(result.settings[i].exchangeType), String(result.settings[i].exchangeTypeId), String(result.settings[i].description)])
+                            }
+                        }
+                        
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupTabCollectionView()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
 }
 
 extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -170,7 +231,56 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabChangeCollectionViewCell
         if indexPath.row == 0 {
             
-             
+            trasfer_type_choosed = settings_data[0][13]
+            trasfer_type_choosed_id = Int(settings_data[0][14])!
+            
+            cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
+            cell.count_transfer.text = String(Int((cell.slider.value[0])))
+            
+            cell.user_to_number.text = trasfer_type_choosed
+            
+            cell.user_to_number.didSelect { [self] (selectedText, index, id) in
+                self.trasfer_type_choosed = selectedText
+                self.trasfer_type_choosed_id = Int(settings_data[index][14])!
+                //putRequest()
+                cell.slider.minimumValue = CGFloat(Double(settings_data[index][0])!)
+                cell.slider.maximumValue = CGFloat(Double(settings_data[index][1])!)
+                cell.slider.value = [CGFloat(Double(settings_data[index][0])!)]
+                cell.count_transfer.text = String(Int((cell.slider.value[0])))
+            }
+            
+            for i in 0 ..< settings_data.count {
+                cell.user_to_number.optionArray.append(settings_data[i][13])
+                cell.user_to_number.optionIds?.append(Int(settings_data[i][14])!)
+               // putRequest()
+                
+            }
+            
+            to_trasfer_type_choosed = settings_data[0][13]
+            to_trasfer_type_choosed_id = Int(settings_data[0][14])!
+            
+            cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
+            cell.count_transfer.text = String(Int((cell.slider.value[0])))
+            
+            cell.type_transfer.text = trasfer_type_choosed
+            
+            cell.type_transfer.didSelect { [self] (selectedText, index, id) in
+                self.trasfer_type_choosed = selectedText
+                self.trasfer_type_choosed_id = Int(settings_data[index][14])!
+                //putRequest()
+                cell.slider.minimumValue = CGFloat(Double(settings_data[index][0])!)
+                cell.slider.maximumValue = CGFloat(Double(settings_data[index][1])!)
+                cell.slider.value = [CGFloat(Double(settings_data[index][0])!)]
+                cell.count_transfer.text = String(Int((cell.slider.value[0])))
+            }
+            
+            for i in 0 ..< settings_data.count {
+                cell.type_transfer.optionArray.append(settings_data[i][13])
+                cell.type_transfer.optionIds?.append(Int(settings_data[i][14])!)
+               // putRequest()
+                
+            }
+            
            
         }
         else {

@@ -39,6 +39,10 @@
 		B8358EF527FDAA54001A6696 /* SupportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF427FDAA53001A6696 /* SupportCollectionViewCell.swift */; };
 		B8358EF727FE0A36001A6696 /* DialogOfficesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF627FE0A36001A6696 /* DialogOfficesViewController.swift */; };
 		B8358EF927FE11B8001A6696 /* DialogOfficesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EF827FE11B7001A6696 /* DialogOfficesViewCell.swift */; };
+		B8358EFB27FF3C93001A6696 /* ExchangeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFA27FF3C93001A6696 /* ExchangeData.swift */; };
+		B8358EFD27FF3F5A001A6696 /* DetalizationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */; };
+		B8358EFF27FF436E001A6696 /* MoneyTransferData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */; };
+		B8358F0127FF572C001A6696 /* ZeroHelpData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358F0027FF572B001A6696 /* ZeroHelpData.swift */; };
 		B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852979B27C55AA000B68F36 /* ConditionViewController.swift */; };
 		B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A127C6AD9100B68F36 /* MenuViewController.swift */; };
 		B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A927C6ADD100B68F36 /* MenuViewCell.swift */; };
@@ -195,6 +199,10 @@
 		B8358EF427FDAA53001A6696 /* SupportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportCollectionViewCell.swift; sourceTree = "<group>"; };
 		B8358EF627FE0A36001A6696 /* DialogOfficesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogOfficesViewController.swift; sourceTree = "<group>"; };
 		B8358EF827FE11B7001A6696 /* DialogOfficesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialogOfficesViewCell.swift; sourceTree = "<group>"; };
+		B8358EFA27FF3C93001A6696 /* ExchangeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeData.swift; sourceTree = "<group>"; };
+		B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalizationData.swift; sourceTree = "<group>"; };
+		B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyTransferData.swift; sourceTree = "<group>"; };
+		B8358F0027FF572B001A6696 /* ZeroHelpData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroHelpData.swift; sourceTree = "<group>"; };
 		B852979B27C55AA000B68F36 /* ConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionViewController.swift; sourceTree = "<group>"; };
 		B85297A127C6AD9100B68F36 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B85297A927C6ADD100B68F36 /* MenuViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
@@ -595,6 +603,10 @@
 				B858A2C927DBB1C100D190CE /* SupportData.swift */,
 				B858A2CB27DBB2EA00D190CE /* SettingsData.swift */,
 				B8358EF227EA40A7001A6696 /* TransferData.swift */,
+				B8358EFA27FF3C93001A6696 /* ExchangeData.swift */,
+				B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */,
+				B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */,
+				B8358F0027FF572B001A6696 /* ZeroHelpData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -1038,6 +1050,7 @@
 				B853D75D2754CD3B00FBE1F1 /* MobileTransferView.swift in Sources */,
 				B86429AF273C3B31000C159E /* UsageCollectionViewCell.swift in Sources */,
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
+				B8358F0127FF572C001A6696 /* ZeroHelpData.swift in Sources */,
 				B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */,
 				B864297B273B8584000C159E /* HalfModalPresentationController.swift in Sources */,
 				B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */,
@@ -1074,8 +1087,10 @@
 				B85297E927C7548700B68F36 /* MenuView.swift in Sources */,
 				B86428A827313B90000C159E /* ContainerViewController.swift in Sources */,
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
+				B8358EFB27FF3C93001A6696 /* ExchangeData.swift in Sources */,
 				B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */,
 				B853D74E2754CCEB00FBE1F1 /* ChangeTransferViewController.swift in Sources */,
+				B8358EFD27FF3F5A001A6696 /* DetalizationData.swift in Sources */,
 				B82B7D7A27C2B00300570AC0 /* SplashViewController.swift in Sources */,
 				B864295F273A36C0000C159E /* PushViewController.swift in Sources */,
 				B87F472D27311A1100BAEDFA /* SceneDelegate.swift in Sources */,
@@ -1137,6 +1152,7 @@
 				B853D7EC2758D92700FBE1F1 /* CalendarViewController.swift in Sources */,
 				B8358EF727FE0A36001A6696 /* DialogOfficesViewController.swift in Sources */,
 				B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */,
+				B8358EFF27FF436E001A6696 /* MoneyTransferData.swift in Sources */,
 				B858A2C427DBAF4B00D190CE /* AboutAppData.swift in Sources */,
 				B853D7702754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift in Sources */,
 				B858A2C227DB9BF300D190CE /* ServicesData.swift in Sources */,

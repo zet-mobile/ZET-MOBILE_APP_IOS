@@ -52,9 +52,9 @@ struct connectedPackets_data {
 }
 
 struct discount_data: Decodable {
-    let discountName: String
+    //let discountName: String
     let discountPercent: Int
-    let discountServiceId: String
+    let discountServiceId: Int
 }
 
 extension PacketsData: Decodable {

@@ -477,7 +477,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
-                        if result.offices.count != 0 {
+                        /*if result.offices.count != 0 {
                             for i in 0 ..< result.offices.count {
                                officesdata.append([String(result.offices[i].information), String(result.offices[i].title), String(result.offices[i].iconUrl), String(result.offices[i].officeType), String(result.offices[i].latitude), String(result.offices[i].longitude), String(result.offices[i].officeTypeId)])
                             }
@@ -487,7 +487,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                             for i in 0 ..< result.support.count {
                                supportdata.append([String(result.support[i].id), String(result.support[i].description), String(result.support[i].url), String(result.support[i].iconUrl)])
                             }
-                        }
+                        }*/
 
                     }
                 },

@@ -6,10 +6,28 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
+import MultiSlider
+
+struct historyData {
+    let date_header: String
+    let phoneNumber: [String]
+    let status: [String]
+    let date: [String]
+    let id: [String]
+    let volume: [String]
+    let price: [String]
+    let type: [String]
+    let transferType: [String]
+    let statusId: [String]
+    let transactionId: [String]
+}
 
 class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
 
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    let disposeBag = DisposeBag()
     
     let scrollView = UIScrollView()
     
@@ -34,22 +52,24 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    
+    var balances_data = [[String]]()
+    var settings_data = [[String]]()
+    var history_data = [[String]]()
+    var histories_data = [[String]]()
+    
+    var balance = ""
+    var trasfer_type_choosed = ""
+    var trasfer_type_choosed_id = 0
+    
+    var HistoryData = [historyData(date_header: String(), phoneNumber: [String](), status: [String](), date: [String](), id: [String](), volume: [String](), price: [String](), type: [String](), transferType: [String](), statusId: [String](), transactionId: [String]())]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        view.backgroundColor = .white
         
-        setupView()
-        setupTabCollectionView()
+        sendRequest()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +90,17 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         traficView = TraficTransferView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
@@ -78,6 +109,18 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Трафик трансфер"
+        
+        self.traficView.balance.text = balance
+        
+        traficView.rez1.text = balances_data[0][0]
+        traficView.rez2.text = balances_data[0][1]
+        traficView.rez3.text = balances_data[0][2]
+        traficView.rez4.text = balances_data[0][3]
+        
+        traficView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez1.text!.count * 15) - 50, y: 0, width: (traficView.rez1.text!.count * 15), height: 45)
+        traficView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez2.text!.count * 15) - 50, y: 47, width: (traficView.rez2.text!.count * 15), height: 45)
+        traficView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez3.text!.count * 15) - 50, y: 94, width: (traficView.rez3.text!.count * 15), height: 45)
+        traficView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez4.text!.count * 15) - 50, y: 141, width: (traficView.rez4.text!.count * 15), height: 45)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
     }
@@ -152,6 +195,89 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         traficView.tab2Line.backgroundColor = .orange
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.getTransferRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        
+                        self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
+                        
+                        self.balance = String(result.subscriberBalance) + " сомони"
+                        
+                        if result.settings.count != 0 {
+                            for i in 0 ..< result.settings.count {
+                                self.settings_data.append([String(result.settings[i].minValue), String(result.settings[i].maxValue), String(result.settings[i].midValue), String(result.settings[i].midPrice), String(result.settings[i].price), String(result.settings[i].quantityLimit), String(result.settings[i].volumeLimit), String(result.settings[i].conversationRate), String(result.settings[i].discountPercent), String(result.settings[i].transferType), String(result.settings[i].transferTypeId), String(result.settings[i].description)])
+                            }
+                        }
+                        
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        sendHistoryRequest()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+      }
+    
+    func sendHistoryRequest() {
+        let client = APIClient.shared
+            do{
+              try client.transferHistoryRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async { [self] in
+                        
+                        if result.history != nil {
+                            
+                            for i in 0 ..< result.history!.count {
+                                
+                               var tableData = [[String]]()
+                               
+                                for j in 0 ..< result.history![i].histories.count {
+                                    
+                                    tableData.append([String(result.history![i].histories[j].phoneNumber), String(result.history![i].histories[j].status), String(result.history![i].histories[j].date), String(result.history![i].histories[j].id), String(result.history![i].histories[j].volume), String(result.history![i].histories[j].price), String(result.history![i].histories[j].type), String(result.history![i].histories[j].transferType), String(result.history![i].histories[j].statusId), String(result.history![i].histories[j].transactionId)])
+                                }
+                                
+                              //  HistoryData.append(historyData(date_header: String(result.history![i].date), phoneNumber: tableData[i][0], status: tableData[i][1], date: tableData[i][2], id: tableData[i][3], volume: tableData[i][4], price: tableData[i][5], type: tableData[i][6], transferType: tableData[i][7], statusId: tableData[i][8], transactionId: tableData[i][9]))
+                            }
+                            
+                        }
+                        
+                       /* if result.history.count != 0 {
+                            for i in 0 ..< result.settings.count {
+                                self.settings_data.append([String(result.settings[i].minValue), String(result.settings[i].maxValue), String(result.settings[i].midValue), String(result.settings[i].midPrice), String(result.settings[i].price), String(result.settings[i].quantityLimit), String(result.settings[i].volumeLimit), String(result.settings[i].conversationRate), String(result.settings[i].discountPercent), String(result.settings[i].transferType), String(result.settings[i].transferTypeId), String(result.settings[i].description)])
+                            }
+                        }*/
+                        
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupTabCollectionView()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
 }
 
 extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -169,8 +295,33 @@ extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabTraficCollectionViewCell
         if indexPath.row == 0 {
+            // setup language field
+            trasfer_type_choosed = settings_data[0][9]
+            trasfer_type_choosed_id = Int(settings_data[0][10])!
+            cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
+            cell.count_transfer.text = String(Int((cell.slider.value[0])))
             
-             
+            cell.type_transfer.text = trasfer_type_choosed
+            
+            cell.type_transfer.didSelect { [self] (selectedText, index, id) in
+                self.trasfer_type_choosed = selectedText
+                self.trasfer_type_choosed_id = Int(settings_data[index][10])!
+                //putRequest()
+                cell.slider.minimumValue = CGFloat(Double(settings_data[index][0])!)
+                cell.slider.maximumValue = CGFloat(Double(settings_data[index][1])!)
+                cell.slider.value = [CGFloat(Double(settings_data[index][0])!)]
+                cell.count_transfer.text = String(Int((cell.slider.value[0])))
+            }
+            
+            for i in 0 ..< settings_data.count {
+                cell.type_transfer.optionArray.append(settings_data[i][9])
+                cell.type_transfer.optionIds?.append(Int(settings_data[i][10])!)
+               // putRequest()
+                
+            }
+            
+            cell.slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
+            
            
         }
         else {
@@ -210,11 +361,40 @@ extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICo
           }
        }
     }
+    
+    @objc func sliderChanged(_ slider: MultiSlider) {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = self.TabCollectionView.cellForItem(at: indexPath) as! TabTraficCollectionViewCell
+        cell.count_transfer.text = String(Int(slider.value[0]))
+        
+    }
 }
 
 extension TraficTransferViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if HistoryData.count != 0 {
+            return HistoryData.count
+        }
+        else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+       let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        let date = dateFormatter1.date(from: history_data[section][2])
+        dateFormatter1.dateFormat = "dd MMMM"
+        dateFormatter1.locale = Locale(identifier: "ru_RU")
+        view.title.text = dateFormatter1.string(from: date!)
+        
+       return view
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return HistoryData[section].phoneNumber.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -11,7 +11,7 @@ class ZeroHelpView: UIView {
 
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "image16")
+        image.image = UIImage(named: "zero_mini")
         image.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
         return image
     }()

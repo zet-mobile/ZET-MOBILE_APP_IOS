@@ -226,7 +226,175 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
+    // get history of traffic transfer transactions.
+    func transferHistoryRequest() -> Observable<TransferDataHistory> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/history")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get settings of traffic transfer system.
+    func getTransferRequest() -> Observable<TransferData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //for detail information history.
+    func transferHistoryIdRequest(parametr: String) -> Observable<histories_data> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/history/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    // for translate traffic.
+    func transferPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    // get history of traffic exchange transactions.
+    func exchangeHistoryRequest() -> Observable<ExchangeDataHistory> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/history")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get settings of exchange transfer system.
+    func getExchangeRequest() -> Observable<ExchangeData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //for detail information history.
+    func exchangeHistoryIdRequest(parametr: String) -> Observable<histories_exchange_data> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/history/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    // for translate exchange.
+    func exchangePutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    // for get history of money transfer transactions.
+    func moneyHistoryRequest() -> Observable<MoneyTransferDataHistory> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get settings of exchange transfer system.
+    func getMoneyRequest() -> Observable<MoneyTransferData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //for detail information history.
+    func moneyHistoryIdRequest(parametr: String) -> Observable<histories_money_data> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    // for translate exchange.
+    func moneyPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get history of detailing order transactions.
+    func detailingHistoryRequest() -> Observable<DetailingHistory> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing/history")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get settings of exchange transfer system.
+    func getDetailingyRequest() -> Observable<Detailing> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //for detail information history.
+  /*  func moneyHistoryIdRequest(parametr: String) -> Observable<histories_exchange_data> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }*/
+    
+    // for translate detailing.
+    func detailingPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpMethod = "PUT"
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
 }
+
 
 
 extension UIViewController {

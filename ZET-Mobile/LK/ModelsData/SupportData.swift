@@ -14,16 +14,16 @@ struct SupportData: Decodable {
 
 struct support_data: Decodable {
     let id: Int
-    let description: String
+    //let description: String
     let url: String
     let iconUrl: String
 }
 
 struct offices_data: Decodable {
-    let information: String
-    let title: String
+   // let information: String
+    //let title: String
     let iconUrl: String
-    let officeType: String
+   // let officeType: String
     let latitude: String
     let longitude: String
     let officeTypeId: Int

@@ -7,6 +7,7 @@
 
 import UIKit
 import MultiSlider
+import iOSDropDown
 
 class TabChangeCollectionViewCell: UICollectionViewCell {
     
@@ -24,12 +25,13 @@ class TabChangeCollectionViewCell: UICollectionViewCell {
         return titleOne
     }()
     
-    lazy var user_to_number: UITextField = {
-        let textfield = UITextField()
+    lazy var user_to_number: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 50, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
+        textfield.setView(.right, image: UIImage(named: "drop_icon"))
         return textfield
     }()
     
@@ -48,12 +50,13 @@ class TabChangeCollectionViewCell: UICollectionViewCell {
         return title
     }()
     
-    lazy var type_transfer: UITextField = {
-        let textfield = UITextField()
+    lazy var type_transfer: DropDown = {
+        let textfield = DropDown()
         textfield.frame = CGRect(x: 20, y: 180, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
+        textfield.setView(.right, image: UIImage(named: "drop_icon"))
         return textfield
     }()
     
@@ -172,6 +175,27 @@ class TabChangeCollectionViewCell: UICollectionViewCell {
         slider.snapStepSize = 1
         slider.thumbImage = UIImage(named: "slider_thumb")
         slider.frame = CGRect(x: 20, y: 370, width: UIScreen.main.bounds.size.width - 40, height: 30)
+        
+        
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+        count_transfer.leftView = paddingView
+        count_transfer.leftViewMode = .always
+        
+        let paddingView1: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+        count_to_transfer.leftView = paddingView1
+        count_to_transfer.leftViewMode = .always
+        
+        type_transfer.isSearchEnable = false
+        type_transfer.selectedRowColor = .lightGray
+        let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+        type_transfer.leftView = paddingView2
+        type_transfer.leftViewMode = .always
+        
+        user_to_number.isSearchEnable = false
+        user_to_number.selectedRowColor = .lightGray
+        let paddingView3: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+        user_to_number.leftView = paddingView3
+        user_to_number.leftViewMode = .always
         
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true

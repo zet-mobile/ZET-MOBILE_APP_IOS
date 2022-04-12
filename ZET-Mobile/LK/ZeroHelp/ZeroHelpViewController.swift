@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    let disposeBag = DisposeBag()
     
     let scrollView = UIScrollView()
     
@@ -35,22 +38,15 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var balances_data = [[String]]()
+    var settings_data = [[String]]()
+    var history_data = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
         
-        setupView()
-        setupTabCollectionView()
+        view.backgroundColor = .white
+        sendRequest()
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,6 +67,17 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
@@ -79,6 +86,16 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Помощь при нуле"
+        
+        zeroView.rez1.text = balances_data[0][0]
+        zeroView.rez2.text = balances_data[0][1]
+        //zeroView.rez3.text = balances_data[0][2]
+        //zeroView.rez4.text = balances_data[0][3]
+        
+        zeroView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez1.text!.count * 10) - 50, y: 0, width: (zeroView.rez1.text!.count * 10), height: 45)
+        zeroView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez2.text!.count * 10) - 50, y: 47, width: (zeroView.rez2.text!.count * 10), height: 45)
+        //zeroView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez3.text!.count * 10) - 50, y: 94, width: (traficView.rez3.text!.count * 10), height: 45)
+        //zeroView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez4.text!.count * 10) - 50, y: 141, width: (traficView.rez4.text!.count * 10), height: 45)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 500)
     }
@@ -152,6 +169,42 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.tab1Line.backgroundColor = .clear
         zeroView.tab2Line.backgroundColor = .orange
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+    }
+    
+    func sendRequest() {
+        let client = APIClient.shared
+            do{
+              try client.getTransferRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        
+                        self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
+                        
+                        self.zeroView.balance.text = String(result.subscriberBalance) + " сомони"
+                        
+                        if result.settings.count != 0 {
+                            for i in 0 ..< result.settings.count {
+                                self.settings_data.append([String(result.settings[i].minValue), String(result.settings[i].maxValue), String(result.settings[i].midValue), String(result.settings[i].midPrice), String(result.settings[i].price), String(result.settings[i].quantityLimit), String(result.settings[i].volumeLimit), String(result.settings[i].conversationRate), String(result.settings[i].discountPercent), String(result.settings[i].transferType), String(result.settings[i].transferTypeId), String(result.settings[i].description)])
+                            }
+                        }
+                        
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupTabCollectionView()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
     }
 }
 

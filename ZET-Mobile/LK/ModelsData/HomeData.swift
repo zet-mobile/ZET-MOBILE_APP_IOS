@@ -10,7 +10,7 @@ import Foundation
 struct HomeData: Decodable {
     
     let currentVersion: String
-    //let subscriberName: String
+   // let subscriberName: String
     let subscriberBalance: Double
     let subscriberCredit: Double
     let notificationsCount: Int
