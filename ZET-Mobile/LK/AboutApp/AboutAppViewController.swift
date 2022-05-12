@@ -13,6 +13,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    var halfModalTransitioningDelegate: HalfModalTransitioningDelegate?
     
     let scrollView = UIScrollView()
     
@@ -24,16 +25,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        showActivityIndicator(uiView: self.view)
         
         sendRequest()
     }
@@ -54,10 +46,29 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        scrollView.isScrollEnabled = false
+        view.addSubview(scrollView)
+        
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         about_view = AboutAppView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        
+        let nsObject: AnyObject? = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as AnyObject?
+        let version = nsObject as! String
+        let nsObject2: AnyObject? = Bundle.main.infoDictionary!["CFBundleVersion"] as AnyObject?
+        let build = nsObject2 as! String
+        about_view.version_app.text = "v. " + version + " (" + build + ")"
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(about_view)
@@ -65,18 +76,36 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "О приложении"
         
+        about_view.button.addTarget(self, action: #selector(openCondition), for: .touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         table.register(AboutViewCell.self, forCellReuseIdentifier: "about_cell")
-        table.frame = CGRect(x: 10, y: 350, width: UIScreen.main.bounds.size.width - 20, height: 3 * 80)
+        table.frame = CGRect(x: 10, y: CGFloat((Int(UIScreen.main.bounds.size.height) * 250) / 844), width: UIScreen.main.bounds.size.width - 20, height: (UIScreen.main.bounds.size.height * 320) / 844)
         table.delegate = self
         table.dataSource = self
         table.rowHeight = 80
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
         scrollView.addSubview(table)
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
+    }
+    
+    @objc func openCondition(_ sender: UIButton) {
+        sender.showAnimation { [self] in
+            let next = ConditionViewController()
+            next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+            self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
+            next.modalPresentationStyle = .custom
+            next.modalPresentationCapturesStatusBarAppearance = true
+            
+            next.transitioningDelegate = self.halfModalTransitioningDelegate
+            present(next, animated: true, completion: nil)
+        }
     }
 
     func sendRequest() {
@@ -102,6 +131,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
                 onCompleted: {
                     DispatchQueue.main.async {
                         self.setupView()
+                        self.hideActivityIndicator(uiView: self.view)
                     }
                    print("Completed event.")
                     

@@ -9,9 +9,11 @@ import UIKit
 
 class SplashViewController: UIViewController {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let imageViewBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         imageViewBackground.image = UIImage(named: "splash_img.png")
         imageViewBackground.contentMode = UIView.ContentMode.scaleToFill
@@ -36,22 +38,19 @@ class SplashViewController: UIViewController {
     }
     
     @objc func touches() {
-        if (UserDefaults.standard.string(forKey: "mobPhone") != nil) {
-            guard let window = UIApplication.shared.keyWindow else {
-                return
-            }
-
-            guard let rootViewController = window.rootViewController else {
-                return
-            }
-            let vc = ContainerViewController()
-            vc.view.frame = rootViewController.view.frame
-            vc.view.layoutIfNeeded()
-            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-                    window.rootViewController = vc
-              }, completion: nil)
+        //UserDefaults.standard.set("light", forKey: "ThemeAppereance")
+        
+        if UserDefaults.standard.string(forKey: "mobPhone") != nil && UserDefaults.standard.string(forKey: "mobPhone") != "" && UserDefaults.standard.string(forKey: "PinCode") != "" && UserDefaults.standard.string(forKey: "PinCode") != nil
+        {
+            
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(PinCodeInputController(), animated: false)
         }
         else {
+            UserDefaults.standard.set(1, forKey: "language")
+            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+            self.defaultLocalizer.setSelectedLanguage(lang: .ru)
+            
               self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
               navigationController?.pushViewController(AuthorizationViewController(), animated: false)
           }

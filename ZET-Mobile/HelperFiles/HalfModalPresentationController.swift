@@ -29,7 +29,7 @@ class HalfModalPresentationController : UIPresentationController {
             return dimmedView
         }
         
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: containerView!.bounds.width, height: containerView!.bounds.height))
+        let view = UIScrollView(frame: CGRect(x: 0, y: 0, width: containerView!.bounds.width, height: containerView!.bounds.height))
         
         // Blur Effect
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -86,15 +86,12 @@ class HalfModalPresentationController : UIPresentationController {
             case .normal:
                 print("normal")
                 presentedView!.frame.origin.y = (containerView!.bounds.height / 2) / 2
-                dimmingView.backgroundColor = .white
-                statusBar = "darkContent"
-                positionPresentView = "big"
+                dimmingView.backgroundColor = contentColor
             case .adjustedOnce:
                 print("adjusted")
                 presentedView!.frame.origin.y = endPoint.y
                 dimmingView.backgroundColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 0.68)
-                statusBar = "lightContent"
-                positionPresentView = "small"
+             
             }
             direction = velocity.y
             
@@ -276,7 +273,7 @@ class HalfModalTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioni
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.4
+        return 0.1
     }
     
     
@@ -330,7 +327,7 @@ class HalfModalInteractiveTransition: UIPercentDrivenInteractiveTransition {
             
         case .changed:
             let screenHeight = UIScreen.main.bounds.size.height - 50
-            let dragAmount = screenHeight
+            let dragAmount = 0
             let threshold: Float = 0.2
             var percent: Float = Float(translation.y) / Float(dragAmount)
 

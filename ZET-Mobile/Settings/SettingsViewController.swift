@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import iOSDropDown
 
-class SettingsViewController: UIViewController, UIScrollViewDelegate {
+class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDropDelegate {
     
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
@@ -23,8 +23,8 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
     var lang_data = [[String]]()
     var appearance_data = [[String]]()
     
-    var lang_choosed = "Русский"
-    var theme_choosed = "Светлая"
+    var lang_choosed = ""
+    var theme_choosed = ""
     
     var langId_choosed = 0
     var themeID_choosed = 0
@@ -37,16 +37,8 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.backgroundColor = .white
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
-        view.addSubview(scrollView)
+        showActivityIndicator(uiView: self.view)
+        view.backgroundColor = toolbarColor
         
         sendRequest()
     }
@@ -67,8 +59,19 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
   
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = contentColor
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        view.addSubview(scrollView)
+        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         settings_view = SettingsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
@@ -83,7 +86,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Настройки"
-        toolbar.backgroundColor = .white
+        toolbar.backgroundColor = toolbarColor
       
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
@@ -91,6 +94,10 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         settings_view.lang.text = lang_choosed
         settings_view.lang.isSearchEnable = false
         settings_view.lang.selectedRowColor = .lightGray
+        settings_view.lang.textColor = colorBlackWhite
+        //settings_view.lang.rowBackgroundColor = contentColor
+        settings_view.lang.textDropDelegate = self
+      
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         settings_view.lang.leftView = paddingView
         settings_view.lang.leftViewMode = .always
@@ -103,19 +110,45 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         for i in 0 ..< lang_data.count {
             settings_view.lang.optionArray.append(lang_data[i][2])
             settings_view.lang.optionIds?.append(Int(lang_data[i][0])!)
-            putRequest()
+            
         }
         
         // setup theme field
         settings_view.app_theme.text = theme_choosed
         settings_view.app_theme.isSearchEnable = false
         settings_view.app_theme.selectedRowColor = .lightGray
+        settings_view.app_theme.textColor = colorBlackWhite
         let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         settings_view.app_theme.leftView = paddingView2
         settings_view.app_theme.leftViewMode = .always
         settings_view.app_theme.didSelect { [self] (selectedText, index, id) in
             self.theme_choosed = selectedText
+            print(Int(appearance_data[index][0])!)
             self.themeID_choosed = Int(appearance_data[index][0])!
+            if Int(appearance_data[index][0])! == 1 {
+                UserDefaults.standard.set("light", forKey: "ThemeAppereance")
+            }
+            else {
+                UserDefaults.standard.set("dark", forKey: "ThemeAppereance")
+            }
+            
+            colorLine = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
+
+            colorGrayWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
+
+            contentColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor.white)
+            
+            toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
+            
+            colorBlackWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor.white : UIColor.black)
+
+            colorLightDarkGray = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+
+            colorLightDarkGray2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+            
+            darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
+            
+            putRequest()
         }
         
         
@@ -136,6 +169,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
         settings_view.switch_sms.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
     }
 
+    
     @objc func changeCodeTap() {
         print("hello")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -158,8 +192,14 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
-                        
-                        appearance_data.append([String(result.appearance.themeId), String(result.appearance.themeDescription)])
+                        if result.appearance.count != 0 {
+                            for i in 0 ..< result.appearance.count {
+                                appearance_data.append([String(result.appearance[i].themeId), String(result.appearance[i].themeDescription)])
+                                if result.appearance[i].selected == true {
+                                    theme_choosed = String(result.appearance[i].themeDescription)
+                                }
+                            }
+                        }
                         
                         if result.languages.count != 0 {
                             for i in 0 ..< result.languages.count {
@@ -183,6 +223,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
                 onCompleted: {
                     DispatchQueue.main.async {
                         self.setupView()
+                        self.hideActivityIndicator(uiView: self.view)
                     }
                    print("Completed event.")
                     
@@ -195,14 +236,14 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
     @objc func putRequest() {
         
         let parametr: [String: Any] = ["promotionNotification": promotionNotification, "pushNotification": pushNotification, "emailNotification" : emailNotification, "smsNotification" : smsNotification, "languageId": langId_choosed, "themeId" : themeID_choosed]
-        
+        print(parametr)
         let client = APIClient.shared
             do{
                 try client.settingsPutRequest(jsonBody: parametr).subscribe (
                 onNext: { result in
                     print("hello")
-                    DispatchQueue.main.async {
-                      
+                    DispatchQueue.main.async { [self] in
+                        restartApp()
                     }
                 },
                 onError: { error in
@@ -215,6 +256,40 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate {
               catch{
                   
             }
+    }
+    
+    func restartApp() {
+        
+        UserDefaults.standard.set(3, forKey: "language")
+        UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
+       
+        if langId_choosed == 1 {
+            self.defaultLocalizer.setSelectedLanguage(lang: .ru)
+        }
+        else if langId_choosed == 2 {
+            self.defaultLocalizer.setSelectedLanguage(lang: .en)
+        }
+        else if langId_choosed == 3 {
+            self.defaultLocalizer.setSelectedLanguage(lang: .tj)
+        }
+        else {
+            self.defaultLocalizer.setSelectedLanguage(lang: .uz)
+        }
+        
+        guard let window = UIApplication.shared.keyWindow else {
+            return
+        }
+        
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        
+        let vc = ContainerViewController()
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+            window.rootViewController = vc
+        }, completion: nil)
     }
 
 }

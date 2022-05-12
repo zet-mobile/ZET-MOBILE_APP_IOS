@@ -50,7 +50,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
         sendRequest()
        
     }
@@ -71,7 +71,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
         
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -80,7 +80,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = contentColor
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
   
@@ -93,7 +93,11 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Роуминг"
-        toolbar.backgroundColor = .white
+        toolbar.backgroundColor = toolbarColor
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
         
         rouming_view.tab1.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
         rouming_view.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(0), width: UIScreen.main.bounds.size.width / 2, height: 40)
@@ -204,7 +208,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             table.rowHeight = UITableView.automaticDimension
             table.estimatedRowHeight = 80
             table.alwaysBounceVertical = false
-            table.backgroundColor = .white
+            table.backgroundColor = contentColor
             cell.addSubview(table)
            
         }
@@ -260,7 +264,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 title2.text = operatorCharges_data[i][0]
                 title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_pozition, width: title2.text!.count * 10, height: 25)
                 title2.numberOfLines = 0
-                title2.textColor = .black
+                title2.textColor = colorBlackWhite
                 title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
                 title2.font = UIFont.systemFont(ofSize: 15)
                 title2.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -268,7 +272,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 
                 let title_line = UILabel()
                 title_line.frame = CGRect(x: (title.text!.count * 10), y: y_pozition + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
-                title_line.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+                title_line.backgroundColor = colorLightDarkGray
                 
                 cell.addSubview(title)
                 cell.addSubview(title2)
@@ -305,14 +309,14 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                rouming_view.tab1.textColor = .black
+                rouming_view.tab1.textColor = colorBlackWhite
                 rouming_view.tab2.textColor = .gray
                 rouming_view.tab1Line.backgroundColor = .orange
                 rouming_view.tab2Line.backgroundColor = .clear
                 
             } else {
                 rouming_view.tab1.textColor = .gray
-                rouming_view.tab2.textColor = .black
+                rouming_view.tab2.textColor = colorBlackWhite
                 rouming_view.tab1Line.backgroundColor = .clear
                 rouming_view.tab2Line.backgroundColor = .orange
           }

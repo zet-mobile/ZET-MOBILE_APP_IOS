@@ -7,7 +7,16 @@
 
 import UIKit
 
+var container: UIView = UIView()
+
+extension Double {
+    var clean: String {
+       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.2f", self) : String(self)
+    }
+}
+
 extension UIView {
+    
     
     func frameRect(x: Double, y: Double, width: Double, height: Double) {
         frame = CGRect(x: (Double(UIScreen.main.bounds.size.width) * x) / 428, y: (Double(UIScreen.main.bounds.size.height) * y) / 926, width: (Double(UIScreen.main.bounds.size.width) * width) / 428, height: (Double(UIScreen.main.bounds.size.height) * height) / 926)
@@ -132,5 +141,49 @@ extension UIViewController {
             }
         }
         return results
+    }
+    
+    func showActivityIndicator(uiView: UIView) {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+        container.frame = uiView.frame
+        container.center = uiView.center
+        container.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0, green: 0, blue: 0, alpha: 0.5) : UIColor(red: 1, green: 1, blue: 1, alpha: 0.5))
+        activityIndicator.frame = CGRect(x: UIScreen.main.bounds.size.width/2 - 5, y: ((UIScreen.main.bounds.size.height/2) - 5), width: 10.0, height: 10.0)
+        activityIndicator.style = UIActivityIndicatorView.Style.white
+        activityIndicator.color = .orange
+        container.addSubview(activityIndicator)
+        uiView.addSubview(container)
+        activityIndicator.startAnimating()
+    }
+    
+    func hideActivityIndicator(uiView: UIView) {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+        activityIndicator.stopAnimating()
+        container.removeFromSuperview()
+    }
+    
+    
+    
+}
+
+public extension UIView {
+    func showAnimation(_ completionBlock: @escaping () -> Void) {
+      isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.1,
+                       delay: 0,
+                       options: .curveLinear,
+                       animations: { [weak self] in
+                            self?.transform = CGAffineTransform.init(scaleX: 0.95, y: 0.95)
+        }) {  (done) in
+            UIView.animate(withDuration: 0.1,
+                           delay: 0,
+                           options: .curveLinear,
+                           animations: { [weak self] in
+                                self?.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+            }) { [weak self] (_) in
+                self?.isUserInteractionEnabled = true
+                completionBlock()
+            }
+        }
     }
 }

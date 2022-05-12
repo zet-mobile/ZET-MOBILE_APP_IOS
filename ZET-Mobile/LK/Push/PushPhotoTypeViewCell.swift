@@ -28,7 +28,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: "push_photo_cell")
         backgroundColor = .clear
-        view_cell.backgroundColor = .white
+        //view_cell.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         view_cell.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 90)
         view_cell.layer.cornerRadius = 20
         
@@ -49,7 +49,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
         title.frame = CGRect(x: 70, y: 5, width: 300, height: 50)
         title.text = "Скидка на Хаматарафа+200"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
@@ -58,7 +58,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
  С 4 мая по 31 октября действует 30% СКИДКА на пакет \n "Хаматарафа+100"
  """
         //about.numberOfLines = 2
-        about.textColor = .darkGray
+        about.textColor = darkGrayLight
         about.font = UIFont.systemFont(ofSize: 16)
         about.textAlignment = .left
         

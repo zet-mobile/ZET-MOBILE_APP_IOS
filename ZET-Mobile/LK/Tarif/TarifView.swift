@@ -9,6 +9,8 @@ import UIKit
 
 class TarifView: UIView {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var zetImage: UIImageView = {
         let zetImage = UIImageView()
         zetImage.image = nil
@@ -26,7 +28,7 @@ class TarifView: UIView {
         let welcome = UILabel()
         welcome.text = ""
         welcome.numberOfLines = 0
-        welcome.textColor = .black
+        welcome.textColor = colorBlackWhite
         welcome.font = UIFont.systemFont(ofSize: 22)
         welcome.lineBreakMode = NSLineBreakMode.byWordWrapping
         welcome.textAlignment = .left
@@ -39,7 +41,7 @@ class TarifView: UIView {
         let user_name = UILabel()
         user_name.text = ""
         user_name.numberOfLines = 0
-        user_name.textColor = .darkGray
+        user_name.textColor = darkGrayLight
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         user_name.font = UIFont.systemFont(ofSize: 15)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -51,9 +53,9 @@ class TarifView: UIView {
     
     lazy var titleOne: UILabel = {
         let title = UILabel()
-        title.text = "Ваш тариф"
+        title.text = defaultLocalizer.stringForKey(key: "Your_tariff")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -81,9 +83,9 @@ class TarifView: UIView {
     
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Доступные"
+        title.text = defaultLocalizer.stringForKey(key: "Available")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -101,7 +103,7 @@ class TarifView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "Конструктор"
+        title.text = defaultLocalizer.stringForKey(key: "Set_plan")
         title.numberOfLines = 0
         title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -147,10 +149,10 @@ class TarifView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = toolbarColor
        
         white_view_back = UIView(frame: CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = contentColor
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)

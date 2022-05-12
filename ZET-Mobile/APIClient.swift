@@ -88,14 +88,12 @@ class APIClient {
     }
     
     // Disable packet
-    func disableConnect(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/")!)
+    func disableConnect(parametr: String) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
-        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
         request.httpMethod = "DELETE"
-        request.httpBody = jsonData
      return requestObservable.callAPI(request: request)
     }
     
@@ -257,13 +255,13 @@ class APIClient {
     }
     
     // for translate traffic.
-    func transferPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer")!)
+    func transferPostRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
-        request.httpMethod = "PUT"
+        request.httpMethod = "POST"
         request.httpBody = jsonData
      return requestObservable.callAPI(request: request)
     }
@@ -393,6 +391,17 @@ class APIClient {
         request.httpBody = jsonData
      return requestObservable.callAPI(request: request)
     }
+    
+    //  get settings of exchange transfer system.
+    func getAskMoneyRequest() -> Observable<ZeroHelpData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
 }
 
 

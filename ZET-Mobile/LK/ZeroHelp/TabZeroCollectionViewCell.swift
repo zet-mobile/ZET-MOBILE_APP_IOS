@@ -17,7 +17,7 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         title.font = UIFont(name: "", size: 10)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 4 * 80 + 10, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.frame = CGRect(x: 20, y: 4 * 90 + 10, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -27,20 +27,20 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         let icon_more = UIButton()
         //icon_more.setImage(#imageLiteral(resourceName: "View_all"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 4 * 80 + 70, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 4 * 90 + 70, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
-        icon_more.setTitle("Подробнее об услуге  >", for: .normal)
+        icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "More_about_the_service"))  >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
     }()
     
-    lazy var type_paket: UILabel = {
+   /* lazy var type_paket: UILabel = {
         let title = UILabel()
         title.text = "Пакет 3 сомони"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
@@ -83,19 +83,19 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle("Приобрести пакет", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Purchase_package"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
         return button
-    }()
+    }()*/
     
     let white_view_back = UIView(frame: CGRect(x: 0, y: 4 * 80 + 130, width: UIScreen.main.bounds.size.width, height: 300))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        white_view_back.backgroundColor = .white
+        //white_view_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         white_view_back.layer.shadowOpacity = 1
         white_view_back.layer.shadowOffset = .zero
@@ -110,10 +110,10 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(white_view_back)
         contentView.sendSubviewToBack(white_view_back)
         
-        contentView.addSubview(type_paket)
+        /*contentView.addSubview(type_paket)
         contentView.addSubview(title_commission)
         contentView.addSubview(summa)
-        contentView.addSubview(sendButton)
+        contentView.addSubview(sendButton)*/
     
     }
     

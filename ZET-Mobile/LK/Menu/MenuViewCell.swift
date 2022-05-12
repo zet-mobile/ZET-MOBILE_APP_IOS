@@ -19,7 +19,7 @@ class MenuViewCell: UITableViewCell {
     
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = colorBlackWhite
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
@@ -33,8 +33,7 @@ class MenuViewCell: UITableViewCell {
         addSubview(ico_image)
         addSubview(descriptionLabel)
         
-        backgroundColor = .white
-        
+        backgroundColor = contentColor
         ico_image.frame = CGRect(x: 25, y: 20, width: 20, height: 20)
         descriptionLabel.frame = CGRect(x: 65, y: 20, width: UIScreen.main.bounds.size.width  - 150, height: 20)
         descriptionLabel.numberOfLines = 1

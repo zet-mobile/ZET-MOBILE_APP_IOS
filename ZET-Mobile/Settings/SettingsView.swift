@@ -98,7 +98,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "Push-уведомления"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -120,7 +120,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "Акции, предложения"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -142,7 +142,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "E-mail рассылка"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -164,7 +164,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "SMS уведомления"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -192,7 +192,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "Изменить пароль"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -223,7 +223,7 @@ class SettingsView: UIView {
         let titleOne = UILabel()
         titleOne.text = "Вход по биометрии"
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
@@ -245,7 +245,7 @@ class SettingsView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = contentColor
         
         self.addSubview(title)
         self.addSubview(titleOne)

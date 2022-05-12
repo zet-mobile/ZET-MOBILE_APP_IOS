@@ -23,6 +23,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
     
     let disposeBag = DisposeBag()
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    var alert = UIAlertController()
     
     private let scrollView = UIScrollView()
     var MyTarifPage = MyTarifViewController()
@@ -84,13 +86,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        showActivityIndicator(uiView: self.view)
+        view.backgroundColor = toolbarColor
         
-        view.backgroundColor = .white
-        
-        color2 = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        color1 = UIColor.white
+        color2 = colorLightDarkGray
+        color1 = contentColor
         
         sendMapRequest()
+
         print(UserDefaults.standard.string(forKey: "token")!)
         print(UserDefaults.standard.string(forKey: "mobPhone"))
                 
@@ -125,7 +129,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -136,6 +140,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat((services_data.count * (Int(UIScreen.main.bounds.size.height) * 140) / 580)))
         view.addSubview(scrollView)
+        scrollView.backgroundColor = colorLightDarkGray
         
         toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         home_view = HomeView(frame: CGRect(x: 0, y: 360, width: UIScreen.main.bounds.size.width, height: CGFloat((services_data.count * 140)) + 500))
@@ -184,7 +189,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupRemaindersSection(){
         scrollView.addSubview(remainderView)
-        remainderView.frame = CGRect(x: 0, y: 230, width: UIScreen.main.bounds.size.width, height: 140)
+        remainderView.frame = CGRect(x: 0, y: 230, width: UIScreen.main.bounds.size.width, height: 145)
         
         var textColor = UIColor.black
         var textColor2 = UIColor.lightGray
@@ -195,7 +200,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             textColor2 = .red
         }
         else {
-            textColor = .black
+            textColor = colorBlackWhite
             textColor2 = .lightGray
         }
         
@@ -213,7 +218,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
         number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
         
-        var title_label = "\n МИНУТ" as NSString
+        var title_label = "\n \(defaultLocalizer.stringForKey(key: "minutes"))" as NSString
         var titleString = NSMutableAttributedString.init(string: title_label as String)
         var range2 = (title_label).range(of: title_label as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
@@ -227,7 +232,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             textColor2 = .red
         }
         else {
-            textColor = .black
+            textColor = colorBlackWhite
             textColor2 = .lightGray
         }
         
@@ -240,7 +245,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             number_data = remainders_data[1][1]
         }
         number_label = number_data as NSString
-        title_label = "\n МЕГАБАЙТ" as NSString
+        title_label = "\n \(defaultLocalizer.stringForKey(key: "megabyte"))" as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
@@ -259,7 +264,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             textColor2 = .red
         }
         else {
-            textColor = .black
+            textColor = colorBlackWhite
             textColor2 = .lightGray
         }
         if remainders_data[2][2] == "true" {
@@ -271,7 +276,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             number_data = remainders_data[2][1]
         }
         number_label = number_data as NSString
-        title_label = "\n SMS" as NSString
+        title_label = "\n \(defaultLocalizer.stringForKey(key: "SMS"))" as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
@@ -307,6 +312,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         
         remainderView.messagesRemainder.plusText.addTarget(self, action: #selector(openAddionalTraficsView), for: .touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openAddionalTraficsView))
+        remainderView.messagesRemainder.isUserInteractionEnabled = true
+        remainderView.messagesRemainder.addGestureRecognizer(tapGestureRecognizer)
         
     }
     
@@ -351,7 +360,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         ServicesTableView.rowHeight = 140
         ServicesTableView.estimatedRowHeight = 140
         ServicesTableView.isScrollEnabled = false
-        ServicesTableView.backgroundColor = .white
+        ServicesTableView.backgroundColor = contentColor
+        ServicesTableView.separatorColor = colorLine
       }
     
     @objc func openAddionalTraficsView() {
@@ -391,9 +401,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                             let dateFormatter1 = DateFormatter()
                             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                             let date = dateFormatter1.date(from: String(result.priceplan.nextApplyDate!))
-                            dateFormatter1.dateFormat = "dd MMMM"
-                            dateFormatter1.locale = Locale(identifier: "ru_RU")
-                            self.next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                            dateFormatter1.dateFormat = "dd.MM.yyyy"
+                            self.next_apply_date = "Активен до: \(dateFormatter1.string(from: date!))"
                         }
                         
                         self.remainders_data.append([String(result.balances.offnet.start), String(result.balances.offnet.now), String(result.balances.offnet.unlim)])
@@ -415,11 +424,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.services.count != 0 {
                             for i in 0 ..< result.services.count {
+                                var disc_id = ""
+                                var disc_percent = ""
+                                
                                 if result.services[i].discount != nil {
-                                    self.discount_id = String(result.services[i].discount!.discountServiceId)
+                                    disc_id = String(result.services[i].discount!.discountServiceId)
+                                    disc_percent = String(result.services[i].discount!.discountPercent)
                                 }
                                 
-                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), self.discount_id])
+                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), disc_id, disc_percent])
                             }
                         }
                     
@@ -437,6 +450,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         setupBalanceSliderSection()
                         setupSliderSection()
                         setupHotServicesSection()
+                        hideActivityIndicator(uiView: self.view)
                     }
                    print("Completed event.")
                     
@@ -446,28 +460,140 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             }
     }
     
-    @objc func connectService(_ sender: UIButton) {
-        let parametr: [String: Any] = ["serviceId": sender.tag, "discountId": discount_id]
-        print(sender.tag)
-        let client = APIClient.shared
-            do{
-              try client.connectService(jsonBody: parametr).subscribe(
-                onNext: { [self] result in
-                  print(result)
-                    //sendRequest()
-                },
-                onError: { error in
-                   print(error.localizedDescription)
-                },
-                onCompleted: { [self] in
-                    
-                   print("Completed event.")
-                    
-                }).disposed(by: disposeBag)
-              }
-              catch{
-            }
+    @objc func connectService(indexPath: Int) {
+        print(indexPath)
+        print("indexPath")
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
         
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(services_data[indexPath][1])?"
+        
+        view.ok.tag = indexPath
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+    
+        
+    }
+    
+    @objc func requestAnswer(status: Bool, message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        if status == true {
+            view.name.text = "Услуга подключена!"
+            view.image_icon.image = UIImage(named: "correct_alert")
+        }
+        else {
+            view.name.text = "Что-то пошло не так"
+            view.image_icon.image = UIImage(named: "uncorrect_alert")
+        }
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
+    @objc func dismissDialog(_ sender: UIButton) {
+        print("hello")
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
+    }
+    
+    @objc func okClickDialog(_ sender: UIButton) {
+        
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
+        }
+    
+        print(sender.tag)
+        let parametr: [String: Any] = ["serviceId": Int(services_data[sender.tag][0])!, "discountId": discount_id]
+         let client = APIClient.shared
+             do{
+               try client.connectService(jsonBody: parametr).subscribe(
+                 onNext: { [self] result in
+                   print(result)
+                     DispatchQueue.main.async {
+                         if result.success == true {
+                             requestAnswer(status: true, message: String(result.message ?? ""))
+                         }
+                         else {
+                             requestAnswer(status: false, message: String(result.message ?? ""))
+                         }
+                     }
+                    
+                 },
+                 onError: { [self] error in
+                     DispatchQueue.main.async {
+                         requestAnswer(status: false, message: error.localizedDescription)
+                         print(error.localizedDescription)
+                         
+                     }
+                     
+                 },
+                 onCompleted: { [self] in
+                    // sender.hideLoading()
+                     
+                    print("Completed event.")
+                     
+                 }).disposed(by: disposeBag)
+               }
+               catch{
+             }
     }
     
     func sendMapRequest() {
@@ -477,17 +603,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
-                        /*if result.offices.count != 0 {
+                        if result.offices.count != 0 {
                             for i in 0 ..< result.offices.count {
-                               officesdata.append([String(result.offices[i].information), String(result.offices[i].title), String(result.offices[i].iconUrl), String(result.offices[i].officeType), String(result.offices[i].latitude), String(result.offices[i].longitude), String(result.offices[i].officeTypeId)])
+                               officesdata.append([String(result.offices[i].information ?? ""), String(result.offices[i].title ?? ""), String(result.offices[i].iconUrl), String(result.offices[i].officeType ?? ""), String(result.offices[i].latitude), String(result.offices[i].longitude), String(result.offices[i].officeTypeId)])
                             }
                         }
                         
                         if result.support.count != 0 {
                             for i in 0 ..< result.support.count {
-                               supportdata.append([String(result.support[i].id), String(result.support[i].description), String(result.support[i].url), String(result.support[i].iconUrl)])
+                               supportdata.append([String(result.support[i].id), String(result.support[i].description ?? ""), String(result.support[i].url), String(result.support[i].iconUrl)])
                             }
-                        }*/
+                        }
 
                     }
                 },
@@ -523,25 +649,46 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
         }
         cell.titleOne.text = services_data[indexPath.row][1]
-        let cost: NSString = "\(services_data[indexPath.row][2])c/" as NSString
+        let cost: NSString = "\(services_data[indexPath.row][2])" as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
         
-        let title_cost = services_data[indexPath.row][3] as NSString
+        let title_cost = " С/" + services_data[indexPath.row][3].uppercased() as NSString
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
         
         costString.append(titleString)
         cell.titleThree.attributedText = costString
+        cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+        if services_data[indexPath.row][5] != "" {
+            cell.sale_title.text = "-" + services_data[indexPath.row][5] + "%"
+            cell.sale_title.isHidden = false
+        }
+        else {
+            cell.sale_title.isHidden = true
+        }
         
-        cell.getButton.tag = Int(services_data[indexPath.row][0])!
-        cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
+        bgColorView.layer.borderColor = UIColor.orange.cgColor
+        bgColorView.layer.borderWidth = 1
+        bgColorView.layer.cornerRadius = 10
+        cell.selectedBackgroundView = bgColorView
+        
+        cell.actionDelegate = (self as? CellActionDelegate)
+        
         return cell
   }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
+        cell.getButton.tag = indexPath.row
+        cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -576,10 +723,10 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         if collectionView == BalanceSliderView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BalanceSliderCollectionViewCell
             print(indexPath.row)
-            cell.balance.text = balance_credit + " сомони"
+            cell.balance.text = balance_credit + " с."
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
-            cell.titleTarif.frame = CGRect(x: 20, y: 100, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
+            cell.titleTarif.frame = CGRect(x: 20, y: 95, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
             cell.settings.frame.origin.x = CGFloat(cell.titleTarif.text!.count * 10 + 40)
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
@@ -613,22 +760,22 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
                cell.image.image = nil
             }*/
             if hot_services_data[indexPath.row][0] == "2" {
-                cell.image.image = UIImage(named: "hot_trafic")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_trafic_w") :  UIImage(named: "hot_trafic"))
             }
             else if hot_services_data[indexPath.row][0] == "3"  {
-                cell.image.image = UIImage(named: "hot_change")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_change_w") :  UIImage(named: "hot_change"))
             }
             else if hot_services_data[indexPath.row][0] == "4"  {
-                cell.image.image = UIImage(named: "hot_money")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_money_w") :  UIImage(named: "hot_money"))
             }
             else if hot_services_data[indexPath.row][0] == "5"  {
-                cell.image.image = UIImage(named: "hot_help")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_help_w") :  UIImage(named: "hot_help"))
             }
             else if hot_services_data[indexPath.row][0] == "6" {
-                cell.image.image = UIImage(named: "hot_detalization")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_detalization_w") :  UIImage(named: "hot_detalization"))
             }
             else if hot_services_data[indexPath.row][0] == "7" {
-                cell.image.image = UIImage(named: "hot_search")
+                cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_search_w") :  UIImage(named: "hot_search"))
             }
             
             cell.titleOne.text = hot_services_data[indexPath.row][2]
@@ -698,3 +845,16 @@ extension HomeViewController: CellBalanceActionDelegate {
     }
 }
 
+extension HomeViewController: CellActionDelegate {
+    func didServiceConnect(for cell: ServicesTableViewCell) {
+        if let indexPath = ServicesTableView.indexPath(for: cell) {
+            connectService(indexPath: indexPath.row)
+        }
+    }
+    
+    func didServiceReconnect(for cell: ServicesConnectTableViewCell) {
+        
+    }
+    
+    
+}

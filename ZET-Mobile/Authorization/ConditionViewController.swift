@@ -9,7 +9,7 @@ import UIKit
 
 class ConditionViewController: UIViewController, UIScrollViewDelegate {
 
-    let condition_view = ConditionView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
+    let condition_view = ConditionView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,7 @@ class ConditionView: UIView {
     
     lazy var image: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "zet 1-2")
+        image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Frame 150 1") : UIImage(named: "zet 1-2"))
         image.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 100, y: 70, width: 200, height: 30)
         return image
     }()
@@ -50,7 +50,7 @@ class ConditionView: UIView {
         title.frame = CGRect(x: 20, y: 110, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.text = "Пользовательское соглашение"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
@@ -60,13 +60,14 @@ class ConditionView: UIView {
     lazy var content: UITextView = {
         let title = UITextView()
         title.frame = CGRect(x: 20, y: 160, width: Int(UIScreen.main.bounds.size.width) - 40, height: 460)
-        title.textColor = .darkGray
+        title.textColor = darkGrayLight
         //title.numberOfLines = 0
         title.showsVerticalScrollIndicator = true
         title.isEditable = false
         title.isScrollEnabled = true
         title.font = UIFont.systemFont(ofSize: 16)
-        title.textAlignment = .left
+        title.textAlignment = .center
+        title.backgroundColor = colorGrayWhite
         title.text = """
  Публичная оферта.
  Соглашение о пользовании WEB-страницей или Приложением Оператора «ZET-MOBILE» на сайте ООО «ТАКОМ» (ZET-MOBILE)
@@ -183,7 +184,7 @@ class ConditionView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = colorGrayWhite
      
         self.addSubview(image)
         self.addSubview(title)

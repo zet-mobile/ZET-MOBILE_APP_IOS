@@ -33,7 +33,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.frame = CGRect(x: 80, y: 0, width: 240, height: 80)
     titleOne.text = ""
     titleOne.numberOfLines = 2
-    titleOne.textColor = .black
+    titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
     

@@ -8,6 +8,7 @@
 import UIKit
 
 class UsageCollectionViewCell: UICollectionViewCell {
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     let image: UIImageView = {
         let iv = UIImageView()
@@ -20,9 +21,9 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title1: UILabel = {
         let title = UILabel()
-        title.text = "Минуты"
+        title.text = defaultLocalizer.stringForKey(key: "minutes")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 0, width: 100, height: 45)
@@ -60,9 +61,9 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title2: UILabel = {
         let title = UILabel()
-        title.text = "Минуты внутри сети"
+        title.text = defaultLocalizer.stringForKey(key: "Minutes_within_the_network")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 47, width: 200, height: 45)
@@ -100,9 +101,9 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title3: UILabel = {
         let title = UILabel()
-        title.text = "Интернет"
+        title.text = defaultLocalizer.stringForKey(key: "DATA")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 94, width: 100, height: 45)
@@ -140,9 +141,9 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title4: UILabel = {
         let title = UILabel()
-        title.text = "SMS"
+        title.text = defaultLocalizer.stringForKey(key: "SMS")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 141, width: 100, height: 45)
@@ -189,7 +190,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.text = "Сомони"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 188, width: 100, height: 45)

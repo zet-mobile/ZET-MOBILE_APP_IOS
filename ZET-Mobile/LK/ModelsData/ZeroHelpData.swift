@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct ZeroHelpData: Decodable {
+    let subscriberBalance: Double
+    let balances: balances_data
+}

@@ -44,7 +44,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
         setupView()
         
     }
@@ -66,7 +66,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -133,7 +133,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.isHidden = true
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
         support_view.white_back.isHidden = true
         scrollView.addSubview(table)
         
@@ -175,7 +175,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func mapClick() {
         support_view.icon1.image = UIImage(named: "Pin_alt_light")
-        support_view.title1.textColor = .black
+        support_view.title1.textColor = colorBlackWhite
         support_view.icon2.image = UIImage(named: "list_map")
         support_view.title2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         table.isHidden = true
@@ -187,7 +187,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon1.image = UIImage(named: "Pin_alt_light_gray")
         support_view.title1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         support_view.icon2.image = UIImage(named: "list_map_orange")
-        support_view.title2.textColor = .black
+        support_view.title2.textColor = colorBlackWhite
         table.isHidden = false
         mapView.isHidden = true
         support_view.white_back.isHidden = false
@@ -285,7 +285,7 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
             cameraCallback: nil)
         
         support_view.icon1.image = UIImage(named: "Pin_alt_light")
-        support_view.title1.textColor = .black
+        support_view.title1.textColor = colorBlackWhite
         support_view.icon2.image = UIImage(named: "list_map")
         support_view.title2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         table.isHidden = true

@@ -13,7 +13,7 @@ class ToolbarUsage: UIView {
         let number_user_name = UILabel()
         number_user_name.text = "Расходы"
         number_user_name.numberOfLines = 0
-        number_user_name.textColor = .black
+        number_user_name.textColor = colorBlackWhite
         number_user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         number_user_name.font = UIFont.boldSystemFont(ofSize: 18)
         number_user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -44,7 +44,7 @@ class ToolbarUsage: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = colorLightDarkGray
         self.addSubview(number_user_name)
         self.addSubview(openmenu)
     }

@@ -10,20 +10,17 @@ import Foundation
 struct MoneyTransferData: Decodable {
     let subscriberBalance: Double
     let balances: balances_data
-    let settings: [settings_money_data]
-}
-
-struct settings_money_data: Decodable {
     let minValue: Double
     let maxValue: Double
     let price: Double
-    let costPrice: Double
+    let monthlyQuantityLimitA: Double
     let quantityLimitA: Double
     let volumeLimitA: Double
+    let monthlyQuantityLimitB: Double
     let quantityLimitB: Double
     let volumeLimitB: Double
-    let minBalanceAfterTransfer: Double
     let discountPercent: Double
+    let minBalanceAfterTransfer: Double
     let daysSinceRegistration: Double
     let minExpenses: Double
     let description: String
@@ -31,8 +28,8 @@ struct settings_money_data: Decodable {
     let unit: String
 }
 
-struct MoneyTransferDataHistory: Decodable {
-    let history: [history_money_datas]
+struct MoneyTransferDataHistory {
+    let history: [history_money_datas]?
 }
 
 struct history_money_datas: Decodable {
@@ -51,4 +48,25 @@ struct histories_money_data: Decodable {
     let transferType: Int
     let statusId: Int
     let transactionId: Int
+}
+
+extension MoneyTransferDataHistory: Decodable {
+    
+    private enum MoneyTransferDataHistoryCodingKeys: String, CodingKey {
+        case history = "history"
+        
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: MoneyTransferDataHistoryCodingKeys.self)
+      
+        do {
+            history = try container.decode([history_money_datas].self, forKey: .history)
+        }
+        catch {
+            history = nil
+        }
+  
+    
+    }
 }

@@ -9,9 +9,11 @@ import UIKit
 
 class AddionalTraficsView: UIView {
     
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Ваш баланс"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Your_balance")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont(name: "", size: 10)
@@ -27,7 +29,7 @@ class AddionalTraficsView: UIView {
         let user_name = UILabel()
         user_name.text = ""
         user_name.numberOfLines = 0
-        user_name.textColor = .black
+        user_name.textColor = colorBlackWhite
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         user_name.font = UIFont.boldSystemFont(ofSize: 24)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -39,7 +41,7 @@ class AddionalTraficsView: UIView {
     
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Интернет"
+        title.text = defaultLocalizer.stringForKey(key: "DATA")
         title.numberOfLines = 0
         title.textColor = .black
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -59,7 +61,7 @@ class AddionalTraficsView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "Звонки"
+        title.text = defaultLocalizer.stringForKey(key: "Calls")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -80,7 +82,7 @@ class AddionalTraficsView: UIView {
     
     lazy var tab3: UILabel = {
         let title = UILabel()
-        title.text = "Сообщения"
+        title.text = defaultLocalizer.stringForKey(key: "Messages")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -126,10 +128,10 @@ class AddionalTraficsView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = toolbarColor
        
         white_view_back = UIView(frame: CGRect(x: 0, y: 200, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = contentColor
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)

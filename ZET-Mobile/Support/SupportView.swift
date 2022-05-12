@@ -27,7 +27,7 @@ class SupportView: UIView {
         let label = UILabel()
         label.text = ""
         label.numberOfLines = 0
-        label.textColor = .black
+        label.textColor = colorBlackWhite
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -52,7 +52,7 @@ class SupportView: UIView {
         let title = UILabel()
         title.text = "Карта"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 17)
         title.textAlignment = .left
         title.frame = CGRect(x: (white_view_back.frame.width / 2) - 90, y: 10, width: 80, height: 45)
@@ -111,7 +111,7 @@ class SupportView: UIView {
         line.frame = CGRect(x: white_view_back.frame.width / 2, y: 7, width: 2, height: 50)
         
         white_view_back.layer.cornerRadius = 20
-        white_view_back.backgroundColor = .white
+       // white_view_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         white_view_back.layer.shadowRadius = 10
         white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         white_view_back.layer.shadowOpacity = 1
@@ -124,7 +124,7 @@ class SupportView: UIView {
         white_view_back.addSubview(line)
         self.addSubview(white_view_back)
         
-        white_back.backgroundColor = .white
+        //white_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         self.addSubview(white_back)
         self.sendSubviewToBack(white_back)
         

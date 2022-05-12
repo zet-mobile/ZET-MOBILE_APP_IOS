@@ -15,7 +15,7 @@ var style = ToastStyle()
 class AuthorizationViewController: UIViewController, UITextFieldDelegate {
 
     var halfModalTransitioningDelegate: HalfModalTransitioningDelegate?
-
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     var auth_view = AuthorizationView()
     let disposeBag = DisposeBag()
     
@@ -23,8 +23,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     var minute = 01
     var seconds = 59
-    
     var timer = Timer()
+    
     var user_code = ""
     var secretCode = ""
     var hashString = ""
@@ -173,45 +173,83 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.ru_button.addTarget(self, action: #selector(ru_choosed), for: .touchUpInside)
         auth_view.eng_but.addTarget(self, action: #selector(en_choosed), for: .touchUpInside)
         auth_view.tj_but.addTarget(self, action: #selector(tj_choosed), for: .touchUpInside)
+        auth_view.uz_but.addTarget(self, action: #selector(uz_choosed), for: .touchUpInside)
     }
     
     @objc func ru_choosed() {
         auth_view.lang_set.setTitle("RU 🇷🇺", for: .normal)
         auth_view.view_lang.isHidden = true
+        putRequest(lang_id: 1)
     }
     
     @objc func en_choosed() {
         auth_view.lang_set.setTitle("EN 🇺🇸", for: .normal)
         auth_view.view_lang.isHidden = true
+        putRequest(lang_id: 2)
     }
     
     @objc func tj_choosed() {
         auth_view.lang_set.setTitle("TJ 🇹🇯", for: .normal)
         auth_view.view_lang.isHidden = true
+        putRequest(lang_id: 3)
     }
     
-    @objc func buttonClick() {
-        if user_code == "" {
-            print(user_phone)
-            let length = user_phone.count
-            let str = user_phone.prefix(3)
-            let str2 = user_phone.prefix(2)
-            
-            if Int(user_phone) == nil || length < 9 {
-              self.view.makeToast("Ошибка, введите номер", duration: 5.0, position: .bottom, style: style); return
-             }
-            else
-             if str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" {
-                 print("i am here")
-              get_Code_Request()
+    @objc func uz_choosed() {
+        auth_view.lang_set.setTitle("UZ 🇺🇿", for: .normal)
+        auth_view.view_lang.isHidden = true
+        putRequest(lang_id: 4)
+    }
+    
+    @objc func putRequest(lang_id: Int) {
+        
+        let parametr: [String: Any] = ["promotionNotification": true, "pushNotification": true, "emailNotification" : true, "smsNotification" : true, "languageId": lang_id, "themeId" : 0]
+        print(parametr)
+        let client = APIClient.shared
+            do{
+                try client.settingsPutRequest(jsonBody: parametr).subscribe (
+                onNext: { result in
+                    print("hello")
+                    DispatchQueue.main.async {
+                      
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                   print("Completed event.")
+                }).disposed(by: disposeBag)
+              }
+              catch{
+                  
+            }
+    }
+    
+    @objc func buttonClick(_ sender: UIButton) {
+        sender.showAnimation { [self] in
+            if user_code == "" {
+                print(user_phone)
+                let length = user_phone.count
+                let str = user_phone.prefix(3)
+                let str2 = user_phone.prefix(2)
+                
+                if Int(user_phone) == nil || length < 9 {
+                  self.view.makeToast("Ошибка, введите номер", duration: 5.0, position: .bottom, style: style); return
+                 }
+                else
+                 if str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" {
+                     print("i am here")
+                  get_Code_Request()
+                }
+                else {
+                  self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
+                }
             }
             else {
-              self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
+                checkCode()
             }
-        }
-        else {
-            checkCode()
-        }
+          }
+        
     }
     
     @objc func get_Code_Request() {
@@ -264,7 +302,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         print(user_code)
         print(user_phone)
         print(hashString)
-     
         let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString]
         
         let client = APIClient.shared
@@ -276,7 +313,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main.async {
                         UserDefaults.standard.set("Bearer \(self.accessToken)", forKey: "token")
                         UserDefaults.standard.set("\(self.user_phone)", forKey: "mobPhone")
-                        self.goHome()
+                        self.setPass()
                     }
                 },
                 onError: { error in
@@ -338,19 +375,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             }
     }
     
-    func goHome() {
-        guard let window = UIApplication.shared.keyWindow else {
-            return
-        }
-
-        guard let rootViewController = window.rootViewController else {
-            return
-        }
-        let vc = ContainerViewController()
-        vc.view.frame = rootViewController.view.frame
-        vc.view.layoutIfNeeded()
-        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-                window.rootViewController = vc
-          }, completion: nil)
+    func setPass(){
+        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(ChangeCodeController(), animated: false)
     }
+    
+    
 }

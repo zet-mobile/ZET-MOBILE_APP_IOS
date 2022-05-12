@@ -9,6 +9,8 @@ import UIKit
 
 class DetalizationView: UIView {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var email_text: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 50)
@@ -16,15 +18,15 @@ class DetalizationView: UIView {
         textfield.layer.borderColor = UIColor.white.cgColor
         textfield.layer.borderWidth = 1
         textfield.backgroundColor = UIColor.white
-        textfield.placeholder = "Введите e-mail"
+        textfield.placeholder = defaultLocalizer.stringForKey(key: "Enter_e-mail")
         return textfield
     }()
     
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Новый перевод"
+        title.text = defaultLocalizer.stringForKey(key: "New_transfer")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -42,7 +44,7 @@ class DetalizationView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "История запросов"
+        title.text =  defaultLocalizer.stringForKey(key: "Query_history")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -76,10 +78,10 @@ class DetalizationView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .clear
+        backgroundColor = toolbarColor
        
         let white_view_back2 = UIView(frame: CGRect(x: 0, y: 150, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        white_view_back2.backgroundColor = .white
+        white_view_back2.backgroundColor = contentColor
         self.addSubview(white_view_back2)
         self.sendSubviewToBack(white_view_back2)
         
@@ -88,6 +90,10 @@ class DetalizationView: UIView {
         self.addSubview(tab2)
         self.addSubview(tab1Line)
         self.addSubview(tab2Line)
+        
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+        email_text.leftView = paddingView
+        email_text.leftViewMode = .always
     }
 
 }

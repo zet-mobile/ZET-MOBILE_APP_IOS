@@ -13,6 +13,7 @@ enum LanguageType: String {
     case en = "en"
     case ru = "ru"
     case tj = "tg"
+    case uz = "uz"
 }
 
 class AMPLocalizeUtils: NSObject {

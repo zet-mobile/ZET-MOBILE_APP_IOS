@@ -9,6 +9,8 @@ import UIKit
 
 class AuthorizationView: UIView {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var zet_image_top: UIImageView = {
         let image = UIImageView()
         image.image = nil
@@ -229,6 +231,18 @@ class AuthorizationView: UIView {
         return button
     }()
     
+    lazy var uz_but: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 150) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        button.setTitle("UZ 🇺🇿", for: .normal)
+        button.backgroundColor = .clear
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        button.titleLabel?.textAlignment = .left
+        button.layer.cornerRadius = 10
+        
+        return button
+    }()
+    
     var view_lang = UIView()
     
     override init(frame: CGRect) {
@@ -246,13 +260,13 @@ class AuthorizationView: UIView {
         backgroundColor = .white
        
         title_condition.frame = CGRect(x: 65, y: (UIScreen.main.bounds.size.height * 490) / 926, width: UIScreen.main.bounds.size.width - 70, height: 23)
-        let cost: NSString = "Согласен с" as NSString
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Agree_with") as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        let title_cost = " условиями" as NSString
+        let title_cost = " \(defaultLocalizer.stringForKey(key: "Conditions"))" as NSString
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
@@ -269,7 +283,7 @@ class AuthorizationView: UIView {
         code_numberString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black , range: range3)
         code_numberString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
         
-        let title_number = " Введите номер телефона" as NSString
+        let title_number = " \(defaultLocalizer.stringForKey(key: "Enter_phone"))" as NSString
         let title_numberString = NSMutableAttributedString.init(string: title_number as String)
         let range4 = (title_number).range(of: title_number as String)
         title_numberString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.gray , range: range4)
@@ -287,7 +301,7 @@ class AuthorizationView: UIView {
         code_field.leftView = paddingView2
         code_field.leftViewMode = .always
         
-        view_lang = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 220) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 150) / 926))
+        view_lang = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 270) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 200) / 926))
         view_lang.backgroundColor = .clear
         view_lang.isHidden = true
         
@@ -312,6 +326,7 @@ class AuthorizationView: UIView {
         view_lang.addSubview(ru_button)
         view_lang.addSubview(eng_but)
         view_lang.addSubview(tj_but)
+        view_lang.addSubview(uz_but)
         self.addSubview(view_lang)
     }
 }

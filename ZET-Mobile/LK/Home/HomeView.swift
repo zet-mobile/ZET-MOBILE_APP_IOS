@@ -13,9 +13,9 @@ class HomeView: UIView {
     
     lazy var titleOne: UILabel = {
         let title = UILabel()
-        title.text = "Быстрые услуги"
+        title.text = defaultLocalizer.stringForKey(key: "Fast_services")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -27,9 +27,9 @@ class HomeView: UIView {
 
     lazy var titleTwo: UILabel = {
         let title = UILabel()
-        title.text = "Специальные предложения"
+        title.text = defaultLocalizer.stringForKey(key: "Special_offers")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -41,9 +41,9 @@ class HomeView: UIView {
     
     lazy var titleThree: UILabel = {
         let title = UILabel()
-        title.text = defaultLocalizer.stringForKey(key: "services_title")
+        title.text = defaultLocalizer.stringForKey(key: "Services")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -59,7 +59,7 @@ class HomeView: UIView {
         icon_more.backgroundColor = .clear
         icon_more.frame = CGRect(x: 20, y: 320, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
-        icon_more.setTitle(defaultLocalizer.stringForKey(key: "view_all"), for: .normal)
+        icon_more.setTitle(defaultLocalizer.stringForKey(key: "View_all"), for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
@@ -72,7 +72,7 @@ class HomeView: UIView {
         icon_more.backgroundColor = .clear
         icon_more.frame = CGRect(x: 20, y: 1800, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
-        icon_more.setTitle(defaultLocalizer.stringForKey(key: "all_services"), for: .normal)
+        icon_more.setTitle(defaultLocalizer.stringForKey(key: "View_all"), for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
@@ -96,9 +96,9 @@ class HomeView: UIView {
     
     lazy var title_help: UILabel = {
         let title = UILabel()
-        title.text = "Помощь при нуле"
+        title.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 16)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -110,7 +110,7 @@ class HomeView: UIView {
     
     lazy var title_help_desc: UILabel = {
         let title = UILabel()
-        title.text = "У вас имеется неоплаченный пакет"
+        title.text = defaultLocalizer.stringForKey(key: "View_all")
         title.numberOfLines = 2
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 15)
@@ -140,7 +140,7 @@ class HomeView: UIView {
         let popolnit = UIButton()
         //popolnit.setImage(#imageLiteral(resourceName: "Popolnit"), for: UIControl.State.normal)
         popolnit.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        popolnit.setTitle("Оплатить", for: .normal)
+        popolnit.setTitle(defaultLocalizer.stringForKey(key: "Pay"), for: .normal)
         popolnit.setTitleColor(.white, for: .normal)
         popolnit.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 180, y: 90, width: 120, height: 30)
@@ -167,16 +167,15 @@ class HomeView: UIView {
         backgroundColor = .clear
         
         let gray_view_back = UIView(frame: CGRect(x: 0, y: -360, width: UIScreen.main.bounds.size.width, height: 80))
-        gray_view_back.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        gray_view_back.backgroundColor = toolbarColor
         
         white_view_back = UIView(frame: CGRect(x: 0, y: -280, width: UIScreen.main.bounds.size.width, height: 440))
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = contentColor
         
         white_view_back2 = UIView(frame: CGRect(x: 0, y: 350, width: UIScreen.main.bounds.size.width, height: 500))
-        white_view_back2.backgroundColor = .white
-        
+        white_view_back2.backgroundColor = contentColor
         zero_help_view = UIView(frame: CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 130))
-        zero_help_view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        zero_help_view.backgroundColor = colorLightDarkGray
         zero_help_view.isHidden = false
         zero_help_view.layer.cornerRadius = 10
         zero_help_view.addSubview(zetImage)

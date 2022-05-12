@@ -13,7 +13,7 @@ class TarifToolbarView: UIView {
         let number_user_name = UILabel()
         number_user_name.text = ""
         number_user_name.numberOfLines = 0
-        number_user_name.textColor = .black
+        number_user_name.textColor = colorBlackWhite
         number_user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         number_user_name.font = UIFont.boldSystemFont(ofSize: 18)
         number_user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -26,7 +26,7 @@ class TarifToolbarView: UIView {
     
     lazy var icon_back: UIButton = {
         let icon_back = UIButton()
-        icon_back.setImage(#imageLiteral(resourceName: "back_icon"), for: UIControl.State.normal)
+        icon_back.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "back_w") : #imageLiteral(resourceName: "back_icon")), for: UIControl.State.normal)
         
         icon_back.frame = CGRect(x: 20, y: 15, width: 11, height: 20)
         //icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
@@ -45,7 +45,7 @@ class TarifToolbarView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = toolbarColor
         self.addSubview(number_user_name)
         self.addSubview(icon_back)
     }

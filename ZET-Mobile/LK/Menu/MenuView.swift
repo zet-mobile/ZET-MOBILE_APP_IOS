@@ -11,7 +11,7 @@ class MenuView: UIView {
 
     lazy var title: UILabel = {
         let title = UILabel()
-        title.text = "Мы в соцсетях"
+        title.text = defaultLocalizer.stringForKey(key: "social_networks")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 15)
@@ -48,7 +48,7 @@ class MenuView: UIView {
     
     lazy var condition: UILabel = {
         let title = UILabel()
-        title.text = "Политика конфиденциальности"
+        title.text = defaultLocalizer.stringForKey(key: "Privacy_Policy")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 15)
@@ -88,7 +88,7 @@ class MenuView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = contentColor
        
         self.addSubview(title)
         self.addSubview(vk)

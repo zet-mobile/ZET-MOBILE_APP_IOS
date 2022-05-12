@@ -24,7 +24,7 @@ class HotServicesCollectionViewCell: UICollectionViewCell {
         let titleOne = UILabel()
         titleOne.text = ""
         titleOne.numberOfLines = 2
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 11)
         titleOne.textAlignment = .center
         titleOne.frame = CGRect(x: 20, y: 65, width: 75, height: 60)

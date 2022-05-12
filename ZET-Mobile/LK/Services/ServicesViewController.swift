@@ -12,6 +12,8 @@ import RxCocoa
 class ServicesViewController: UIViewController, UIScrollViewDelegate {
 
     let disposeBag = DisposeBag()
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    var alert = UIAlertController()
     
     let scrollView = UIScrollView()
     
@@ -19,7 +21,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     var servicesView = ServicesView()
     
     var x_pozition = 20
-    var y_pozition = 150
+    var y_pozition = 100
     
     let table = UITableView()
     let table2 = UITableView()
@@ -58,7 +60,8 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        showActivityIndicator(uiView: self.view)
+        view.backgroundColor = toolbarColor
         sendRequest()
         
     }
@@ -94,16 +97,20 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         servicesView = ServicesView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(servicesView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Услуги"
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Services")
         
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
     }
@@ -134,7 +141,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         servicesView.tab2.addGestureRecognizer(tapGestureRecognizer2)
         
         scrollView.addSubview(TabCollectionServiceView)
-        TabCollectionServiceView.backgroundColor = .white
+        TabCollectionServiceView.backgroundColor = contentColor
         TabCollectionServiceView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
         TabCollectionServiceView.delegate = self
         TabCollectionServiceView.dataSource = self
@@ -145,7 +152,6 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         if self.scrollView == scrollView {
             if scrollView.contentOffset.y > servicesView.tab1.frame.origin.y {
                 SliderView.isHidden = true
-                servicesView.searchField.isHidden = true
                 self.scrollView.contentOffset.y = 0
                 servicesView.tab1.frame.origin.y = 0
                 servicesView.tab2.frame.origin.y = 0
@@ -155,7 +161,6 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
             }
             if scrollView.contentOffset.y < -10 && SliderView.isHidden == true {
                 SliderView.isHidden = false
-                servicesView.searchField.isHidden = false
                 self.scrollView.contentOffset.y = 104
                 servicesView.tab1.frame.origin.y = CGFloat(y_pozition)
                 servicesView.tab2.frame.origin.y = CGFloat(y_pozition)
@@ -168,7 +173,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func tab1Click() {
-        servicesView.tab1.textColor = .black
+        servicesView.tab1.textColor = colorBlackWhite
         servicesView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         servicesView.tab1Line.backgroundColor = .orange
         servicesView.tab2Line.backgroundColor = .clear
@@ -177,7 +182,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func tab2Click() {
         servicesView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        servicesView.tab2.textColor = .black
+        servicesView.tab2.textColor = colorBlackWhite
         servicesView.tab1Line.backgroundColor = .clear
         servicesView.tab2Line.backgroundColor = .orange
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
@@ -204,7 +209,16 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.available.count != 0 {
                             for i in 0 ..< result.available.count {
-                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? "")])
+                                
+                                var disc_id = ""
+                                var disc_percent = ""
+                                
+                                if result.available[i].discount != nil {
+                                    disc_id = String(result.available[i].discount!.discountServiceId)
+                                    disc_percent = String(result.available[i].discount!.discountPercent)
+                                }
+                                
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent])
                             }
                         }
                     }
@@ -217,6 +231,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         setupView()
                         setupSliderSection()
                         setupTabCollectionView()
+                        hideActivityIndicator(uiView: view)
                     }
                    print("Completed event.")
                     
@@ -227,40 +242,202 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func connectService(_ sender: UIButton) {
-        let parametr: [String: Any] = ["serviceId": sender.tag, "discountId": discount_id]
-        print(sender.tag)
-        let client = APIClient.shared
-            do{
-              try client.connectService(jsonBody: parametr).subscribe(
-                onNext: { [self] result in
-                  print(result)
-                    //sendRequest()
-                },
-                onError: { error in
-                   print(error.localizedDescription)
-                },
-                onCompleted: { [self] in
-                    
-                   print("Completed event.")
-                    
-                }).disposed(by: disposeBag)
-              }
-              catch{
-            }
+       
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        
+        var checkColor = UIColor.black
+        
+        if UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" {
+            checkColor = .white
+        }
+        else {
+            checkColor = .black
+        }
+        
+        if servicesView.tab1.textColor == checkColor {
+            view.name.text = defaultLocalizer.stringForKey(key: "Disable_service")
+            view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service"))\n \(connected_data[sender.tag][1])?"
+            view.ok.addTarget(self, action: #selector(disableService(_:)), for: .touchUpInside)
+        }
+        else {
+            view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
+            view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(availables_data[sender.tag][1])?"
+            view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
+        }
+        
+        
+        view.ok.tag = sender.tag
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        sender.showAnimation { [self] in
+            present(alert, animated: true, completion: nil)
+        }
+    
         
     }
     
+    @objc func requestAnswer(status: Bool, message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        var checkColor = UIColor.black
+        
+        if UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" {
+            checkColor = .white
+        }
+        else {
+            checkColor = .black
+        }
+        
+        if status == true {
+            if servicesView.tab1.textColor == checkColor {
+                view.name.text = "Услуга отключена!"
+                view.image_icon.image = UIImage(named: "correct_alert")
+            }
+            else {
+                view.name.text = "Услуга подключена!"
+                view.image_icon.image = UIImage(named: "correct_alert")
+            }
+        }
+        else {
+            view.name.text = "Что-то пошло не так"
+            view.image_icon.image = UIImage(named: "uncorrect_alert")
+        }
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
+    @objc func dismissDialog(_ sender: UIButton) {
+        print("hello")
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
+    }
+    
+    @objc func okClickDialog(_ sender: UIButton) {
+        
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
+        }
+    
+        print(sender.tag)
+        let parametr: [String: Any] = ["serviceId": Int(availables_data[sender.tag][0])!, "discountId": discount_id]
+         let client = APIClient.shared
+             do{
+               try client.connectService(jsonBody: parametr).subscribe(
+                 onNext: { [self] result in
+                   print(result)
+                     DispatchQueue.main.async {
+                         if result.success == true {
+                             requestAnswer(status: true, message: String(result.message ?? ""))
+                         }
+                         else {
+                             requestAnswer(status: false, message: String(result.message ?? ""))
+                         }
+                     }
+                    
+                 },
+                 onError: { [self] error in
+                     DispatchQueue.main.async {
+                         requestAnswer(status: false, message: error.localizedDescription)
+                         print(error.localizedDescription)
+                         
+                     }
+                     
+                 },
+                 onCompleted: { [self] in
+                    // sender.hideLoading()
+                     
+                    print("Completed event.")
+                     
+                 }).disposed(by: disposeBag)
+               }
+               catch{
+             }
+    }
+    
     @objc func disableService(_ sender: UIButton) {
-     
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
+        }
+        
         let client = APIClient.shared
             do{
-              try client.disableService(parametr: String(sender.tag)).subscribe(
+                try client.disableService(parametr: String(connected_data[sender.tag][0])).subscribe(
                 onNext: { [self] result in
                   print(result)
-                    sendRequest()
+                    DispatchQueue.main.async {
+                        if result.success == true {
+                            requestAnswer(status: true, message: String(result.message ?? ""))
+                        }
+                        else {
+                            requestAnswer(status: false, message: String(result.message ?? ""))
+                        }
+                    }
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        requestAnswer(status: false, message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        
+                    }
                 },
                 onCompleted: { [self] in
                     
@@ -316,7 +493,8 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table.rowHeight = 160
                 table.estimatedRowHeight = 160
                 table.alwaysBounceVertical = false
-                table.backgroundColor = .white
+                table.backgroundColor = contentColor
+                table.separatorColor = colorLine
                 cell.addSubview(table)
             }
             else {
@@ -327,7 +505,8 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table2.rowHeight = 140
                 table2.estimatedRowHeight = 140
                 table2.alwaysBounceVertical = false
-                table2.backgroundColor = .white
+                table2.backgroundColor = contentColor
+                table2.separatorColor = colorLine
                 cell.addSubview(table2)
             }
             return cell
@@ -344,14 +523,14 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionServiceView {
             if indexPath.row == 0 {
-                servicesView.tab1.textColor = .black
+                servicesView.tab1.textColor = colorBlackWhite
                 servicesView.tab2.textColor = .gray
                 servicesView.tab1Line.backgroundColor = .orange
                 servicesView.tab2Line.backgroundColor = .clear
                 
             } else {
                 servicesView.tab1.textColor = .gray
-                servicesView.tab2.textColor = .black
+                servicesView.tab2.textColor = colorBlackWhite
                 servicesView.tab1Line.backgroundColor = .clear
                 servicesView.tab2Line.backgroundColor = .orange
           }
@@ -378,22 +557,29 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             cell.titleOne.text = connected_data[indexPath.row][1]
-            let cost: NSString = "\(connected_data[indexPath.row][2])c/" as NSString
+            let cost: NSString = "\(connected_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = connected_data[indexPath.row][3] as NSString
+            let title_cost = " С/" + connected_data[indexPath.row][3].uppercased()  as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
-            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
             
-            cell.getButton.tag = Int(connected_data[indexPath.row][0])!
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
+            bgColorView.layer.borderColor = UIColor.orange.cgColor
+            bgColorView.layer.borderWidth = 1
+            bgColorView.layer.cornerRadius = 10
+            cell.selectedBackgroundView = bgColorView
+            
+            cell.getButton.tag = indexPath.row
             cell.getButton.addTarget(self, action: #selector(disableService(_:)), for: .touchUpInside)
             
             return cell
@@ -407,22 +593,37 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             cell.titleOne.text = availables_data[indexPath.row][1]
-            let cost: NSString = "\(availables_data[indexPath.row][2])c/" as NSString
+            let cost: NSString = "\(availables_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = availables_data[indexPath.row][3] as NSString
+            let title_cost = " С/" + availables_data[indexPath.row][3].uppercased() as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
-            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
+            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            if availables_data[indexPath.row][5] != "" {
+                cell.sale_title.text = "-" + availables_data[indexPath.row][5] + "%"
+                cell.sale_title.isHidden = false
+            }
+            else {
+                cell.sale_title.isHidden = true
+            }
             
-            cell.getButton.tag = Int(availables_data[indexPath.row][0])!
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
+            bgColorView.layer.borderColor = UIColor.orange.cgColor
+            bgColorView.layer.borderWidth = 1
+            bgColorView.layer.cornerRadius = 10
+            cell.selectedBackgroundView = bgColorView
+            
+            cell.getButton.tag = indexPath.row
             cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
             
             return cell

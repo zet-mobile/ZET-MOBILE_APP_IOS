@@ -15,7 +15,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
-    
+    var alert = UIAlertController()
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
@@ -54,7 +54,8 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        showActivityIndicator(uiView: self.view)
+        view.backgroundColor = toolbarColor
         
         sendRequest()
     }
@@ -75,7 +76,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -90,9 +91,12 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         tarifView = TarifView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
-        toolbar.number_user_name.text = "Тарифный план"
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Change_tariff")
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
         
         tarifView.titleOne.isHidden = true
         tarifView.titleOneRes.isHidden = true
@@ -120,7 +124,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
             title2.text = overChargings_data[i][2]
             title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_pozition, width: title2.text!.count * 10, height: 25)
             title2.numberOfLines = 0
-            title2.textColor = .black
+            title2.textColor = colorBlackWhite
             title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
             title2.font = UIFont.systemFont(ofSize: 15)
             title2.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -128,7 +132,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
             
             let title_line = UILabel()
             title_line.frame = CGRect(x: (title.text!.count * 10), y: y_pozition + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
-            title_line.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+            title_line.backgroundColor = colorLightDarkGray
             
             scrollView.addSubview(title)
             scrollView.addSubview(title2)
@@ -164,7 +168,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
             let title = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: unlim_data[i][0].count * 10, height: 35))
             title.text = unlim_data[i][0]
             title.numberOfLines = 0
-            title.textColor = .darkGray
+            title.textColor = darkGrayLight
             title.font = UIFont.systemFont(ofSize: 15)
             title.lineBreakMode = NSLineBreakMode.byWordWrapping
             title.textAlignment = .left
@@ -178,7 +182,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         let ReconnectBut = UIButton(frame: CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
         ReconnectBut.addTarget(self, action: #selector(goToChangeTarif), for: UIControl.Event.touchUpInside)
         ReconnectBut.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        ReconnectBut.setTitle(defaultLocalizer.stringForKey(key: "reconnect"), for: .normal)
+        ReconnectBut.setTitle(defaultLocalizer.stringForKey(key: "Connect_tariff"), for: .normal)
         ReconnectBut.setTitleColor(.white, for: .normal)
         ReconnectBut.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         ReconnectBut.layer.cornerRadius = ReconnectBut.frame.height / 2
@@ -208,7 +212,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
         tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)
         
         scrollView.addSubview(TabCollectionView)
-        TabCollectionView.backgroundColor = .white
+        TabCollectionView.backgroundColor = contentColor
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
         TabCollectionView.delegate = self
         TabCollectionView.dataSource = self
@@ -222,7 +226,6 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
                 tarifView.zetImage.isHidden = true
                 tarifView.welcome.isHidden = true
                 tarifView.user_name.isHidden = true
-                tarifView.backgroundColor = .white
                 self.scrollView.contentOffset.y = 0
                 tarifView.tab1.frame.origin.y = 0
                 tarifView.tab2.frame.origin.y = 0
@@ -234,7 +237,6 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
                 tarifView.zetImage.isHidden = false
                 tarifView.welcome.isHidden = false
                 tarifView.user_name.isHidden = false
-                tarifView.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
                 self.scrollView.contentOffset.y = 104
                 tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
                 tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
@@ -247,7 +249,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func tab1Click() {
-        tarifView.tab1.textColor = .black
+        tarifView.tab1.textColor = colorBlackWhite
         tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         tarifView.tab1Line.backgroundColor = .orange
         tarifView.tab2Line.backgroundColor = .clear
@@ -256,13 +258,113 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func tab2Click() {
         tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        tarifView.tab2.textColor = .black
+        tarifView.tab2.textColor = colorBlackWhite
         tarifView.tab1Line.backgroundColor = .clear
         tarifView.tab2Line.backgroundColor = .orange
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
-    @objc func goToChangeTarif() {
+    @objc func goToChangeTarif(_ sender: UIButton) {
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        view.name.text = defaultLocalizer.stringForKey(key: "Connect_tariff")
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_tariff")) \(info_data[0][1])?"
+        view.name_content.numberOfLines = 2
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        sender.showAnimation { [self] in
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func requestAnswer(status: Bool, message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        if status == true {
+            view.name.text = "Тариф переподключен!"
+            view.image_icon.image = UIImage(named: "correct_alert")
+        }
+        else {
+            view.name.text = "Что-то пошло не так"
+            view.image_icon.image = UIImage(named: "uncorrect_alert")
+        }
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
+        view.name.isUserInteractionEnabled = true
+        view.name.addGestureRecognizer(tapGestureRecognizer)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
+    @objc func dismissDialog(_ sender: UIButton) {
+        print("hello")
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
+    }
+    
+    @objc func okClickDialog(_ sender: UIButton) {
+        
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
+        }
+    
         let parametr: [String: Any] = ["priceplanForUserId": info_data[0][0], "discountId": discount_id]
         
         let client = APIClient.shared
@@ -270,10 +372,23 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
               try client.changePricepPlan(jsonBody: parametr).subscribe(
                 onNext: { [self] result in
                   print(result)
-                    //sendRequest()
+                    DispatchQueue.main.async {
+                        if result.success == true {
+                            requestAnswer(status: true, message: String(result.message ?? ""))
+                        }
+                        else {
+                            requestAnswer(status: false, message: String(result.message ?? ""))
+                        }
+                    }
+                   
                 },
-                onError: { error in
-                   print(error.localizedDescription)
+                onError: { [self] error in
+                    DispatchQueue.main.async {
+                        requestAnswer(status: false, message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        
+                    }
+                    
                 },
                 onCompleted: { [self] in
                     
@@ -283,8 +398,8 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
               }
               catch{
             }
-        
     }
+    
     
     func sendRequest() {
         let client = APIClient.shared
@@ -362,6 +477,7 @@ class ChangeTarifViewController: UIViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async { [self] in
                         setupView()
                         setupTabCollectionView()
+                        hideActivityIndicator(uiView: view)
                     }
                    print("Completed event.")
                     
@@ -386,28 +502,34 @@ extension ChangeTarifViewController: UICollectionViewDelegateFlowLayout, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionViewCell
-        table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
-        table.register(TarifTabViewCell.self, forCellReuseIdentifier: "tarif_tab_cell")
-        table.delegate = self
-        table.dataSource = self
-        table.rowHeight = 100
-        table.estimatedRowHeight = 100
-        table.alwaysBounceVertical = false
-        table.backgroundColor = .white
-        cell.addSubview(table)
+
+        if indexPath.row == 0 {
+            table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
+            table.register(TarifTabViewCell.self, forCellReuseIdentifier: "tarif_tab_cell")
+            table.delegate = self
+            table.dataSource = self
+            table.rowHeight = 100
+            table.estimatedRowHeight = 100
+            table.alwaysBounceVertical = false
+            table.backgroundColor = contentColor
+            cell.addSubview(table)
+        }
+        else {
+            
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                tarifView.tab1.textColor = .black
+                tarifView.tab1.textColor = colorBlackWhite
                 tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
                 tarifView.tab1Line.backgroundColor = .orange
                 tarifView.tab2Line.backgroundColor = .clear
             } else {
                 tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-                tarifView.tab2.textColor = .black
+                tarifView.tab2.textColor = colorBlackWhite
                 tarifView.tab1Line.backgroundColor = .clear
                 tarifView.tab2Line.backgroundColor = .orange
           }
@@ -440,12 +562,20 @@ extension ChangeTarifViewController: UITableViewDelegate, UITableViewDataSource 
         let title_cost = " \(availables_data[indexPath.row][3])" as NSString
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
         
         costString.append(titleString)
         
         cell.titleThree.attributedText = costString
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
+        bgColorView.layer.borderColor = UIColor.orange.cgColor
+        bgColorView.layer.borderWidth = 1
+        bgColorView.layer.cornerRadius = 10
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
     }
     

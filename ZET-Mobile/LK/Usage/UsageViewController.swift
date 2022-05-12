@@ -12,10 +12,11 @@ import Toast_Swift
 
 class UsageViewController: UIViewController, UIScrollViewDelegate {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
     
     let scrollView = UIScrollView()
-    var toolbar = ToolbarUsage()
+    var toolbar = TarifToolbarView()
     var usage_view = UsageView()
     
     let table = UITableView()
@@ -40,19 +41,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *) {
-            scrollView.contentInsetAdjustmentBehavior = .never
-        } else {
-            // Fallback on earlier versions
-        }
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 805)
-        view.addSubview(scrollView)
+        showActivityIndicator(uiView: self.view)
         
-        setupView()
-        setupUsages()
-        setupHistoryUsagesTableView()
+        view.backgroundColor = toolbarColor
         sendRequest()
     }
 
@@ -63,6 +54,12 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+    }
+
+    func setupView() {
+        view.backgroundColor = toolbarColor
+        
         if #available(iOS 11.0, *) {
             scrollView.scrollIndicatorInsets = view.safeAreaInsets
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
@@ -71,15 +68,17 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         }
         
-        self.UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
-    }
-
-    func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        //self.UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .left, animated: false)
+        scrollView.backgroundColor = .clear
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 805)
+        view.addSubview(scrollView)
         
-        toolbar = ToolbarUsage(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Expenses")
+        toolbar.icon_back.isHidden = true
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         usage_view.tab1.isUserInteractionEnabled = true
         usage_view.tab1.addGestureRecognizer(tapGestureRecognizer)
@@ -102,7 +101,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
 
     func setupUsages() {
         
-        UsageCollectionView.backgroundColor = .white
+        UsageCollectionView.backgroundColor = colorGrayWhite
         UsageCollectionView.layer.cornerRadius = 10
         UsageCollectionView.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 250)
         UsageCollectionView.delegate = self
@@ -124,43 +123,53 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         table.separatorStyle = .none
         table.isScrollEnabled = false
         table.showsVerticalScrollIndicator = false
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
+        table.tableHeaderView?.backgroundColor = contentColor
       }
     
     
-    @objc func openDetalazition() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(DetalizationViewController(), animated: true)
+    @objc func openDetalazition(_ sender: UIButton) {
+        sender.showAnimation { [self] in
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(DetalizationViewController(), animated: true)
+        }
     }
     
     @objc func tab1Click() {
-        usage_view.tab1.textColor = .black
-        usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab1Line.backgroundColor = .orange
-        usage_view.tab2Line.backgroundColor = .clear
-        usage_view.tab3Line.backgroundColor = .clear
-        UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        usage_view.tab1.showAnimation { [self] in
+            usage_view.tab1.textColor = colorBlackWhite
+            usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab1Line.backgroundColor = .orange
+            usage_view.tab2Line.backgroundColor = .clear
+            usage_view.tab3Line.backgroundColor = .clear
+            UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        }
     }
     
     @objc func tab2Click() {
-        usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab2.textColor = .black
-        usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab1Line.backgroundColor = .clear
-        usage_view.tab2Line.backgroundColor = .orange
-        usage_view.tab3Line.backgroundColor = .clear
-        UsageCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        usage_view.tab2.showAnimation { [self] in
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab2.textColor = colorBlackWhite
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab1Line.backgroundColor = .clear
+            usage_view.tab2Line.backgroundColor = .orange
+            usage_view.tab3Line.backgroundColor = .clear
+            UsageCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        }
     }
     
     @objc func tab3Click() {
-        usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        usage_view.tab3.textColor = .black
-        usage_view.tab1Line.backgroundColor = .clear
-        usage_view.tab2Line.backgroundColor = .clear
-        usage_view.tab3Line.backgroundColor = .orange
-        UsageCollectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        usage_view.tab3.showAnimation { [self] in
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab3.textColor = colorBlackWhite
+            usage_view.tab1Line.backgroundColor = .clear
+            usage_view.tab2Line.backgroundColor = .clear
+            usage_view.tab3Line.backgroundColor = .orange
+            UsageCollectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        }
+        
     }
     
     func sendRequest() {
@@ -177,9 +186,10 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
                         
                         self.usages_data.append([String(result.lastMonth.offnetMin!), String(result.lastMonth.onnetMin!), String(result.lastMonth.internetMb!), String(result.lastMonth.sms!), String(result.lastMonth.tjs!)])
                         
-                        if result.history.count != 0 {
-                            for i in 0 ..< result.history.count {
-                                self.history_data.append([String(result.history[i].serviceName!), String(result.history[i].balanceChange!), String(result.history[i].transactionDate!)])
+                        
+                        if result.history != nil {
+                            for i in 0 ..< result.history!.count {
+                                self.history_data.append([String(result.history![i].serviceName!), String(result.history![i].balanceChange!), String(result.history![i].transactionDate!)])
                             }
                         }
                     }
@@ -188,12 +198,11 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
                    print(error.localizedDescription)
                 },
                 onCompleted: {
-                    DispatchQueue.main.async {
-                        self.UsageCollectionView.reloadData()
-                        self.table.reloadData()
-                        self.table.reloadSectionIndexTitles()
-                        self.table.beginUpdates()
-                        self.table.endUpdates()
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupUsages()
+                        setupHistoryUsagesTableView()
+                        hideActivityIndicator(uiView: view)
                     }
                    print("Completed event.")
                     
@@ -217,11 +226,17 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "usages", for: indexPath) as! UsageCollectionViewCell
         if usages_data.count != 0 {
-            cell.rez1.text = usages_data[indexPath.row][0]
-            cell.rez2.text = usages_data[indexPath.row][1]
-            cell.rez3.text = usages_data[indexPath.row][2]
-            cell.rez4.text = usages_data[indexPath.row][3]
+            cell.rez1.text = String(Int(Double(usages_data[indexPath.row][0])!))
+            cell.rez2.text = String(Int(Double(usages_data[indexPath.row][1])!))
+            cell.rez3.text = String(Int(Double(usages_data[indexPath.row][2])!))
+            cell.rez4.text = String(Int(Double(usages_data[indexPath.row][3])!))
             cell.rez5.text = usages_data[indexPath.row][4]
+            
+            cell.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez1.text!.count * 15) - 45, y: 0, width: cell.rez1.text!.count * 15, height: 45)
+            cell.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez2.text!.count * 15 + 45), y: 47, width: cell.rez2.text!.count * 15, height: 45)
+            cell.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez3.text!.count * 15 + 45), y: 94, width: cell.rez3.text!.count * 15, height: 45)
+            cell.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez4.text!.count * 15 + 45), y: 141, width: cell.rez4.text!.count * 15, height: 45)
+            cell.rez5.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez5.text!.count * 15 + 45), y: 188, width: cell.rez5.text!.count * 15, height: 45)
         }
         
         return cell
@@ -244,7 +259,7 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
       
         if indexPath.row == 0 {
-            usage_view.tab1.textColor = .black
+            usage_view.tab1.textColor = colorBlackWhite
             usage_view.tab2.textColor = .gray
             usage_view.tab3.textColor = .gray
             usage_view.tab1Line.backgroundColor = .orange
@@ -253,7 +268,7 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
         } else if indexPath.row == 2 {
             usage_view.tab1.textColor = .gray
             usage_view.tab2.textColor = .gray
-            usage_view.tab3.textColor = .black
+            usage_view.tab3.textColor = colorBlackWhite
             usage_view.tab1Line.backgroundColor = .clear
             usage_view.tab2Line.backgroundColor = .clear
             usage_view.tab3Line.backgroundColor = .orange
@@ -266,7 +281,7 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
         if indexPath.row == 0 {
             print("d")
             usage_view.tab1.textColor = .gray
-            usage_view.tab2.textColor = .black
+            usage_view.tab2.textColor = colorBlackWhite
             usage_view.tab3.textColor = .gray
             usage_view.tab1Line.backgroundColor = .clear
             usage_view.tab2Line.backgroundColor = .orange
@@ -274,7 +289,7 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
         }
         else if indexPath.row == 2 {
             usage_view.tab1.textColor = .gray
-            usage_view.tab2.textColor = .black
+            usage_view.tab2.textColor = colorBlackWhite
             usage_view.tab3.textColor = .gray
             usage_view.tab1Line.backgroundColor = .clear
             usage_view.tab2Line.backgroundColor = .orange
@@ -296,7 +311,7 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
-        
+        view.backgroundColor = contentColor
         let dateFormatter1 = DateFormatter()
         dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
         let date = dateFormatter1.date(from: history_data[section][2])

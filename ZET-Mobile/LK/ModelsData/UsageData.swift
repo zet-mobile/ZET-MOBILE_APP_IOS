@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct UsageData: Decodable {
+struct UsageData {
     let lastDay: last_data
     let lastWeek: last_data
     let lastMonth: last_data
-    let history: [history_data]
+    let history: [history_data]?
 }
 
 struct last_data {
@@ -26,6 +26,29 @@ struct history_data {
     let serviceName: String?
     let balanceChange: Double?
     let transactionDate: String?
+}
+
+extension UsageData: Decodable {
+    
+    private enum UsageDataCodingKeys: String, CodingKey {
+        case lastDay = "lastDay"
+        case lastWeek = "lastWeek"
+        case lastMonth = "lastMonth"
+        case history = "history"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: UsageDataCodingKeys.self)
+        lastDay = try container.decode(last_data.self, forKey: .lastDay)
+        lastWeek = try container.decode(last_data.self, forKey: .lastWeek)
+        lastMonth = try container.decode(last_data.self, forKey: .lastMonth)
+      
+        do {
+            history = try container.decode([history_data].self, forKey: .history)
+        } catch {
+            history = nil
+        }
+    }
 }
 
 extension last_data: Decodable {

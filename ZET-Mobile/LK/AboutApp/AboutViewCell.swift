@@ -39,17 +39,17 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
     titleOne.text = ""
     titleOne.numberOfLines = 1
-    titleOne.textColor = .black
-    titleOne.font = UIFont.systemFont(ofSize: 20)
+    titleOne.textColor = colorBlackWhite
+    titleOne.font = UIFont.systemFont(ofSize: 18, weight: .regular)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 80, y: 40, width: 340, height: 30)
+    titleTwo.frame = CGRect(x: 80, y: 30, width: UIScreen.main.bounds.size.width - 130, height: 50)
     titleTwo.text = ""
-    titleTwo.numberOfLines = 1
+    titleTwo.numberOfLines = 2
     titleTwo.textColor = .lightGray
-    titleTwo.font = UIFont.systemFont(ofSize: 15)
+    titleTwo.font = UIFont.systemFont(ofSize: 17)
     titleTwo.textAlignment = .left
-    
+    titleTwo.lineBreakMode = .byWordWrapping
 }
 
 override func layoutSubviews() {

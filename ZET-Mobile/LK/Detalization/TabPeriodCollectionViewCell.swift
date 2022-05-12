@@ -21,7 +21,7 @@ class TabPeriodCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.text = ""
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -36,7 +36,7 @@ class TabPeriodCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.text = "Сутки"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -49,7 +49,7 @@ class TabPeriodCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.text = "Неделя"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -62,7 +62,7 @@ class TabPeriodCollectionViewCell: UICollectionViewCell {
         let title = UILabel()
         title.text = "Месяц"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping

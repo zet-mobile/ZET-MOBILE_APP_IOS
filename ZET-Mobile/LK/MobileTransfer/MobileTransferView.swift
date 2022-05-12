@@ -9,6 +9,8 @@ import UIKit
 
 class MobileTransferView: UIView {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "mobile_mini")
@@ -18,7 +20,7 @@ class MobileTransferView: UIView {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Баланс и пакеты"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Balance_and_packages")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         titleOne.font = UIFont(name: "", size: 10)
@@ -34,7 +36,7 @@ class MobileTransferView: UIView {
         let user_name = UILabel()
         user_name.text = "45 somoni"
         user_name.numberOfLines = 0
-        user_name.textColor = .black
+        user_name.textColor = colorBlackWhite
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
         user_name.font = UIFont.boldSystemFont(ofSize: 24)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -46,7 +48,7 @@ class MobileTransferView: UIView {
     
     let image: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "Call_usage")
+        iv.image = UIImage(named: "minutes")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         iv.frame = CGRect(x: 20, y: 10, width: 25, height: 25)
@@ -55,9 +57,9 @@ class MobileTransferView: UIView {
     
     lazy var title1: UILabel = {
         let title = UILabel()
-        title.text = "Минуты"
+        title.text = defaultLocalizer.stringForKey(key: "Minutes")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 0, width: 100, height: 45)
@@ -67,26 +69,26 @@ class MobileTransferView: UIView {
     
     lazy var rez1: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 0, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
     
     lazy var Line1: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 45, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
+        title.frame = CGRect(x: 20, y: 45, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.backgroundColor = colorLine
         return title
     }()
     
     let image2: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "zet")
+        iv.image = UIImage(named: "zet_minutes")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         iv.frame = CGRect(x: 20, y: 57, width: 25, height: 25)
@@ -95,9 +97,9 @@ class MobileTransferView: UIView {
     
     lazy var title2: UILabel = {
         let title = UILabel()
-        title.text = "Минуты внутри сети"
+        title.text = defaultLocalizer.stringForKey(key: "Minutes_within_the_network")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 47, width: 200, height: 45)
@@ -107,26 +109,26 @@ class MobileTransferView: UIView {
     
     lazy var rez2: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 47, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
     
     lazy var Line2: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 92, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
+        title.frame = CGRect(x: 20, y: 92, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.backgroundColor = colorLine
         return title
     }()
     
     let image3: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "Chart")
+        iv.image = UIImage(named: "internet")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         iv.frame = CGRect(x: 20, y: 104, width: 25, height: 25)
@@ -135,9 +137,9 @@ class MobileTransferView: UIView {
     
     lazy var title3: UILabel = {
         let title = UILabel()
-        title.text = "Интернет"
+        title.text = defaultLocalizer.stringForKey(key: "DATA")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 94, width: 100, height: 45)
@@ -147,26 +149,26 @@ class MobileTransferView: UIView {
     
     lazy var rez3: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 94, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 94, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
     
     lazy var Line3: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 94, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
+        title.frame = CGRect(x: 20, y: 94, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.backgroundColor = colorLine
         return title
     }()
     
     let image4: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "Message")
+        iv.image = UIImage(named: "message")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         iv.frame = CGRect(x: 20, y: 151, width: 25, height: 25)
@@ -175,9 +177,9 @@ class MobileTransferView: UIView {
     
     lazy var title4: UILabel = {
         let title = UILabel()
-        title.text = "SMS"
+        title.text = defaultLocalizer.stringForKey(key: "SMS")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.frame = CGRect(x: 60, y: 141, width: 100, height: 45)
@@ -187,20 +189,20 @@ class MobileTransferView: UIView {
     
     lazy var rez4: UILabel = {
         let title = UILabel()
-        title.text = "23"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .right
-        title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 141, width: (title.text!.count * 15), height: 45)
+        //title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title.text!.count * 15) - 50, y: 141, width: (title.text!.count * 15), height: 45)
         
         return title
     }()
     
     lazy var Line4: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 141, width: UIScreen.main.bounds.size.width - 50, height: 2)
-        title.backgroundColor = UIColor(red: 0.925, green: 0.925, blue: 0.925, alpha: 1)
+        title.frame = CGRect(x: 20, y: 141, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.backgroundColor = colorLine
         return title
     }()
     
@@ -208,9 +210,9 @@ class MobileTransferView: UIView {
     
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Новый перевод"
+        title.text = defaultLocalizer.stringForKey(key: "New_transfer")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -228,7 +230,7 @@ class MobileTransferView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "История переводов"
+        title.text = defaultLocalizer.stringForKey(key: "Transfer_History")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -264,7 +266,7 @@ class MobileTransferView: UIView {
     private func setupView() {
         backgroundColor = .clear
         
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = colorGrayWhite
         white_view_back.layer.cornerRadius = 20
         white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         white_view_back.layer.shadowOpacity = 1
@@ -294,7 +296,7 @@ class MobileTransferView: UIView {
         self.addSubview(white_view_back)
        
         let white_view_back2 = UIView(frame: CGRect(x: 0, y: 360, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        white_view_back2.backgroundColor = .white
+        white_view_back2.backgroundColor = contentColor
         self.addSubview(white_view_back2)
         self.sendSubviewToBack(white_view_back2)
         

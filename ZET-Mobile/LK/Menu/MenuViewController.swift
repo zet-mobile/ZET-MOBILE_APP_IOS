@@ -8,11 +8,12 @@
 import UIKit
 
 private let reuseIdentifer = "MenuOptionCell"
+var defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
 
 class MenuViewController: UIViewController {
-
+    
     var tableView: UITableView!
-    var tableData = [["Notification", "Уведомления"], ["Discount", "Акции и предложения"], ["Setting", "Настройки"], ["roaming", "Роуминг"], ["Message", "Обратная связь"], ["Info Square", "О нас"], ["Logout", "Выйти"]]
+    var tableData = [["Notification", defaultLocalizer.stringForKey(key: "Notifications")], ["Discount", defaultLocalizer.stringForKey(key: "Promotions")], ["Setting", defaultLocalizer.stringForKey(key: "Settings")], ["roaming", defaultLocalizer.stringForKey(key: "Roaming")], ["Message", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", defaultLocalizer.stringForKey(key: "About")], ["Logout", defaultLocalizer.stringForKey(key: "Exit")]]
     
     
     var menuView = MenuView()
@@ -25,7 +26,7 @@ class MenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
         configureTableView()
         menuView = MenuView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926, width: UIScreen.main.bounds.size.width - 50, height: (UIScreen.main.bounds.size.height * 200) / 926))
 
@@ -40,7 +41,7 @@ class MenuViewController: UIViewController {
         tableView.rowHeight = (UIScreen.main.bounds.size.height * 70) / 926
         tableView.separatorStyle = .none
         tableView.frame = CGRect(x: 0, y: 10, width: UIScreen.main.bounds.size.width - 50, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = contentColor
         view.addSubview(tableView)
 
     }
@@ -88,9 +89,20 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(AboutAppViewController(), animated: true)
         }
         else if indexPath.row == 6 {
-            UserDefaults.standard.set("", forKey: "mobPhone")
-            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.pushViewController(SplashViewController(), animated: true)
+            guard let window = UIApplication.shared.keyWindow else {
+                return
+            }
+            guard let rootViewController = window.rootViewController else {
+                return
+            }
+            let vc = UINavigationController(rootViewController: SplashViewController())
+            vc.view.frame = rootViewController.view.frame
+            vc.view.layoutIfNeeded()
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                window.rootViewController = vc
+            }, completion: { completed in
+                UserDefaults.standard.set("", forKey: "mobPhone")
+            })
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

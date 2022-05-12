@@ -37,13 +37,13 @@ class CircularProgressView: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.textAlignment = .center
-        label.textColor  = .black
+        label.textColor  = colorBlackWhite
         return label
     }()
     
     let plusText: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "plus-circle"), for: UIControl.State.normal)
+        button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "plus-circle-w") : #imageLiteral(resourceName: "plus-circle")), for: UIControl.State.normal)
         button.backgroundColor = .clear
         button.layer.masksToBounds = true
         button.contentHorizontalAlignment = .center
@@ -64,6 +64,7 @@ class CircularProgressView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         createCircularPath(color1: color1, color2: color2)
         text.frame = CGRect(x: (frame.width / 2) - ((width - 25) / 2), y: (frame.height / 2) - ((height / 2) / 2), width: width - 25, height: height / 2)
         addSubview(text)
@@ -114,7 +115,7 @@ class CircularProgressView: UIView {
 
         progressLayer.path = circularPath.cgPath
         progressLayer.fillColor = UIColor.clear.cgColor
-        progressLayer.strokeColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00).cgColor
+        progressLayer.strokeColor = color2.cgColor
         progressLayer.lineCap = .round
         progressLayer.lineWidth = 6.5
         progressLayer.strokeEnd = 0

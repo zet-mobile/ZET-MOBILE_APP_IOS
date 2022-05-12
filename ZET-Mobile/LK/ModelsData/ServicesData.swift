@@ -27,7 +27,6 @@ struct services_data {
 struct offers_data: Decodable {
     let iconUrl: String
     let url: String
-    
     let name: String
     let id: Int
 }

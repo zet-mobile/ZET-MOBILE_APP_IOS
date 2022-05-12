@@ -35,14 +35,14 @@ class ProfileMenuCell: UITableViewCell {
         titleOne.frame = CGRect(x: 80, y: 20, width: UIScreen.main.bounds.size.width  - 100, height: 30)
         titleOne.text = "Александр"
         titleOne.numberOfLines = 1
-        titleOne.textColor = .darkGray
+        titleOne.textColor = darkGrayLight
         titleOne.font = UIFont.systemFont(ofSize: 15)
         titleOne.textAlignment = .left
         
         titleTwo.frame = CGRect(x: 80, y: 50, width: UIScreen.main.bounds.size.width  - 100, height: 30)
         titleTwo.text = "+956654448162"
         titleTwo.numberOfLines = 1
-        titleTwo.textColor = .black
+        titleTwo.textColor = colorBlackWhite
         titleTwo.font = UIFont.systemFont(ofSize: 16)
         titleTwo.textAlignment = .left
         

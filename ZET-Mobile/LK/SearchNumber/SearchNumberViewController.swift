@@ -50,7 +50,7 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        view.backgroundColor = toolbarColor
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         search_number_view = SearchNumberView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
@@ -59,8 +59,7 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(search_number_view)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Поиск номера"
-        
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Search_for_number")
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
         table.register(ZeroTableViewCell.self, forCellReuseIdentifier: "zero_cell")
@@ -71,7 +70,7 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.showsVerticalScrollIndicator = false
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
         scrollView.addSubview(table)
     }
 

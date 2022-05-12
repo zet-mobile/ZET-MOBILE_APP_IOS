@@ -9,6 +9,8 @@ import UIKit
 
 class TarifTabViewCell: UITableViewCell {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     let ico_image = UIImageView()
     let titleOne = UILabel()
     let titleTwo = UILabel()
@@ -24,7 +26,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     backgroundColor = .clear
     
     ico_image.image = UIImage(named: "services_cell_img")
-    titleOne.text = "Трафик трансфер"
+    titleOne.text = defaultLocalizer.stringForKey(key: "Traffic_transfer")
     
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
@@ -38,14 +40,14 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.frame = CGRect(x: 80, y: 10, width: 200, height: 50)
     titleOne.text = "Фаври"
     titleOne.numberOfLines = 1
-    titleOne.textColor = .black
+    titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.boldSystemFont(ofSize: 16)
     titleOne.textAlignment = .left
     
     titleTwo.frame = CGRect(x: 80, y: 35, width: 300, height: 60)
     titleTwo.text = ""
     titleTwo.numberOfLines = 2
-    titleTwo.textColor = .darkGray
+    titleTwo.textColor = darkGrayLight
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     

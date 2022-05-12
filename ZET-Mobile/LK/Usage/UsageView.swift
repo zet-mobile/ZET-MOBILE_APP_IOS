@@ -8,12 +8,13 @@
 import UIKit
 
 class UsageView: UIView {
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
 
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Вчера"
+        title.text = defaultLocalizer.stringForKey(key: "Yesterday")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -31,7 +32,7 @@ class UsageView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "Неделя"
+        title.text = defaultLocalizer.stringForKey(key: "Aweek")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -52,7 +53,7 @@ class UsageView: UIView {
     
     lazy var tab3: UILabel = {
         let title = UILabel()
-        title.text = "Месяц"
+        title.text = defaultLocalizer.stringForKey(key: "Month")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -82,9 +83,9 @@ class UsageView: UIView {
     
     lazy var titleTable: UILabel = {
         let title = UILabel()
-        title.text = "История расходов"
+        title.text = defaultLocalizer.stringForKey(key: "History_of_expenses")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -107,10 +108,10 @@ class UsageView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = toolbarColor
      
         white_view_back = UIView(frame: CGRect(x: 0, y: 420, width: UIScreen.main.bounds.size.width, height: 650))
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = contentColor
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)

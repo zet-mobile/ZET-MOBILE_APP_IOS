@@ -47,7 +47,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.frame = CGRect(x: 70, y: 10, width: 240, height: 50)
     titleOne.text = ""
     titleOne.numberOfLines = 2
-    titleOne.textColor = .black
+    titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.boldSystemFont(ofSize: 16)
     titleOne.textAlignment = .left
     titleTwo.lineBreakMode = .byWordWrapping
@@ -55,7 +55,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.frame = CGRect(x: 70, y: 35, width: UIScreen.main.bounds.size.width - 100, height: 60)
     titleTwo.text = ""
     titleTwo.numberOfLines = 2
-    titleTwo.textColor = .darkGray
+    titleTwo.textColor = darkGrayLight
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     titleTwo.lineBreakMode = .byWordWrapping
@@ -66,7 +66,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     //getButton.setImage(#imageLiteral(resourceName: "turn_off"), for: UIControl.State.normal)
     getButton.frame = CGRect(x: UIScreen.main.bounds.size.width - 190, y: 90, width: 160, height: 40)
     getButton.backgroundColor = .clear
-    getButton.setTitle(defaultLocalizer.stringForKey(key: "disable"), for: .normal)
+    getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
     getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
     getButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
     getButton.layer.cornerRadius = getButton.frame.height / 2

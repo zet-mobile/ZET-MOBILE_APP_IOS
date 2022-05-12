@@ -31,13 +31,13 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Ваш баланс"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Your_balance")
         titleOne.numberOfLines = 0
-        titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+        titleOne.textColor = .white
         titleOne.font = UIFont(name: "", size: 10)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 25, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 40, width: 300, height: 20)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -49,10 +49,10 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         user_name.numberOfLines = 0
         user_name.textColor = .white
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: 24)
+        user_name.font = UIFont.boldSystemFont(ofSize: 25)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
         user_name.textAlignment = .left
-        user_name.frame = CGRect(x: 20, y: 45, width: 200, height: 28)
+        user_name.frame = CGRect(x: 20, y: 65, width: 200, height: 28)
         user_name.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return user_name
     }()
@@ -61,10 +61,10 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         let popolnit = UIButton()
         //popolnit.setImage(#imageLiteral(resourceName: "Popolnit"), for: UIControl.State.normal)
         popolnit.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0, alpha: 1)
-        popolnit.setTitle(defaultLocalizer.stringForKey(key: "topUpBalance"), for: .normal)
+        popolnit.setTitle(defaultLocalizer.stringForKey(key: "Top_up_balance"), for: .normal)
         popolnit.setTitleColor(.black, for: .normal)
         popolnit.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 180, y: 20, width: 120, height: 33)
+        popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 30, width: 140, height: 35)
         popolnit.layer.cornerRadius = popolnit.frame.height / 2
         popolnit.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
         
@@ -76,18 +76,18 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleTarif.text = ""
         titleTarif.numberOfLines = 0
         titleTarif.textColor = .white
-        titleTarif.font = UIFont.boldSystemFont(ofSize: 18)
+        titleTarif.font = UIFont.boldSystemFont(ofSize: 19)
         titleTarif.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleTarif.textAlignment = .left
-        titleTarif.frame = CGRect(x: 20, y: 100, width: 200, height: 20)
+        //titleTarif.frame = CGRect(x: 20, y: 60, width: 200, height: 20)
         titleTarif.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleTarif
     }()
     
     lazy var settings: UIButton = {
         let settings = UIButton()
-        settings.setImage(#imageLiteral(resourceName: "Setting"), for: UIControl.State.normal)
-        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 100, width: 20, height: 20)
+        settings.setImage(UIImage(named: "Setting"), for: .normal)
+        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 90, width: 30, height: 30)
         settings.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
         settings.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return settings
@@ -101,16 +101,16 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleNumber.font = UIFont(name: "", size: 10)
         titleNumber.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleNumber.textAlignment = .left
-        titleNumber.frame = CGRect(x: 20, y: 165, width: 200, height: 20)
+        titleNumber.frame = CGRect(x: 20, y: 155, width: 200, height: 20)
         titleNumber.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleNumber
     }()
     
     lazy var spisanie: UILabel = {
         let spisanie = UILabel()
-        spisanie.text = "Следующее списание 13 november"
+        spisanie.text = ""
         spisanie.numberOfLines = 0
-        spisanie.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+        spisanie.textColor = .white
         spisanie.font = UIFont(name: "", size: 10)
         spisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
         spisanie.textAlignment = .left
@@ -121,12 +121,18 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     }()
     
     
-    @objc func openTarifView(){
-        actionDelegate?.didSettingTapped(for: self)
+    @objc func openTarifView(_ sender: UIButton){
+        sender.showAnimation { [self] in
+            actionDelegate?.didSettingTapped(for: self)
+        }
+        
     }
     
-    @objc func addBalanceOption(){
-        actionDelegate?.didAddBalance(for: self)
+    @objc func addBalanceOption(_ sender: UIButton){
+        sender.showAnimation { [self] in
+            actionDelegate?.didAddBalance(for: self)
+        }
+        
     }
     
     override init(frame: CGRect) {

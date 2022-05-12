@@ -13,7 +13,7 @@ class RoumingView: UIView {
         let title = UILabel()
         title.text = "Информация"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -63,7 +63,7 @@ class RoumingView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+       // backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         
         self.addSubview(tab1)
         self.addSubview(tab2)

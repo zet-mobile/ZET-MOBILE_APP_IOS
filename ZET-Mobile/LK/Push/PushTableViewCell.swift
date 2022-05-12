@@ -21,7 +21,7 @@ class PushTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: "push_cell")
         backgroundColor = .clear
-        view_cell.backgroundColor = .white
+        view_cell.backgroundColor = colorLightDarkGray
         view_cell.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 90)
         view_cell.layer.cornerRadius = 20
         
@@ -35,7 +35,7 @@ class PushTableViewCell: UITableViewCell {
         title.frame = CGRect(x: 20, y: 5, width: 350, height: 50)
         title.text = "Скидка на Хаматарафа+200"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 17)
         title.textAlignment = .left
         
@@ -44,7 +44,7 @@ class PushTableViewCell: UITableViewCell {
  С 4 мая по 31 октября действует 30% СКИДКА на пакет "Хаматарафа+100"
  """
         //about.numberOfLines = 2
-        about.textColor = .darkGray
+        about.textColor = darkGrayLight
         about.font = UIFont.systemFont(ofSize: 15)
         about.textAlignment = .left
         

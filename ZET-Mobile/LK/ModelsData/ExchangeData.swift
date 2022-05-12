@@ -44,12 +44,12 @@ struct unitB_data: Decodable {
     let exchangeType: Int
 }
 
-struct ExchangeDataHistory: Decodable {
-    let history: [history_exchange_datas]
+struct ExchangeDataHistory {
+    let history: [history_exchange_datas]?
 }
 
 struct history_exchange_datas: Decodable {
-    let date:  String
+    let date: String
     let histories: [histories_exchange_data]
 }
 
@@ -60,10 +60,33 @@ struct histories_exchange_data: Decodable {
     let id: Int
     let volumeA: Double
     let volumeB: Double
-    let unitA: Double
-    let unitB: Double
+    let unitA: String
+    let unitB: String
     let price: Double
     let exchangeType: Int
     let statusId: Int
     let transactionId: Int
 }
+
+extension ExchangeDataHistory: Decodable {
+    
+    private enum ExchangeDataHistoryCodingKeys: String, CodingKey {
+        case history = "history"
+        
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: ExchangeDataHistoryCodingKeys.self)
+      
+        do {
+            history = try container.decode([history_exchange_datas].self, forKey: .history)
+        }
+        catch {
+            history = nil
+        }
+  
+    
+    }
+}
+
+

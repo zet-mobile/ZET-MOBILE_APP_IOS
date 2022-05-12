@@ -9,11 +9,13 @@ import UIKit
 
 class SearchNumberView: UIView {
 
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+    
     lazy var searchField: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.borderStyle = .none
-        textfield.backgroundColor = .white
+        textfield.backgroundColor = contentColor
         textfield.layer.cornerRadius = 20
         textfield.setView(.left, image: UIImage(named: "Search"))
         return textfield
@@ -61,7 +63,7 @@ class SearchNumberView: UIView {
     // bottom view
     lazy var title_info: UILabel = {
         let title = UILabel()
-        title.text = "Выбранный номер"
+        title.text = defaultLocalizer.stringForKey(key: "Selected_number")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         title.font = UIFont(name: "", size: 10)
@@ -78,7 +80,7 @@ class SearchNumberView: UIView {
         let title = UILabel()
         title.text = "+992 91 111 0611"
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
@@ -107,7 +109,7 @@ class SearchNumberView: UIView {
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle("Подключить", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
@@ -119,7 +121,7 @@ class SearchNumberView: UIView {
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         button.backgroundColor = .clear
-        button.setTitle("Забронировать", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Connect_service"), for: .normal)
         button.setTitleColor(.orange, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
@@ -147,12 +149,12 @@ class SearchNumberView: UIView {
         self.sendSubviewToBack(image)
         
         let white_view_back = UIView(frame: CGRect(x: 0, y: 100, width: UIScreen.main.bounds.size.width, height: 550))
-        white_view_back.backgroundColor = .white
+        white_view_back.backgroundColor = contentColor
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)
         
-        bottom_view.backgroundColor = .white
+        bottom_view.backgroundColor = contentColor
         bottom_view.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         bottom_view.layer.shadowOpacity = 1
         bottom_view.layer.shadowOffset = .zero

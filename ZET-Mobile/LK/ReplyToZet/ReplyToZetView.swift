@@ -31,7 +31,7 @@ class ReplyToZetView: UIView {
         textfield.layer.borderWidth = 1
         textfield.text = "info@zet-mobile.com"
         textfield.isUserInteractionEnabled = false
-        textfield.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        textfield.backgroundColor = colorLightDarkGray
         return textfield
     }()
     
@@ -102,7 +102,7 @@ class ReplyToZetView: UIView {
     lazy var button_send: UIButton = {
         let button = UIButton(frame: CGRect(x: 20, y: Int(UIScreen.main.bounds.size.height) - 250, width: Int(UIScreen.main.bounds.size.width) - 40, height: 50))
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle("Отправить", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Send"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
@@ -122,7 +122,7 @@ class ReplyToZetView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = toolbarColor
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         email.leftView = paddingView

@@ -8,7 +8,7 @@
 import Foundation
 
 struct SettingsData: Decodable {
-    let appearance: appearance_data
+    let appearance: [appearance_data]
     let languages: [languages_data]
     let notifications: notifications_data
 }
@@ -16,6 +16,7 @@ struct SettingsData: Decodable {
 struct appearance_data: Decodable {
     let themeId: Int
     let themeDescription: String
+    let selected: Bool
 }
 
 struct languages_data: Decodable {

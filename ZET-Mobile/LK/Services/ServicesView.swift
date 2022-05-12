@@ -8,21 +8,14 @@
 import UIKit
 
 class ServicesView: UIView {
-
-    lazy var searchField: UITextField = {
-        let textfield = UITextField()
-        textfield.background = UIImage(named: "back_search")!
-        textfield.frame = CGRect(x: 30, y: 5, width: UIScreen.main.bounds.size.width - 60, height: 50)
-        textfield.borderStyle = .none
-        
-        return textfield
-    }()
+    
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
     lazy var tab1: UILabel = {
         let title = UILabel()
-        title.text = "Активные"
+        title.text = defaultLocalizer.stringForKey(key: "Active")
         title.numberOfLines = 0
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.boldSystemFont(ofSize: 19)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -40,7 +33,7 @@ class ServicesView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text = "Доступные"
+        title.text = defaultLocalizer.stringForKey(key: "Available")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -74,15 +67,14 @@ class ServicesView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        backgroundColor = toolbarColor
        
-        white_view_back = UIView(frame: CGRect(x: 0, y: 115, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        white_view_back.backgroundColor = .white
+        white_view_back = UIView(frame: CGRect(x: 0, y: 65, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        white_view_back.backgroundColor = contentColor
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)
-     
-        self.addSubview(searchField)
+
         self.addSubview(tab1)
         self.addSubview(tab2)
         self.addSubview(tab1Line)

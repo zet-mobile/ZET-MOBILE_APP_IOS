@@ -26,6 +26,11 @@
 		B80929D3278D4A9500CF5824 /* RoumingTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */; };
 		B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929EF279283C300CF5824 /* ChangeCodeController.swift */; };
 		B80929F8279283E200CF5824 /* ChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929F7279283E200CF5824 /* ChangeView.swift */; };
+		B8237802281CA16E00298AD0 /* MobileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237801281CA16E00298AD0 /* MobileTableViewCell.swift */; };
+		B82378042821FE3100298AD0 /* ColorsTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82378032821FE3100298AD0 /* ColorsTheme.swift */; };
+		B8287608280A30E50025B878 /* MoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8287607280A30E50025B878 /* MoreDetailViewController.swift */; };
+		B828760A280B330F0025B878 /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8287609280B330F0025B878 /* LoadingButton.swift */; };
+		B828760C280E9A1B0025B878 /* ChangeTransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B828760B280E9A1A0025B878 /* ChangeTransferTableViewCell.swift */; };
 		B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */; };
 		B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */; };
 		B82B7D5927B4449000570AC0 /* HalfModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82B7D5827B4449000570AC0 /* HalfModal.swift */; };
@@ -134,6 +139,10 @@
 		B87F474D27311A1500BAEDFA /* ZET_MobileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F474C27311A1500BAEDFA /* ZET_MobileUITests.swift */; };
 		B87F475E27311E8300BAEDFA /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87F475D27311E8300BAEDFA /* Toolbar.swift */; };
 		B8819E3927DFADC700AA2CEF /* HomeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8819E3827DFADC700AA2CEF /* HomeData.swift */; };
+		B88218B02823A2EA004C0563 /* ZeroButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88218AF2823A2EA004C0563 /* ZeroButtonViewController.swift */; };
+		B88D322B282ADBF600D574F6 /* Calendar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B88D322A282ADBF600D574F6 /* Calendar.storyboard */; };
+		B88D322D282CDC6E00D574F6 /* DetalizationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D322C282CDC6E00D574F6 /* DetalizationViewCell.swift */; };
+		B8C815E22808EBDC00FD8B81 /* TraficTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */; };
 		B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */; };
 		B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8B27D52755007D189F /* PacketsData.swift */; };
 		B8CD5A8E27D6721E007D189F /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8D27D6721E007D189F /* UsageData.swift */; };
@@ -182,6 +191,11 @@
 		B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTableCell.swift; sourceTree = "<group>"; };
 		B80929EF279283C300CF5824 /* ChangeCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCodeController.swift; sourceTree = "<group>"; };
 		B80929F7279283E200CF5824 /* ChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeView.swift; sourceTree = "<group>"; };
+		B8237801281CA16E00298AD0 /* MobileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileTableViewCell.swift; sourceTree = "<group>"; };
+		B82378032821FE3100298AD0 /* ColorsTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsTheme.swift; sourceTree = "<group>"; };
+		B8287607280A30E50025B878 /* MoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDetailViewController.swift; sourceTree = "<group>"; };
+		B8287609280B330F0025B878 /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
+		B828760B280E9A1A0025B878 /* ChangeTransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTransferTableViewCell.swift; sourceTree = "<group>"; };
 		B82B7D4027B4357D00570AC0 /* AddBalanceOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewController.swift; sourceTree = "<group>"; };
 		B82B7D4B27B4378B00570AC0 /* AddBalanceOptionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBalanceOptionViewCell.swift; sourceTree = "<group>"; };
 		B82B7D5827B4449000570AC0 /* HalfModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfModal.swift; sourceTree = "<group>"; };
@@ -303,9 +317,15 @@
 		B87F474E27311A1500BAEDFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B87F475D27311E8300BAEDFA /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		B8819E3827DFADC700AA2CEF /* HomeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeData.swift; sourceTree = "<group>"; };
+		B88218AF2823A2EA004C0563 /* ZeroButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroButtonViewController.swift; sourceTree = "<group>"; };
+		B88D322A282ADBF600D574F6 /* Calendar.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Calendar.storyboard; sourceTree = "<group>"; };
+		B88D322C282CDC6E00D574F6 /* DetalizationViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalizationViewCell.swift; sourceTree = "<group>"; };
+		B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraficTableViewCell.swift; sourceTree = "<group>"; };
 		B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCodeData.swift; sourceTree = "<group>"; };
 		B8CD5A8B27D52755007D189F /* PacketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketsData.swift; sourceTree = "<group>"; };
 		B8CD5A8D27D6721E007D189F /* UsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageData.swift; sourceTree = "<group>"; };
+		B8FDC45E2815AA33003620D4 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		B8FDC45F2815AA33003620D4 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BD7353AFFD29CB667BFC193B /* Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile-ZET-MobileUITests/Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DC63A82C91D2FD4051CC9F79 /* Pods-ZET-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile.release.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile/Pods-ZET-Mobile.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -506,6 +526,7 @@
 				B853D6B32741121F00FBE1F1 /* Styles.swift */,
 				B864297A273B8583000C159E /* HalfModalPresentationController.swift */,
 				B82B7D5827B4449000570AC0 /* HalfModal.swift */,
+				B82378032821FE3100298AD0 /* ColorsTheme.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -526,6 +547,8 @@
 				B853D71B274B5D2700FBE1F1 /* TraficTransferView.swift */,
 				B853D720274B639B00FBE1F1 /* TabTraficCollectionViewCell.swift */,
 				B853D725274CAD2D00FBE1F1 /* TraficHistoryViewCell.swift */,
+				B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */,
+				B8287607280A30E50025B878 /* MoreDetailViewController.swift */,
 			);
 			path = TraficTransfer;
 			sourceTree = "<group>";
@@ -537,6 +560,7 @@
 				B853D7572754CD2400FBE1F1 /* ChangeTransferView.swift */,
 				B853D7642754CD6900FBE1F1 /* TabChangeCollectionViewCell.swift */,
 				B853D7402754CCB500FBE1F1 /* ChangeHistoryViewCell.swift */,
+				B828760B280E9A1A0025B878 /* ChangeTransferTableViewCell.swift */,
 			);
 			path = ChangeTransfer;
 			sourceTree = "<group>";
@@ -548,6 +572,7 @@
 				B853D75C2754CD3B00FBE1F1 /* MobileTransferView.swift */,
 				B853D76F2754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift */,
 				B853D7482754CCCA00FBE1F1 /* MobileHistoryViewCell.swift */,
+				B8237801281CA16E00298AD0 /* MobileTableViewCell.swift */,
 			);
 			path = MobileTransfer;
 			sourceTree = "<group>";
@@ -560,6 +585,7 @@
 				B853D796275506AD00FBE1F1 /* TabZeroCollectionViewCell.swift */,
 				B853D79B275506D000FBE1F1 /* ZeroHistoryViewCell.swift */,
 				B853D8372762F17900FBE1F1 /* ZeroTableViewCell.swift */,
+				B88218AF2823A2EA004C0563 /* ZeroButtonViewController.swift */,
 			);
 			path = ZeroHelp;
 			sourceTree = "<group>";
@@ -572,6 +598,7 @@
 				B853D7C227562E6500FBE1F1 /* TabPeriodCollectionViewCell.swift */,
 				B853D7D12757949900FBE1F1 /* TapDetalizationCollectionCell.swift */,
 				B853D7EB2758D92700FBE1F1 /* CalendarViewController.swift */,
+				B88D322C282CDC6E00D574F6 /* DetalizationViewCell.swift */,
 			);
 			path = Detalization;
 			sourceTree = "<group>";
@@ -722,13 +749,13 @@
 			children = (
 				B82B7D3B27B4311A00570AC0 /* Authorization */,
 				B80929D72791435500CF5824 /* LK */,
-				B853D6EB2743AFC100FBE1F1 /* Languages */,
-				B853D6E72743AF7700FBE1F1 /* HelperFiles */,
+				B8092991278B5C4200CF5824 /* Settings */,
 				B86429042733B715000C159E /* Wallet */,
 				B80929EE2792838600CF5824 /* ChangeCode */,
 				B8092994278B5CAC00CF5824 /* PinCodeInput */,
 				B8092950277AEC9900CF5824 /* Support */,
-				B8092991278B5C4200CF5824 /* Settings */,
+				B853D6E72743AF7700FBE1F1 /* HelperFiles */,
+				B853D6EB2743AFC100FBE1F1 /* Languages */,
 				B87F473527311A1400BAEDFA /* LaunchScreen.storyboard */,
 				B87F473827311A1400BAEDFA /* Info.plist */,
 				B87F473327311A1400BAEDFA /* Assets.xcassets */,
@@ -736,10 +763,12 @@
 				B86428A727313B90000C159E /* ContainerViewController.swift */,
 				B86429A2273C3678000C159E /* ToolbarUsage.swift */,
 				B86429C6273FD16E000C159E /* AlertViewController.swift */,
+				B8287609280B330F0025B878 /* LoadingButton.swift */,
 				B87F472A27311A1100BAEDFA /* AppDelegate.swift */,
 				B87F472C27311A1100BAEDFA /* SceneDelegate.swift */,
 				B82B7D9E27C3FB6B00570AC0 /* RequestObservable.swift */,
 				B82B7DA327C4005600570AC0 /* APIClient.swift */,
+				B88D322A282ADBF600D574F6 /* Calendar.storyboard */,
 			);
 			path = "ZET-Mobile";
 			sourceTree = "<group>";
@@ -856,6 +885,7 @@
 				Base,
 				ru,
 				tg,
+				"uz-Cyrl",
 			);
 			mainGroup = B87F471E27311A1000BAEDFA;
 			productRefGroup = B87F472827311A1100BAEDFA /* Products */;
@@ -874,6 +904,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B88D322B282ADBF600D574F6 /* Calendar.storyboard in Resources */,
 				B87F473727311A1400BAEDFA /* LaunchScreen.storyboard in Resources */,
 				B853D6FF2743B29000FBE1F1 /* Localizable.strings in Resources */,
 				B87F473427311A1400BAEDFA /* Assets.xcassets in Resources */,
@@ -1052,6 +1083,7 @@
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
 				B8358F0127FF572C001A6696 /* ZeroHelpData.swift in Sources */,
 				B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */,
+				B88D322D282CDC6E00D574F6 /* DetalizationViewCell.swift in Sources */,
 				B864297B273B8584000C159E /* HalfModalPresentationController.swift in Sources */,
 				B82B7D4127B4357D00570AC0 /* AddBalanceOptionViewController.swift in Sources */,
 				B80929AD278B5FA000CF5824 /* SettingsView.swift in Sources */,
@@ -1059,11 +1091,13 @@
 				B853D7C327562E6500FBE1F1 /* TabPeriodCollectionViewCell.swift in Sources */,
 				B858A2C627DBAFE200D190CE /* RoumingData.swift in Sources */,
 				B80929A3278B5E3800CF5824 /* ReplyToZetViewController.swift in Sources */,
+				B88218B02823A2EA004C0563 /* ZeroButtonViewController.swift in Sources */,
 				B852980627C7A24B00B68F36 /* ProfilesMenuViewController.swift in Sources */,
 				B853D84B27632FBF00FBE1F1 /* SearchNumberView.swift in Sources */,
 				B87F472F27311A1100BAEDFA /* HomeViewController.swift in Sources */,
 				B864295127392D7F000C159E /* TabCollectionServiceViewCell.swift in Sources */,
 				B853D71C274B5D2700FBE1F1 /* TraficTransferView.swift in Sources */,
+				B8237802281CA16E00298AD0 /* MobileTableViewCell.swift in Sources */,
 				B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */,
 				B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */,
 				B86428B0273165D4000C159E /* HomeView.swift in Sources */,
@@ -1080,6 +1114,7 @@
 				B8092988278962D100CF5824 /* AboutViewCell.swift in Sources */,
 				B80929BC278B5FE200CF5824 /* RoumingView.swift in Sources */,
 				B86428F62732B6B6000C159E /* HotServicesCollectionView.swift in Sources */,
+				B8287608280A30E50025B878 /* MoreDetailViewController.swift in Sources */,
 				B858A2BB27DB278300D190CE /* HistoryHeaderCell.swift in Sources */,
 				B86429B4273CFCB8000C159E /* HistoryUsageViewCell.swift in Sources */,
 				B87F472B27311A1100BAEDFA /* AppDelegate.swift in Sources */,
@@ -1114,12 +1149,15 @@
 				B853D83E2763010600FBE1F1 /* SearchNumberViewController.swift in Sources */,
 				B853D7532754CCFF00FBE1F1 /* MobileTransferViewController.swift in Sources */,
 				B80929832789602F00CF5824 /* AboutAppView.swift in Sources */,
+				B828760A280B330F0025B878 /* LoadingButton.swift in Sources */,
 				B853D721274B639B00FBE1F1 /* TabTraficCollectionViewCell.swift in Sources */,
 				B864292E27358F50000C159E /* TarifTabViewCell.swift in Sources */,
+				B82378042821FE3100298AD0 /* ColorsTheme.swift in Sources */,
 				B853D726274CAD2D00FBE1F1 /* TraficHistoryViewCell.swift in Sources */,
 				B82B7DA427C4005600570AC0 /* APIClient.swift in Sources */,
 				B86428A327313B58000C159E /* ProfileViewController.swift in Sources */,
 				B853D8462763013900FBE1F1 /* SearchTableViewCell.swift in Sources */,
+				B828760C280E9A1B0025B878 /* ChangeTransferTableViewCell.swift in Sources */,
 				B853D70E2743D8BF00FBE1F1 /* AMPLocalizeUtils.swift in Sources */,
 				B86429C7273FD16F000C159E /* AlertViewController.swift in Sources */,
 				B86428CD27326B30000C159E /* CircularProgressView.swift in Sources */,
@@ -1140,6 +1178,7 @@
 				B864291A2734EF04000C159E /* TarifToolbarView.swift in Sources */,
 				B864294427390590000C159E /* ServicesViewController.swift in Sources */,
 				B853D714274B5D0500FBE1F1 /* TraficTransferViewController.swift in Sources */,
+				B8C815E22808EBDC00FD8B81 /* TraficTableViewCell.swift in Sources */,
 				B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */,
 				B858A2CC27DBB2EA00D190CE /* SettingsData.swift in Sources */,
 				B86428EA27329A48000C159E /* SliderCollectionView.swift in Sources */,
@@ -1202,6 +1241,7 @@
 				B853D7002743B29000FBE1F1 /* en */,
 				B853D7052743B29500FBE1F1 /* ru */,
 				B853D7062743B29700FBE1F1 /* tg */,
+				B8FDC45F2815AA33003620D4 /* uz-Cyrl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1212,6 +1252,7 @@
 				B87F473627311A1400BAEDFA /* Base */,
 				B853D6EC2743B12200FBE1F1 /* ru */,
 				B853D6F32743B21600FBE1F1 /* tg */,
+				B8FDC45E2815AA33003620D4 /* uz-Cyrl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

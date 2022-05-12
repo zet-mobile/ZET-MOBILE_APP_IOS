@@ -39,11 +39,10 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
     titleOne.text = "+992 91 111 0611"
     titleOne.numberOfLines = 2
-    titleOne.textColor = .black
+    titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 80, y: 40, width: 340, height: 30)
     titleTwo.text = "Выполнено"
     titleTwo.numberOfLines = 1
     titleTwo.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
@@ -51,17 +50,15 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.textAlignment = .left
     
     titleThree.text = "1024"
-    titleThree.textColor = .black
+    titleThree.textColor = colorBlackWhite
     titleThree.font = UIFont.systemFont(ofSize: 18)
     titleThree.textAlignment = .right
-    titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleThree.text!.count * 15) - 30, y: 10, width: (titleThree.text!.count * 15), height: 30)
     
     titleFour.text = "21-10-2021 13:48"
     titleFour.numberOfLines = 2
     titleFour.textColor = .gray
     titleFour.font = UIFont.systemFont(ofSize: 15)
     titleFour.textAlignment = .right
-    titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (titleFour.text!.count * 15) - 30, y: 40, width: (titleFour.text!.count * 15), height: 30)
     
 }
 

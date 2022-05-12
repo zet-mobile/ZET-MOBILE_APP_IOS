@@ -28,7 +28,8 @@ class ProfilesMenuViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = true
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

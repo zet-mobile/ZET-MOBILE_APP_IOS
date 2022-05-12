@@ -34,7 +34,7 @@ class RoumingTableCell: UITableViewCell {
         titleOne.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 90, height: 60)
         titleOne.text = ""
         titleOne.numberOfLines = 0
-        titleOne.textColor = .black
+        titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 20)
         titleOne.textAlignment = .left
         

@@ -9,12 +9,10 @@ import UIKit
 
 class PushMoreViewController: UIViewController {
 
-    let push_view = PushMoreView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
+    let push_view = PushMoreView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        modalPresentationCapturesStatusBarAppearance = true
        
         push_view.layer.cornerRadius = 10
         view.addSubview(push_view)
@@ -49,7 +47,7 @@ class PushMoreView: UIView {
         title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.text = "Скидка на Хаматарафа+200"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
@@ -63,7 +61,7 @@ class PushMoreView: UIView {
  С 12 октября по 31 января действуют 50% СКИДКИ на пакеты Хаматарафа+120, Хаматарафа+95, Хаматарафа+75.
  """
         title.numberOfLines = 4
-        title.textColor = .darkGray
+        title.textColor = darkGrayLight
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         return title
@@ -89,8 +87,7 @@ class PushMoreView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
-     
+        backgroundColor = contentColor
         self.addSubview(image_push)
         self.addSubview(title_push)
         self.addSubview(close)

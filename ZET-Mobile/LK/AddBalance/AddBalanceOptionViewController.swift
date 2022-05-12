@@ -11,7 +11,7 @@ class AddBalanceOptionViewController: UIViewController {
     
     let table = UITableView()
     
-    let tableData = [["icon1", "Временный платеж"], ["iconn2", "Оплата Корти Милли"], ["icon3", "Попросить у друга"]]
+    let tableData = [["icon1", defaultLocalizer.stringForKey(key: "Temporary_payment")], ["iconn2", defaultLocalizer.stringForKey(key: "Payment_via")], ["icon3", defaultLocalizer.stringForKey(key: "Ask_friend")]]
     
     let add_balance_option = AddBalanceOptionView(frame: CGRect(x: 5, y: UIScreen.main.bounds.size.height - (3 * 80) - 60, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height / 4))
     
@@ -33,7 +33,7 @@ class AddBalanceOptionViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = false
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -71,9 +71,9 @@ class AddBalanceOptionView: UIView {
     lazy var title_push: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
-        title.text = "Пополнить счет"
+        title.text = defaultLocalizer.stringForKey(key: "Top_account")
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
@@ -93,7 +93,7 @@ class AddBalanceOptionView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = contentColor
     
         self.addSubview(title_push)
         self.addSubview(close)

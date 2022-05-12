@@ -36,7 +36,7 @@ class DialogOfficesViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.isScrollEnabled = false
-        table.backgroundColor = .white
+        table.backgroundColor = contentColor
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -77,7 +77,7 @@ class DialogOfficesView: UIView {
         title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.text = "Офис ZET Mobile"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
@@ -97,7 +97,7 @@ class DialogOfficesView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = .white
+       // backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
     
         self.addSubview(title_push)
         self.addSubview(close)

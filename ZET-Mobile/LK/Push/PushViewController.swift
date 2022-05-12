@@ -23,9 +23,15 @@ class PushViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+       // showActivityIndicator(uiView: self.view)
+        view.backgroundColor = toolbarColor
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         toolbar.number_user_name.text = "Уведомления"
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         self.view.addSubview(toolbar)
 
         table.register(PushPhotoTypeViewCell.self, forCellReuseIdentifier: "push_photo_cell")
@@ -36,8 +42,12 @@ class PushViewController: UIViewController {
         table.alwaysBounceVertical = false
         table.separatorStyle = .none
         table.allowsSelection = false
-        table.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        //table.backgroundColor =
         view.addSubview(table)
+    }
+    
+    @objc func goBack() {
+        navigationController?.popViewController(animated: true)
     }
     
 }

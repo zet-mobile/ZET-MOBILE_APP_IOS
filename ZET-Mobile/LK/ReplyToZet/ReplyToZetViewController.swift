@@ -26,7 +26,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate {
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = contentColor
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
@@ -49,7 +49,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = toolbarColor
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
@@ -61,7 +61,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Обратная связь"
-        toolbar.backgroundColor = .white
+        toolbar.backgroundColor = toolbarColor
       
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
