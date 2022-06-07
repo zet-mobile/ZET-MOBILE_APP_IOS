@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ZeroHelpData: Decodable {
+struct AskMoneyData: Decodable {
     let subscriberBalance: Double
     let balances: balances_data
 }

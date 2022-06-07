@@ -47,7 +47,7 @@
 		B8358EFB27FF3C93001A6696 /* ExchangeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFA27FF3C93001A6696 /* ExchangeData.swift */; };
 		B8358EFD27FF3F5A001A6696 /* DetalizationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */; };
 		B8358EFF27FF436E001A6696 /* MoneyTransferData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */; };
-		B8358F0127FF572C001A6696 /* ZeroHelpData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358F0027FF572B001A6696 /* ZeroHelpData.swift */; };
+		B8358F0127FF572C001A6696 /* AskFriendData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8358F0027FF572B001A6696 /* AskFriendData.swift */; };
 		B852979C27C55AA000B68F36 /* ConditionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B852979B27C55AA000B68F36 /* ConditionViewController.swift */; };
 		B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A127C6AD9100B68F36 /* MenuViewController.swift */; };
 		B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85297A927C6ADD100B68F36 /* MenuViewCell.swift */; };
@@ -142,6 +142,14 @@
 		B88218B02823A2EA004C0563 /* ZeroButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88218AF2823A2EA004C0563 /* ZeroButtonViewController.swift */; };
 		B88D322B282ADBF600D574F6 /* Calendar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B88D322A282ADBF600D574F6 /* Calendar.storyboard */; };
 		B88D322D282CDC6E00D574F6 /* DetalizationViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D322C282CDC6E00D574F6 /* DetalizationViewCell.swift */; };
+		B88D3230282E6ED100D574F6 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D322F282E6ED000D574F6 /* ContactsViewController.swift */; };
+		B88D3232282E6F2400D574F6 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D3231282E6F2400D574F6 /* ContactsTableViewCell.swift */; };
+		B88D323428301C6F00D574F6 /* FeedbackData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D323328301C6F00D574F6 /* FeedbackData.swift */; };
+		B88D3237283310B900D574F6 /* AskFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D3236283310B800D574F6 /* AskFriendView.swift */; };
+		B88D32392833117C00D574F6 /* AskFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D32382833117C00D574F6 /* AskFriendViewController.swift */; };
+		B8A38BF92845B6650091F028 /* HelpAtZeroData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */; };
+		B8A38BFB2848DA940091F028 /* RoumingTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */; };
+		B8A38BFD2849F16B0091F028 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFC2849F16B0091F028 /* EmptyView.swift */; };
 		B8C815E22808EBDC00FD8B81 /* TraficTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */; };
 		B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */; };
 		B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8B27D52755007D189F /* PacketsData.swift */; };
@@ -216,7 +224,7 @@
 		B8358EFA27FF3C93001A6696 /* ExchangeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeData.swift; sourceTree = "<group>"; };
 		B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalizationData.swift; sourceTree = "<group>"; };
 		B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyTransferData.swift; sourceTree = "<group>"; };
-		B8358F0027FF572B001A6696 /* ZeroHelpData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroHelpData.swift; sourceTree = "<group>"; };
+		B8358F0027FF572B001A6696 /* AskFriendData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskFriendData.swift; sourceTree = "<group>"; };
 		B852979B27C55AA000B68F36 /* ConditionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionViewController.swift; sourceTree = "<group>"; };
 		B85297A127C6AD9100B68F36 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B85297A927C6ADD100B68F36 /* MenuViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
@@ -320,6 +328,14 @@
 		B88218AF2823A2EA004C0563 /* ZeroButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroButtonViewController.swift; sourceTree = "<group>"; };
 		B88D322A282ADBF600D574F6 /* Calendar.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Calendar.storyboard; sourceTree = "<group>"; };
 		B88D322C282CDC6E00D574F6 /* DetalizationViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetalizationViewCell.swift; sourceTree = "<group>"; };
+		B88D322F282E6ED000D574F6 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		B88D3231282E6F2400D574F6 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
+		B88D323328301C6F00D574F6 /* FeedbackData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackData.swift; sourceTree = "<group>"; };
+		B88D3236283310B800D574F6 /* AskFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskFriendView.swift; sourceTree = "<group>"; };
+		B88D32382833117C00D574F6 /* AskFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskFriendViewController.swift; sourceTree = "<group>"; };
+		B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpAtZeroData.swift; sourceTree = "<group>"; };
+		B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTopViewCell.swift; sourceTree = "<group>"; };
+		B8A38BFC2849F16B0091F028 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraficTableViewCell.swift; sourceTree = "<group>"; };
 		B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCodeData.swift; sourceTree = "<group>"; };
 		B8CD5A8B27D52755007D189F /* PacketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketsData.swift; sourceTree = "<group>"; };
@@ -424,6 +440,7 @@
 				B80929BB278B5FE200CF5824 /* RoumingView.swift */,
 				B80929C0278B612500CF5824 /* TabRoumingCollectionCell.swift */,
 				B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */,
+				B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */,
 			);
 			path = Rouming;
 			sourceTree = "<group>";
@@ -461,12 +478,14 @@
 				B853D72A274CB87800FBE1F1 /* ChangeTransfer */,
 				B853D71227491E3A00FBE1F1 /* TraficTransfer */,
 				B853D73F2754CABA00FBE1F1 /* MobileTransfer */,
+				B88D322E282E6EA100D574F6 /* Contacts */,
 				B853D7872755058B00FBE1F1 /* ZeroHelp */,
 				B853D7AA2756285400FBE1F1 /* Detalization */,
 				B809294F277AEB2A00CF5824 /* AboutApp */,
 				B853D83C276300C800FBE1F1 /* SearchNumber */,
 				B8092993278B5C8E00CF5824 /* ReplyToZet */,
 				B86429B8273E3D09000C159E /* AdditionalTrafics */,
+				B88D32352833107800D574F6 /* AskFriend */,
 				B8092992278B5C7200CF5824 /* Rouming */,
 			);
 			path = LK;
@@ -527,6 +546,7 @@
 				B864297A273B8583000C159E /* HalfModalPresentationController.swift */,
 				B82B7D5827B4449000570AC0 /* HalfModal.swift */,
 				B82378032821FE3100298AD0 /* ColorsTheme.swift */,
+				B8A38BFC2849F16B0091F028 /* EmptyView.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -633,7 +653,9 @@
 				B8358EFA27FF3C93001A6696 /* ExchangeData.swift */,
 				B8358EFC27FF3F5A001A6696 /* DetalizationData.swift */,
 				B8358EFE27FF436E001A6696 /* MoneyTransferData.swift */,
-				B8358F0027FF572B001A6696 /* ZeroHelpData.swift */,
+				B8358F0027FF572B001A6696 /* AskFriendData.swift */,
+				B88D323328301C6F00D574F6 /* FeedbackData.swift */,
+				B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -789,6 +811,24 @@
 				B87F474E27311A1500BAEDFA /* Info.plist */,
 			);
 			path = "ZET-MobileUITests";
+			sourceTree = "<group>";
+		};
+		B88D322E282E6EA100D574F6 /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				B88D322F282E6ED000D574F6 /* ContactsViewController.swift */,
+				B88D3231282E6F2400D574F6 /* ContactsTableViewCell.swift */,
+			);
+			path = Contacts;
+			sourceTree = "<group>";
+		};
+		B88D32352833107800D574F6 /* AskFriend */ = {
+			isa = PBXGroup;
+			children = (
+				B88D32382833117C00D574F6 /* AskFriendViewController.swift */,
+				B88D3236283310B800D574F6 /* AskFriendView.swift */,
+			);
+			path = AskFriend;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1073,6 +1113,7 @@
 				B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */,
 				B858A2C827DBB0C200D190CE /* RoumingCountryData.swift in Sources */,
 				B82B7D9F27C3FB6B00570AC0 /* RequestObservable.swift in Sources */,
+				B8A38BFD2849F16B0091F028 /* EmptyView.swift in Sources */,
 				B853D8382762F17900FBE1F1 /* ZeroTableViewCell.swift in Sources */,
 				B853D6B42741121F00FBE1F1 /* Styles.swift in Sources */,
 				B86428C827326AAE000C159E /* RemainderStackView.swift in Sources */,
@@ -1081,7 +1122,7 @@
 				B853D75D2754CD3B00FBE1F1 /* MobileTransferView.swift in Sources */,
 				B86429AF273C3B31000C159E /* UsageCollectionViewCell.swift in Sources */,
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
-				B8358F0127FF572C001A6696 /* ZeroHelpData.swift in Sources */,
+				B8358F0127FF572C001A6696 /* AskFriendData.swift in Sources */,
 				B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */,
 				B88D322D282CDC6E00D574F6 /* DetalizationViewCell.swift in Sources */,
 				B864297B273B8584000C159E /* HalfModalPresentationController.swift in Sources */,
@@ -1113,7 +1154,9 @@
 				B864295927393132000C159E /* ServicesConnectTableViewCell.swift in Sources */,
 				B8092988278962D100CF5824 /* AboutViewCell.swift in Sources */,
 				B80929BC278B5FE200CF5824 /* RoumingView.swift in Sources */,
+				B88D3232282E6F2400D574F6 /* ContactsTableViewCell.swift in Sources */,
 				B86428F62732B6B6000C159E /* HotServicesCollectionView.swift in Sources */,
+				B88D3237283310B900D574F6 /* AskFriendView.swift in Sources */,
 				B8287608280A30E50025B878 /* MoreDetailViewController.swift in Sources */,
 				B858A2BB27DB278300D190CE /* HistoryHeaderCell.swift in Sources */,
 				B86429B4273CFCB8000C159E /* HistoryUsageViewCell.swift in Sources */,
@@ -1124,6 +1167,7 @@
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
 				B8358EFB27FF3C93001A6696 /* ExchangeData.swift in Sources */,
 				B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */,
+				B88D323428301C6F00D574F6 /* FeedbackData.swift in Sources */,
 				B853D74E2754CCEB00FBE1F1 /* ChangeTransferViewController.swift in Sources */,
 				B8358EFD27FF3F5A001A6696 /* DetalizationData.swift in Sources */,
 				B82B7D7A27C2B00300570AC0 /* SplashViewController.swift in Sources */,
@@ -1137,6 +1181,7 @@
 				B809298D278B59E100CF5824 /* SupportListCell.swift in Sources */,
 				B82B7D8427C2B07500570AC0 /* AuthorizationView.swift in Sources */,
 				B82B7D4C27B4378B00570AC0 /* AddBalanceOptionViewCell.swift in Sources */,
+				B8A38BF92845B6650091F028 /* HelpAtZeroData.swift in Sources */,
 				B853D7AC2756289100FBE1F1 /* DetalizationViewController.swift in Sources */,
 				B864291F27350703000C159E /* TarifView.swift in Sources */,
 				B864289E27313B4A000C159E /* CallCenterViewController.swift in Sources */,
@@ -1169,9 +1214,11 @@
 				B80929B7278B5FCE00CF5824 /* ReplyToZetView.swift in Sources */,
 				B82B7D7F27C2B02500570AC0 /* AuthorizationViewController.swift in Sources */,
 				B864289427313B29000C159E /* WalletViewController.swift in Sources */,
+				B8A38BFB2848DA940091F028 /* RoumingTopViewCell.swift in Sources */,
 				B8358EF927FE11B8001A6696 /* DialogOfficesViewCell.swift in Sources */,
 				B864294C27390622000C159E /* ServicesView.swift in Sources */,
 				B86429122734EEE1000C159E /* MyTarifViewController.swift in Sources */,
+				B88D3230282E6ED100D574F6 /* ContactsViewController.swift in Sources */,
 				B86428FB2732B6D9000C159E /* HotServicesCollectionViewCell.swift in Sources */,
 				B80929C1278B612500CF5824 /* TabRoumingCollectionCell.swift in Sources */,
 				B864292927351E78000C159E /* TabCollectionViewCell.swift in Sources */,
@@ -1194,6 +1241,7 @@
 				B8358EFF27FF436E001A6696 /* MoneyTransferData.swift in Sources */,
 				B858A2C427DBAF4B00D190CE /* AboutAppData.swift in Sources */,
 				B853D7702754CD7F00FBE1F1 /* TabMobileCollectionViewCell.swift in Sources */,
+				B88D32392833117C00D574F6 /* AskFriendViewController.swift in Sources */,
 				B858A2C227DB9BF300D190CE /* ServicesData.swift in Sources */,
 				B86429A3273C3678000C159E /* ToolbarUsage.swift in Sources */,
 				B852980E27C7A40800B68F36 /* ProfileMenuCell.swift in Sources */,
@@ -1384,6 +1432,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = HPE5MZVLNF;
@@ -1395,6 +1444,7 @@
 				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zet-mobile.Salom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1406,6 +1456,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = HPE5MZVLNF;
@@ -1417,6 +1468,7 @@
 				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zet-mobile.Salom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

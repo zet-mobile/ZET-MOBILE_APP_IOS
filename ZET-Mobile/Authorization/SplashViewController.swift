@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreTelephony
 
 class SplashViewController: UIViewController {
 

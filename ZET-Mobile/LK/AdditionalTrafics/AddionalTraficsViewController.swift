@@ -11,6 +11,7 @@ import RxSwift
 
 var color1 = colorLightDarkGray
 var color2 = colorBlackWhite
+var emptyView: EmptyView?
 
 class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
 
@@ -379,10 +380,24 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                                 self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus), String(result.internetAvailablePackets[i].nextApplyDate ?? ""), String(result.internetAvailablePackets[i].description ?? "")])
                             }
                         }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table.frame.height), text: "Нет доступных интернет-пакетов")
+                            self.table3.separatorStyle = .none
+                            self.table3.backgroundView = emptyView
+                            }
+                        }
                         
                         if result.offnetAvailablePackets.count != 0 {
                             for i in 0 ..< result.offnetAvailablePackets.count {
                                 self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus), String(result.offnetAvailablePackets[i].nextApplyDate ?? "") , String(result.offnetAvailablePackets[i].description ?? "") ])
+                            }
+                        }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table.frame.height), text: "Нет доступных голосовых-пакетов")
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
                             }
                         }
                         
@@ -391,7 +406,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                                 self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus), String(result.smsAvailablePackets[i].nextApplyDate ?? ""), String(result.smsAvailablePackets[i].description ?? "")])
                             }
                         }
-
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table.frame.height), text: "Нет доступных смс-пакетов")
+                            self.table3.separatorStyle = .none
+                            self.table3.backgroundView = emptyView
+                            }
+                        }
                     }
                 },
                 onError: { error in
@@ -845,7 +866,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
         }
         else if tableView == table2 {
             if minuti_data[indexPath.row][4] != "" {
-                table.rowHeight = 160
+                table2.rowHeight = 160
                 cell.contentView.frame.size.height = 160
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -864,7 +885,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
                 cell.titleThree.frame.origin.y = 100
             }
             else {
-                table.rowHeight = 140
+                table2.rowHeight = 140
                 cell.contentView.frame.size.height = 140
                 cell.titleTwo.text = internet_data[indexPath.row][1]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
@@ -895,7 +916,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
         }
         else {
             if sms_data[indexPath.row][4] != "" {
-                table.rowHeight = 160
+                table3.rowHeight = 160
                 cell.contentView.frame.size.height = 160
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -914,7 +935,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
                 cell.titleThree.frame.origin.y = 100
             }
             else {
-                table.rowHeight = 140
+                table3.rowHeight = 140
                 cell.contentView.frame.size.height = 140
                 cell.titleTwo.text = internet_data[indexPath.row][1]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
@@ -944,7 +965,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         
-        if indexPath.row == 2 {
+        if indexPath.row == indexPath.last! {
             cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
         }
         

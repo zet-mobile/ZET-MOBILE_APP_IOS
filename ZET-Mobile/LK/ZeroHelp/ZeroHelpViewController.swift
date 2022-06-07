@@ -9,6 +9,20 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+struct zeroHelpData {
+    let date_header: String
+    let packet_tax: [String]
+    let packet_sum: [String]
+    let packet_amount: [String]
+    let credit_id: [String]
+    let remaind_sum_amount: [String]
+    let remaind_tax_amount: [String]
+    let remaind_credit_amount: [String]
+    let is_repayment: [String]
+    let packet_name: [String]
+    let created_at: [String]
+}
+
 class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     
     var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
@@ -43,11 +57,15 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
-    var balances_data = [[String]]()
-    var settings_data = [[String]]()
+    var balance = ""
+    var message = ""
+    var descrip = ""
+    var lifetime = ""
+    var arpu = ""
+    var packets_data = [[String]]()
     var history_data = [[String]]()
     
-    var HistoryData = [exchangeData(date_header: String(), phoneNumber: [String](), status: [String](), date: [String](), id: [String](), volumeA: [String](), volumeB: [String](), unitA: [String](), unitB: [String](), price: [String](), type: [String](), transferType: [String](), statusId: [String](), transactionId: [String]())]
+    var HistoryData = [zeroHelpData(date_header: String(), packet_tax: [String](), packet_sum: [String](), packet_amount: [String](), credit_id: [String](), remaind_sum_amount: [String](), remaind_tax_amount: [String](), remaind_credit_amount: [String](), is_repayment: [String](), packet_name: [String](), created_at: [String]())]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,8 +113,9 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         
-        zeroView.rez1.text = balances_data[0][0]
-        zeroView.rez2.text = balances_data[0][1]
+        zeroView.balance.text = balance
+        zeroView.rez1.text = arpu
+        zeroView.rez2.text = lifetime
         
         zeroView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez1.text!.count * 15) - 50, y: 0, width: (zeroView.rez1.text!.count * 15), height: 55)
         zeroView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez2.text!.count * 15) - 50, y: 57, width: (zeroView.rez2.text!.count * 15), height: 45)
@@ -178,14 +197,105 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     func sendRequest() {
         let client = APIClient.shared
             do{
-              try client.getAskMoneyRequest().subscribe(
+              try client.getCreditRequest().subscribe(
                 onNext: { result in
                   print(result)
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [self] in
                         
-                        self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
+                        self.balance = String(result.balance) + " с."
+                        self.message = String(result.message)
+                        self.lifetime = String(result.lifetime)
+                        self.descrip = String(result.description)
+                        self.arpu = String(result.arpu)
                         
-                        self.zeroView.balance.text = String(result.subscriberBalance) + " сомони"
+                        if result.packets != nil {
+                            if result.packets!.count != 0 {
+                                for i in 0 ..< result.packets!.count {
+                                    packets_data.append([String(result.packets![i].packet_tax), String(result.packets![i].packet_sum), String(result.packets![i].packet_amount), String(result.packets![i].packet_name)])
+                                }
+                            }
+                        }
+                        
+                        else if result.packets == nil {
+                            print("empty history")
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.message)
+                            self.table.separatorStyle = .none
+                            self.table.backgroundView = emptyView
+                            }
+                        }
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        sendHistoryRequest()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    func sendHistoryRequest() {
+        HistoryData.removeAll()
+        
+        let client = APIClient.shared
+            do{
+              try client.getCreditHistoryRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async { [self] in
+                        
+                        if result.history?.count != 0 {
+                            
+                            print(result.history!.count)
+                            for i in 0 ..< result.history!.count {
+                                
+                                var tableData1 = [String]()
+                                var tableData2 = [String]()
+                                var tableData3 = [String]()
+                                var tableData4 = [String]()
+                                var tableData5 = [String]()
+                                var tableData6 = [String]()
+                                var tableData7 = [String]()
+                                var tableData8 = [String]()
+                                var tableData9 = [String]()
+                                var tableData10 = [String]()
+                               
+                                for j in 0 ..< result.history![i].histories.count {
+                                    
+                                    tableData1.append(String(result.history![i].histories[j].packet_tax))
+                                    tableData2.append(String(result.history![i].histories[j].packet_sum))
+                                    tableData3.append(String(result.history![i].histories[j].packet_amount))
+                                    tableData4.append(String(result.history![i].histories[j].credit_id))
+                                    tableData5.append(String(result.history![i].histories[j].remaind_sum_amount))
+                                    tableData6.append(String(result.history![i].histories[j].remaind_tax_amount))
+                                    tableData7.append(String(result.history![i].histories[j].remaind_credit_amount))
+                                    tableData8.append(String(result.history![i].histories[j].is_repayment))
+                                    tableData9.append(String(result.history![i].histories[j].packet_name))
+                                    tableData10.append(String(result.history![i].histories[j].created_at))
+                                    
+                                }
+                                
+                                HistoryData.append(zeroHelpData(date_header: String(result.history![i].date), packet_tax: tableData1, packet_sum: tableData2, packet_amount: tableData3, credit_id: tableData4, remaind_sum_amount: tableData5, remaind_tax_amount: tableData6, remaind_credit_amount: tableData7, is_repayment: tableData8, packet_name: tableData9, created_at: tableData10))
+                            }
+                            
+                        }
+                        else {
+                            print("empty history")
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: """
+                                Вы еще не воспользовались услугой "Обмен трафика"
+                                """)
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
+                            }
+                        }
                         
                     }
                 },
@@ -194,6 +304,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
+                        print(HistoryData.count)
                         setupView()
                         setupTabCollectionView()
                         hideActivityIndicator(uiView: self.view)
@@ -207,11 +318,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func openCondition() {
-        detailViewController.more_view.content.text = """
-        Для предоставления пакета рассматриваются затраты абонента за последнии 90 (девяносто) дней в разбивке на 3 (три) периода по 30 (тридцать) дней каждый;
-        
-        Пакет предоставляется относительно градации затрат абонента согласно приведённой таблицы:
-        """
+        detailViewController.more_view.content.text = descrip
         detailViewController.more_view.title_top.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         detailViewController.more_view.image.image = UIImage(named: "mobile.png")
         detailViewController.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
@@ -272,6 +379,15 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
             cell.icon_more.isUserInteractionEnabled = true
             cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
+            
+            if packets_data.count == 0 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table.frame.width, height: table.frame.height), text: message)
+                table.separatorStyle = .none
+                table.backgroundView = emptyView
+                cell.icon_more.isHidden = !cell.icon_more.isHidden
+                cell.title_info.isHidden = !cell.title_info.isHidden
+            }
+            
         }
         else {
             table2.register(ZeroHistoryViewCell.self, forCellReuseIdentifier: "history_transfer")
@@ -287,6 +403,13 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table2.backgroundColor = contentColor
             cell.addSubview(table2)
             
+            if history_data.count == 0 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
+                Вы еще не воспользовались услугой "Помощь при нуле"
+                """)
+                table2.separatorStyle = .none
+                table2.backgroundView = emptyView
+            }
         }
         return cell
     }
@@ -332,10 +455,10 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == table {
-            return 4
+            return packets_data.count
         }
         else {
-            return HistoryData[section].phoneNumber.count
+            return HistoryData[section].packet_tax.count
         }
     }
     
@@ -376,6 +499,8 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
             
             if indexPath.row == 3 {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+                cell.titleOne.text = packets_data[indexPath.row][0]
+                cell.titleTwo.text = packets_data[indexPath.row][1]
             
             }
             //cell.button.setImage(#imageLiteral(resourceName: "choosed_help"), for: UIControl.State.normal)
@@ -393,13 +518,13 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "history_transfer", for: indexPath) as! ZeroHistoryViewCell
-            cell.titleOne.text = HistoryData[indexPath.section].phoneNumber[indexPath.row]
-            cell.titleTwo.text = "" + HistoryData[indexPath.section].status[indexPath.row]
-            cell.titleThree.text = HistoryData[indexPath.section].price[indexPath.row]
+            cell.titleOne.text = HistoryData[indexPath.section].packet_name[indexPath.row]
+            cell.titleTwo.text = "" + HistoryData[indexPath.section].is_repayment[indexPath.row]
+            cell.titleThree.text = HistoryData[indexPath.section].packet_sum[indexPath.row]
             
             let dateFormatter1 = DateFormatter()
             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-            let date = dateFormatter1.date(from: String(HistoryData[indexPath.section].date[indexPath.row]))
+            let date = dateFormatter1.date(from: String(HistoryData[indexPath.section].created_at[indexPath.row]))
             dateFormatter1.dateFormat = "HH:mm"
             
             cell.titleFour.text = dateFormatter1.string(from: date!)

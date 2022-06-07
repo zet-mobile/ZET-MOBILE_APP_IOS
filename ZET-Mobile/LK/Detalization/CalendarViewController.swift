@@ -40,7 +40,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         
         calendar_view = CalendarView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
-        koyomi.frame = CGRect(x: 20, y : 120, width: UIScreen.main.bounds.size.width - 40, height: 250)
+        koyomi.frame = CGRect(x: 20, y : 120, width: UIScreen.main.bounds.size.width - 40, height: 210)
         koyomi.backgroundColor = .clear
         koyomi.circularViewDiameter = 0.2
         koyomi.calendarDelegate = self
@@ -50,12 +50,13 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         koyomi.dayPosition = .center
         koyomi.weekdayColor = .black
         koyomi.weekColor = .gray
+        koyomi.otherMonthColor = .gray
+        //koyomi.isHiddenOtherMonth = true
         koyomi.selectionMode = .sequence(style: .semicircleEdge)
         koyomi.selectedStyleColor = UIColor(red: 1.00, green: 0.68, blue: 0.40, alpha: 1.00)
         koyomi
             .setDayFont(size: 14)
             .setWeekFont(size: 10)
-        
         calendar_view.addSubview(koyomi)
         calendar_view.layer.cornerRadius = 10
         
@@ -68,7 +69,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         
         calendar_view.next_button.addTarget(self, action: #selector(nextMonth), for: .touchUpInside)
         calendar_view.prev_button.addTarget(self, action: #selector(prevMonth), for: .touchUpInside)
-
+        calendar_view.cancel.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
+        calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
+        calendar_view.close.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         view.addSubview(calendar_view)
     }
 
@@ -132,7 +135,12 @@ extension CalendarViewController: KoyomiDelegate {
         koyomi.display(in: month)
     }
     
-   
+    @objc func dismissCalendar() {
+        dismiss(animated: true) {
+            print("jjj")
+        }
+    }
+    
 }
 
 
@@ -142,7 +150,7 @@ class CalendarView: UIView {
         let button = UIButton()
         button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 20, height: 20)
         button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
-        button.isUserInteractionEnabled = false
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()
@@ -163,7 +171,7 @@ class CalendarView: UIView {
         let button = UIButton()
         button.frame = CGRect(x: 40, y: 90, width: 8, height: 15)
         button.setImage(#imageLiteral(resourceName: "prev"), for: UIControl.State.normal)
-        
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()
@@ -172,7 +180,7 @@ class CalendarView: UIView {
         let button = UIButton()
         button.frame = CGRect(x: UIScreen.main.bounds.size.width - 48, y: 90, width: 8, height: 15)
         button.setImage(#imageLiteral(resourceName: "next"), for: UIControl.State.normal)
-        
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()
@@ -196,9 +204,9 @@ class CalendarView: UIView {
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitle(defaultLocalizer.stringForKey(key: "Choosed"), for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
-    
+        button.isUserInteractionEnabled = true
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return button
     }()
@@ -209,9 +217,9 @@ class CalendarView: UIView {
         button.backgroundColor = .clear
         button.setTitle(defaultLocalizer.stringForKey(key: "Cancel"), for: .normal)
         button.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
-        
+        button.isUserInteractionEnabled = true
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return button
     }()

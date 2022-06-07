@@ -69,6 +69,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
         user_to_number.textColor = colorBlackWhite
         user_to_number.setView(.right, image: UIImage(named: "drop_icon"))
         
+        
         titleTwo.text = defaultLocalizer.stringForKey(key: "Exchange")
         titleTwo.numberOfLines = 0
         titleTwo.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
@@ -102,7 +103,8 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_transfer.layer.borderWidth = 1
         count_transfer.tag = 1
         count_transfer.textColor = colorBlackWhite
-    
+        count_transfer.keyboardType = .numberPad
+        
         line.backgroundColor = colorBlackWhite
         line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - 25, y: 325, width: 30, height: 1)
         
@@ -112,6 +114,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_to_transfer.layer.borderWidth = 1
         count_to_transfer.tag = 2
         count_to_transfer.textColor = colorBlackWhite
+        count_to_transfer.keyboardType = .numberPad
         
         title_commission.text = "Комиссия: "
         title_commission.numberOfLines = 0

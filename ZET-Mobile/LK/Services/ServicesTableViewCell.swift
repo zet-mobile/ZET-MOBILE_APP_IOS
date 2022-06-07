@@ -33,6 +33,8 @@ class ServicesTableViewCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: cellID4)
         backgroundColor = .clear
         
+        
+        
         ico_image.image = UIImage(named: "services_cell_img")
         
         contentView.addSubview(ico_image)
@@ -72,7 +74,7 @@ class ServicesTableViewCell: UITableViewCell {
         sale_title.isHidden = true
         
        // getButton.setImage(#imageLiteral(resourceName: "get_button"), for: UIControl.State.normal)
-        getButton.frame = CGRect(x: UIScreen.main.bounds.size.width  - 170, y: 90, width: 150, height: 40)
+        getButton.frame = CGRect(x: UIScreen.main.bounds.size.width  - 160, y: 90, width: 140, height: 35)
         getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
         getButton.setTitleColor(.white, for: .normal)
@@ -95,5 +97,7 @@ class ServicesTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
 
 }

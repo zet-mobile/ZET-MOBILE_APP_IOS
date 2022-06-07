@@ -67,7 +67,15 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key></key>
-	<string></string>
+	<key>NSContactsUsageDescription</key>
+	<string>ZET-MOBILE использует контакты, чтобы добавить контактов в список  </string>
+	<key>NSCameraUsageDescription</key>
+	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
+	<key>NSDebugDescription</key>
+	<string>for calling</string>
 </dict>
 </plist>

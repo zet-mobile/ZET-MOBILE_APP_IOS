@@ -15,8 +15,6 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
-    var expandedCellPaths = Set<IndexPath>()
-    
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
@@ -42,6 +40,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     var countries_data = [[String]]()
     var roamingOperators_data = [[String]]()
     var operatorCharges_data = [[String]]()
+    var row_height = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
     var country_choosed = ""
     var country_choosed_id = "0"
@@ -92,7 +91,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(rouming_view)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Роуминг"
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Roaming")
         toolbar.backgroundColor = toolbarColor
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
@@ -125,7 +124,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async { [self] in
                         print(result.questions.count)
                         for i in 0 ..< result.questions.count {
-                            questions_data.append([String(result.questions[i].id), String(result.questions[i].question), String(result.questions[i].answer)])
+                            questions_data.append([String(result.questions[i].id), String(result.questions[i].question), String(result.questions[i].answer), "false"])
                         }
                         
                         for i in 0 ..< result.countries.count {
@@ -199,16 +198,18 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoumingCollectionCell
-        if indexPath.row == 0 {
+        if indexPath.row == 1 {
             cell.contentView.isHidden = true
             table.register(RoumingTableCell.self, forCellReuseIdentifier: "roming_list_cell")
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: 7 * 80)
+            table.register(RoumingTopViewCell.self, forCellReuseIdentifier: "roaming_top")
+            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 104)
             table.delegate = self
             table.dataSource = self
-            table.rowHeight = UITableView.automaticDimension
-            table.estimatedRowHeight = 80
+            table.rowHeight = 60
+            table.estimatedRowHeight = 60
             table.alwaysBounceVertical = false
             table.backgroundColor = contentColor
+            table.allowsSelection = true
             cell.addSubview(table)
            
         }
@@ -326,60 +327,79 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
 
 
 extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         return questions_data.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if questions_data[section][3] == "true" {
+            return 2
+        }
+        else {
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return 60
+        }
+        else {
+            return row_height[indexPath.section] + 10
+        }
     }
   
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "roming_list_cell", for: indexPath) as! RoumingTableCell
+        if indexPath.row == 0 {
+            let cell = table.dequeueReusableCell(withIdentifier: "roaming_top", for: indexPath) as! RoumingTopViewCell
             
-        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+            cell.titleOne.text = questions_data[indexPath.section][1]
             
-        if indexPath.row == 6 {
-            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            if questions_data[indexPath.section][3] == "true" {
+                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "roming_list_cell", for: indexPath) as! RoumingTableCell
+                
+            cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+            
+            cell.opisanie.text = questions_data[indexPath.section][2]
+            
+            cell.opisanie.frame = CGRect(x: 20, y: 0, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+            cell.opisanie.numberOfLines = 0
+            cell.opisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.opisanie.sizeToFit()
+            print(cell.opisanie.frame.height)
+            row_height[indexPath.section] = cell.opisanie.frame.height
+            
+            return cell
         }
         
-        cell.titleOne.text = questions_data[indexPath.row][1]
-        cell.opisanie.text = questions_data[indexPath.row][2]
-        cell.opisanie.isHidden = !expandedCellPaths.contains(indexPath)
-        
-        cell.opisanie.frame.size.height = (CGFloat(questions_data[indexPath.row][2].count) / (UIScreen.main.bounds.width / 10)) * 10
-        return cell
         
     }
     
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "roming_list_cell", for: indexPath) as! RoumingTableCell
+        let cell = table.dequeueReusableCell(withIdentifier: "roming_list_cell", for: indexPath) as! RoumingTableCell
         
-        /*print("hi")
-        if cell.opisanie.isHidden == true {
-            print("1")
-            cell.opisanie.isHidden = false
-            cell.contentView.frame.size.height = 80 + ((CGFloat(questions_data[indexPath.row][2].count) / (UIScreen.main.bounds.width / 10)) * 10)
-            table.rowHeight = 80 + ((CGFloat(questions_data[indexPath.row][2].count) / (UIScreen.main.bounds.width / 10)) * 10)
-            table.estimatedRowHeight = 80 + ((CGFloat(questions_data[indexPath.row][2].count) / (UIScreen.main.bounds.width / 10)) * 10)
-        } else {
-            print("2")
-            cell.opisanie.isHidden = true
-            cell.contentView.frame.size.height = 80
-            table.rowHeight = 80
-            table.estimatedRowHeight = 80
-        }*/
-        
-        cell.opisanie.isHidden = !cell.opisanie.isHidden
-        if cell.opisanie.isHidden {
-            expandedCellPaths.remove(indexPath)
-            cell.contentView.frame.size.height = 80
-            
-        } else {
-            expandedCellPaths.insert(indexPath)
-            cell.contentView.frame.size.height = 80 + ((CGFloat(questions_data[indexPath.row][2].count) / (UIScreen.main.bounds.width / 10)) * 10)
+        print("a")
+        table.deselectRow(at: indexPath, animated: true)
+        print(cell.opisanie.frame.height)
+        if questions_data[indexPath.section][3] == "false" {
+            print("b")
+            questions_data[indexPath.section][3] = "true"
+        }
+        else {
+            print("c")
+            questions_data[indexPath.section][3] = "false"
         }
         
-        table.beginUpdates()
-        table.endUpdates()
-        table.reloadRows(at: [indexPath], with: .none)
-        table.deselectRow(at: indexPath, animated: false)
+        table.reloadSections([indexPath.section], with: .none)
     }
     
 }

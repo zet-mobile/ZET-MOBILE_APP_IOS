@@ -57,6 +57,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         return cv
     }()
     
+    var balance = ""
     var balances_data = [[String]]()
     var settings_data = [[String]]()
     
@@ -84,6 +85,11 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -91,6 +97,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = toolbarColor
   
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -109,7 +116,14 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(mobileView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Mobile_transfer")
+        
+        self.mobileView.balance.text = balance
+        self.mobileView.balance.frame.size.width = CGFloat(balance.count * 12)
+        self.mobileView.balance.frame.origin.x = CGFloat(UIScreen.main.bounds.size.width) -  CGFloat(balance.count * 12) - 20
         
         mobileView.rez1.text = balances_data[0][0]
         mobileView.rez2.text = balances_data[0][1]
@@ -205,7 +219,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                         
                         self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
                         
-                        self.mobileView.balance.text = String(result.subscriberBalance) + " сомони"
+                        self.balance = String(result.subscriberBalance) + " с."
                         
                         self.settings_data.append([String(result.minValue), String(result.maxValue), String(result.price), String(result.monthlyQuantityLimitA),  String(result.quantityLimitA), String(result.volumeLimitA), String(result.monthlyQuantityLimitB), String(result.quantityLimitB), String(result.volumeLimitB), String(result.minBalanceAfterTransfer), String(result.discountPercent), String(result.daysSinceRegistration), String(result.minExpenses), String(result.description),  String(result.title), String(result.unit)])
                             
@@ -267,7 +281,15 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                                 
                                 HistoryData.append(moneyData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData1, date: tableData2, id: tableData3, volume: tableData4, price: tableData5, type: tableData6, transferType: tableData7, statusId: tableData8, transactionId: tableData9))
                             }
-                            
+                        }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table.frame.height), text: """
+                                Вы еще не воспользовались услугой "Мобильный перевод"
+                                """)
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
+                            }
                         }
                         
                     }
@@ -570,6 +592,15 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table2.separatorStyle = .none
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
+            
+            if HistoryData.count == 1 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: """
+                Вы еще не воспользовались услугой "Мобильный перевод"
+                """)
+                table2.separatorStyle = .none
+                table2.backgroundView = emptyView
+            }
+            
             cell.addSubview(table2)
             
         }
@@ -658,7 +689,9 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell_transfer", for: indexPath) as! MobileTableViewCell
             cell.user_to_number.delegate = self
             cell.count_transfer.delegate = self
-            
+            let contacts = cell.user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
+            contacts.addTarget(self, action: #selector(openContacts), for: .touchUpInside)
+            cell.user_to_number.text = "+992 " + to_phone
             value_transfer = "0.10 " +  defaultLocalizer.stringForKey(key: "somoni")
             
             cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
@@ -817,5 +850,21 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         return true
     }
     
-    
+    @objc func openContacts() {
+        guard let window = UIApplication.shared.keyWindow else {
+            return
+        }
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        let vc = UINavigationController(rootViewController: ContactsViewController())
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.0, options: .transitionFlipFromLeft, animations: {
+            window.rootViewController = vc
+        }, completion: { completed in
+            
+        })
+        
+    }
 }

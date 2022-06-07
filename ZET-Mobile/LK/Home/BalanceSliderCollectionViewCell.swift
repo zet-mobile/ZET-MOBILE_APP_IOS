@@ -61,10 +61,10 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         let popolnit = UIButton()
         //popolnit.setImage(#imageLiteral(resourceName: "Popolnit"), for: UIControl.State.normal)
         popolnit.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0, alpha: 1)
-        popolnit.setTitle(defaultLocalizer.stringForKey(key: "Top_up_balance"), for: .normal)
+        popolnit.setTitle("+ \(defaultLocalizer.stringForKey(key: "Top_up_balance"))", for: .normal)
         popolnit.setTitleColor(.black, for: .normal)
         popolnit.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 30, width: 140, height: 35)
+        popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 40, width: 140, height: 35)
         popolnit.layer.cornerRadius = popolnit.frame.height / 2
         popolnit.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
         
@@ -76,7 +76,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleTarif.text = ""
         titleTarif.numberOfLines = 0
         titleTarif.textColor = .white
-        titleTarif.font = UIFont.boldSystemFont(ofSize: 19)
+        titleTarif.font = UIFont.boldSystemFont(ofSize: 18)
         titleTarif.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleTarif.textAlignment = .left
         //titleTarif.frame = CGRect(x: 20, y: 60, width: 200, height: 20)
@@ -87,7 +87,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     lazy var settings: UIButton = {
         let settings = UIButton()
         settings.setImage(UIImage(named: "Setting"), for: .normal)
-        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 90, width: 30, height: 30)
+        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 100, width: 30, height: 30)
         settings.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
         settings.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return settings
@@ -98,7 +98,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleNumber.text = ""
         titleNumber.numberOfLines = 0
         titleNumber.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        titleNumber.font = UIFont(name: "", size: 10)
+        titleNumber.font = UIFont.systemFont(ofSize: 18)
         titleNumber.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleNumber.textAlignment = .left
         titleNumber.frame = CGRect(x: 20, y: 155, width: 200, height: 20)
@@ -111,7 +111,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         spisanie.text = ""
         spisanie.numberOfLines = 0
         spisanie.textColor = .white
-        spisanie.font = UIFont(name: "", size: 10)
+        spisanie.font = UIFont.systemFont(ofSize: 18)
         spisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
         spisanie.textAlignment = .left
         spisanie.frame = CGRect(x: 20, y: 130, width: 300, height: 20)

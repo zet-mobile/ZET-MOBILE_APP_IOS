@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+
 //MARK: RequestObservable class
 public class RequestObservable {
   private lazy var jsonDecoder = JSONDecoder()
@@ -22,7 +23,7 @@ public class RequestObservable {
   //MARK: creating our observable
   return Observable.create { observer in
   //MARK: create URLSession dataTask
-  let task = self.urlSession.dataTask(with: request) { (data,
+  let task = self.urlSession.dataTask(with: request) { [self] (data,
                 response, error) in
   if let httpResponse = response as? HTTPURLResponse{
   let statusCode = httpResponse.statusCode
@@ -34,10 +35,15 @@ public class RequestObservable {
       //MARK: observer onNext event
       observer.onNext(objs)
     }
+      else if statusCode == 401 {
+          refreshGetToken()
+          print("new get token")
+      }
     else {
-//      observer.onError(error!)
+      //observer.onError(error!)
     }
   } catch {
+      
       //MARK: observer onNext event
       observer.onError(error)
      }
@@ -52,4 +58,36 @@ public class RequestObservable {
      }
    }
   }
+    
+    func refreshGetToken() {
+        print("i am here")
+        let client = APIClient.shared
+            do{
+                try client.refreshToken().subscribe (
+                onNext: { result in
+                    print("hello")
+                    DispatchQueue.main.async {
+                        UserDefaults.standard.set("Bearer \(String(result.accessToken))", forKey: "token")
+                        UserDefaults.standard.set("Bearer \(String(result.refreshToken))", forKey: "refresh_token")
+                        
+                    }
+                },
+                onError: { error in
+                   
+                   print(error.localizedDescription)
+                },
+                onCompleted: {
+                   print("Completed event.")
+                    DispatchQueue.main.async {
+                        
+                        
+                        
+                    }
+                }).disposed(by: disposeBag)
+              }
+              catch{
+                  
+            }
+       
+    }
 }

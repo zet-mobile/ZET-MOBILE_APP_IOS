@@ -35,6 +35,7 @@ class AuthorizationView: UIView {
         textfield.borderStyle = .none
         textfield.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
         textfield.layer.cornerRadius = 10
+        textfield.keyboardType = .numberPad
         /*textfield.placeholder = "Введите номер телефона"
         textfield.font = UIFont.systemFont(ofSize: 15)*/
         return textfield
@@ -107,6 +108,7 @@ class AuthorizationView: UIView {
         textfield.placeholder = "Введите смс-код"
         textfield.font = UIFont.systemFont(ofSize: 15)
         textfield.isHidden = true
+        textfield.keyboardType = .numberPad
         return textfield
     }()
     

@@ -17,7 +17,7 @@ class HomeView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 0, width: 200, height: 28)
@@ -31,7 +31,7 @@ class HomeView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 170, width: 300, height: 28)
@@ -45,7 +45,7 @@ class HomeView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 370, width: 300, height: 28)
@@ -59,9 +59,9 @@ class HomeView: UIView {
         icon_more.backgroundColor = .clear
         icon_more.frame = CGRect(x: 20, y: 320, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
-        icon_more.setTitle(defaultLocalizer.stringForKey(key: "View_all"), for: .normal)
+        icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "View_all")) >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
-        icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
     }()
@@ -72,9 +72,9 @@ class HomeView: UIView {
         icon_more.backgroundColor = .clear
         icon_more.frame = CGRect(x: 20, y: 1800, width: 200, height: 20)
         icon_more.contentHorizontalAlignment = .left
-        icon_more.setTitle(defaultLocalizer.stringForKey(key: "View_all"), for: .normal)
+        icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "View_all")) >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
-        icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
     }()

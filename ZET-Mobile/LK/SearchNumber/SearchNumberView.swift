@@ -13,6 +13,7 @@ class SearchNumberView: UIView {
     
     lazy var searchField: UITextField = {
         let textfield = UITextField()
+        textfield.keyboardType = .numberPad
         textfield.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.borderStyle = .none
         textfield.backgroundColor = contentColor

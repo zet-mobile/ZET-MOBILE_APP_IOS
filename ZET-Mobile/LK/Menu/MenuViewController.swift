@@ -13,7 +13,7 @@ var defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
 class MenuViewController: UIViewController {
     
     var tableView: UITableView!
-    var tableData = [["Notification", defaultLocalizer.stringForKey(key: "Notifications")], ["Discount", defaultLocalizer.stringForKey(key: "Promotions")], ["Setting", defaultLocalizer.stringForKey(key: "Settings")], ["roaming", defaultLocalizer.stringForKey(key: "Roaming")], ["Message", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", defaultLocalizer.stringForKey(key: "About")], ["Logout", defaultLocalizer.stringForKey(key: "Exit")]]
+    var tableData = [["Notification", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting", defaultLocalizer.stringForKey(key: "Settings")], ["Message", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", defaultLocalizer.stringForKey(key: "About")], ["Logout", defaultLocalizer.stringForKey(key: "Exit")]]
     
     
     var menuView = MenuView()
@@ -38,7 +38,7 @@ class MenuViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MenuViewCell.self, forCellReuseIdentifier: reuseIdentifer)
-        tableView.rowHeight = (UIScreen.main.bounds.size.height * 70) / 926
+        tableView.rowHeight = (UIScreen.main.bounds.size.height * 50) / 926
         tableView.separatorStyle = .none
         tableView.frame = CGRect(x: 0, y: 10, width: UIScreen.main.bounds.size.width - 50, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
         tableView.backgroundColor = contentColor
@@ -52,7 +52,7 @@ class MenuViewController: UIViewController {
 // MARK: - Extensions
 extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return 6
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -68,27 +68,23 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(PushViewController(), animated: true)
         }
-        else if indexPath.row == 1  {
-            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.pushViewController(ChangeTransferViewController(), animated: true)
-        }
         else if indexPath.row == 2  {
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(SettingsViewController(), animated: true)
         }
-        else if indexPath.row == 3  {
+        else if indexPath.row == 1  {
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(RoumingViewController(), animated: true)
         }
-        else if indexPath.row == 4 {
+        else if indexPath.row == 3 {
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(ReplyToZetViewController(), animated: true)
         }
-        else if indexPath.row == 5 {
+        else if indexPath.row == 4 {
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(AboutAppViewController(), animated: true)
         }
-        else if indexPath.row == 6 {
+        else if indexPath.row == 5 {
             guard let window = UIApplication.shared.keyWindow else {
                 return
             }

@@ -146,7 +146,7 @@ class AlertView2: UIView {
     lazy var value_title: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "Transfer")
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.font = UIFont.systemFont(ofSize: 16)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
@@ -157,7 +157,7 @@ class AlertView2: UIView {
     lazy var number_title: UILabel = {
         let title = UILabel()
         title.text = ""
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.font = UIFont.systemFont(ofSize: 16)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center

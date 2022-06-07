@@ -15,7 +15,8 @@ pod 'RxSwift'
 pod 'RxCocoa'
 pod 'SideMenu'
 pod 'Toast-Swift'
-pod 'AlamofireImage', '~> 4.1'
+pod 'AlamofireImage', '~> 3.0'
+pod 'Moya', '~> 13.0.0'
 pod 'iOSDropDown'
 
   target 'ZET-MobileTests' do

@@ -84,6 +84,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     var hot_services_data = [[String]]()
     var remainders_data = [[String]]()
     
+    var refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -94,8 +96,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         color1 = contentColor
         
         sendMapRequest()
-
+       // self.refreshGetToken()
         print(UserDefaults.standard.string(forKey: "token")!)
+        print(UserDefaults.standard.string(forKey: "refresh_token")!)
         print(UserDefaults.standard.string(forKey: "mobPhone"))
                 
     }
@@ -107,6 +110,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        if cellClick == "0" {
+            
+        }
+        else if  cellClick == "1" {
+            
+        }
+        else if cellClick == "2" {
+            
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navigationController?.pushViewController(AskFriendViewController(), animated: true)
+        }
+        
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        scrollView.refreshControl = refreshControl
     }
     
     override func viewDidLayoutSubviews() {
@@ -118,6 +135,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             // Fallback on earlier versions
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         }
+    }
+    
+    @objc func refresh(){
+            // Code to refresh table view
+            self.sendMapRequest()
+
     }
     
     @objc func openServices() {
@@ -372,8 +395,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     @objc func openMenu() {
         // Define the menu
         let menu = SideMenuNavigationController(rootViewController: MenuViewController())
-        menu.menuWidth = UIScreen.main.bounds.size.width - 50
+        menu.menuWidth = UIScreen.main.bounds.size.width - 110
+    
         menu.presentationStyle = .menuSlideIn
+        menu.view.layer.cornerRadius = 20
         present(menu, animated: true, completion: nil)
     }
     
@@ -441,16 +466,25 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        self.requestAnswer(status: false, message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        self.hideActivityIndicator(uiView: self.view)
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
+                        
                         setupView()
-                        setupRemaindersSection()
+                        if remainders_data.count != 0 {
+                            setupRemaindersSection()
+                        }
                         setupServicesTableView()
                         setupBalanceSliderSection()
                         setupSliderSection()
                         setupHotServicesSection()
                         hideActivityIndicator(uiView: self.view)
+                        refreshControl.endRefreshing()
                     }
                    print("Completed event.")
                     
@@ -619,10 +653,22 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    
+                    DispatchQueue.main.async {
+                        self.requestAnswer(status: false, message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        self.hideActivityIndicator(uiView: self.view)
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
-                        self.sendRequest()
+                        if supportdata.count != 0 {
+                            self.sendRequest()
+                        }
+                        else {
+                            self.hideActivityIndicator(uiView: self.view)
+                        }
+                        
                     }
                    print("Completed event.")
                     
@@ -643,9 +689,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
         
-        if indexPath.row == 2 {
+        if indexPath.row == services_data.count - 1 {
             cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
         }
         cell.titleOne.text = services_data[indexPath.row][1]
@@ -685,9 +731,24 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
   }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-        cell.getButton.tag = indexPath.row
-        cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+        
+        if tableView == ServicesTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
+            cell.getButton.tag = indexPath.row
+            cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+        }
+        else if tableView == AddBalanceOptionViewController().table {
+            if indexPath.row == 0 {
+                
+            }
+            else if indexPath.row == 1 {
+                
+            }
+            else {
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                navigationController?.pushViewController(AskFriendViewController(), animated: true)
+            }
+        }
     }
 }
 
@@ -726,7 +787,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.balance.text = balance_credit + " с."
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
-            cell.titleTarif.frame = CGRect(x: 20, y: 95, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
+            
+            cell.titleTarif.frame = CGRect(x: 20, y: 105, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
             cell.settings.frame.origin.x = CGFloat(cell.titleTarif.text!.count * 10 + 40)
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
@@ -829,9 +891,10 @@ extension HomeViewController: CellBalanceActionDelegate {
         self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
         next.modalPresentationStyle = .custom
         //next.modalPresentationCapturesStatusBarAppearance = true
-        
+
         next.transitioningDelegate = self.halfModalTransitioningDelegate
         present(next, animated: true, completion: nil)
+        
     }
     
     func didSettingTapped(for cell: BalanceSliderCollectionViewCell) {

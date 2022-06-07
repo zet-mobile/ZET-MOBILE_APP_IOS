@@ -18,6 +18,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     var auth_view = AuthorizationView()
     let disposeBag = DisposeBag()
+    var alert = UIAlertController()
     
     var user_phone = ""
     
@@ -29,6 +30,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     var secretCode = ""
     var hashString = ""
     var accessToken = ""
+    var lang_id = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,50 +181,25 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     @objc func ru_choosed() {
         auth_view.lang_set.setTitle("RU 🇷🇺", for: .normal)
         auth_view.view_lang.isHidden = true
-        putRequest(lang_id: 1)
+        lang_id = 1
     }
     
     @objc func en_choosed() {
         auth_view.lang_set.setTitle("EN 🇺🇸", for: .normal)
         auth_view.view_lang.isHidden = true
-        putRequest(lang_id: 2)
+        lang_id = 2
     }
     
     @objc func tj_choosed() {
         auth_view.lang_set.setTitle("TJ 🇹🇯", for: .normal)
         auth_view.view_lang.isHidden = true
-        putRequest(lang_id: 3)
+        lang_id = 3
     }
     
     @objc func uz_choosed() {
         auth_view.lang_set.setTitle("UZ 🇺🇿", for: .normal)
         auth_view.view_lang.isHidden = true
-        putRequest(lang_id: 4)
-    }
-    
-    @objc func putRequest(lang_id: Int) {
-        
-        let parametr: [String: Any] = ["promotionNotification": true, "pushNotification": true, "emailNotification" : true, "smsNotification" : true, "languageId": lang_id, "themeId" : 0]
-        print(parametr)
-        let client = APIClient.shared
-            do{
-                try client.settingsPutRequest(jsonBody: parametr).subscribe (
-                onNext: { result in
-                    print("hello")
-                    DispatchQueue.main.async {
-                      
-                    }
-                },
-                onError: { error in
-                   print(error.localizedDescription)
-                },
-                onCompleted: {
-                   print("Completed event.")
-                }).disposed(by: disposeBag)
-              }
-              catch{
-                  
-            }
+        lang_id = 4
     }
     
     @objc func buttonClick(_ sender: UIButton) {
@@ -256,13 +233,12 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
         print(user_phone)
        
-        let parametr: [String: Any] = ["ctn": "992\(user_phone)"]
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "language": lang_id]
         
         let client = APIClient.shared
             do{
                 try client.authPost(jsonBody: parametr).subscribe (
                 onNext: { result in
-                    self.secretCode = String(result.code)
                     self.hashString = result.hashString
                     
                     DispatchQueue.main.async {
@@ -282,10 +258,13 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                         self.auth_view.numberField.isEnabled = false
                         
                         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+                        print("llll")
                     }
                 },
                 onError: { error in
-                   print(error.localizedDescription)
+                    print("ggggg")
+                    self.requestAnswer(message: error.localizedDescription)
+                    print(error.localizedDescription)
                    
                 },
                 onCompleted: {
@@ -302,7 +281,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         print(user_code)
         print(user_phone)
         print(hashString)
-        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString]
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString, "language" : lang_id]
         
         let client = APIClient.shared
             do{
@@ -312,6 +291,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                     self.accessToken = String(result.accessToken!)
                     DispatchQueue.main.async {
                         UserDefaults.standard.set("Bearer \(self.accessToken)", forKey: "token")
+                        UserDefaults.standard.set("Bearer \(String(result.refreshToken))", forKey: "refresh_token")
                         UserDefaults.standard.set("\(self.user_phone)", forKey: "mobPhone")
                         self.setPass()
                     }
@@ -360,7 +340,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 try client.authPost(jsonBody: parametr).subscribe(
                 onNext: { result in
                     print("hello")
-                    self.secretCode = String(result.code)
                     self.hashString = result.hashString
                     self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
                 },
@@ -381,5 +360,52 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         navigationController?.pushViewController(ChangeCodeController(), animated: false)
     }
     
+    func requestAnswer(message: String) {
+        print("kkkkkkkk")
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        view.name.text = "Что-то пошло не так"
+        view.image_icon.image = UIImage(named: "uncorrect_alert")
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
+    @objc func dismissDialog(_ sender: UIButton) {
+        print("hello")
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
+    }
     
 }

@@ -216,7 +216,7 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
                         
                         self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
                         
-                        self.balance = String(result.subscriberBalance) + " сомони"
+                        self.balance = String(result.subscriberBalance) + " с."
                         
                         if result.settings.count != 0 {
                             for i in 0 ..< result.settings.count {
@@ -280,7 +280,15 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
                                 }
                                 HistoryData.append(historyData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData1, date: tableData2, id: tableData3, volume: tableData4, price: tableData5, type: tableData6, transferType: tableData7, statusId: tableData8, transactionId: tableData9))
                             }
-                            
+                        }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table.frame.height), text: """
+                                Вы еще не воспользовались услугой "Трафик трансфер"
+                                """)
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
+                            }
                         }
                         
                     }
@@ -405,7 +413,9 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         if inPhoneNumber != "" {
             cell.titleRed.isHidden = true
             cell.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            present(alert, animated: true, completion: nil)
+            cell.sendButton.showAnimation {
+                self.present(self.alert, animated: true, completion: nil)
+              }
         }
         else {
             cell.titleRed.isHidden = false
@@ -414,12 +424,65 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    @objc func requestAnswer(status: Bool, message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        if status == true {
+            view.name.text = defaultLocalizer.stringForKey(key: "Your message successfully was sent")
+            view.image_icon.image = UIImage(named: "correct_alert")
+        }
+        else {
+            view.name.text = defaultLocalizer.stringForKey(key: "Something went wrong")
+            view.image_icon.image = UIImage(named: "uncorrect_alert")
+        }
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
     @objc func dismissDialog() {
         print("hello")
         alert.dismiss(animated: true, completion: nil)
+        hideActivityIndicator(uiView: view)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
+        
+        sender.showAnimation {
+            self.alert.dismiss(animated: true, completion: nil)
+        }
+        showActivityIndicator(uiView: view)
+        
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = table.cellForRow(at: indexPath) as! TraficTableViewCell
         
@@ -433,6 +496,14 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { [self] result in
                   print(result)
                     //sendRequest()
+                    DispatchQueue.main.async {
+                        if result.success == true {
+                            requestAnswer(status: true, message: String(result.message ?? ""))
+                        }
+                        else {
+                            requestAnswer(status: false, message: String(result.message ?? ""))
+                        }
+                    }
                 },
                 onError: { error in
                    print(error.localizedDescription)
@@ -522,6 +593,13 @@ extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
             
+            if HistoryData.count == 1 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
+                Вы еще не воспользовались услугой "Трафик трансфер"
+                """)
+                table2.separatorStyle = .none
+                table2.backgroundView = emptyView
+            }
             cell.addSubview(table2)
             
         }

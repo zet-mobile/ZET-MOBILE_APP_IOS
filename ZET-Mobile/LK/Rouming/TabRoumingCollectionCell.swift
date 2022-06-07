@@ -12,7 +12,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Выберите страну"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Choose_country")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 16)
@@ -36,7 +36,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
     
     lazy var titleTwo: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Гостевой оператор"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Guest_operator")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 16)

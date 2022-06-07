@@ -59,7 +59,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     }
     
     func setupView() {
-        view.backgroundColor = toolbarColor
+        view.backgroundColor = contentColor
   
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -86,7 +86,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Настройки"
-        toolbar.backgroundColor = toolbarColor
+        toolbar.backgroundColor = contentColor
       
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
@@ -118,9 +118,11 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         settings_view.app_theme.isSearchEnable = false
         settings_view.app_theme.selectedRowColor = .lightGray
         settings_view.app_theme.textColor = colorBlackWhite
+        
         let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         settings_view.app_theme.leftView = paddingView2
         settings_view.app_theme.leftViewMode = .always
+        
         settings_view.app_theme.didSelect { [self] (selectedText, index, id) in
             self.theme_choosed = selectedText
             print(Int(appearance_data[index][0])!)

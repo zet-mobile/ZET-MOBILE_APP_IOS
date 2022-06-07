@@ -122,6 +122,7 @@ class MoreDetailView: UIView {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()

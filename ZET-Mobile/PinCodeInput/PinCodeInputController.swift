@@ -79,6 +79,12 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 enterPlace[3].backgroundColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                 enterPlace[4].backgroundColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                 
+                let buttons = getButtonsInView(view: pincode_view)
+                for button in buttons {
+                    button.isUserInteractionEnabled = false
+                    button.isEnabled = false
+                }
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
                     guard let window = UIApplication.shared.keyWindow else {
                        return

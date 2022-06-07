@@ -25,6 +25,7 @@ class ChangeView: UIView {
     
     lazy var old_code: UITextField = {
         let textfield = UITextField()
+        textfield.keyboardType = .numberPad
         textfield.frame = CGRect(x: 20, y: 30, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.textColor = colorBlackWhite
         textfield.layer.cornerRadius = 16
@@ -51,6 +52,7 @@ class ChangeView: UIView {
     lazy var new_code: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 150, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        textfield.keyboardType = .numberPad
         textfield.textColor = colorBlackWhite
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
@@ -76,6 +78,7 @@ class ChangeView: UIView {
     lazy var confirm_code: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 270, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        textfield.keyboardType = .numberPad
         textfield.layer.cornerRadius = 16
         textfield.textColor = colorBlackWhite
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor

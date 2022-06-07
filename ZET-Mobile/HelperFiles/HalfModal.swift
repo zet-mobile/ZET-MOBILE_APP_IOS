@@ -51,22 +51,35 @@ class HalfModalPresentationControllerTwo : UIPresentationController {
     override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
         self.panGestureRecognizer = UIPanGestureRecognizer()
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
-        panGestureRecognizer.addTarget(self, action: #selector(onPan(pan:)))
+        
+        if cellClick == "0" {
+            
+        }
+        else if  cellClick == "1" {
+            
+        }
+        else if cellClick == "2" {
+            
+            HomeViewController().navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            HomeViewController().navigationController?.pushViewController(AskFriendViewController(), animated: true)
+        }
+        
+        /*panGestureRecognizer.addTarget(self, action: #selector(onPan(pan:)))
         presentedViewController.view.addGestureRecognizer(panGestureRecognizer)
         
         let action = UITapGestureRecognizer(target: self, action: #selector(self.actionClick))
         presentedViewController.view.isUserInteractionEnabled = true
-        presentedViewController.view.addGestureRecognizer(action)
+        presentedViewController.view.addGestureRecognizer(action)*/
     }
     
     @objc func actionClick(){
-        presentedViewController.dismiss(animated: true, completion: nil)
+       // presentedViewController.dismiss(animated: true, completion: nil)
     }
     
     @objc func onPan(pan: UIPanGestureRecognizer) -> Void {
         let endPoint = pan.translation(in: pan.view?.superview)
-        presentedViewController.dismiss(animated: true, completion: nil)
-  
+        //presentedViewController.dismiss(animated: true, completion: nil)
+        
     }
     
     func changeScale(to state: ModalScaleState) {

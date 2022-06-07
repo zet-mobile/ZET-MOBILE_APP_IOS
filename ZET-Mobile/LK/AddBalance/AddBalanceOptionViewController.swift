@@ -7,6 +7,8 @@
 
 import UIKit
 
+var cellClick = ""
+
 class AddBalanceOptionViewController: UIViewController {
     
     let table = UITableView()
@@ -55,6 +57,24 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        cellClick = String(indexPath.row)
+        print("hi")
+        if indexPath.row == 0 {
+            
+        }
+        else if indexPath.row == 1 {
+            
+        }
+        else if indexPath.row == 2 {
+            print("hhhh")
+            self.dismiss(animated: true) {
+                HomeViewController().navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                HomeViewController().navigationController?.pushViewController(AskFriendViewController(), animated: true)
+            }
+            
+        }
+    }
 }
 
 class AddBalanceOptionView: UIView {

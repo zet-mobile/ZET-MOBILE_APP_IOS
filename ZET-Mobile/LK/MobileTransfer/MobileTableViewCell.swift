@@ -63,7 +63,7 @@ class MobileTableViewCell: UITableViewCell {
         user_to_number.textColor = colorBlackWhite
         user_to_number.text = "+992 "
         user_to_number.tag = 1
-        user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
+        user_to_number.keyboardType = .numberPad
         
         titleRed.text = defaultLocalizer.stringForKey(key: "Invalid_recipient_number")
         titleRed.numberOfLines = 0
@@ -92,6 +92,7 @@ class MobileTableViewCell: UITableViewCell {
         count_transfer.layer.borderWidth = 1
         count_transfer.tag = 2
         count_transfer.textColor = colorBlackWhite
+        count_transfer.keyboardType = .numberPad
     
         title_commission.text = ""
         title_commission.numberOfLines = 0

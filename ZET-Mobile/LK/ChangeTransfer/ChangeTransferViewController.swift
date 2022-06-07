@@ -229,7 +229,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                         
                         self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
                         
-                        self.balance = String(result.subscriberBalance) + " сомони"
+                        self.balance = String(result.subscriberBalance) + " с."
                         
                         if result.settings.count != 0 {
                             for i in 0 ..< result.settings.count {
@@ -282,7 +282,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                   print(result)
                     DispatchQueue.main.async { [self] in
                         
-                        if result.history != nil {
+                        if result.history?.count != 0 {
                             
                             print(result.history!.count)
                             for i in 0 ..< result.history!.count {
@@ -321,6 +321,16 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                                 HistoryData.append(exchangeData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData1, date: tableData2, id: tableData3, volumeA: tableData4,volumeB: tableData5, unitA: tableData6, unitB: tableData7, price: tableData8, type: tableData9, transferType: tableData10, statusId: tableData11, transactionId: tableData12))
                             }
                             
+                        }
+                        else {
+                            print("empty history")
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: """
+                                Вы еще не воспользовались услугой "Обмен трафика"
+                                """)
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
+                            }
                         }
                         
                     }
@@ -646,6 +656,14 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table2.separatorStyle = .none
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
+            
+            if HistoryData.count == 1 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
+                Вы еще не воспользовались услугой "Обмен трафика"
+                """)
+                table2.separatorStyle = .none
+                table2.backgroundView = emptyView
+            }
             
             cell.addSubview(table2)
             

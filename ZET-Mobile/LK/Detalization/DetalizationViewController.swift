@@ -99,6 +99,11 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -275,6 +280,15 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                             }
                             
                         }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table.frame.height), text: """
+                                Вы еще не воспользовались услугой "Детализация"
+                                """)
+                            self.table2.separatorStyle = .none
+                            self.table2.backgroundView = emptyView
+                            }
+                        }
                         
                     }
                 },
@@ -318,32 +332,34 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         view.backgroundColor = contentColor
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
         view.layer.cornerRadius = 20
-        view.name.text = defaultLocalizer.stringForKey(key: "Mobile_transfer")
-        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
+        view.name.text = defaultLocalizer.stringForKey(key: "History")
+        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "money_w") : UIImage(named: "detail"))
         
-        let cost: NSString = defaultLocalizer.stringForKey(key: "Transfer") as NSString
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Send_history") as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        var title_cost = "  " + defaultLocalizer.stringForKey(key: "somoni") as NSString
+        var title_cost = " \(fromDate) - \(to_Date)" as NSString
             
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2)
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2)
         
         costString.append(titleString)
         view.value_title.attributedText = costString
+        view.value_title.frame.size.height = 60
+        view.value_title.frame.origin.y = view.value_title.frame.origin.y - 10
         
-        let cost2: NSString = defaultLocalizer.stringForKey(key: "to_number") as NSString
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "to") as NSString
         let range2_1 = (cost2).range(of: cost2 as String)
         let costString2 = NSMutableAttributedString.init(string: cost2 as String)
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
-        let title_cost2 = " \(inMail) " as NSString
+        let title_cost2 = " \(detalizationView.email_text.text) " as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
         titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
@@ -358,6 +374,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         titleString2.append(titleString2_1)
         costString2.append(titleString2)
         
+        view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
         view.number_title.attributedText = costString2
         
         
@@ -376,20 +393,24 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         
         costString3.append(titleString3)
         view.cost_title.attributedText = costString3
+        view.cost_title.frame.origin.y = view.cost_title.frame.origin.y + 20
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
         view.name.isUserInteractionEnabled = true
         view.name.addGestureRecognizer(tapGestureRecognizer)
         
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Send"), for: .normal)
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
-        if inMail != "" {
+        if detalizationView.email_text.text != "" && isValidEmail(detalizationView.email_text.text!) == true {
            // cell.titleRed.isHidden = true
             detalizationView.email_text.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            present(alert, animated: true, completion: nil)
+            cell.sendButton.showAnimation {
+                self.present(self.alert, animated: true, completion: nil)
+              }
         }
         else {
             detalizationView.email_text.layer.borderColor = UIColor.red.cgColor
@@ -464,12 +485,20 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
         
         inMail = String(detalizationView.email_text.text ?? "")
-
-        let parametr: [String: Any] = ["inPhoneNumber": "\(inMail)", "value": Int(value_transfer)!]
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "dd.MM.yyyy"
+        let date1 = dateFormatter2.date(from: fromDate)
+        let date2 = dateFormatter2.date(from: to_Date)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        fromDate = dateFormatter2.string(from: date1!)
+        to_Date = dateFormatter2.string(from: date2!)
+        
+        let parametr: [String: Any] = ["dateFrom": fromDate, "dateTo": to_Date, "email": inMail]
         
         let client = APIClient.shared
             do{
-              try client.moneyPutRequest(jsonBody: parametr).subscribe(
+              try client.detailingPutRequest(jsonBody: parametr).subscribe(
                 onNext: { [self] result in
                   print(result)
                     DispatchQueue.main.async {
@@ -529,8 +558,16 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     
     @objc func dismiss_view() {
         print("jlllllll")
+        nav.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    @objc func dismissCalendar(_ sender: UIButton) {
+        print("jlllllll")
         nav.dismiss(animated: true) { [self] in
-            TabCollectionView.reloadData()
+            let indexPath = IndexPath(row: 0, section: 0)
+            let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+            cell.period.text = fromDate + " - " + to_Date
         }
     }
 }
@@ -670,6 +707,54 @@ extension DetalizationViewController: CellTapPeriodActionDelegate {
             choosedPeriod = indexPath.row
             TabPeriodCollectionView.reloadData()
             
+            switch choosedPeriod {
+            case 0:
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "dd.MM.yyyy"
+                let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                fromDate = dateFormatter2.string(from: lastDaysAgo!)
+                to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                let indexPath = IndexPath(row: 0, section: 0)
+                let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+                cell.period.text = fromDate + " - " + to_Date
+                
+            case 1:
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "dd.MM.yyyy"
+                let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                fromDate = dateFormatter2.string(from: lastDaysAgo!)
+                to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                let indexPath = IndexPath(row: 0, section: 0)
+                let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+                cell.period.text = fromDate + " - " + to_Date
+
+            case 2:
+                let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())
+                let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "dd.MM.yyyy"
+                fromDate = dateFormatter2.string(from: sevenDaysAgo!)
+                to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                
+                let indexPath = IndexPath(row: 0, section: 0)
+                let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+                cell.period.text = fromDate + " - " + to_Date
+                
+            case 3:
+                let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())
+                let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                let dateFormatter2 = DateFormatter()
+                dateFormatter2.dateFormat = "dd.MM.yyyy"
+                fromDate = dateFormatter2.string(from: sevenDaysAgo!)
+                to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                
+                let indexPath = IndexPath(row: 0, section: 0)
+                let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+                cell.period.text = fromDate + " - " + to_Date
+
+            default: break;
+            }
+            
         }
     }
     
@@ -733,6 +818,12 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == table {
             let cell = tableView.dequeueReusableCell(withIdentifier: "detail_cell", for: indexPath) as! DetalizationViewCell
+            let dateFormatter2 = DateFormatter()
+            dateFormatter2.dateFormat = "dd.MM.yyyy"
+            let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+            fromDate = dateFormatter2.string(from: lastDaysAgo!)
+            to_Date = dateFormatter2.string(from: lastDaysAgo!)
+            
             cell.period.text = fromDate + " - " + to_Date
             value_transfer = "0.10 " +  defaultLocalizer.stringForKey(key: "somoni")
             
@@ -785,10 +876,11 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
        
     }
     
-    @objc func openCalendar() {
+    @objc func openCalendar(_ sender: UIButton) {
         
         calendarViewController.calendar_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-        calendarViewController.calendar_view.ok.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        calendarViewController.calendar_view.cancel.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        calendarViewController.calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         
         nav = UINavigationController(rootViewController: calendarViewController)
         nav.modalPresentationStyle = .pageSheet
@@ -805,8 +897,18 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             // Fallback on earlier versions
         }
-            // 4
-        present(nav, animated: true, completion: nil)
+            
+        sender.showAnimation { [self] in
+            present(nav, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
     }
     
 }

@@ -8,6 +8,22 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import Alamofire
+
+struct Media {
+    let key: String
+    let filename: String
+    let data: Data
+    let mimeType: String
+    
+    init?(withImage image: UIImage, forKey key: String) {
+        self.key = key
+        self.mimeType = "image/jpeg"
+        self.filename = "imagefile.jpg"
+        guard let data = image.jpegData(compressionQuality: 0.7) else { return nil }
+        self.data = data
+    }
+}
 
 //MARK: extension for converting out RecipeModel to jsonObject
 fileprivate extension Encodable {
@@ -32,6 +48,7 @@ class APIClient {
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
         request.httpMethod = "POST"
         request.httpBody = jsonData
+        
      return requestObservable.callAPI(request: request)
     }
 
@@ -42,6 +59,24 @@ class APIClient {
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
         request.httpMethod = "POST"
         request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    func refreshToken() -> Observable<RefreshData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/get/refresh")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "refresh_token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        return requestObservable.callAPI(request: request)
+    }
+    
+    func logout() -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/logout")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
     }
     
@@ -370,16 +405,6 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
-    //for detail information history.
-  /*  func moneyHistoryIdRequest(parametr: String) -> Observable<histories_exchange_data> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history/" + "\(parametr)")!)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
-     return requestObservable.callAPI(request: request)
-    }*/
-    
     // for translate detailing.
     func detailingPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing")!)
@@ -392,8 +417,8 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
-    //  get settings of exchange transfer system.
-    func getAskMoneyRequest() -> Observable<ZeroHelpData> {
+    //  get ask money
+    func getAskMoneyRequest() -> Observable<AskMoneyData> {
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -402,9 +427,120 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
+    //  post money ask
+    func postMoneyAskRequest(jsonBody: [String: Any]) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  This is api for get info about available credit packets.
+    func getCreditRequest() -> Observable<HelpAtZeroData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  This is api for get info about available credit packets.
+    func getCreditHistoryRequest() -> Observable<HelpAtZeroHistoryData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/history/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  post money ask
+    func postCreditRequest(jsonBody: [String: Any]) -> Observable<HelpAtZeroPostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
+        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  get feedbackData
+    func getFeedBackRequest() -> Observable<FeedbackData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/feedback/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  post feedbackData
+    func postFeedBackRequest(jsonBody: [String: Any], mediaImage: [Media]) -> Observable<PostData> {
+        
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/feedback/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        
+        let boundary = generateBoundary()
+           //set content type
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+           //call createDataBody method
+        let dataBody = createDataBody(withParameters: jsonBody, media: mediaImage, boundary: boundary)
+        request.httpBody = dataBody
+
+     return requestObservable.callAPI(request: request)
+    }
+    
+    func createDataBody(withParameters params: Parameters?, media: [Media]?, boundary: String) -> Data {
+       let lineBreak = "\r\n"
+       var body = Data()
+       if let parameters = params {
+          for (key, value) in parameters {
+             body.append("--\(boundary + lineBreak)")
+             body.append("Content-Disposition: form-data; name=\"\(key)\"\(lineBreak + lineBreak)")
+             body.append("\(value)")
+             body.append(lineBreak)
+          }
+       }
+       if let media = media {
+          for photo in media {
+             body.append("--\(boundary + lineBreak)")
+             body.append("Content-Disposition: form-data; name=\"\(photo.key)\"; filename=\"\(photo.filename)\"\(lineBreak)")
+             body.append("Content-Type: \(photo.mimeType + lineBreak + lineBreak)")
+             body.append(photo.data)
+             body.append(lineBreak)
+          }
+       }
+       body.append("--\(boundary)--\(lineBreak)")
+       return body
+    }
+    
+    func generateBoundary() -> String {
+       return "Boundary-\(NSUUID().uuidString)"
+    }
+    
+
 }
 
+extension Data {
+   mutating func append(_ string: String) {
+      if let data = string.data(using: .utf8) {
+         append(data)
+         print("data======>>>",data)
+      }
+   }
+}
 
+let disposeBag = DisposeBag()
 
 extension UIViewController {
     func open(scheme: String) {
@@ -420,4 +556,5 @@ extension UIViewController {
             }
         }
     }
+    
 }

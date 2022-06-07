@@ -67,6 +67,7 @@ class TraficTableViewCell: UITableViewCell {
         user_to_number.textColor = colorBlackWhite
         user_to_number.text = "+992 "
         user_to_number.tag = 1
+        user_to_number.keyboardType = .numberPad
         user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
         
         titleRed.text = defaultLocalizer.stringForKey(key: "Invalid_recipient_number")
@@ -113,6 +114,7 @@ class TraficTableViewCell: UITableViewCell {
         count_transfer.layer.borderWidth = 1
         count_transfer.tag = 2
         count_transfer.textColor = colorBlackWhite
+        count_transfer.keyboardType = .numberPad
     
         title_commission.text = "Комиссия: 0.2 сомони"
         title_commission.numberOfLines = 0

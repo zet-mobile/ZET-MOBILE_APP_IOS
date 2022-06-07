@@ -1,15 +1,21 @@
 PODS:
-  - Alamofire (5.5.0)
-  - AlamofireImage (4.2.0):
-    - Alamofire (~> 5.4)
+  - Alamofire (4.9.1)
+  - AlamofireImage (3.6.0):
+    - Alamofire (~> 4.9)
   - AvailableHapticFeedback (1.0.2)
   - FSCalendar (2.8.2)
   - iOSDropDown (0.3.4)
   - Koyomi (1.2.7)
+  - Moya (13.0.1):
+    - Moya/Core (= 13.0.1)
+  - Moya/Core (13.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.1)
   - MultiSlider (1.11.2):
     - AvailableHapticFeedback
     - SweeterSwift
   - Pulsator (0.6.0)
+  - Result (4.1.0)
   - RxBlocking (6.5.0):
     - RxSwift (= 6.5.0)
   - RxCocoa (6.5.0):
@@ -28,10 +34,11 @@ PODS:
   - YandexRuntime (3.4)
 
 DEPENDENCIES:
-  - AlamofireImage (~> 4.1)
+  - AlamofireImage (~> 3.0)
   - FSCalendar
   - iOSDropDown
   - Koyomi
+  - Moya (~> 13.0.0)
   - MultiSlider
   - Pulsator
   - RxBlocking
@@ -50,8 +57,10 @@ SPEC REPOS:
     - FSCalendar
     - iOSDropDown
     - Koyomi
+    - Moya
     - MultiSlider
     - Pulsator
+    - Result
     - RxBlocking
     - RxCocoa
     - RxRelay
@@ -64,14 +73,16 @@ SPEC REPOS:
     - YandexRuntime
 
 SPEC CHECKSUMS:
-  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
-  AlamofireImage: 34a2d90b0e5fe6a5605f85ae4b7b01e784c60192
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireImage: be9963c6582d68b39e89191f64c82a7d7bf40fdd
   AvailableHapticFeedback: 9b21b9f6d3e4566015988b5de35b40abefe6c09a
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
   iOSDropDown: c10a761f9a00c3f1cc9d3bce43ae504628e2f692
   Koyomi: f03615b8d2bb5a5a4752c6404a9794ed7ef7b327
+  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   MultiSlider: 944d00877d371bbb5ce0a512fec517de87958775
   Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxBlocking: 04b5fd28bb5ea49f7d64b80db8bbfe50d9cc1c7d
   RxCocoa: 94f817b71c07517321eb4f9ad299112ca8af743b
   RxRelay: 1de1523e604c72b6c68feadedd1af3b1b4d0ecbd
@@ -83,6 +94,6 @@ SPEC CHECKSUMS:
   YandexMapKit: f222923561fe159dd8480d927f61950fc5ff3b8d
   YandexRuntime: 2547d72a3ce4757f16ad188cfbe8a124ae13d806
 
-PODFILE CHECKSUM: 871ad2af66ff4959a02e16345ffaef01f2da5f58
+PODFILE CHECKSUM: ce68498aeb13668f8ddaf8d2139392c3ddb6d976
 
 COCOAPODS: 1.11.2

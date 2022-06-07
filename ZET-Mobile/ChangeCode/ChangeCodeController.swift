@@ -64,6 +64,7 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
         change_code_view.button.addTarget(self, action: #selector(setPassword), for: .touchUpInside)
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.backgroundColor = contentColor
+        
         self.view.addSubview(toolbar)
         scrollView.addSubview(change_code_view)
         
@@ -95,7 +96,6 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
             change_code_view.confirm_code.isHidden = false
             change_code_view.button.setTitle(defaultLocalizer.stringForKey(key: "Change_PIN"), for: .normal)
         }
-        toolbar.backgroundColor = toolbarColor
       
         scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
