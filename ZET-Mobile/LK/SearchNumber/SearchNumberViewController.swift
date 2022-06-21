@@ -60,7 +60,8 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Search_for_number")
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
         table.register(ZeroTableViewCell.self, forCellReuseIdentifier: "zero_cell")
         table.frame = CGRect(x: 10, y: 230, width: UIScreen.main.bounds.size.width - 20, height: 5 * 80)

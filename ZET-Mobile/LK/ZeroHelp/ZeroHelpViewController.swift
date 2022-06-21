@@ -120,7 +120,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez1.text!.count * 15) - 50, y: 0, width: (zeroView.rez1.text!.count * 15), height: 55)
         zeroView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez2.text!.count * 15) - 50, y: 57, width: (zeroView.rez2.text!.count * 15), height: 45)
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTabCollectionView() {
@@ -228,6 +228,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -301,6 +302,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -346,6 +348,60 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     @objc func dismiss_view() {
         print("jlllllll")
         nav.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func requestAnswer(status: Bool, message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        if status == true {
+            view.name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange_completed")
+            view.image_icon.image = UIImage(named: "correct_alert")
+        }
+        else {
+            view.name.text = "Что-то пошло не так"
+            view.image_icon.image = UIImage(named: "uncorrect_alert")
+        }
+        
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
+        view.name.isUserInteractionEnabled = true
+        view.name.addGestureRecognizer(tapGestureRecognizer)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+        
+    }
+    
+    @objc func dismissDialog() {
+        print("hello")
+        alert.dismiss(animated: true, completion: nil)
     }
 }
 

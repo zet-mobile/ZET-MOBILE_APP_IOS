@@ -18,6 +18,9 @@ pod 'Toast-Swift'
 pod 'AlamofireImage', '~> 3.0'
 pod 'Moya', '~> 13.0.0'
 pod 'iOSDropDown'
+pod 'SnapKit', '~> 5.0.0'
+pod 'Firebase/Core'
+pod 'Firebase/Messaging'
 
   target 'ZET-MobileTests' do
     inherit! :search_paths

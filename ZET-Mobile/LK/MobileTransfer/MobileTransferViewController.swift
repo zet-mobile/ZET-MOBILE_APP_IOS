@@ -135,7 +135,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         mobileView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (mobileView.rez3.text!.count * 15) - 50, y: 94, width: (mobileView.rez3.text!.count * 15), height: 45)
         mobileView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (mobileView.rez4.text!.count * 15) - 50, y: 141, width: (mobileView.rez4.text!.count * 15), height: 45)
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTabCollectionView() {
@@ -227,6 +227,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -296,6 +297,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in

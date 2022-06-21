@@ -94,7 +94,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(toolbar)
         scrollView.addSubview(usage_view)
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
         usage_view.get_Detaization.addTarget(self, action: #selector(openDetalazition), for: .touchUpInside)
     }

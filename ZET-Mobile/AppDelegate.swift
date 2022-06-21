@@ -8,7 +8,12 @@
 import UIKit
 import YandexMapKit
 
+    var window = UIApplication.shared.keyWindow
+    var topPadding = window?.safeAreaInsets.top
+    var bottomPadding = window?.safeAreaInsets.bottom
+
 extension UIApplication {
+    
     
     static func topViewController(base: UIViewController? = UIApplication.shared.delegate?.window??.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {

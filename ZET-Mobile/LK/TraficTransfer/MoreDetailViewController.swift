@@ -9,7 +9,7 @@ import UIKit
 
 class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
     
-    let more_view = MoreDetailView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height + 800))
+    let more_view = MoreDetailView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
     
     let scrollView = UIScrollView()
     
@@ -26,12 +26,21 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 800)
-        view.addSubview(scrollView)
-        
-        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
         
         more_view.layer.cornerRadius = 10
+        more_view.content.frame.size.height = CGFloat.greatestFiniteMagnitude
+        more_view.content.textColor = darkGrayLight
+        more_view.content.numberOfLines = 0
+        more_view.content.lineBreakMode = NSLineBreakMode.byWordWrapping
+        more_view.content.sizeToFit()
+      
+        print(more_view.content.frame.height)
+        more_view.content.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: more_view.content.frame.height)
+        more_view.close_banner.frame.origin.y = more_view.content.frame.height + 520
+        scrollView.contentSize = CGSize(width: view.frame.width, height: more_view.content.frame.height + 850)
+        more_view.frame.size.height = more_view.content.frame.height + 850
+        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        view.addSubview(scrollView)
         scrollView.addSubview(more_view)
 
     }
@@ -98,18 +107,13 @@ class MoreDetailView: UIView {
         return title
     }()
     
-    lazy var content: UITextView = {
-        let title = UITextView()
-        title.frame = CGRect(x: 20, y: (Int(UIScreen.main.bounds.size.width) - 40) + 140, width: Int(UIScreen.main.bounds.size.width) - 40, height: 400)
+    lazy var content: UILabel = {
+        let title = UILabel()
         title.textColor = darkGrayLight
-        //title.numberOfLines = 0
-        title.showsVerticalScrollIndicator = true
-        title.isEditable = false
-        title.isScrollEnabled = true
+        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
         title.text = ""
-        title.backgroundColor = .clear
         return title
     }()
     

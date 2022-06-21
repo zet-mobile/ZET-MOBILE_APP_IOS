@@ -88,7 +88,7 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate {
         
         self.askFriendView.sendButton.addTarget(self, action:  #selector(self.translateTrafic), for: .touchUpInside)
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
         let contentRect: CGRect = scrollView.subviews.reduce(into: .zero) { rect, view in
             rect = rect.union(view.frame)
@@ -110,6 +110,7 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in

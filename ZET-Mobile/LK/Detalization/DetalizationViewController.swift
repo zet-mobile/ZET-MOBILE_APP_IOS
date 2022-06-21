@@ -131,7 +131,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "History")
         
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
     }
 
@@ -225,6 +225,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -294,6 +295,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     
@@ -49,11 +50,96 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         
         self.view.addSubview(pincode_view)
       
+        showTouchId(uiView: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    func checkTouch() {
+        let context = LAContext()
+        
+        //context.localizedCancelTitle = "Ввести пин-код"
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Приложите палец к сканеру"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) {
+                [unowned self] success, authenticationError in
+                
+                DispatchQueue.main.async {
+                    if success {
+                        
+                        print("dd")
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
+                            guard let window = UIApplication.shared.keyWindow else {
+                               return
+                            }
+
+                            guard let rootViewController = window.rootViewController else {
+                               return
+                            }
+                            let vc = ContainerViewController()
+                            vc.view.frame = rootViewController.view.frame
+                            vc.view.layoutIfNeeded()
+                            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                                   window.rootViewController = vc
+                             }, completion: nil)
+                        }
+                       
+                    } else {
+                        switch authenticationError!._code {
+                            
+                        case LAError.systemCancel.rawValue:
+                            print("Authentication was cancelled by the system")
+                            self.hideTouchID(uiView: self.view)
+                            //exit(0)
+                            
+                        case LAError.userCancel.rawValue:
+                            print("Authentication was cancelled by the user")
+                            self.hideTouchID(uiView: self.view)
+                            
+                        case LAError.userFallback.rawValue:
+                            print("User selected to enter custom password")
+                            self.hideTouchID(uiView: self.view)
+                            
+                        default:
+                            print("Authentication failed")
+                            self.hideTouchID(uiView: self.view)
+                        }
+                        
+                        print(authenticationError!._code)
+                    }
+                }
+            }
+        } else {
+            print(error?.localizedDescription as Any)
+            hideTouchID(uiView: self.view)
+        }
+        
+    }
+    
+    func showTouchId(uiView: UIView) {
+        container.frame = uiView.frame
+        container.center = uiView.center
+        container.backgroundColor = UIColor.clear
+        uiView.addSubview(container)
+        
+        if UserDefaults.standard.bool(forKey: "BiometricEnter") == true {
+            checkTouch()
+        }
+        else {
+            self.hideTouchID(uiView: self.view)
+        }
+        
+    }
+    
+    func hideTouchID(uiView: UIView) {
+        container.removeFromSuperview()
+
     }
     
     @objc func clickButton(sender: UIButton) {

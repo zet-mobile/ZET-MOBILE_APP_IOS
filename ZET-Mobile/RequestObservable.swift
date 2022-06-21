@@ -35,13 +35,41 @@ public class RequestObservable {
       //MARK: observer onNext event
       observer.onNext(objs)
     }
-      else if statusCode == 401 {
-          refreshGetToken()
+      else if statusCode == 401 && ItemModel.self != RefreshData.self {
+         refreshGetToken()
+      
           print("new get token")
       }
-    else {
+    else if statusCode == 401 && ItemModel.self == RefreshData.self {
+        DispatchQueue.main.async {
+            
+            guard let window = UIApplication.shared.keyWindow else {
+                return
+            }
+            guard let rootViewController = window.rootViewController else {
+                return
+            }
+            let vc = UINavigationController(rootViewController: SplashViewController())
+            vc.view.frame = rootViewController.view.frame
+            vc.view.layoutIfNeeded()
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                window.rootViewController = vc
+            }, completion: { completed in
+                UserDefaults.standard.set("", forKey: "mobPhone")
+                UserDefaults.standard.set(1, forKey: "language")
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                UserDefaults.standard.set("", forKey: "PinCode")
+                UserDefaults.standard.set(true, forKey: "BiometricEnter")
+                UserDefaults.standard.set("", forKey: "token")
+                UserDefaults.standard.set("", forKey: "refresh_token")
+            })
+            
+        }
       //observer.onError(error!)
     }
+      else {
+          
+      }
   } catch {
       
       //MARK: observer onNext event
@@ -77,9 +105,9 @@ public class RequestObservable {
                    print(error.localizedDescription)
                 },
                 onCompleted: {
+                    
                    print("Completed event.")
                     DispatchQueue.main.async {
-                        
                         
                         
                     }

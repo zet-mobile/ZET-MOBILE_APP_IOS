@@ -95,7 +95,7 @@ class ChangeView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 30, y: 10, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 30, y: 20, width: 300, height: 20)
         return titleOne
     }()
     
@@ -112,7 +112,8 @@ class ChangeView: UIView {
     }()
     
     lazy var button: UIButton = {
-        let button = UIButton(frame: CGRect(x: 20, y: Int(UIScreen.main.bounds.size.height) - 270, width: Int(UIScreen.main.bounds.size.width) - 40, height: 50))
+        let button = UIButton()
+        button.frame = CGRect(x: 20, y: 0, width: CGFloat(Int(UIScreen.main.bounds.size.width) - 40), height: 50)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitle("", for: .normal)
         button.setTitleColor(.white, for: .normal)

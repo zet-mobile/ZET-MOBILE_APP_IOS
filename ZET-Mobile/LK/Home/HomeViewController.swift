@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 import Alamofire
 import AlamofireImage
-
+import SnapKit
 
 let cellID = "BalanceSliderCell"
 let cellID2 = "sliderCell"
@@ -91,7 +91,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
-        
         color2 = colorLightDarkGray
         color1 = contentColor
         
@@ -124,6 +123,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         scrollView.refreshControl = refreshControl
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -161,13 +161,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat((services_data.count * (Int(UIScreen.main.bounds.size.height) * 140) / 580)))
+        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat((services_data.count * 140)) + 800)
+        
         view.addSubview(scrollView)
+        
         scrollView.backgroundColor = colorLightDarkGray
         
-        toolbar = Toolbar(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
         home_view = HomeView(frame: CGRect(x: 0, y: 360, width: UIScreen.main.bounds.size.width, height: CGFloat((services_data.count * 140)) + 500))
+     
+        toolbar = Toolbar(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         toolbar.user_name.text = user_name
+        view.addSubview(toolbar)
         
         if zero_help_view_show == false {
             home_view.zero_help_view.isHidden = true
@@ -196,9 +200,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
         
-        self.view.addSubview(toolbar)
         scrollView.addSubview(home_view)
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        
+        print("ContainerViewController().tabBar.frame.size.height")
+        print(ContainerViewController().tabBar.frame.size.height)
+    
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+       
     }
 
     func setupBalanceSliderSection() {
@@ -385,6 +393,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         ServicesTableView.isScrollEnabled = false
         ServicesTableView.backgroundColor = contentColor
         ServicesTableView.separatorColor = colorLine
+        
       }
     
     @objc func openAddionalTraficsView() {
@@ -467,6 +476,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 onError: { error in
                    print(error.localizedDescription)
                     DispatchQueue.main.async {
+                        print("error")
                         self.requestAnswer(status: false, message: error.localizedDescription)
                         print(error.localizedDescription)
                         self.hideActivityIndicator(uiView: self.view)

@@ -28,7 +28,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: "push_photo_cell")
         backgroundColor = .clear
-        //view_cell.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        view_cell.backgroundColor = contentColor
         view_cell.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 90)
         view_cell.layer.cornerRadius = 20
         
@@ -46,14 +46,14 @@ class PushPhotoTypeViewCell: UITableViewCell {
         
         ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
         
-        title.frame = CGRect(x: 70, y: 5, width: 300, height: 50)
+        title.frame = CGRect(x: 70, y: 5, width: UIScreen.main.bounds.size.width - 140, height: 50)
         title.text = "Скидка на Хаматарафа+200"
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
         title.textAlignment = .left
         
-        about.frame = CGRect(x: 70, y: 45, width: 300, height: 30)
+        about.frame = CGRect(x: 70, y: 45, width: UIScreen.main.bounds.size.width - 120, height: 30)
         about.text = """
  С 4 мая по 31 октября действует 30% СКИДКА на пакет \n "Хаматарафа+100"
  """
@@ -62,7 +62,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
         about.font = UIFont.systemFont(ofSize: 16)
         about.textAlignment = .left
         
-        icon_more.frame = CGRect(x: 355, y: 25, width: 11, height: 6)
+        icon_more.frame = CGRect(x: UIScreen.main.bounds.size.width - 60, y: 25, width: 11, height: 6)
         icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
         icon_more.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         

@@ -150,6 +150,7 @@
 		B8A38BF92845B6650091F028 /* HelpAtZeroData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */; };
 		B8A38BFB2848DA940091F028 /* RoumingTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */; };
 		B8A38BFD2849F16B0091F028 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFC2849F16B0091F028 /* EmptyView.swift */; };
+		B8A38C002853C0C70091F028 /* NotificationsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFF2853C0C60091F028 /* NotificationsData.swift */; };
 		B8C815E22808EBDC00FD8B81 /* TraficTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */; };
 		B8CD5A8A27D4E61D007D189F /* CheckCodeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */; };
 		B8CD5A8C27D52755007D189F /* PacketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8B27D52755007D189F /* PacketsData.swift */; };
@@ -336,6 +337,7 @@
 		B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpAtZeroData.swift; sourceTree = "<group>"; };
 		B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTopViewCell.swift; sourceTree = "<group>"; };
 		B8A38BFC2849F16B0091F028 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		B8A38BFF2853C0C60091F028 /* NotificationsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsData.swift; sourceTree = "<group>"; };
 		B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraficTableViewCell.swift; sourceTree = "<group>"; };
 		B8CD5A8927D4E61D007D189F /* CheckCodeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCodeData.swift; sourceTree = "<group>"; };
 		B8CD5A8B27D52755007D189F /* PacketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketsData.swift; sourceTree = "<group>"; };
@@ -656,6 +658,7 @@
 				B8358F0027FF572B001A6696 /* AskFriendData.swift */,
 				B88D323328301C6F00D574F6 /* FeedbackData.swift */,
 				B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */,
+				B8A38BFF2853C0C60091F028 /* NotificationsData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -1247,6 +1250,7 @@
 				B852980E27C7A40800B68F36 /* ProfileMenuCell.swift in Sources */,
 				B853D797275506AD00FBE1F1 /* TabZeroCollectionViewCell.swift in Sources */,
 				B853D7922755069000FBE1F1 /* ZeroHelpView.swift in Sources */,
+				B8A38C002853C0C70091F028 /* NotificationsData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

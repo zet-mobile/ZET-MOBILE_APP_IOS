@@ -27,6 +27,7 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
+       // scrollView.isScrollEnabled = false
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
@@ -58,11 +59,15 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = contentColor
   
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        change_code_view = ChangeView(frame: CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: 896))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: 60))
+        change_code_view = ChangeView(frame: CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         change_code_view.button.addTarget(self, action: #selector(setPassword), for: .touchUpInside)
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let back = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(back)
+        
         toolbar.backgroundColor = contentColor
         
         self.view.addSubview(toolbar)
@@ -82,6 +87,8 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
             change_code_view.titleThree.isHidden = true
             change_code_view.confirm_code.isHidden = true
             change_code_view.button.setTitle(defaultLocalizer.stringForKey(key: "Set_password"), for: .normal)
+            change_code_view.button.frame.origin.y = UIScreen.main.bounds.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 130
+            scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
         }
         else {
             toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Change_PIN")
@@ -95,9 +102,9 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
             change_code_view.titleThree.isHidden = false
             change_code_view.confirm_code.isHidden = false
             change_code_view.button.setTitle(defaultLocalizer.stringForKey(key: "Change_PIN"), for: .normal)
+            change_code_view.button.frame.origin.y = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 150
+            scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         }
-      
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
     }
     
@@ -109,6 +116,7 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate {
         print(change_code_view.old_code.text)
         print(change_code_view.new_code.text)
         change_code_view.gray_back.frame.size.height = 100
+        change_code_view.title1.frame.origin.y = 10
         
         if UserDefaults.standard.string(forKey: "PinCode") == "" || UserDefaults.standard.string(forKey: "PinCode") == nil {
             

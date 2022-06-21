@@ -261,7 +261,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         self.view.addSubview(toolbar)
         scrollView.addSubview(tarifView)
         scrollView.sendSubviewToBack(tarifView)
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTarifBalanceViewSection() {
@@ -544,6 +544,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                 },  
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in

@@ -131,19 +131,20 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
         
         self.changeView.balance.text = balance
+        if balances_data.count != 0 {
+            changeView.rez1.text = balances_data[0][0]
+            changeView.rez2.text = balances_data[0][1]
+            changeView.rez3.text = balances_data[0][2]
+            changeView.rez4.text = balances_data[0][3]
+        }
         
-        changeView.rez1.text = balances_data[0][0]
-        changeView.rez2.text = balances_data[0][1]
-        changeView.rez3.text = balances_data[0][2]
-        changeView.rez4.text = balances_data[0][3]
         
         changeView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez1.text!.count * 15) - 50, y: 0, width: (changeView.rez1.text!.count * 15), height: 45)
         changeView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez2.text!.count * 15) - 50, y: 47, width: (changeView.rez2.text!.count * 15), height: 45)
         changeView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez3.text!.count * 15) - 50, y: 94, width: (changeView.rez3.text!.count * 15), height: 45)
         changeView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez4.text!.count * 15) - 50, y: 141, width: (changeView.rez4.text!.count * 15), height: 45)
         
-        
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTabCollectionView() {
@@ -259,6 +260,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -337,6 +339,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(status: false, message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in

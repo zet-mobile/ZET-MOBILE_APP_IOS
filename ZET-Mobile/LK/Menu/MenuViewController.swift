@@ -98,6 +98,13 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
                 window.rootViewController = vc
             }, completion: { completed in
                 UserDefaults.standard.set("", forKey: "mobPhone")
+                UserDefaults.standard.set(1, forKey: "language")
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                UserDefaults.standard.set("", forKey: "PinCode")
+                UserDefaults.standard.set(true, forKey: "BiometricEnter")
+                UserDefaults.standard.set("", forKey: "token")
+                UserDefaults.standard.set("", forKey: "refresh_token")
+                
             })
         }
         tableView.deselectRow(at: indexPath, animated: true)

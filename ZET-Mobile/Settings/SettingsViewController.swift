@@ -17,6 +17,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     let scrollView = UIScrollView()
     
+    var alert = UIAlertController()
     var toolbar = TarifToolbarView()
     var settings_view = SettingsView()
     
@@ -77,6 +78,11 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         
+        let back = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(back)
+        
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(changeCodeTap))
         settings_view.code_change_t.isUserInteractionEnabled = true
         settings_view.code_change_t.addGestureRecognizer(tap)
@@ -87,8 +93,6 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = "Настройки"
         toolbar.backgroundColor = contentColor
-      
-        scrollView.frame = CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
         
         // setup language field
         settings_view.lang.text = lang_choosed
@@ -169,6 +173,8 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         settings_view.switch_sales.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
         settings_view.switch_email.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
         settings_view.switch_sms.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
+        
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     
@@ -221,6 +227,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(message: error.localizedDescription)
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
@@ -294,6 +301,50 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         }, completion: nil)
     }
 
+    @objc func requestAnswer(message: String) {
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.90
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView()
+
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.layer.cornerRadius = 20
+        view.name.text = "Что-то пошло не так"
+        view.image_icon.image = UIImage(named: "uncorrect_alert")
+        view.name_content.text = "\(message)"
+        view.ok.setTitle("OK", for: .normal)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
+        view.name.isUserInteractionEnabled = true
+        view.name.addGestureRecognizer(tapGestureRecognizer)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        //alert.view.sendSubviewToBack(view)
+        
+        present(alert, animated: true, completion: nil)
+
+    }
+    
+    @objc func dismissDialog() {
+        alert.dismiss(animated: true, completion: nil)
+    }
 }
 
 

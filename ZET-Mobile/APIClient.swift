@@ -460,14 +460,32 @@ class APIClient {
     }
     
     //  post money ask
-    func postCreditRequest(jsonBody: [String: Any]) -> Observable<HelpAtZeroPostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+    func postCreditRequest(parametr: String) -> Observable<HelpAtZeroPostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
         request.httpMethod = "POST"
-        let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
-        request.httpBody = jsonData
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  This is api for get info about notifications
+    func getNotificationRequest() -> Observable<NotificationData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  This is api for post notification
+    func postNotificationRequest(parametr: String) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
      return requestObservable.callAPI(request: request)
     }
     
