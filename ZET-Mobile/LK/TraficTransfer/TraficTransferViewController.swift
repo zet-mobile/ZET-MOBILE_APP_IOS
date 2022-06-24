@@ -122,10 +122,12 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         
         self.traficView.balance.text = balance
         
-        traficView.rez1.text = balances_data[0][0]
-        traficView.rez2.text = balances_data[0][1]
-        traficView.rez3.text = balances_data[0][2]
-        traficView.rez4.text = balances_data[0][3]
+        if balances_data.count != 0 {
+            traficView.rez1.text = balances_data[0][0]
+            traficView.rez2.text = balances_data[0][1]
+            traficView.rez3.text = balances_data[0][2]
+            traficView.rez4.text = balances_data[0][3]
+        }
         
         traficView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez1.text!.count * 15) - 50, y: 0, width: (traficView.rez1.text!.count * 15), height: 45)
         traficView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez2.text!.count * 15) - 50, y: 47, width: (traficView.rez2.text!.count * 15), height: 45)

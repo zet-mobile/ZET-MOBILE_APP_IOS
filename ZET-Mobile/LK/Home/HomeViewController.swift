@@ -392,7 +392,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         ServicesTableView.estimatedRowHeight = 140
         ServicesTableView.isScrollEnabled = false
         ServicesTableView.backgroundColor = contentColor
-        ServicesTableView.separatorColor = colorLine
+        ServicesTableView.separatorColor = .lightGray
         
       }
     
@@ -466,7 +466,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                                     disc_percent = String(result.services[i].discount!.discountPercent)
                                 }
                                 
-                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), disc_id, disc_percent])
+                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), disc_id, disc_percent, String(result.services[i].description ?? "")])
                             }
                         }
                     
@@ -692,6 +692,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if services_data[indexPath.row][6] == "" {
+            return 110
+        } else {
+            
+            return 140
+        }
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return services_data.count
   }
@@ -699,12 +709,20 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-        cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
+        cell.separatorInset = UIEdgeInsets.init(top: 10.0, left: 20.0, bottom: 2.0, right: 20.0)
         
         if indexPath.row == services_data.count - 1 {
             cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
         }
         cell.titleOne.text = services_data[indexPath.row][1]
+        cell.titleTwo.text = services_data[indexPath.row][6]
+        
+        if services_data[indexPath.row][6] == "" {
+            cell.titleThree.frame.origin.y = 50
+            cell.getButton.frame.origin.y = 60
+            cell.sale_title.frame.origin.y = 70
+        }
+        
         let cost: NSString = "\(services_data[indexPath.row][2])" as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)

@@ -14,11 +14,11 @@ struct NotificationData {
 struct notification_data: Decodable {
     let id: Int
     let title: String
-    let body: String
+    // body: String
     let image: String
-    let icon: Int
+    let icon: String
     let statusId: Int
-    let service: service_data
+    //let service: service_data
 }
 
 struct service_data: Decodable {

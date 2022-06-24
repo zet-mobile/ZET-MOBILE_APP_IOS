@@ -7,6 +7,9 @@
 
 import UIKit
 import YandexMapKit
+import Firebase
+import FirebaseMessaging
+import UserNotifications
 
     var window = UIApplication.shared.keyWindow
     var topPadding = window?.safeAreaInsets.top
@@ -39,13 +42,27 @@ extension UIApplication {
 }
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate  {
     
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
+               
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound,.badge]){success, _ in
+        guard success else {
+            return
+        }
+            print("Success APNS registry")
+                   
+        }
+               
+        application.registerForRemoteNotifications()
+               
         window = UIWindow()
         window?.makeKeyAndVisible()
         let navController = UINavigationController(rootViewController: SplashViewController())
@@ -57,6 +74,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        messaging.token{ token, _ in
+        guard let token = token else {
+            return
+        }
+        UserDefaults.standard.set(token, forKey: "fbaseToken")
+        print("Token : \(token)")
+                
+        }
+    }
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

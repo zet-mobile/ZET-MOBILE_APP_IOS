@@ -281,10 +281,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         print(user_code)
         print(user_phone)
         print(hashString)
-        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString, "language" : lang_id]
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString, "fbaseToken": UserDefaults.standard.string(forKey: "fbaseToken"), "language" : lang_id]
         
         let client = APIClient.shared
             do{
+                
                 try client.checkSmsCode(jsonBody: parametr).subscribe (
                 onNext: { result in
                     print("hello")

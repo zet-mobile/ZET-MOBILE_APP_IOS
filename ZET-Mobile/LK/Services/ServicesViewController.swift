@@ -203,7 +203,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.connected.count != 0 {
                             for i in 0 ..< result.connected.count {
-                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price ?? ""),  String(result.available[i].period ?? "")])
+                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price ?? ""),  String(result.connected[i].period ?? ""), String(result.connected[i].description ?? ""), String(result.connected[i].nextChargeDate ?? "")])
                             }
                         }
                         
@@ -218,7 +218,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                                     disc_percent = String(result.available[i].discount!.discountPercent)
                                 }
                                 
-                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent])
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent, String(result.available[i].description ?? "")])
                             }
                         }
                     }
@@ -495,7 +495,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table.estimatedRowHeight = 160
                 table.alwaysBounceVertical = false
                 table.backgroundColor = contentColor
-                table.separatorColor = colorLine
+                table.separatorColor = .lightGray
                 cell.addSubview(table)
             }
             else {
@@ -507,7 +507,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table2.estimatedRowHeight = 140
                 table2.alwaysBounceVertical = false
                 table2.backgroundColor = contentColor
-                table2.separatorColor = colorLine
+                table2.separatorColor = .lightGray
                 cell.addSubview(table2)
             }
             return cell
@@ -540,6 +540,24 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
 }
 
 extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == table {
+            if connected_data[indexPath.row][4] == "" {
+                return 130
+            } else {
+                return 160
+            }
+        }
+        else {
+            if availables_data[indexPath.row][5] == "" {
+                return 110
+            } else {
+                return 140
+            }
+       }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == table {
             return connected_data.count
@@ -554,10 +572,20 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "serv_connect", for: indexPath) as! ServicesConnectTableViewCell
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            if indexPath.row == 2 {
+            if indexPath.row == connected_data.count - 1 {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             cell.titleOne.text = connected_data[indexPath.row][1]
+            cell.titleTwo.text = connected_data[indexPath.row][4]
+            cell.spisanie.text = defaultLocalizer.stringForKey(key: "Charge") + " " + connected_data[indexPath.row][5]
+            
+            if connected_data[indexPath.row][4] == "" {
+                cell.titleThree.frame.origin.y = 50
+                cell.getButton.frame.origin.y = 60
+                cell.spisanie.frame.origin.y = 80
+                cell.ic_image.frame.origin.y = 106
+            }
+            
             let cost: NSString = "\(connected_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
@@ -590,10 +618,18 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            if indexPath.row == 2 {
+            if indexPath.row == availables_data.count - 1 {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             cell.titleOne.text = availables_data[indexPath.row][1]
+            cell.titleTwo.text = availables_data[indexPath.row][5]
+            
+            if availables_data[indexPath.row][5] == "" {
+                cell.titleThree.frame.origin.y = 50
+                cell.getButton.frame.origin.y = 60
+                cell.sale_title.frame.origin.y = 70
+            }
+            
             let cost: NSString = "\(availables_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)

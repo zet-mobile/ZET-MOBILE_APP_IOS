@@ -18,6 +18,7 @@ struct services_data {
     let iconUrl: String?
     let description: String?
     let priceAndPeriod: String?
+    let nextChargeDate: String?
     let price: String?
     let period: String?
     let id: Int
@@ -42,6 +43,7 @@ extension services_data: Decodable {
         case period = "period"
         case priceAndPeriod = "priceAndPeriod"
         case discount = "discount"
+        case nextChargeDate = "nextChargeDate"
     }
         
     init(from decoder: Decoder) throws {
@@ -90,7 +92,12 @@ extension services_data: Decodable {
             discount = nil
         }
         
-    
+        do {
+            nextChargeDate = try container.decode(String.self, forKey: .nextChargeDate)
+        }
+        catch {
+            nextChargeDate = nil
+        }
     }
 }
 

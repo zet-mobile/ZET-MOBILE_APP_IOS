@@ -619,7 +619,7 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 table.estimatedRowHeight = 100
                 table.alwaysBounceVertical = false
                 table.backgroundColor = contentColor
-                table.separatorColor = colorLine
+                table.separatorColor = .lightGray
                 cell.addSubview(table)
             }
             else {

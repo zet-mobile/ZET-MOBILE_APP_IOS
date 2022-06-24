@@ -429,7 +429,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
-            table.separatorColor = colorLine
+            table.separatorColor = .lightGray
             cell.addSubview(table)
            
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))

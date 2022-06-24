@@ -73,7 +73,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
     getButton.layer.borderWidth = 1
     
-    spisanie.frame = CGRect(x: 95, y: 110, width: 200, height: 60)
+    spisanie.frame = CGRect(x: 90, y: 110, width: 200, height: 60)
     spisanie.text = ""
     spisanie.numberOfLines = 2
     spisanie.textColor = .lightGray

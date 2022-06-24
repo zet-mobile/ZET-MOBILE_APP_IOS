@@ -489,6 +489,16 @@ class APIClient {
      return requestObservable.callAPI(request: request)
     }
     
+    //  This is api for delete notification
+    func deleteNotificationRequest(parametr: String) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "DELETE"
+     return requestObservable.callAPI(request: request)
+    }
+    
     //  get feedbackData
     func getFeedBackRequest() -> Observable<FeedbackData> {
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/feedback/")!)
