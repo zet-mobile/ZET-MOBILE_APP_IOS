@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import MultiSlider
+import Toast_Swift
 
 struct moneyData {
     let date_header: String
@@ -88,10 +89,26 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.navigationController?.tabBarController?.tabBar.isHidden = false
+        if to_phone != "" {
+            table.reloadData()
+        }
+        
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
     
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        cell.count_transfer.resignFirstResponder()
+        cell.user_to_number.resignFirstResponder()
     }
     
     func setupView() {
@@ -316,6 +333,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     @objc func translateTrafic() {
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        cell.user_to_number.resignFirstResponder()
         
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
@@ -361,7 +379,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
-        let title_cost2 = " +992 \(inPhoneNumber) " as NSString
+        let title_cost2 = " +992 \(to_phone) " as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
         titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
@@ -395,19 +413,21 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         costString3.append(titleString3)
         view.cost_title.attributedText = costString3
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
-        view.name.isUserInteractionEnabled = true
-        view.name.addGestureRecognizer(tapGestureRecognizer)
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
-        if inPhoneNumber != "" {
-            cell.titleRed.isHidden = true
-            cell.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            present(alert, animated: true, completion: nil)
+        if to_phone != "" {
+            if to_phone == UserDefaults.standard.string(forKey: "mobPhone") {
+                self.view.makeToast("Ошибка, введите другой номер", duration: 5.0, position: .bottom, style: style); return
+            }
+            else {
+                cell.titleRed.isHidden = true
+                cell.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+                present(alert, animated: true, completion: nil)
+            }
         }
         else {
             cell.titleRed.isHidden = false
@@ -449,9 +469,10 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
+        
+        /*let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
         view.name.isUserInteractionEnabled = true
-        view.name.addGestureRecognizer(tapGestureRecognizer)
+        view.name.addGestureRecognizer(tapGestureRecognizer)*/
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
@@ -460,31 +481,36 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
 
         
     }
     
-    @objc func dismissDialog() {
+    @objc func dismissDialog(_ sender: UIButton) {
         print("hello")
-        alert.dismiss(animated: true, completion: nil)
+        
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation {
-            self.alert.dismiss(animated: true, completion: nil)
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
         }
-        showActivityIndicator(uiView: view)
         
         print(sender.tag)
         
         let indexPath = IndexPath(row: 0, section: 0)
-        let cell = table.cellForRow(at: indexPath) as! TraficTableViewCell
+        let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
         
-        inPhoneNumber = String(cell.user_to_number.text ?? "")
+        to_phone = String(cell.user_to_number.text ?? "")
 
-        let parametr: [String: Any] = ["inPhoneNumber": "992\(inPhoneNumber)", "value": Int(value_transfer)!]
+        print(to_phone)
+        let parametr: [String: Any] = ["inPhoneNumber": to_phone, "value": Int(cell.count_transfer.text ?? "1")!]
         
         let client = APIClient.shared
             do{
@@ -509,9 +535,6 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                     }
                 },
                 onCompleted: { [self] in
-                    DispatchQueue.main.async {
-                        hideActivityIndicator(uiView: view)
-                    }
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
@@ -551,6 +574,13 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         nav.dismiss(animated: true, completion: nil)
     }
     
+    @objc func tableTouch() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        cell.count_transfer.resignFirstResponder()
+        cell.user_to_number.resignFirstResponder()
+    }
+    
 }
 
 extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -579,7 +609,9 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.separatorStyle = .none
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
-            table.allowsSelection = false
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+            table.isUserInteractionEnabled = true
+            table.addGestureRecognizer(tapGestureRecognizer)
             cell.addSubview(table)
         }
         else {
@@ -693,7 +725,12 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             cell.count_transfer.delegate = self
             let contacts = cell.user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
             contacts.addTarget(self, action: #selector(openContacts), for: .touchUpInside)
-            cell.user_to_number.text = "+992 " + to_phone
+            if to_phone != "" {
+                cell.user_to_number.text = "992" + to_phone
+            }
+            else {
+                cell.user_to_number.text = "+992 "
+            }
             value_transfer = "0.10 " +  defaultLocalizer.stringForKey(key: "somoni")
             
             cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
@@ -722,6 +759,11 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             
             cell.slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
             cell.sendButton.addTarget(self, action:  #selector(self.translateTrafic), for: .touchUpInside)
+            
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = .clear
+            cell.selectedBackgroundView = bgColorView
+            
             return cell
         }
         else {
@@ -795,7 +837,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
     func textFieldDidBeginEditing(_ textField: UITextField) {
         let indexPath = IndexPath(item: 0, section: 0);
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
-        
+        to_phone = ""
         if textField.tag == 1 {
             cell.user_to_number.text! = "+992 "
             cell.user_to_number.textColor = colorBlackWhite
@@ -813,7 +855,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         let indexPath = IndexPath(item: 0, section: 0);
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
         if textField.tag == 1 {
-            cell.user_to_number.text! = "992" + inPhoneNumber
+            cell.user_to_number.text! = "992" + to_phone
             cell.user_to_number.textColor = colorBlackWhite
             cell.user_to_number.font = UIFont.systemFont(ofSize: 15)
         }
@@ -834,7 +876,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         
         if string  == "" {
             if tag == 1 {
-                inPhoneNumber = (inPhoneNumber as String).substring(to: inPhoneNumber.index(before: inPhoneNumber.endIndex))
+                to_phone = (to_phone as String).substring(to: to_phone.index(before: to_phone.endIndex))
             }
             else {
                 value_transfer = (value_transfer as String).substring(to: value_transfer.index(before: value_transfer.endIndex))
@@ -845,15 +887,15 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             return false
         }
         else if tag == 1 {
-            inPhoneNumber = inPhoneNumber + string
-            print(inPhoneNumber)
+            to_phone = to_phone + string
+            print(to_phone)
         }
         
         return true
     }
     
     @objc func openContacts() {
-        guard let window = UIApplication.shared.keyWindow else {
+       /* guard let window = UIApplication.shared.keyWindow else {
             return
         }
         guard let rootViewController = window.rootViewController else {
@@ -866,7 +908,10 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             window.rootViewController = vc
         }, completion: { completed in
             
-        })
+        })*/
+        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(ContactsViewController(), animated: false)
         
     }
 }

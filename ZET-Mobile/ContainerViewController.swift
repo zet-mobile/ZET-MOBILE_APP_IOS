@@ -16,7 +16,7 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
         print(tabBar.frame.size.height)
         tabBar.tintColor = .orange
         tabBar.barTintColor = contentColor
-        tabBar.backgroundColor = .white
+        tabBar.backgroundColor = contentColor
         //Assign self for delegate for that ViewController can respond to UITabBarControllerDelegate methods
         self.delegate = self
         

@@ -33,7 +33,7 @@ class AuthorizationView: UIView {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 360) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.borderStyle = .none
-        textfield.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        textfield.backgroundColor = colorLightDarkGray
         textfield.layer.cornerRadius = 10
         textfield.keyboardType = .numberPad
         /*textfield.placeholder = "Введите номер телефона"
@@ -86,8 +86,8 @@ class AuthorizationView: UIView {
     lazy var lang_set: UIButton = {
         let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 70) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("RU 🇷🇺", for: .normal)
-        button.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
-        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = colorLightDarkGray
+        button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = 10
@@ -103,7 +103,7 @@ class AuthorizationView: UIView {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 460) / 926, width: 150, height: 50)
         textfield.borderStyle = .none
-        textfield.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        textfield.backgroundColor = colorLightDarkGray
         textfield.layer.cornerRadius = 10
         textfield.placeholder = "Введите смс-код"
         textfield.font = UIFont.systemFont(ofSize: 15)
@@ -139,7 +139,7 @@ class AuthorizationView: UIView {
         let title = UILabel()
         title.text = "01"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
@@ -154,7 +154,7 @@ class AuthorizationView: UIView {
         let title = UILabel()
         title.text = ":"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
@@ -169,7 +169,7 @@ class AuthorizationView: UIView {
         let title = UILabel()
         title.text = "59"
         title.numberOfLines = 1
-        title.textColor = .black
+        title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
@@ -188,7 +188,7 @@ class AuthorizationView: UIView {
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 485) / 926, width: (UIScreen.main.bounds.size.width * 200) / 428, height: 20)
+        title.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 489) / 926, width: (UIScreen.main.bounds.size.width * 200) / 428, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -201,7 +201,7 @@ class AuthorizationView: UIView {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("RU 🇷🇺", for: .normal)
         button.backgroundColor = .clear
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.titleLabel?.textAlignment = .left
         button.layer.cornerRadius = 10
@@ -213,7 +213,7 @@ class AuthorizationView: UIView {
         let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 50) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("EN 🇺🇸", for: .normal)
         button.backgroundColor = .clear
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.titleLabel?.textAlignment = .left
         button.layer.cornerRadius = 10
@@ -225,7 +225,7 @@ class AuthorizationView: UIView {
         let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 100) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("TJ 🇹🇯", for: .normal)
         button.backgroundColor = .clear
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.titleLabel?.textAlignment = .left
         button.layer.cornerRadius = 10
@@ -237,7 +237,7 @@ class AuthorizationView: UIView {
         let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 150) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("UZ 🇺🇿", for: .normal)
         button.backgroundColor = .clear
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.titleLabel?.textAlignment = .left
         button.layer.cornerRadius = 10
@@ -265,10 +265,10 @@ class AuthorizationView: UIView {
         let cost: NSString = defaultLocalizer.stringForKey(key: "Agree_with") as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
-        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black , range: range)
+        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite, range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        let title_cost = " \(defaultLocalizer.stringForKey(key: "Conditions"))" as NSString
+        let title_cost = " \(defaultLocalizer.stringForKey(key: "agree_conditions"))" as NSString
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
@@ -282,7 +282,7 @@ class AuthorizationView: UIView {
         let code_number: NSString = "+992" as NSString
         let range3 = (code_number).range(of: code_number as String)
         let code_numberString = NSMutableAttributedString.init(string: code_number as String)
-        code_numberString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.black , range: range3)
+        code_numberString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range3)
         code_numberString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
         
         let title_number = " \(defaultLocalizer.stringForKey(key: "Enter_phone"))" as NSString

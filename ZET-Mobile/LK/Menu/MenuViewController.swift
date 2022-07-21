@@ -13,7 +13,7 @@ var defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
 class MenuViewController: UIViewController {
     
     var tableView: UITableView!
-    var tableData = [["Notification", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting", defaultLocalizer.stringForKey(key: "Settings")], ["Message", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", defaultLocalizer.stringForKey(key: "About")], ["Logout", defaultLocalizer.stringForKey(key: "Exit")]]
+    var tableData = [["Notification", "Notification-1", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", "roaming-1", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting menu", "Setting-1", defaultLocalizer.stringForKey(key: "Settings")], ["Message", "Message-1", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", "Info Square-1", defaultLocalizer.stringForKey(key: "About")], ["Logout", "Logout-1", defaultLocalizer.stringForKey(key: "Exit")]]
     
     
     var menuView = MenuView()
@@ -57,9 +57,8 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! MenuViewCell
-        cell.descriptionLabel.text = tableData[indexPath.row][1]
-        cell.ico_image.image = UIImage(named: tableData[indexPath.row][0])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-         
+        cell.descriptionLabel.text = tableData[indexPath.row][2]
+        cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: tableData[indexPath.row][1])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal) : UIImage(named: tableData[indexPath.row][0])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         return cell
     }
 

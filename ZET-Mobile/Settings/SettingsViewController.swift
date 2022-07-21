@@ -34,7 +34,6 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     var emailNotification = false
     var pushNotification = false
     var promotionNotification = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,6 +54,10 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -70,10 +73,11 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 650)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        
         settings_view = SettingsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
@@ -108,7 +112,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         settings_view.lang.didSelect { [self] (selectedText, index, id) in
             self.lang_choosed = selectedText
             self.langId_choosed = Int(lang_data[index][0])!
-            putRequest()
+            putRequest(type: "lang")
         }
         
         for i in 0 ..< lang_data.count {
@@ -154,7 +158,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
             
             darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
             
-            putRequest()
+            putRequest(type: "theme")
         }
         
         
@@ -166,13 +170,13 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         
         settings_view.switch_push.isOn = pushNotification
         settings_view.switch_sales.isOn = promotionNotification
-        settings_view.switch_email.isOn = emailNotification
         settings_view.switch_sms.isOn = smsNotification
+        settings_view.switch_enter.isOn = UserDefaults.standard.bool(forKey: "BiometricEnter")
         
         settings_view.switch_push.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
         settings_view.switch_sales.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
-        settings_view.switch_email.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
         settings_view.switch_sms.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
+        settings_view.switch_enter.addTarget(self, action: #selector(switchEnterChange), for: .touchUpInside)
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
@@ -186,12 +190,17 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     @objc func switchChange(_ sender: Any) {
         
-            pushNotification = settings_view.switch_push.isOn
-            promotionNotification = settings_view.switch_sales.isOn
-            emailNotification = settings_view.switch_email.isOn
-            smsNotification = settings_view.switch_sms.isOn
-       putRequest()
+        pushNotification = settings_view.switch_push.isOn
+        promotionNotification = settings_view.switch_sales.isOn
+        smsNotification = settings_view.switch_sms.isOn
+        putRequest(type: "switch")
     }
+    
+    @objc func switchEnterChange(_ sender: Any) {
+        
+        UserDefaults.standard.set(settings_view.switch_enter.isOn, forKey: "BiometricEnter")
+    }
+    
     
     func sendRequest() {
         let client = APIClient.shared
@@ -242,8 +251,9 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
             }
     }
     
-    @objc func putRequest() {
+    @objc func putRequest(type: String) {
         
+        self.showActivityIndicator(uiView: self.view)
         let parametr: [String: Any] = ["promotionNotification": promotionNotification, "pushNotification": pushNotification, "emailNotification" : emailNotification, "smsNotification" : smsNotification, "languageId": langId_choosed, "themeId" : themeID_choosed]
         print(parametr)
         let client = APIClient.shared
@@ -252,14 +262,20 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                 onNext: { result in
                     print("hello")
                     DispatchQueue.main.async { [self] in
-                        restartApp()
+                        if type != "switch" {
+                            restartApp()
+                        }
                     }
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    self.requestAnswer(message: error.localizedDescription)
                 },
                 onCompleted: {
                    print("Completed event.")
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator(uiView: self.view)
+                    }
                 }).disposed(by: disposeBag)
               }
               catch{

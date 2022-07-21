@@ -61,6 +61,10 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }

@@ -8,6 +8,7 @@
 import UIKit
 
 var container: UIView = UIView()
+var container2: UIView = UIView()
 
 extension Double {
     var clean: String {
@@ -162,7 +163,24 @@ extension UIViewController {
         container.removeFromSuperview()
     }
     
+    func showActivityIndicator2(uiView: UIView) {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+        container2.frame = uiView.frame
+        container2.center = uiView.center
+        container2.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        activityIndicator.frame = CGRect(x: UIScreen.main.bounds.size.width/2 - 5, y: ((UIScreen.main.bounds.size.height/2) - 5), width: 10.0, height: 10.0)
+        activityIndicator.style = UIActivityIndicatorView.Style.whiteLarge
+        activityIndicator.color = .orange
+        container2.addSubview(activityIndicator)
+        uiView.addSubview(container2)
+        activityIndicator.startAnimating()
+    }
     
+    func hideActivityIndicator2(uiView: UIView) {
+        let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+        activityIndicator.stopAnimating()
+        container2.removeFromSuperview()
+    }
     
 }
 
@@ -188,3 +206,14 @@ public extension UIView {
     }
 }
 
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}

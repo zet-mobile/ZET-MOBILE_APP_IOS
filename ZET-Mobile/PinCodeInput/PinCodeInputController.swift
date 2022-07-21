@@ -58,6 +58,10 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     func checkTouch() {
         let context = LAContext()
         

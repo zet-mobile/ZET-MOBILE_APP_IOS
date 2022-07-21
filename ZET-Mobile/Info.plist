@@ -22,6 +22,21 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
+	<key>NSContactsUsageDescription</key>
+	<string>ZET-MOBILE использует контакты, чтобы добавить контактов в список  </string>
+	<key>NSDebugDescription</key>
+	<string>for calling</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -52,8 +67,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -62,20 +75,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>ZET-MOBILE использует контакты, чтобы добавить контактов в список  </string>
-	<key>NSCameraUsageDescription</key>
-	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
-	<key>NSDebugDescription</key>
-	<string>for calling</string>
 </dict>
 </plist>

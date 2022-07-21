@@ -21,7 +21,6 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "add_balance_cell")
     backgroundColor = .clear
     
-    ico_image.image = UIImage(named: "in_money")
     
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)

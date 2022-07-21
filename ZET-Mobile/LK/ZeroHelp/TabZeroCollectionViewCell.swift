@@ -9,7 +9,7 @@ import UIKit
 
 class TabZeroCollectionViewCell: UICollectionViewCell {
     
-    lazy var title_info: UILabel = {
+ /*   lazy var title_info: UILabel = {
         let title = UILabel()
         title.text = "Оставайтесь на связи даже при нулевом балансе"
         title.numberOfLines = 2
@@ -34,17 +34,31 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
+    }()*/
+    
+    lazy var title_info: UILabel = {
+           let title = UILabel()
+        title.text = defaultLocalizer.stringForKey(key: "unpaid_package")
+        title.numberOfLines = 2
+        title.textColor = .red
+        title.font = UIFont(name: "", size: 10)
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.textAlignment = .left
+        title.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.autoresizesSubviews = true
+        title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return title
     }()
     
-   /* lazy var type_paket: UILabel = {
+    lazy var type_paket: UILabel = {
         let title = UILabel()
-        title.text = "Пакет 3 сомони"
+        title.text = ""
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 4 * 80 + 150, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 80, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -52,13 +66,13 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
     
     lazy var title_commission: UILabel = {
         let title = UILabel()
-        title.text = "Стоимость услуги: 0.2 сомони"
+        title.text = ""
         title.numberOfLines = 0
         title.textColor = .orange
         title.font = UIFont(name: "", size: 9)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 4 * 80 + 190, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 100, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -66,54 +80,54 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
     
     lazy var summa: UILabel = {
         let title = UILabel()
-        title.text = "Итого:: 0.2 сомони"
+        title.text = ""
         title.numberOfLines = 0
         title.textColor = .orange
         title.font = UIFont(name: "", size: 9)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 4 * 80 + 220, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 120, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
     }()
     
     lazy var sendButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 20, y: 4 * 80 + 260, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
+        let button = UIButton(frame: CGRect(x: 20, y: 160, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle(defaultLocalizer.stringForKey(key: "Purchase_package"), for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Pay_current"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
         return button
-    }()*/
+    }()
     
-    let white_view_back = UIView(frame: CGRect(x: 0, y: 4 * 80 + 130, width: UIScreen.main.bounds.size.width, height: 300))
+    let white_view_back = UIView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)) - 280, width: UIScreen.main.bounds.size.width, height: 280))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        //white_view_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        white_view_back.backgroundColor = .white
         white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         white_view_back.layer.shadowOpacity = 1
         white_view_back.layer.shadowOffset = .zero
         white_view_back.layer.shadowRadius = 10
+        white_view_back.isHidden = false
         
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        contentView.addSubview(title_info)
-        contentView.addSubview(icon_more)
-        contentView.addSubview(white_view_back)
-        contentView.sendSubviewToBack(white_view_back)
+        white_view_back.addSubview(title_info)
         
-        /*contentView.addSubview(type_paket)
-        contentView.addSubview(title_commission)
-        contentView.addSubview(summa)
-        contentView.addSubview(sendButton)*/
+        contentView.addSubview(white_view_back)
+        
+        white_view_back.addSubview(type_paket)
+        white_view_back.addSubview(title_commission)
+        white_view_back.addSubview(summa)
+        white_view_back.addSubview(sendButton)
     
     }
     

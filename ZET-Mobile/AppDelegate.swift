@@ -42,7 +42,7 @@ extension UIApplication {
 }
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate  {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     
     var window: UIWindow?
     
@@ -100,3 +100,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
 
 }
 
+extension AppDelegate: UNUserNotificationCenterDelegate {
+
+  // This function will be called when the app receive notification
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+      
+    // show the notification alert (banner), and with sound
+    completionHandler([.alert, .sound])
+  }
+    
+  // This function will be called right after user tap on the notification
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+      
+      let application = UIApplication.shared
+        
+        if(application.applicationState == .active){
+          print("user tapped the notification bar when the app is in foreground")
+           /* window = UIWindow()
+            window?.makeKeyAndVisible()
+            let navController = UINavigationController(rootViewController: ContainerViewController())
+            window?.rootViewController = navController
+            
+            navController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navController.navigationController?.pushViewController(PushViewController(), animated: true)*/
+        }
+        
+        if(application.applicationState == .inactive)
+        {
+          print("user tapped the notification bar when the app is in background")
+            
+           /* window = UIWindow()
+            window?.makeKeyAndVisible()
+            let navController = UINavigationController(rootViewController: ContainerViewController())
+            window?.rootViewController = navController
+            
+            navController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            navController.navigationController?.pushViewController(PushViewController(), animated: true)
+           
+            guard let window = UIApplication.shared.keyWindow else {
+               return
+            }
+
+            guard let rootViewController = window.rootViewController else {
+               return
+            }
+            let vc = ContainerViewController()
+            vc.view.frame = rootViewController.view.frame
+            vc.view.layoutIfNeeded()
+            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                   window.rootViewController = vc
+             }, completion: nil)*/
+        }
+        
+        /* Change root view controller to a specific viewcontroller */
+        // let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        // let vc = storyboard.instantiateViewController(withIdentifier: "ViewControllerStoryboardID") as? ViewController
+        // self.window?.rootViewController = vc
+        
+        completionHandler()
+  }
+}

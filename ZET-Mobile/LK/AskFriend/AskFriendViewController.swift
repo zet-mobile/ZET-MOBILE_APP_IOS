@@ -48,8 +48,24 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+        guard let window = UIApplication.shared.keyWindow else {
+           return
+        }
+
+        guard let rootViewController = window.rootViewController else {
+           return
+        }
+        let vc = ContainerViewController()
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+               window.rootViewController = vc
+         }, completion: nil)
     }
     
     func setupView() {

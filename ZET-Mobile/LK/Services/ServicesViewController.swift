@@ -67,7 +67,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
     
     override func viewDidLayoutSubviews() {
@@ -99,7 +99,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         
         view.backgroundColor = toolbarColor
   
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
@@ -118,7 +118,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     func setupSliderSection() {
         scrollView.addSubview(SliderView)
         SliderView.backgroundColor = .clear
-        SliderView.frame = CGRect(x: 0, y: 60, width: UIScreen.main.bounds.size.width, height: 120)
+        SliderView.frame = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: 120)
         SliderView.delegate = self
         SliderView.dataSource = self
     }
@@ -126,11 +126,11 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     func setupTabCollectionView() {
         y_pozition = y_pozition + 55
         
-        servicesView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
-        servicesView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2 - 20, height: 40)
+        servicesView.tab1.frame = CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 40)
+        servicesView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2 - 40, height: 40)
         
-        servicesView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 10, height: 3)
-        servicesView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 10, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 10, height: 3)
+        servicesView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 3)
+        servicesView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 40, height: 3)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         servicesView.tab1.isUserInteractionEnabled = true
@@ -197,13 +197,13 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async {
                         if result.offers.count != 0 {
                             for i in 0 ..< result.offers.count {
-                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name)])
+                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name ?? "")])
                             }
                         }
                         
                         if result.connected.count != 0 {
                             for i in 0 ..< result.connected.count {
-                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName), String(result.connected[i].price ?? ""),  String(result.connected[i].period ?? ""), String(result.connected[i].description ?? ""), String(result.connected[i].nextChargeDate ?? "")])
+                                self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName ?? ""), String(result.connected[i].price ?? ""),  String(result.connected[i].period ?? ""), String(result.connected[i].description ?? ""), String(result.connected[i].nextChargeDate ?? "")])
                             }
                         }
                         
@@ -218,7 +218,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                                     disc_percent = String(result.available[i].discount!.discountPercent)
                                 }
                                 
-                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent, String(result.available[i].description ?? "")])
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName ?? ""), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent, String(result.available[i].description ?? "")])
                             }
                         }
                     }

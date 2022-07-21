@@ -23,6 +23,7 @@ struct zeroHelpData {
     let created_at: [String]
 }
 
+
 class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     
     var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
@@ -62,7 +63,9 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     var descrip = ""
     var lifetime = ""
     var arpu = ""
+    var status = true
     var packets_data = [[String]]()
+    var remainders_data = [[String]]()
     var history_data = [[String]]()
     
     var HistoryData = [zeroHelpData(date_header: String(), packet_tax: [String](), packet_sum: [String](), packet_amount: [String](), credit_id: [String](), remaind_sum_amount: [String](), remaind_tax_amount: [String](), remaind_credit_amount: [String](), is_repayment: [String](), packet_name: [String](), created_at: [String]())]
@@ -84,6 +87,10 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
             // Fallback on earlier versions
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
     
     @objc func goBack() {
@@ -207,11 +214,16 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                         self.lifetime = String(result.lifetime)
                         self.descrip = String(result.description)
                         self.arpu = String(result.arpu)
+                        self.status = result.success
+                        
+                        if result.remainders != nil {
+                            remainders_data.append([String(result.remainders!.remaind_sum_amount), String(result.remainders!.remaind_credit_amount), String(result.remainders!.remaind_tax_amount), String(result.remainders!.packet_name), String(result.remainders!.created_at)])
+                          }
                         
                         if result.packets != nil {
                             if result.packets!.count != 0 {
                                 for i in 0 ..< result.packets!.count {
-                                    packets_data.append([String(result.packets![i].packet_tax), String(result.packets![i].packet_sum), String(result.packets![i].packet_amount), String(result.packets![i].packet_name)])
+                                    packets_data.append([String(result.packets![i].packet_tax), String(result.packets![i].packet_sum), String(result.packets![i].packet_amount), String(result.packets![i].packet_name), String(result.packets![i].packet_id)])
                                 }
                             }
                         }
@@ -319,6 +331,154 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
             }
     }
     
+    @objc func translateTrafic(_ sender: UIButton) {
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+       // let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width * 0.80
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AlertView2()
+        view.backgroundColor = contentColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
+        view.layer.cornerRadius = 20
+        view.name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
+        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
+        
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Pay_current") as NSString
+        let range = (cost).range(of: cost as String)
+        let costString = NSMutableAttributedString.init(string: cost as String)
+        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+        costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
+        
+        var title_cost = " '" + remainders_data[0][3] + "'" as NSString
+            
+        let titleString = NSMutableAttributedString.init(string: title_cost as String)
+        let range2 = (title_cost).range(of: title_cost as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2)
+        
+        costString.append(titleString)
+        view.value_title.attributedText = costString
+        view.value_title.numberOfLines = 2
+        view.value_title.frame.size.height = view.value_title.frame.size.height + 30
+        
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
+        let range2_1 = (cost2).range(of: cost2 as String)
+        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
+        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+        
+        let title_cost2 = " " + remainders_data[0][0] + " с. "as NSString
+        let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
+        let range2_2 = (title_cost2).range(of: title_cost2 as String)
+        titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
+        titleString2.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2_2)
+        
+        let title_cost2_1 = "?" as NSString
+        let titleString2_1 = NSMutableAttributedString.init(string: title_cost2_1 as String)
+        let range2_3 = (title_cost2_1).range(of: title_cost2_1 as String)
+        titleString2_1.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_3)
+        titleString2_1.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_3)
+        
+        titleString2.append(titleString2_1)
+        costString2.append(titleString2)
+        
+        view.number_title.attributedText = costString2
+        view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
+        
+        let cost3: NSString = "\(defaultLocalizer.stringForKey(key: "Service_cost")): " as NSString
+        let range3 = (cost3).range(of: cost3 as String)
+        let costString3 = NSMutableAttributedString.init(string: cost3 as String)
+        costString3.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range3)
+        costString3.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
+        
+        var title_cost3 = " " + remainders_data[0][2] + " с." as NSString
+            
+        let titleString3 = NSMutableAttributedString.init(string: title_cost3 as String)
+        let range3_1 = (title_cost3).range(of: title_cost3 as String)
+        titleString3.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range3_1)
+        titleString3.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range3_1)
+        
+        costString3.append(titleString3)
+        view.cost_title.attributedText = costString3
+        view.cost_title.frame.origin.y = view.cost_title.frame.origin.y + 20
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
+        view.name.isUserInteractionEnabled = true
+        view.name.addGestureRecognizer(tapGestureRecognizer)
+        
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Pay"), for: .normal)
+        
+        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .touchUpInside)
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        
+        sender.showAnimation {
+            self.present(self.alert, animated: true, completion: nil)
+           
+          }
+        
+    }
+    
+    @objc func okClickDialog(_ sender: UIButton) {
+        
+        sender.showAnimation {
+            self.alert.dismiss(animated: true, completion: nil)
+        }
+        showActivityIndicator(uiView: view)
+        
+        print(sender.tag)
+        
+         let client = APIClient.shared
+             do{
+               try client.postCreditRequest().subscribe(
+                 onNext: { [self] result in
+                   print(result)
+                     DispatchQueue.main.async {
+                         if result.success == true {
+                             requestAnswer(status: true, message: String(result.message ?? ""))
+                         }
+                         else {
+                             requestAnswer(status: false, message: String(result.message ?? ""))
+                         }
+                     }
+                    
+                 },
+                 onError: { [self] error in
+                     DispatchQueue.main.async {
+                         requestAnswer(status: false, message: error.localizedDescription)
+                         print(error.localizedDescription)
+                         
+                     }
+                     
+                 },
+                 onCompleted: { [self] in
+                     DispatchQueue.main.async {
+                         hideActivityIndicator(uiView: view)
+                     }
+                    print("Completed event.")
+                     
+                 }).disposed(by: disposeBag)
+               }
+               catch{
+            }
+    }
+    
     @objc func openCondition() {
         detailViewController.more_view.content.text = descrip
         detailViewController.more_view.title_top.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
@@ -396,12 +556,18 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         
         present(alert, animated: true, completion: nil)
 
-        
     }
     
     @objc func dismissDialog() {
         print("hello")
         alert.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func tableTouch() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        cell.count_transfer.resignFirstResponder()
+        cell.user_to_number.resignFirstResponder()
     }
 }
 
@@ -421,7 +587,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabZeroCollectionViewCell
         if indexPath.row == 0 {
             table.register(ZeroTableViewCell.self, forCellReuseIdentifier: "zero_cell")
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: 4 * 90)
+            table.frame = CGRect(x: 10, y: 0, width: Int(UIScreen.main.bounds.size.width) - 20, height: 4 * 90)
             table.delegate = self
             table.dataSource = self
             table.rowHeight = 80
@@ -433,15 +599,51 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             cell.addSubview(table)
            
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
-            cell.icon_more.isUserInteractionEnabled = true
-            cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
+            //cell.icon_more.isUserInteractionEnabled = true
+           // cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
             
             if packets_data.count == 0 {
                 emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table.frame.width, height: table.frame.height), text: message)
                 table.separatorStyle = .none
                 table.backgroundView = emptyView
-                cell.icon_more.isHidden = !cell.icon_more.isHidden
-                cell.title_info.isHidden = !cell.title_info.isHidden
+                cell.white_view_back.isHidden = true
+            }
+            else if packets_data.count != 0 && self.status == false {
+                cell.white_view_back.isHidden = false
+                cell.type_paket.text = remainders_data[0][3]
+                
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite, range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
+                
+                var title_cost =  ": " + remainders_data[0][2] + " с." as NSString
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+                
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
+                
+                let cost2: NSString = defaultLocalizer.stringForKey(key: "TOTAL") as NSString
+                let range2_1 = (cost2).range(of: cost2 as String)
+                let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+                costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite, range: range2_1)
+                costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+                
+                var title_cost2 =  ": " + remainders_data[0][0] + " с." as NSString
+                let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
+                let range2_2 = (title_cost2).range(of: title_cost2 as String)
+                titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2_2)
+                titleString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_2)
+                
+                costString2.append(titleString2)
+                cell.summa.attributedText = costString2
+                
+                cell.sendButton.addTarget(self, action: #selector(translateTrafic), for: .touchUpInside)
+                table.allowsSelection = false
             }
             
         }
@@ -459,7 +661,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table2.backgroundColor = contentColor
             cell.addSubview(table2)
             
-            if history_data.count == 0 {
+            if HistoryData.count == 0 {
                 emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
                 Вы еще не воспользовались услугой "Помощь при нуле"
                 """)
@@ -553,12 +755,29 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            if indexPath.row == 3 {
+            if indexPath.row == packets_data.count - 1 {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-                cell.titleOne.text = packets_data[indexPath.row][0]
-                cell.titleTwo.text = packets_data[indexPath.row][1]
             
             }
+            
+            cell.titleOne.text = packets_data[indexPath.row][3]
+            
+            let cost: NSString = packets_data[indexPath.row][1] as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
+            
+            var title_cost = " " + defaultLocalizer.stringForKey(key: "с.") as NSString
+                
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleTwo.attributedText = costString
+            
             //cell.button.setImage(#imageLiteral(resourceName: "choosed_help"), for: UIControl.State.normal)
             cell.button.setImage(#imageLiteral(resourceName: "un_choosed_help"), for: UIControl.State.normal)
             cell.button.isUserInteractionEnabled = false
@@ -579,7 +798,7 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
             cell.titleThree.text = HistoryData[indexPath.section].packet_sum[indexPath.row]
             
             let dateFormatter1 = DateFormatter()
-            dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+            dateFormatter1.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
             let date = dateFormatter1.date(from: String(HistoryData[indexPath.section].created_at[indexPath.row]))
             dateFormatter1.dateFormat = "HH:mm"
             
@@ -623,10 +842,45 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
         next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
         next.modalPresentationStyle = .custom
+        next.zero_button_view.type_paket.text = packets_data[indexPath.row][3]
+        
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") as NSString
+        let range = (cost).range(of: cost as String)
+        let costString = NSMutableAttributedString.init(string: cost as String)
+        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite, range: range)
+        costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
+        
+        var title_cost =  ": " + packets_data[indexPath.row][0] + " с." as NSString
+        let titleString = NSMutableAttributedString.init(string: title_cost as String)
+        let range2 = (title_cost).range(of: title_cost as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+        
+        costString.append(titleString)
+        next.zero_button_view.title_commission.attributedText = costString
+        
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "TOTAL") as NSString
+        let range2_1 = (cost2).range(of: cost2 as String)
+        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite, range: range2_1)
+        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+        
+        var title_cost2 =  ": " + packets_data[indexPath.row][1] + " с." as NSString
+        let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
+        let range2_2 = (title_cost2).range(of: title_cost2 as String)
+        titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2_2)
+        titleString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_2)
+        
+        costString2.append(titleString2)
+        next.zero_button_view.summa.attributedText = costString2
         //next.modalPresentationCapturesStatusBarAppearance = true
+        packet_tax = packets_data[indexPath.row][0]
+        packet_sum = packets_data[indexPath.row][1]
+        packet_amount = packets_data[indexPath.row][2]
+        packet_name = packets_data[indexPath.row][3]
+        packet_id = packets_data[indexPath.row][4]
         
         next.transitioningDelegate = self.halfModalTransitioningDelegate
         present(next, animated: true, completion: nil)
     }
-    
 }

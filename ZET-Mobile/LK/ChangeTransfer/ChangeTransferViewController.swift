@@ -103,6 +103,10 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -472,14 +476,12 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         view.name.addGestureRecognizer(tapGestureRecognizer)
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
-        cell.sendButton.showAnimation {
-            self.present(self.alert, animated: true, completion: nil)
-          }
         
+        present(alert, animated: true, completion: nil)
         
     }
     
@@ -527,31 +529,38 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
 
         
     }
     
-    @objc func dismissDialog() {
+    @objc func dismissDialog(_ sender: UIButton) {
         print("hello")
-        alert.dismiss(animated: true, completion: nil)
-        hideActivityIndicator(uiView: view)
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            hideActivityIndicator(uiView: view)
+        }
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation {
-            self.alert.dismiss(animated: true, completion: nil)
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
         }
-        showActivityIndicator(uiView: view)
         
         print(sender.tag)
-        let parametr: [String: Any] = ["exchangeType": "", "value": ""]
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! ChangeTransferTableViewCell
+        
+        let parametr: [String: Any] = ["exchangeType": exchangeType, "value": String(cell.count_transfer.text ?? "")]
+        
          let client = APIClient.shared
              do{
                try client.exchangePutRequest(jsonBody: parametr).subscribe(
                  onNext: { [self] result in
                    print(result)
+                     print("here")
                      DispatchQueue.main.async {
                          if result.success == true {
                              requestAnswer(status: true, message: String(result.message ?? ""))
@@ -563,6 +572,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                     
                  },
                  onError: { [self] error in
+                     print("and here")
                      DispatchQueue.main.async {
                          requestAnswer(status: false, message: error.localizedDescription)
                          print(error.localizedDescription)
@@ -571,9 +581,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                      
                  },
                  onCompleted: { [self] in
-                     DispatchQueue.main.async {
-                         hideActivityIndicator(uiView: view)
-                     }
+                    
                     print("Completed event.")
                      
                  }).disposed(by: disposeBag)
@@ -616,6 +624,13 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         print("jlllllll")
         nav.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func tableTouch() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! ChangeTransferTableViewCell
+        cell.count_transfer.resignFirstResponder()
+        cell.count_to_transfer.resignFirstResponder()
+    }
 }
 
 extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -644,7 +659,10 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.separatorStyle = .none
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
-            table.allowsSelection = false
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+            table.isUserInteractionEnabled = true
+            table.addGestureRecognizer(tapGestureRecognizer)
+            
             cell.addSubview(table)
         }
         else {
@@ -837,7 +855,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
             
             cell.slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
-            cell.sendButton.addTarget(self, action:  #selector(self.translateTrafic), for: .touchUpInside)
+            cell.sendButton.addTarget(self, action:  #selector(translateTrafic), for: .touchUpInside)
             return cell
         }
         else {

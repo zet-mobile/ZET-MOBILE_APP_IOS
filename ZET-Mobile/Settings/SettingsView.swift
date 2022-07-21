@@ -44,7 +44,7 @@ class SettingsView: UIView {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
-        textfield.setView(.right, image: UIImage(named: "drop_icon"))
+        textfield.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
         return textfield
     }()
     
@@ -68,7 +68,7 @@ class SettingsView: UIView {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
-        textfield.setView(.right, image: UIImage(named: "drop_icon"))
+        textfield.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
         return textfield
     }()
     
@@ -130,32 +130,11 @@ class SettingsView: UIView {
         return titleOne
     }()
 
-    lazy var switch_email: UISwitch = {
-        let switch_ = UISwitch()
-        switch_.onTintColor = .orange
-        switch_.frame = CGRect(x: 20, y: 450, width: 0, height: 0)
-        switch_.setFrame(width: 50, height: 27)
-        return switch_
-    }()
-    
-    lazy var email_t: UILabel = {
-        let titleOne = UILabel()
-        titleOne.text = "E-mail рассылка"
-        titleOne.numberOfLines = 0
-        titleOne.textColor = colorBlackWhite
-        titleOne.font = UIFont.systemFont(ofSize: 18)
-        titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-        titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 90, y: 450, width: 300, height: 30)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return titleOne
-    }()
-    
+
     lazy var switch_sms: UISwitch = {
         let switch_ = UISwitch()
         switch_.onTintColor = .orange
-        switch_.frame = CGRect(x: 20, y: 500, width: 0, height: 0)
+        switch_.frame = CGRect(x: 20, y: 450, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)
         return switch_
     }()
@@ -168,7 +147,7 @@ class SettingsView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 90, y: 500, width: 300, height: 30)
+        titleOne.frame = CGRect(x: 90, y: 450, width: 300, height: 30)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -182,7 +161,7 @@ class SettingsView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 570, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 520, width: 300, height: 20)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -196,7 +175,7 @@ class SettingsView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 620, width: 300, height: 30)
+        titleOne.frame = CGRect(x: 20, y: 570, width: 300, height: 30)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         titleOne.isUserInteractionEnabled = true
@@ -205,16 +184,15 @@ class SettingsView: UIView {
     
     lazy var icon_but: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 620, width: 30, height: 30)
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 570, width: 30, height: 30)
         button.setImage(#imageLiteral(resourceName: "next_arrow"), for: UIControl.State.normal)
         return button
     }()
     
     lazy var switch_enter: UISwitch = {
         let switch_ = UISwitch()
-        switch_.isOn = true
         switch_.onTintColor = .orange
-        switch_.frame = CGRect(x: 20, y: 670, width: 0, height: 0)
+        switch_.frame = CGRect(x: 20, y: 630, width: 0, height: 0)
         switch_.setFrame(width: 50, height: 27)
         return switch_
     }()
@@ -227,7 +205,7 @@ class SettingsView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 18)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 90, y: 670, width: 300, height: 30)
+        titleOne.frame = CGRect(x: 90, y: 630, width: 310, height: 30)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -258,8 +236,6 @@ class SettingsView: UIView {
         self.addSubview(push_t)
         self.addSubview(switch_sales)
         self.addSubview(sales_t)
-        self.addSubview(switch_email)
-        self.addSubview(email_t)
         self.addSubview(switch_sms)
         self.addSubview(sms_t)
         

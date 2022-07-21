@@ -9,20 +9,54 @@ import UIKit
 
 class ConditionViewController: UIViewController, UIScrollViewDelegate {
 
-    let condition_view = ConditionView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+    let condition_view = ConditionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+    
+    let scrollView = UIScrollView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         modalPresentationCapturesStatusBarAppearance = true
         
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = .clear
+        
         condition_view.layer.cornerRadius = 10
-        view.addSubview(condition_view)
+        condition_view.content.frame.size.height = CGFloat.greatestFiniteMagnitude
+        condition_view.content.textColor = darkGrayLight
+        condition_view.content.numberOfLines = 0
+        condition_view.content.lineBreakMode = NSLineBreakMode.byWordWrapping
+        condition_view.content.sizeToFit()
+      
+        print(condition_view.content.frame.height)
+        condition_view.content.frame = CGRect(x: 20, y: 160, width: UIScreen.main.bounds.size.width - 40, height: condition_view.content.frame.height)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: condition_view.content.frame.height + 210)
+        condition_view.frame.size.height = condition_view.content.frame.height + 210
+        
+        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (bottomPadding ?? 0))
+        view.addSubview(scrollView)
+        scrollView.addSubview(condition_view)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if #available(iOS 11.0, *) {
+            scrollView.scrollIndicatorInsets = view.safeAreaInsets
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
+        } else {
+            // Fallback on earlier versions
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        }
     }
     
 }
@@ -57,17 +91,13 @@ class ConditionView: UIView {
         return title
     }()
     
-    lazy var content: UITextView = {
-        let title = UITextView()
-        title.frame = CGRect(x: 20, y: 160, width: Int(UIScreen.main.bounds.size.width) - 40, height: 460)
+    
+    lazy var content: UILabel = {
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 160, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
         title.textColor = darkGrayLight
-        //title.numberOfLines = 0
-        title.showsVerticalScrollIndicator = true
-        title.isEditable = false
-        title.isScrollEnabled = true
         title.font = UIFont.systemFont(ofSize: 16)
-        title.textAlignment = .center
-        title.backgroundColor = colorGrayWhite
+        title.textAlignment = .left
         title.text = """
  Публичная оферта.
  Соглашение о пользовании WEB-страницей или Приложением Оператора «ZET-MOBILE» на сайте ООО «ТАКОМ» (ZET-MOBILE)
@@ -168,6 +198,9 @@ class ConditionView: UIView {
  6.4. Настоящее Соглашение вступает в силу для Абонента с момента авторизации (регистрации) и действует на неопределённый срок или до момента внесения изменения со стороны Оператора и публикации Соглашения на Веб-сайте Оператора в новой редакции.
  6.5. Действующая редакция Соглашения находится по следующему адресу: my.zet-mobile.com
  """
+        title.numberOfLines = 0
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.sizeToFit()
         return title
     }()
     

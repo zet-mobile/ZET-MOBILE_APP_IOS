@@ -14,7 +14,7 @@ struct ServicesData: Decodable {
 }
 
 struct services_data {
-    let serviceName: String
+    let serviceName: String?
     let iconUrl: String?
     let description: String?
     let priceAndPeriod: String?
@@ -25,12 +25,37 @@ struct services_data {
     let discount: discount_data?
 }
 
-struct offers_data: Decodable {
+struct offers_data {
     let iconUrl: String
     let url: String
-    let name: String
+    let name: String?
     let id: Int
 }
+
+extension offers_data: Decodable {
+    
+    private enum offers_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case iconUrl = "iconUrl"
+        case name = "name"
+        case url = "url"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: offers_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        iconUrl = try container.decode(String.self, forKey: .iconUrl)
+        url = try container.decode(String.self, forKey: .url)
+        do {
+            name = try container.decode(String.self, forKey: .name)
+        }
+        catch {
+            name = nil
+        }
+       
+    }
+}
+
 
 extension services_data: Decodable {
     
@@ -49,7 +74,13 @@ extension services_data: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: connected_dataCodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
-        serviceName = try container.decode(String.self, forKey: .serviceName)
+        do {
+            serviceName = try container.decode(String.self, forKey: .serviceName)
+        }
+        catch {
+            serviceName = nil
+        }
+        
         do {
             iconUrl = try container.decode(String.self, forKey: .iconUrl)
         }

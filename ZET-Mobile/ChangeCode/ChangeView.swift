@@ -18,8 +18,6 @@ class ChangeView: UIView {
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
         titleOne.frame = CGRect(x: 20, y: 0, width: 300, height: 20)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
     }()
     
@@ -44,8 +42,6 @@ class ChangeView: UIView {
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
         titleOne.frame = CGRect(x: 20, y: 120, width: 300, height: 20)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
     }()
     
@@ -58,6 +54,7 @@ class ChangeView: UIView {
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
         textfield.isSecureTextEntry = true
+        textfield.clearsOnBeginEditing = false
         return textfield
     }()
     
@@ -70,8 +67,6 @@ class ChangeView: UIView {
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
         titleOne.frame = CGRect(x: 20, y: 240, width: 300, height: 20)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
     }()
     
@@ -84,6 +79,7 @@ class ChangeView: UIView {
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
         textfield.isSecureTextEntry = true
+        textfield.clearsOnBeginEditing = false
         return textfield
     }()
     
@@ -145,8 +141,6 @@ class ChangeView: UIView {
         gray_back.addSubview(title1)
         gray_back.addSubview(title2)
         self.addSubview(gray_back)
-        
-        
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         old_code.leftView = paddingView

@@ -78,6 +78,10 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -336,18 +340,6 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
     
-    @objc func tab4Click() {
-        addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-       
-        addional_view.tab1Line.backgroundColor = .clear
-        addional_view.tab2Line.backgroundColor = .clear
-        addional_view.tab3Line.backgroundColor = .clear
-        TabCollectionServiceView.scrollToItem(at: IndexPath(item: 3, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
-    }
-    
-    
     func sendRequest() {
         let client = APIClient.shared
             do{
@@ -382,9 +374,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table.frame.height), text: "Нет доступных интернет-пакетов")
-                            self.table3.separatorStyle = .none
-                            self.table3.backgroundView = emptyView
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: "Нет доступных интернет-пакетов")
+                            self.table.separatorStyle = .none
+                            self.table.backgroundView = emptyView
                             }
                         }
                         
@@ -395,7 +387,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table.frame.height), text: "Нет доступных голосовых-пакетов")
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: "Нет доступных голосовых-пакетов")
                             self.table2.separatorStyle = .none
                             self.table2.backgroundView = emptyView
                             }
@@ -408,7 +400,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table.frame.height), text: "Нет доступных смс-пакетов")
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table3.frame.height), text: "Нет доступных смс-пакетов")
                             self.table3.separatorStyle = .none
                             self.table3.backgroundView = emptyView
                             }
@@ -591,7 +583,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         }
         
         if addional_view.tab1.textColor == checkColor {
-            parametr = ["packetId": Int(internet_data[sender.tag][0]), "discountId": discount_id]
+            parametr = ["packetId": internet_data[sender.tag][0], "discountId": discount_id]
         } else if addional_view.tab2.textColor == checkColor {
             parametr = ["packetId": Int(minuti_data[sender.tag][0]), "discountId": discount_id]
         } else {
@@ -614,6 +606,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                     
                  },
                  onError: { [self] error in
+                     print("hhhhh")
                      DispatchQueue.main.async {
                          requestAnswer(status: false, message: error.localizedDescription, type_request: "post")
                          print(error.localizedDescription)
@@ -628,6 +621,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                  }).disposed(by: disposeBag)
                }
                catch{
+                   print("hhhhkk;okok")
              }
     }
     
@@ -698,7 +692,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -767,13 +761,6 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .orange
             addional_view.tab3Line.backgroundColor = .clear
-        } else if indexPath.row == 3 {
-            addional_view.tab1.textColor = .gray
-            addional_view.tab2.textColor = .gray
-            addional_view.tab3.textColor = .gray
-            addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .clear
-            addional_view.tab3Line.backgroundColor = .clear
         }
           
     }
@@ -789,13 +776,13 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab2Line.backgroundColor = .orange
             addional_view.tab3Line.backgroundColor = .clear
         }
-        else if indexPath.row == 3 {
+        else if indexPath.row == 2 {
             addional_view.tab1.textColor = .gray
-            addional_view.tab2.textColor = .gray
-            addional_view.tab3.textColor = colorBlackWhite
+            addional_view.tab2.textColor = colorBlackWhite
+            addional_view.tab3.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .clear
-            addional_view.tab3Line.backgroundColor = .orange
+            addional_view.tab2Line.backgroundColor = .orange
+            addional_view.tab3Line.backgroundColor = .clear
         }
     }
 }

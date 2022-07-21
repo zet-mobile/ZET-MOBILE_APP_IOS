@@ -97,6 +97,19 @@ public class RequestObservable {
                     DispatchQueue.main.async {
                         UserDefaults.standard.set("Bearer \(String(result.accessToken))", forKey: "token")
                         UserDefaults.standard.set("Bearer \(String(result.refreshToken))", forKey: "refresh_token")
+                        guard let window = UIApplication.shared.keyWindow else {
+                           return
+                        }
+
+                        guard let rootViewController = window.rootViewController else {
+                           return
+                        }
+                        let vc = ContainerViewController()
+                        vc.view.frame = rootViewController.view.frame
+                        vc.view.layoutIfNeeded()
+                        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                               window.rootViewController = vc
+                         }, completion: nil)
                         
                     }
                 },

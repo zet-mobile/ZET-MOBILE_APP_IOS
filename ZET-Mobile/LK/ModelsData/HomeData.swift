@@ -22,14 +22,36 @@ struct HomeData: Decodable {
 }
 
 struct priceplan_data {
-    let priceplanName: String
+    let priceplanName: String?
     let nextApplyDate: String?
 }
 
-struct microServices_data: Decodable {
+struct microServices_data {
     let id: Int
     let iconUrl: String
-    let microServiceName: String
+    let microServiceName: String?
+}
+
+extension microServices_data: Decodable {
+    
+    private enum microServices_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case iconUrl = "iconUrl"
+        case microServiceName = "microServiceName"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: microServices_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        iconUrl = try container.decode(String.self, forKey: .iconUrl)
+        do {
+            microServiceName = try container.decode(String.self, forKey: .microServiceName)
+        }
+        catch {
+            microServiceName = nil
+        }
+       
+    }
 }
 
 extension priceplan_data: Decodable {
@@ -41,7 +63,12 @@ extension priceplan_data: Decodable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: priceplan_dataCodingKeys.self)
-        priceplanName = try container.decode(String.self, forKey: .priceplanName)
+        do {
+            priceplanName = try container.decode(String.self, forKey: .priceplanName)
+        }
+        catch {
+            priceplanName = nil
+        }
         do {
             nextApplyDate = try container.decode(String.self, forKey: .nextApplyDate)
         }

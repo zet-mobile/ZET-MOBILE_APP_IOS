@@ -45,11 +45,16 @@ class ContactsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        self.navigationController?.tabBarController?.tabBar.isHidden = true
+        
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
  
     @objc func goBack() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(MobileTransferViewController(), animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     func fetchContacts() {
@@ -67,35 +72,26 @@ class ContactsViewController: UIViewController {
                 do {
                     // 3.
                     try store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-                        let length = contact.phoneNumbers.first?.value.stringValue.count
-                        let str = contact.phoneNumbers.first?.value.stringValue.prefix(3)
-                        let str2 = contact.phoneNumbers.first?.value.stringValue.prefix(2)
-                        let str3 = contact.phoneNumbers.first?.value.stringValue.prefix(5)
                         
-                        if str3 == "+992 " {
-                            var number = contact.phoneNumbers.first?.value.stringValue ?? ""
-                            number = number.replacingOccurrences(of: str3!, with: "", options: NSString.CompareOptions.literal, range: nil)
-                            self.tableData1.append([String(contact.givenName), String(contact.familyName), String(number)])
-                            self.tableData2.append([String(contact.givenName), String(contact.familyName), String(number)])
+                        var number = contact.phoneNumbers.first?.value.stringValue ?? ""
+                        number = number.trimmingCharacters(in: .whitespaces)
+                        
+                        number = number.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
+                        number = number.replacingOccurrences(of: "(", with: "", options: NSString.CompareOptions.literal, range: nil)
+                        number = number.replacingOccurrences(of: ")", with: "", options: NSString.CompareOptions.literal, range: nil)
+                        number = number.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
+                        
+                        if number.prefix(4) == "+992" {
+                            number = number.replacingOccurrences(of: number.prefix(4), with: "", options: NSString.CompareOptions.literal, range: nil)
                         }
-                        
-                        if str == "992" {
-                            var number = contact.phoneNumbers.first?.value.stringValue ?? ""
-                            number = number.replacingOccurrences(of: str!, with: "", options: NSString.CompareOptions.literal, range: nil)
-                            self.tableData1.append([String(contact.givenName), String(contact.familyName), String(number)])
-                            self.tableData2.append([String(contact.givenName), String(contact.familyName), String(number)])
-                        }
-                        
-                        print(contact.phoneNumbers.first?.value.stringValue ?? "")
-                        if  str3 == "(911)" || str3 == "(915)" || str3 == "(917)" || str3 == "(919)" || str3 == "(80)" || str3 == "(40)" {
+                        else if number.prefix(3) == "992" {
+                            number = number.replacingOccurrences(of: number.prefix(3), with: "", options: NSString.CompareOptions.literal, range: nil)
                             
-                            var number = contact.phoneNumbers.first?.value.stringValue ?? ""
-                            number = number.replacingOccurrences(of: "(", with: "", options: NSString.CompareOptions.literal, range: nil)
-                            number = number.replacingOccurrences(of: ")", with: "", options: NSString.CompareOptions.literal, range: nil)
-                            number = number.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
-                            number = number.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
+                        }
+                        
+                        if  number.prefix(3) == "911" || number.prefix(3) == "915" || number.prefix(3) == "917" || number.prefix(3) == "919" || number.prefix(2) == "80" || number.prefix(2) == "40"  {
+                          
                             print(number)
-                            
                             self.tableData1.append([String(contact.givenName), String(contact.familyName), String(number)])
                             self.tableData2.append([String(contact.givenName), String(contact.familyName), String(number)])
                         }
@@ -131,7 +127,7 @@ class ContactsViewController: UIViewController {
         toolbar.backgroundColor = contentColor
         
         table.register(ContactsTableViewCell.self, forCellReuseIdentifier: "contacts")
-        table.frame = CGRect(x: 10, y: 80, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+        table.frame = CGRect(x: 10, y: 80, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (140 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         table.delegate = self
         table.dataSource = self
         table.rowHeight = 70
@@ -217,8 +213,7 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         to_phone = tableData1[indexPath.row][2]
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(MobileTransferViewController(), animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     func updateNumber() {

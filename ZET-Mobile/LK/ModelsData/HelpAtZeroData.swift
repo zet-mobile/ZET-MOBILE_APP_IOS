@@ -16,7 +16,7 @@ struct HelpAtZeroData {
     let code: Int
     let success: Bool
     let packets: [packets_data]?
-    let remainders: [remainders_data]?
+    let remainders: remainders_data?
 }
 
 struct packets_data: Decodable {
@@ -24,6 +24,7 @@ struct packets_data: Decodable {
     let packet_sum: Double
     let packet_amount: Double
     let packet_name: String
+    let packet_id: Int
 }
 
 struct remainders_data: Decodable {
@@ -34,12 +35,12 @@ struct remainders_data: Decodable {
     let created_at: String
 }
 
-struct HelpAtZeroPostData: Decodable {
-    let message: String
-    let description: String
-    let code: String
-    let success: String
-    let packet_info: packets_data
+struct HelpAtZeroPostData {
+    let message: String?
+    let description: String?
+    let code: Int
+    let success: Bool
+ 
 }
 
 struct HelpAtZeroHistoryData {
@@ -98,7 +99,7 @@ extension HelpAtZeroData: Decodable {
         }
   
         do {
-            remainders = try container.decode([remainders_data].self, forKey: .remainders)
+            remainders = try container.decode(remainders_data.self, forKey: .remainders)
         }
         catch {
             remainders = nil
@@ -125,5 +126,38 @@ extension HelpAtZeroHistoryData: Decodable {
         }
   
     
+    }
+}
+
+
+extension HelpAtZeroPostData: Decodable {
+    
+    private enum HelpAtZeroPostDataCodingKeys: String, CodingKey {
+        case message = "message"
+        case description = "description"
+        case code = "code"
+        case success = "success"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: HelpAtZeroPostDataCodingKeys.self)
+      
+        do {
+            message = try container.decode(String.self, forKey: .message)
+        }
+        catch {
+            message = nil
+        }
+        
+        do {
+            description = try container.decode(String.self, forKey: .description)
+        }
+        catch {
+            description = nil
+        }
+        
+        code = try container.decode(Int.self, forKey: .code)
+        success = try container.decode(Bool.self, forKey: .success)
+        
     }
 }

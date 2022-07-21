@@ -57,6 +57,10 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     func setupView() {
         view.backgroundColor = toolbarColor
         

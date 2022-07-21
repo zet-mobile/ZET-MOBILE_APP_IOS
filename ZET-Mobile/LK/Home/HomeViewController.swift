@@ -86,6 +86,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     var refreshControl = UIRefreshControl()
     
+    var table_height = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -93,6 +95,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = toolbarColor
         color2 = colorLightDarkGray
         color1 = contentColor
+
         
         sendMapRequest()
        // self.refreshGetToken()
@@ -103,23 +106,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        if cellClick == "0" {
-            
-        }
-        else if  cellClick == "1" {
-            
-        }
-        else if cellClick == "2" {
-            
-            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.pushViewController(AskFriendViewController(), animated: true)
-        }
+       
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         scrollView.refreshControl = refreshControl
@@ -153,7 +146,18 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupView() {
         view.backgroundColor = toolbarColor
-  
+        table_height = 0
+        
+        for i in 0 ..< services_data.count - 1 {
+            if services_data[i][6] == "" {
+                table_height += 120
+            } else {
+                table_height += 140
+            }
+        }
+        
+        table_height += 20
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -161,13 +165,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat((services_data.count * 140)) + 800)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(table_height) + 800)
         
         view.addSubview(scrollView)
         
         scrollView.backgroundColor = colorLightDarkGray
         
-        home_view = HomeView(frame: CGRect(x: 0, y: 360, width: UIScreen.main.bounds.size.width, height: CGFloat((services_data.count * 140)) + 500))
+        home_view = HomeView(frame: CGRect(x: 0, y: 360, width: Int(UIScreen.main.bounds.size.width), height: table_height + 500))
      
         toolbar = Toolbar(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         toolbar.user_name.text = user_name
@@ -179,7 +183,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             home_view.titleTwo.frame.origin.y = 170
             home_view.titleThree.frame.origin.y = 370
             home_view.icon_more.frame.origin.y = 320
-            home_view.icon_more_services.frame.origin.y = CGFloat((services_data.count * 140)) + 430
+            home_view.icon_more_services.frame.origin.y = CGFloat(table_height + 430)
             home_view.white_view_back.frame.size.height = 440
             home_view.white_view_back2.frame.size.height = 500
             home_view.white_view_back2.frame.origin.y = 350
@@ -190,7 +194,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             home_view.titleTwo.frame.origin.y = 340
             home_view.titleThree.frame.origin.y = 540
             home_view.icon_more.frame.origin.y = 490
-            home_view.icon_more_services.frame.origin.y = CGFloat((services_data.count * 140)) + 600
+            home_view.icon_more_services.frame.origin.y = CGFloat(table_height + 600)
             home_view.white_view_back.frame.size.height = 610
             home_view.white_view_back2.frame.size.height = 670
             home_view.white_view_back2.frame.origin.y = 520
@@ -379,17 +383,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setupServicesTableView() {
         scrollView.addSubview(ServicesTableView)
+    
         if zero_help_view_show == false {
-            ServicesTableView.frame = CGRect(x: 0, y: 770, width: Int(UIScreen.main.bounds.size.width), height: (services_data.count * 140))
+            ServicesTableView.frame = CGRect(x: 0, y: 770, width: Int(UIScreen.main.bounds.size.width), height: table_height)
         }
         else {
-            ServicesTableView.frame = CGRect(x: 0, y: 940, width: Int(UIScreen.main.bounds.size.width), height: (services_data.count * 140))
+            ServicesTableView.frame = CGRect(x: 0, y: 940, width: Int(UIScreen.main.bounds.size.width), height: table_height)
         }
         ServicesTableView.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
         ServicesTableView.delegate = self
         ServicesTableView.dataSource = self
-        ServicesTableView.rowHeight = 140
-        ServicesTableView.estimatedRowHeight = 140
         ServicesTableView.isScrollEnabled = false
         ServicesTableView.backgroundColor = contentColor
         ServicesTableView.separatorColor = .lightGray
@@ -423,6 +426,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func sendRequest() {
+        services_data.removeAll()
+        remainders_data.removeAll()
+        slider_data.removeAll()
+        hot_services_data.removeAll()
+        
         let client = APIClient.shared
             do{
               try client.homeGetRequest().subscribe(
@@ -430,7 +438,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                   print(result)
                     DispatchQueue.main.async {
                         self.balance_credit = String(result.subscriberBalance)
-                        self.tarif_name = String(result.priceplan.priceplanName)
+                        self.tarif_name = String(result.priceplan.priceplanName ?? "")
                         if result.priceplan.nextApplyDate != nil {
                             let dateFormatter1 = DateFormatter()
                             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -446,13 +454,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.microServices.count != 0 {
                             for i in 0 ..< result.microServices.count {
-                                self.hot_services_data.append([String(result.microServices[i].id), String(result.microServices[i].iconUrl), String(result.microServices[i].microServiceName)])
+                                self.hot_services_data.append([String(result.microServices[i].id), String(result.microServices[i].iconUrl), String(result.microServices[i].microServiceName ?? "")])
                             }
                         }
                         
                         if result.offers.count != 0 {
                             for i in 0 ..< result.offers.count {
-                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name)])
+                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name ?? "")])
                             }
                         }
                         
@@ -466,7 +474,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                                     disc_percent = String(result.services[i].discount!.discountPercent)
                                 }
                                 
-                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName), String(result.services[i].price!),  String(result.services[i].period!), disc_id, disc_percent, String(result.services[i].description ?? "")])
+                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName ?? ""), String(result.services[i].price ?? ""),  String(result.services[i].period ?? ""), disc_id, disc_percent, String(result.services[i].description ?? "")])
                             }
                         }
                     
@@ -764,18 +772,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
             cell.getButton.tag = indexPath.row
             cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
-        }
-        else if tableView == AddBalanceOptionViewController().table {
-            if indexPath.row == 0 {
-                
-            }
-            else if indexPath.row == 1 {
-                
-            }
-            else {
-                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                navigationController?.pushViewController(AskFriendViewController(), animated: true)
-            }
         }
     }
 }

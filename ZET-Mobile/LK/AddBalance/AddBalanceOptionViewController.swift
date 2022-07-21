@@ -23,6 +23,7 @@ class AddBalanceOptionViewController: UIViewController {
         modalPresentationCapturesStatusBarAppearance = true
        
         add_balance_option.layer.cornerRadius = 10
+        add_balance_option.close.addTarget(self, action: #selector(close_view), for: .touchUpInside)
         view.addSubview(add_balance_option)
         
         view.addSubview(table)
@@ -36,6 +37,11 @@ class AddBalanceOptionViewController: UIViewController {
         table.separatorStyle = .none
         table.isScrollEnabled = false
         table.backgroundColor = contentColor
+        
+    }
+    
+    @objc func close_view() {
+        dismiss(animated: true, completion: nil)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -51,9 +57,30 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "add_balance_cell", for: indexPath) as! AddBalanceOptionViewCell
-        cell.accessoryType = .disclosureIndicator
+        
+        let image = UIImage(named: "Stroke_next.png")
+            let checkmark  = UIImageView(frame:CGRect(x:0, y:0, width:(image?.size.width)!, height:(image?.size.height)!));
+            checkmark.image = image
+            cell.accessoryView = checkmark
+      
         cell.titleOne.text = tableData[indexPath.row][1]
-        //cell.textLabel?.text = characters[indexPath.row]
+        if indexPath.row == 0 {
+            cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
+        }
+        else if indexPath.row == 1 {
+            cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "second.png") : UIImage(named: "second_l.png"))
+        }
+        else {
+            cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "third.png") : UIImage(named: "third_l.png"))
+        }
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
+        bgColorView.layer.borderColor = UIColor.orange.cgColor
+        bgColorView.layer.borderWidth = 1
+        bgColorView.layer.cornerRadius = 10
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
     }
     
@@ -61,16 +88,16 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
         cellClick = String(indexPath.row)
         print("hi")
         if indexPath.row == 0 {
-            
+            self.dismiss(animated: true, completion: nil)
         }
         else if indexPath.row == 1 {
-            
+            self.dismiss(animated: true, completion: nil)
         }
         else if indexPath.row == 2 {
             print("hhhh")
             self.dismiss(animated: true) {
-                HomeViewController().navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                HomeViewController().navigationController?.pushViewController(AskFriendViewController(), animated: true)
+                ContainerViewController().navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                ContainerViewController().navigationController?.pushViewController(AskFriendViewController(), animated: true)
             }
             
         }
@@ -83,7 +110,7 @@ class AddBalanceOptionView: UIView {
         let button = UIButton()
         button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 20, height: 20)
         button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
-        button.isUserInteractionEnabled = false
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()

@@ -112,7 +112,7 @@ class APIClient {
     
     // Connect packet
     func packetConnect(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/")!)
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/connect")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -338,7 +338,7 @@ class APIClient {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
-        request.httpMethod = "PUT"
+        request.httpMethod = "POST"
         request.httpBody = jsonData
      return requestObservable.callAPI(request: request)
     }
@@ -380,7 +380,7 @@ class APIClient {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
-        request.httpMethod = "PUT"
+        request.httpMethod = "POST"
         request.httpBody = jsonData
      return requestObservable.callAPI(request: request)
     }
@@ -460,8 +460,18 @@ class APIClient {
     }
     
     //  post money ask
-    func postCreditRequest(parametr: String) -> Observable<HelpAtZeroPostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/" + "\(parametr)")!)
+    func postCreditRequestID(parametr: String) -> Observable<HelpAtZeroPostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    //  post money ask
+    func postCreditRequest() -> Observable<HelpAtZeroPostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/refusal/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")

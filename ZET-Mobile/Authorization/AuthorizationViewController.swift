@@ -17,20 +17,22 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     var halfModalTransitioningDelegate: HalfModalTransitioningDelegate?
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     var auth_view = AuthorizationView()
+    var nav = UINavigationController()
     let disposeBag = DisposeBag()
     var alert = UIAlertController()
-    
-    var user_phone = ""
     
     var minute = 01
     var seconds = 59
     var timer = Timer()
     
+    var user_phone = ""
     var user_code = ""
     var secretCode = ""
     var hashString = ""
     var accessToken = ""
     var lang_id = 1
+    
+    var activeTextField : UITextField? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.code_field.delegate = self
         auth_view.numberField.tag = 1
         auth_view.code_field.tag = 2
+        auth_view.backgroundColor = contentColor
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
         auth_view.title_condition.isUserInteractionEnabled = true
@@ -54,6 +57,12 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
         
         self.view.addSubview(auth_view)
+        
+        
+        //NotificationCenter.default.addObserver(self, selector: #selector(AuthorizationViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+            // call the 'keyboardWillHide' function when the view controlelr receive notification that keyboard is going to be hidden
+       // NotificationCenter.default.addObserver(self, selector: #selector(AuthorizationViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -70,33 +79,73 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        auth_view.numberField.resignFirstResponder()
+        auth_view.code_field.resignFirstResponder()
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+
+      guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+
+        // if keyboard size is not available for some reason, dont do anything
+        return
+      }
+
+      var shouldMoveViewUp = false
+
+      // if active text field is not nil
+      if let activeTextField = activeTextField {
+
+        let bottomOfTextField = activeTextField.convert(activeTextField.bounds, to: self.auth_view).maxY;
+        
+        let topOfKeyboard = self.auth_view.frame.height  - keyboardSize.height
+
+        // if the bottom of Textfield is below the top of keyboard, move up
+        if bottomOfTextField > topOfKeyboard {
+          shouldMoveViewUp = true
+        }
+      }
+
+      if(shouldMoveViewUp) {
+        self.auth_view.frame.origin.y = (self.view.frame.origin.y + self.view.frame.height) - keyboardSize.height
+      }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+      // move back the root view origin to zero
+      self.auth_view.frame.origin.y = self.view.frame.origin.y + self.view.frame.height
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField.tag == 1 {
-            auth_view.numberField.text! = "+992 "
-            auth_view.numberField.textColor = .black
+            auth_view.numberField.text! = "+992 " + user_phone
+            auth_view.numberField.textColor = colorBlackWhite
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
         }
         else if textField.tag == 2 {
-            auth_view.code_field.text! = ""
-            auth_view.code_field.textColor = .black
+            auth_view.code_field.text! = user_code
+            auth_view.code_field.textColor = colorBlackWhite
             auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
         }
         
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        if textField.tag == 1 {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.tag == 1 && auth_view.code_field.isHidden == false {
+            print("end")
             auth_view.numberField.text! = "992" + user_phone
-            auth_view.numberField.textColor = .black
+            auth_view.numberField.textColor = colorBlackWhite
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
         }
         else if textField.tag == 2 {
-           // auth_view.code_field.text! = user_code
-            //auth_view.code_field.textColor = .black
-            //auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
+            auth_view.code_field.text! = user_code
+            auth_view.code_field.textColor = colorBlackWhite
+            auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
         }
         
     }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         auth_view.numberField.resignFirstResponder()
         auth_view.code_field.resignFirstResponder()
@@ -108,8 +157,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         let tag = textField.tag
         
         if string  == "" {
-            if tag == 1 {
+            if tag == 1 && user_phone != "" {
                 user_phone = (user_phone as String).substring(to: user_phone.index(before: user_phone.endIndex))
+            }
+            else if tag == 1 && user_phone == "" {
+                return false
             }
             else {
                 user_code = (user_code as String).substring(to: user_code.index(before: user_code.endIndex))
@@ -154,14 +206,38 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func openCondition() {
-        let next = ConditionViewController()
+       /* let next = ConditionViewController()
         next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
         next.modalPresentationStyle = .custom
         next.modalPresentationCapturesStatusBarAppearance = true
         
         next.transitioningDelegate = self.halfModalTransitioningDelegate
-        present(next, animated: true, completion: nil)
+        present(next, animated: true, completion: nil)*/
+        
+        ConditionViewController().condition_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+    
+        nav = UINavigationController(rootViewController: ConditionViewController())
+        nav.modalPresentationStyle = .pageSheet
+        nav.view.backgroundColor = contentColor
+        nav.isNavigationBarHidden = true
+        ConditionViewController().view.backgroundColor = colorGrayWhite
+        if #available(iOS 15.0, *) {
+            if let sheet = nav.sheetPresentationController {
+                sheet.detents = [.medium(), .large()]
+                sheet.selectedDetentIdentifier = .medium
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+            // 4
+        present(nav, animated: true, completion: nil)
+    }
+    
+    @objc func dismiss_view() {
+        nav.dismiss(animated: true, completion: nil)
     }
     
     @objc func chooseLanguage() {
@@ -203,6 +279,9 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func buttonClick(_ sender: UIButton) {
+        auth_view.numberField.resignFirstResponder()
+        auth_view.code_field.resignFirstResponder()
+        
         sender.showAnimation { [self] in
             if user_code == "" {
                 print(user_phone)
@@ -219,7 +298,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                   get_Code_Request()
                 }
                 else {
-                  self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
+                    self.requestAnswer(message: "Введите номер Zet - Mobile")
+                  //self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
                 }
             }
             else {
@@ -230,7 +310,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func get_Code_Request() {
-        
+        self.showActivityIndicator2(uiView: view)
         print(user_phone)
        
         let parametr: [String: Any] = ["ctn": "992\(user_phone)", "language": lang_id]
@@ -241,34 +321,43 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 onNext: { result in
                     self.hashString = result.hashString
                     
-                    DispatchQueue.main.async {
-                        self.auth_view.title_info.isHidden = true
-                        self.auth_view.check_condition.isHidden = true
-                        self.auth_view.title_condition.isHidden = true
+                    DispatchQueue.main.async { [self] in
+                        auth_view.numberField.text = "992" + user_phone
+                        auth_view.numberField.textColor = colorBlackWhite
+                        auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
                         
-                        self.auth_view.title_code_info.isHidden = true
-                        self.auth_view.send_again.isHidden = true
+                        auth_view.title_info.isHidden = true
+                        auth_view.check_condition.isHidden = true
+                        auth_view.title_condition.isHidden = true
                         
-                        self.auth_view.code_field.isHidden = false
-                        self.auth_view.time_symbol.isHidden = false
-                        self.auth_view.timer_label.isHidden = false
-                        self.auth_view.second_label.isHidden = false
-                        self.auth_view.symbol_label.isHidden = false
-                        self.auth_view.get_sms.setTitle("Подтвердить", for: .normal)
-                        self.auth_view.numberField.isEnabled = false
+                        auth_view.title_code_info.isHidden = true
+                        auth_view.send_again.isHidden = true
+                        
+                        auth_view.code_field.isHidden = false
+                        auth_view.time_symbol.isHidden = false
+                        auth_view.timer_label.isHidden = false
+                        auth_view.second_label.isHidden = false
+                        auth_view.symbol_label.isHidden = false
+                        auth_view.get_sms.setTitle("Подтвердить", for: .normal)
+                        auth_view.numberField.isEnabled = false
                         
                         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
                         print("llll")
                     }
                 },
                 onError: { error in
-                    print("ggggg")
-                    self.requestAnswer(message: error.localizedDescription)
-                    print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        self.requestAnswer(message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        self.hideActivityIndicator2(uiView: self.view)
+                    }
                    
                 },
                 onCompleted: {
                    print("Completed event.")
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator2(uiView: self.view)
+                    }
                 }).disposed(by: disposeBag)
               }
               catch{
@@ -281,7 +370,10 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         print(user_code)
         print(user_phone)
         print(hashString)
-        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": user_code, "hashString" : hashString, "fbaseToken": UserDefaults.standard.string(forKey: "fbaseToken"), "language" : lang_id]
+        
+        self.showActivityIndicator2(uiView: view)
+        
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "secretCode": String(auth_view.code_field.text ?? ""), "hashString" : hashString, "fbaseToken": UserDefaults.standard.string(forKey: "fbaseToken"), "language" : lang_id]
         
         let client = APIClient.shared
             do{
@@ -298,10 +390,17 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                     }
                 },
                 onError: { error in
-                   print(error.localizedDescription)
+                    DispatchQueue.main.async {
+                        self.requestAnswer(message: error.localizedDescription)
+                        print(error.localizedDescription)
+                        self.hideActivityIndicator2(uiView: self.view)
+                    }
                 },
                 onCompleted: {
                    print("Completed event.")
+                    DispatchQueue.main.async {
+                        self.hideActivityIndicator2(uiView: self.view)
+                    }
                 }).disposed(by: disposeBag)
               }
               catch{
@@ -311,6 +410,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func updateTimer() {
+        print("hi")
         if seconds < 1 && minute != 0{
             minute -= 1
             seconds = 59
@@ -334,15 +434,22 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         minute = 01
         seconds = 59
         
-        let parametr: [String: Any] = ["ctn": "992\(user_phone)"]
+        let parametr: [String: Any] = ["ctn": "992\(user_phone)", "language": lang_id]
         
         let client = APIClient.shared
             do{
                 try client.authPost(jsonBody: parametr).subscribe(
-                onNext: { result in
+                    onNext: { [self] result in
                     print("hello")
-                    self.hashString = result.hashString
-                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+                    hashString = result.hashString
+                    DispatchQueue.main.async { [self] in
+                        auth_view.timer_label.text = "01"
+                        auth_view.second_label.text = "59"
+                        auth_view.send_again.isHidden = true
+                        timer.invalidate()
+                        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(updateTimer)), userInfo: nil, repeats: true)
+                    }
+                    
                 },
                 onError: { error in
                    print(error.localizedDescription)
@@ -355,13 +462,13 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             }
     }
     
-    func setPass(){
+    func setPass() {
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(ChangeCodeController(), animated: false)
     }
     
-    func requestAnswer(message: String) {
+    @objc func requestAnswer(message: String) {
         print("kkkkkkkk")
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })

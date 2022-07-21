@@ -82,7 +82,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
     
     override func viewDidLayoutSubviews() {

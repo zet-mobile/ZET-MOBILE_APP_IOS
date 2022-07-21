@@ -60,7 +60,7 @@ class ReplyToZetView: UIView {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
-        textfield.setView(.right, image: UIImage(named: "drop_icon"))
+        textfield.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
         return textfield
     }()
 
@@ -87,7 +87,7 @@ class ReplyToZetView: UIView {
         textfield.text = "Опишите проблему"
         textfield.font = UIFont.systemFont(ofSize: 16)
         textfield.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        
+        textfield.backgroundColor = .clear
         return textfield
     }()
     

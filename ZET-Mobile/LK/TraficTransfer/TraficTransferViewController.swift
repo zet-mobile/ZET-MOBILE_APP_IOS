@@ -93,6 +93,10 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
@@ -410,7 +414,7 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         view.name.addGestureRecognizer(tapGestureRecognizer)
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
+        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
@@ -553,6 +557,13 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
         print("jlllllll")
         nav.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func tableTouch() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        cell.count_transfer.resignFirstResponder()
+        cell.user_to_number.resignFirstResponder()
+    }
 }
 
 extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate {
@@ -581,7 +592,9 @@ extension TraficTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.separatorStyle = .none
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
-            table.allowsSelection = false
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+            table.isUserInteractionEnabled = true
+            table.addGestureRecognizer(tapGestureRecognizer)
             cell.addSubview(table)
         }
         else {

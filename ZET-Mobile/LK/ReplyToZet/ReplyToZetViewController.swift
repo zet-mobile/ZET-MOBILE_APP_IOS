@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import Photos
 
-class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
@@ -57,8 +57,20 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func touchesView() {
+        reply_view.text_message.resignFirstResponder()
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        reply_view.text_message.text = ""
     }
     
     func setupView() {
@@ -72,21 +84,29 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 500)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
-        
+         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(touchesView))
+        reply_view.isUserInteractionEnabled = true
+        reply_view.addGestureRecognizer(tapGestureRecognizer2)
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(reply_view)
         
-        toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Feedback")
         toolbar.backgroundColor = contentColor
       
+        reply_view.text_message.delegate = self
+        
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
     }
@@ -337,7 +357,12 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         alert.addAction(camera)
         alert.addAction(cancel)
         
-        present(alert, animated: true, completion: nil)
+        if screenName.count < 5 {
+            present(alert, animated: true, completion: nil)
+        }
+        else {
+            
+        }
       }
       
       func didSendScreen() {
@@ -368,7 +393,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                   title.textAlignment = .left
                   title.frame = CGRect(x: 45, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 90, height: 20)
                   
-                  title.text = asset?.value(forKey: "filename") as! String
+                  title.text = asset?.value(forKey: "filename") as? String
                   
                   let icon2 = UIButton()
                   icon2.setImage(UIImage(named: "Trash_light"), for: .normal)
@@ -381,6 +406,9 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                   scrollView.addSubview(icon2)
                   screen_i += 1
                   reply_view.button_send.frame.origin.y = CGFloat(y_pozition + 40)
+                  
+                  scrollView.contentSize = CGSize(width: view.frame.width, height: reply_view.button_send.frame.origin.y + 50)
+                  scrollView.updateConstraints()
                   
                   let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
                   pickedImage!.fixedOrientation()
@@ -457,6 +485,8 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             scrollView.addSubview(icon2)
             screen_i += 1
             reply_view.button_send.frame.origin.y = CGFloat(y_pozition + 40)
+            scrollView.contentSize = CGSize(width: view.frame.width, height: reply_view.button_send.frame.origin.y + 50)
+            scrollView.updateConstraints()
         }
         
     }

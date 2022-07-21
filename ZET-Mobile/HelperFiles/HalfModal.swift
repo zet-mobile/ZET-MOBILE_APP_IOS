@@ -51,18 +51,7 @@ class HalfModalPresentationControllerTwo : UIPresentationController {
     override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
         self.panGestureRecognizer = UIPanGestureRecognizer()
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
-        
-        if cellClick == "0" {
-            
-        }
-        else if  cellClick == "1" {
-            
-        }
-        else if cellClick == "2" {
-            
-            HomeViewController().navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            HomeViewController().navigationController?.pushViewController(AskFriendViewController(), animated: true)
-        }
+       
         
         /*panGestureRecognizer.addTarget(self, action: #selector(onPan(pan:)))
         presentedViewController.view.addGestureRecognizer(panGestureRecognizer)

@@ -96,7 +96,7 @@ class TraficTableViewCell: UITableViewCell {
         type_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         type_transfer.layer.borderWidth = 1
         type_transfer.textColor = colorBlackWhite
-        type_transfer.setView(.right, image: UIImage(named: "drop_icon"))
+        type_transfer.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
      
         titleThree.text = defaultLocalizer.stringForKey(key: "Number_of_package_units")
         titleThree.numberOfLines = 0

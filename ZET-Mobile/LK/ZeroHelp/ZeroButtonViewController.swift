@@ -9,6 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+var packet_tax = ""
+var packet_sum = ""
+var packet_amount = ""
+var packet_name = ""
+var packet_id = ""
+
 class ZeroButtonViewController: UIViewController {
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
@@ -30,8 +36,6 @@ class ZeroButtonViewController: UIViewController {
     }
     
     @objc func translateTrafic(_ sender: UIButton) {
-        let indexPath = IndexPath(row: 0, section: 0)
-       // let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
         
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
@@ -52,16 +56,16 @@ class ZeroButtonViewController: UIViewController {
         view.backgroundColor = contentColor
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
         view.layer.cornerRadius = 20
-        view.name.text = defaultLocalizer.stringForKey(key: "Mobile_transfer")
+        view.name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
         
-        let cost: NSString = defaultLocalizer.stringForKey(key: "Transfer") as NSString
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Connect_the_package") as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        var title_cost = "" + defaultLocalizer.stringForKey(key: "somoni") as NSString
+        var title_cost = " '" + packet_name + "'" as NSString
             
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
@@ -70,14 +74,16 @@ class ZeroButtonViewController: UIViewController {
         
         costString.append(titleString)
         view.value_title.attributedText = costString
+        view.value_title.numberOfLines = 2
+        view.value_title.frame.size.height = view.value_title.frame.size.height + 30
         
-        let cost2: NSString = defaultLocalizer.stringForKey(key: "to_number") as NSString
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
         let range2_1 = (cost2).range(of: cost2 as String)
         let costString2 = NSMutableAttributedString.init(string: cost2 as String)
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
-        let title_cost2 = " +992 " as NSString
+        let title_cost2 = " " + packet_sum + " с."  as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
         titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
@@ -93,7 +99,7 @@ class ZeroButtonViewController: UIViewController {
         costString2.append(titleString2)
         
         view.number_title.attributedText = costString2
-        
+        view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
         
         let cost3: NSString = "\(defaultLocalizer.stringForKey(key: "Service_cost")): " as NSString
         let range3 = (cost3).range(of: cost3 as String)
@@ -101,7 +107,7 @@ class ZeroButtonViewController: UIViewController {
         costString3.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range3)
         costString3.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
         
-        var title_cost3 = " " as NSString
+        var title_cost3 = " " + packet_tax + " с." as NSString
             
         let titleString3 = NSMutableAttributedString.init(string: title_cost3 as String)
         let range3_1 = (title_cost3).range(of: title_cost3 as String)
@@ -110,10 +116,13 @@ class ZeroButtonViewController: UIViewController {
         
         costString3.append(titleString3)
         view.cost_title.attributedText = costString3
+        view.cost_title.frame.origin.y = view.cost_title.frame.origin.y + 20
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
         view.name.isUserInteractionEnabled = true
         view.name.addGestureRecognizer(tapGestureRecognizer)
+        
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Pay"), for: .normal)
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
@@ -122,8 +131,8 @@ class ZeroButtonViewController: UIViewController {
         
         sender.showAnimation {
             self.present(self.alert, animated: true, completion: nil)
+           
           }
-        
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
@@ -177,7 +186,7 @@ class ZeroButtonViewController: UIViewController {
     
     @objc func dismissDialog() {
         print("hello")
-        alert.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
@@ -188,10 +197,10 @@ class ZeroButtonViewController: UIViewController {
         showActivityIndicator(uiView: view)
         
         print(sender.tag)
-        let parametr: [String: Any] = ["inPhoneNumber": "992", "value": "Int(value_transfer)!"]
+        
          let client = APIClient.shared
              do{
-               try client.exchangePutRequest(jsonBody: parametr).subscribe(
+               try client.postCreditRequestID(parametr: packet_id).subscribe(
                  onNext: { [self] result in
                    print(result)
                      DispatchQueue.main.async {

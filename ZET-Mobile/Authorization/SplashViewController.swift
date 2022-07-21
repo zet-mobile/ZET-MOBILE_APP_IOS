@@ -16,7 +16,7 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         
         let imageViewBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        imageViewBackground.image = UIImage(named: "splash_img.png")
+        imageViewBackground.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "splash_black.png") : UIImage(named: "splash_img.png"))
         imageViewBackground.contentMode = UIView.ContentMode.scaleToFill
         self.view.addSubview(imageViewBackground)
         self.view.sendSubviewToBack(imageViewBackground)

@@ -104,6 +104,10 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
+    }
+    
     @objc func goBack() {
         navigationController?.popViewController(animated: true)
     }
