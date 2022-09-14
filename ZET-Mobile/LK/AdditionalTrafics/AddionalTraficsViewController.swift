@@ -97,14 +97,14 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 100)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 600)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         addional_view = AddionalTraficsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Connect_package")
-        addional_view.balance.text = balance_credit + " \(defaultLocalizer.stringForKey(key: "somoni"))"
+        addional_view.balance.text = balance_credit + " c."
         self.view.addSubview(toolbar)
         scrollView.addSubview(addional_view)
         
@@ -125,6 +125,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         var textColor = UIColor.black
         var textColor2 = UIColor.lightGray
         var number_data = ""
+        var size = 18
         
         if remainders_data[0][1] == "0" {
             textColor = .red
@@ -137,17 +138,20 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         
         if remainders_data[0][2] == "true" {
             number_data = "∞"
+            size = 22
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[0][1]
         }
+        
         var number_label: NSString = number_data as NSString
         var range = (number_label).range(of: number_label as String)
         var number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         var title_label = "\n \(defaultLocalizer.stringForKey(key: "minutes")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[0][0])" as NSString
         var titleString = NSMutableAttributedString.init(string: title_label as String)
@@ -156,7 +160,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.minutesRemainder.text.attributedText = number_label_String
+        
+        if number_data == "∞" {
+            remainderView.minutesRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.minutesRemainder.text.attributedText = number_label_String
+        }
        
         if remainders_data[1][1] == "0" {
             textColor = .red
@@ -169,17 +179,19 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         
         if remainders_data[1][2] == "true" {
             number_data = "∞"
+            size = 30
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[1][1]
         }
         number_label = number_data as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         number_label = "7060" as NSString
         
@@ -190,7 +202,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.internetRemainder.text.attributedText = number_label_String
+        
+        if number_data == "∞" {
+            remainderView.internetRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.internetRemainder.text.attributedText = number_label_String
+        }
         
         if remainders_data[2][1] == "0" {
             textColor = .red
@@ -200,19 +218,22 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
             textColor = colorBlackWhite
             textColor2 = .lightGray
         }
+        
         if remainders_data[2][2] == "true" {
             number_data = "∞"
+            size = 30
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[2][1]
         }
         number_label = number_data as NSString
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         title_label = "\n \(defaultLocalizer.stringForKey(key: "SMS")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[2][0])" as NSString
         titleString = NSMutableAttributedString.init(string: title_label as String)
@@ -221,7 +242,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.messagesRemainder.text.attributedText = number_label_String
+        if number_data == "∞" {
+            remainderView.messagesRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.messagesRemainder.text.attributedText = number_label_String
+        }
+        
         
         remainderView.messagesRemainder.plusText.isHidden = true
         remainderView.messagesRemainder.backgroundColor = .clear
@@ -250,11 +277,10 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     func setupTabCollectionView() {
         y_pozition = y_pozition + 55
         
-        addional_view.tab1.frame = CGRect(x: 10, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 40)
+        addional_view.tab1.frame = CGRect(x: 10, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width - 20) / 3), height: 40)
         addional_view.tab2.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 40)
-        addional_view.tab3.frame = CGRect(x: (Int(addional_view.tab1.frame.width) * 2) + 20, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 40)
-        
-        
+        addional_view.tab3.frame = CGRect(x: (Int(addional_view.tab1.frame.width) * 2) + 10, y: y_pozition, width: (Int(UIScreen.main.bounds.size.width - 20) / 3), height: 40)
+     
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         addional_view.tab1.isUserInteractionEnabled = true
         addional_view.tab1.addGestureRecognizer(tapGestureRecognizer)
@@ -268,13 +294,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3.addGestureRecognizer(tapGestureRecognizer3)
         
         
-        addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) - 40) / 3, height: 3)
-        addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 3, height: 3)
-        addional_view.tab3Line.frame = CGRect(x: CGFloat((Int(addional_view.tab1.frame.width) * 2) + 20), y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 40) / 3, height: 3)
+        addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width - 20) / 3), height: 2)
+        addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 2)
+        addional_view.tab3Line.frame = CGRect(x: CGFloat(Int(addional_view.tab1.frame.width) * 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 2)
         
         scrollView.addSubview(TabCollectionServiceView)
         TabCollectionServiceView.backgroundColor = contentColor
-        TabCollectionServiceView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
+        TabCollectionServiceView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0))))
         TabCollectionServiceView.delegate = self
         TabCollectionServiceView.dataSource = self
         TabCollectionServiceView.alwaysBounceVertical = false
@@ -293,6 +319,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 addional_view.tab3.frame.origin.y = 0
                 addional_view.tab3Line.frame.origin.y = 40
                 TabCollectionServiceView.frame.origin.y = 45
+                table.isScrollEnabled = true
             }
             if scrollView.contentOffset.y < -10 && remainderView.isHidden == true {
                 remainderView.isHidden = false
@@ -314,7 +341,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab1.textColor = colorBlackWhite
         addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        addional_view.tab1Line.backgroundColor = .orange
+        addional_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
@@ -325,7 +352,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab2.textColor = colorBlackWhite
         addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         addional_view.tab1Line.backgroundColor = .clear
-        addional_view.tab2Line.backgroundColor = .orange
+        addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         addional_view.tab3Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
@@ -336,7 +363,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3.textColor = colorBlackWhite
         addional_view.tab1Line.backgroundColor = .clear
         addional_view.tab2Line.backgroundColor = .clear
-        addional_view.tab3Line.backgroundColor = .orange
+        addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
     }
     
@@ -699,7 +726,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionServiceViewCell
         if indexPath.row == 0 {
             table.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table.delegate = self
             table.dataSource = self
             table.rowHeight = 140
@@ -707,11 +734,12 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
+            table.isScrollEnabled = false
             cell.addSubview(table)
         }
         else if indexPath.row == 1 {
             table2.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table2.delegate = self
             table2.dataSource = self
             table2.rowHeight = 140
@@ -719,11 +747,12 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table2.alwaysBounceVertical = false
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
+            table2.isScrollEnabled = false
             cell.addSubview(table2)
         }
         else if indexPath.row == 2 {
             table3.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table3.delegate = self
             table3.dataSource = self
             table3.rowHeight = 140
@@ -731,6 +760,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.alwaysBounceVertical = false
             table3.showsVerticalScrollIndicator = false
             table3.backgroundColor = contentColor
+            table3.isScrollEnabled = false
             cell.addSubview(table3)
         }
         
@@ -743,7 +773,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab1.textColor = colorBlackWhite
             addional_view.tab2.textColor = .gray
             addional_view.tab3.textColor = .gray
-            addional_view.tab1Line.backgroundColor = .orange
+            addional_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .clear
         } else if indexPath.row == 2 {
@@ -752,14 +782,14 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab3.textColor = colorBlackWhite
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = .clear
-            addional_view.tab3Line.backgroundColor = .orange
+            addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         }
        if indexPath.row == 1 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = colorBlackWhite
             addional_view.tab3.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .orange
+            addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab3Line.backgroundColor = .clear
         }
           
@@ -773,7 +803,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab2.textColor = colorBlackWhite
             addional_view.tab3.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .orange
+            addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab3Line.backgroundColor = .clear
         }
         else if indexPath.row == 2 {
@@ -781,7 +811,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab2.textColor = colorBlackWhite
             addional_view.tab3.textColor = .gray
             addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .orange
+            addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab3Line.backgroundColor = .clear
         }
     }
@@ -840,11 +870,19 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = " С/" + internet_data[indexPath.row][3] as NSString
+            var  period = " С/" + internet_data[indexPath.row][3].uppercased()
+            if internet_data[indexPath.row][3] == "" || internet_data[indexPath.row][3] == "0.0" {
+                period = " С"
+            }
+            else {
+                period = " С/" + internet_data[indexPath.row][3].uppercased()
+            }
+            
+            let title_cost = period as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13)], range: range2)
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString
@@ -858,7 +896,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
                 cell.contentView.frame.size.height = 160
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                let date = dateFormatter1.date(from: internet_data[indexPath.row][4])
+                let date = dateFormatter1.date(from: minuti_data[indexPath.row][4])
                 dateFormatter1.dateFormat = "dd MMMM"
                 dateFormatter1.locale = Locale(identifier: "ru_RU")
                 let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
@@ -875,7 +913,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             else {
                 table2.rowHeight = 140
                 cell.contentView.frame.size.height = 140
-                cell.titleTwo.text = internet_data[indexPath.row][1]
+                cell.titleTwo.text = minuti_data[indexPath.row][1]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 cell.getButton.setTitleColor(.white, for: .normal)
@@ -890,7 +928,15 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = " С" as NSString
+            var  period = " С/" + minuti_data[indexPath.row][3].uppercased()
+            if minuti_data[indexPath.row][3] == "" || minuti_data[indexPath.row][3] == "0.0" {
+                period = " С"
+            }
+            else {
+                period = " С/" + minuti_data[indexPath.row][3].uppercased()
+            }
+            
+            let title_cost = period as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
@@ -908,12 +954,12 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
                 cell.contentView.frame.size.height = 160
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                let date = dateFormatter1.date(from: internet_data[indexPath.row][4])
+                let date = dateFormatter1.date(from: sms_data[indexPath.row][4])
                 dateFormatter1.dateFormat = "dd MMMM"
                 dateFormatter1.locale = Locale(identifier: "ru_RU")
                 let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
                 
-                cell.titleTwo.text = internet_data[indexPath.row][1] + "\n" + next_apply_date
+                cell.titleTwo.text = sms_data[indexPath.row][1] + "\n" + next_apply_date
                 cell.getButton.backgroundColor = .clear
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
@@ -925,7 +971,7 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             else {
                 table3.rowHeight = 140
                 cell.contentView.frame.size.height = 140
-                cell.titleTwo.text = internet_data[indexPath.row][1]
+                cell.titleTwo.text = sms_data[indexPath.row][1]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 cell.getButton.setTitleColor(.white, for: .normal)
@@ -940,11 +986,19 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = " С/" + sms_data[indexPath.row][3] as NSString
+            var  period = " С/" + sms_data[indexPath.row][3].uppercased()
+            if sms_data[indexPath.row][3] == "" || sms_data[indexPath.row][3] == "0.0" {
+                period = " С"
+            }
+            else {
+                period = " С/" + sms_data[indexPath.row][3].uppercased()
+            }
+            
+            let title_cost = period as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13)], range: range2)
             
             costString.append(titleString)
             cell.titleThree.attributedText = costString

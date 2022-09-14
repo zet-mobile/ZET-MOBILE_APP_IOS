@@ -32,7 +32,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     var toolbar = Toolbar()
     var home_view = HomeView()
     let remainderView = RemainderStackView()
-    
+    let circular = CircularProgressView()
     var zero_help_view_show = false
     
     let BalanceSliderView: UICollectionView = {
@@ -73,9 +73,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     let ServicesTableView = UITableView()
     var user_name = ""
+    var welcomePhrase = ""
     var balance_credit = ""
     var tarif_name = ""
     var next_apply_date = ""
+    var languageId = ""
+    var themeId = ""
+    var mainBannerUrl = ""
     
     var discount_id = ""
     var serviceId = ""
@@ -88,6 +92,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     var table_height = 0
     
+    let table_balance = UITableView()
+    var tableData = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -96,6 +103,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         color2 = colorLightDarkGray
         color1 = contentColor
 
+        tableData = [["icon1", defaultLocalizer.stringForKey(key: "Temporary_payment")],  ["icon3", defaultLocalizer.stringForKey(key: "Ask_friend")]]
         
         sendMapRequest()
        // self.refreshGetToken()
@@ -112,7 +120,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-       
         
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         scrollView.refreshControl = refreshControl
@@ -175,6 +182,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
      
         toolbar = Toolbar(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         toolbar.user_name.text = user_name
+        toolbar.welcome.text = welcomePhrase
         view.addSubview(toolbar)
         
         if zero_help_view_show == false {
@@ -201,13 +209,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         
         toolbar.openmenu.addTarget(self, action: #selector(openMenu), for: .touchUpInside)
-        toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openMenu))
+        toolbar.view_menu.isUserInteractionEnabled = true
+        toolbar.view_menu.addGestureRecognizer(tapGestureRecognizer)
+        
+       // toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
         
-        scrollView.addSubview(home_view)
         
-        print("ContainerViewController().tabBar.frame.size.height")
-        print(ContainerViewController().tabBar.frame.size.height)
+        scrollView.addSubview(home_view)
     
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
        
@@ -223,12 +233,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setupRemaindersSection(){
+        print("size")
+        print(remainderView.messagesRemainder.frame.width)
+        
         scrollView.addSubview(remainderView)
         remainderView.frame = CGRect(x: 0, y: 230, width: UIScreen.main.bounds.size.width, height: 145)
         
         var textColor = UIColor.black
         var textColor2 = UIColor.lightGray
         var number_data = ""
+        var size = 18
         
         if remainders_data[0][1] == "0" {
             textColor = .red
@@ -241,26 +255,38 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         if remainders_data[0][2] == "true" {
             number_data = "∞"
+            size = 30
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[0][1]
         }
         var number_label: NSString = number_data as NSString
         var range = (number_label).range(of: number_label as String)
         var number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         var title_label = "\n \(defaultLocalizer.stringForKey(key: "minutes"))" as NSString
+        if remainders_data[0][3] != "" {
+            title_label = "\n" + remainders_data[0][4] + " " + remainders_data[0][3] as NSString
+        }
+        
         var titleString = NSMutableAttributedString.init(string: title_label as String)
         var range2 = (title_label).range(of: title_label as String)
         titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.minutesRemainder.text.attributedText = number_label_String
+        //remainderView.minutesRemainder.text.attributedText = number_label_String
+        if number_data == "∞" {
+            remainderView.minutesRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.minutesRemainder.text.attributedText = number_label_String
+        }
        
         if remainders_data[1][1] == "0" {
             textColor = .red
@@ -273,18 +299,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         if remainders_data[1][2] == "true" {
             number_data = "∞"
+            size = 30
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[1][1]
         }
         number_label = number_data as NSString
         title_label = "\n \(defaultLocalizer.stringForKey(key: "megabyte"))" as NSString
+        if remainders_data[1][3] != "" {
+            title_label = "\n" + remainders_data[1][4] + " " + remainders_data[1][3] as NSString
+        }
+        
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         titleString = NSMutableAttributedString.init(string: title_label as String)
         range2 = (title_label).range(of: title_label as String)
@@ -292,7 +324,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.internetRemainder.text.attributedText = number_label_String
+        //remainderView.internetRemainder.text.attributedText = number_label_String
+        if number_data == "∞" {
+            remainderView.internetRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.internetRemainder.text.attributedText = number_label_String
+        }
         
         if remainders_data[2][1] == "0" {
             textColor = .red
@@ -304,18 +342,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         }
         if remainders_data[2][2] == "true" {
             number_data = "∞"
+            size = 30
             textColor = .orange
             textColor2 = .lightGray
         }
         else {
+            size = 18
             number_data = remainders_data[2][1]
         }
         number_label = number_data as NSString
         title_label = "\n \(defaultLocalizer.stringForKey(key: "SMS"))" as NSString
+        if remainders_data[2][3] != "" {
+            title_label = "\n" + remainders_data[2][4] + " " + remainders_data[2][3] as NSString
+        }
+        
         range = (number_label).range(of: number_label as String)
         number_label_String = NSMutableAttributedString.init(string: number_label as String)
         number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range)
+        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
         
         titleString = NSMutableAttributedString.init(string: title_label as String)
         range2 = (title_label).range(of: title_label as String)
@@ -323,7 +367,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
         
         number_label_String.append(titleString)
-        remainderView.messagesRemainder.text.attributedText = number_label_String
+        if number_data == "∞" {
+            remainderView.messagesRemainder.text2.attributedText = number_label_String
+        }
+        else {
+            remainderView.messagesRemainder.text.attributedText = number_label_String
+        }
+        
         
         if remainders_data[0][2] == "true" || Double(remainders_data[0][0])! < Double(remainders_data[0][1])! {
             remainderView.minutesRemainder.spentProgress = CGFloat(1)
@@ -380,7 +430,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         HotServicesView.delegate = self
         HotServicesView.dataSource = self
     }
-    
+     
     func setupServicesTableView() {
         scrollView.addSubview(ServicesTableView)
     
@@ -396,7 +446,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         ServicesTableView.isScrollEnabled = false
         ServicesTableView.backgroundColor = contentColor
         ServicesTableView.separatorColor = .lightGray
-        
+        ServicesTableView.alwaysBounceVertical = false
+        ServicesTableView.showsVerticalScrollIndicator = false
+        ServicesTableView.allowsSelection = false
       }
     
     @objc func openAddionalTraficsView() {
@@ -423,6 +475,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         next.transitioningDelegate = self.halfModalTransitioningDelegate
         present(next, animated: true, completion: nil)
+        
     }
     
     func sendRequest() {
@@ -437,44 +490,51 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async {
-                        self.balance_credit = String(result.subscriberBalance)
-                        self.tarif_name = String(result.priceplan.priceplanName ?? "")
-                        if result.priceplan.nextApplyDate != nil {
+                        self.balance_credit = String(result.subscriberBalance ?? 0)
+                        self.tarif_name = String(result.priceplan?.priceplanName ?? "")
+                        self.user_name = String(result.subscriberName ?? "")
+                        self.welcomePhrase = String(result.welcomePhrase ?? "")
+                        self.mainBannerUrl = String(result.mainBannerUrl ?? "")
+                        print(self.mainBannerUrl)
+                        if result.priceplan!.nextApplyDate != nil {
                             let dateFormatter1 = DateFormatter()
                             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                            let date = dateFormatter1.date(from: String(result.priceplan.nextApplyDate!))
+                            let date = dateFormatter1.date(from: String(result.priceplan!.nextApplyDate ?? ""))
                             dateFormatter1.dateFormat = "dd.MM.yyyy"
                             self.next_apply_date = "Активен до: \(dateFormatter1.string(from: date!))"
                         }
                         
-                        self.remainders_data.append([String(result.balances.offnet.start), String(result.balances.offnet.now), String(result.balances.offnet.unlim)])
-                        self.remainders_data.append([String(result.balances.mb.start), String(result.balances.mb.now), String(result.balances.mb.unlim)])
-                        self.remainders_data.append([String(result.balances.sms.start), String(result.balances.sms.now), String(result.balances.sms.unlim)])
+                        self.remainders_data.append([String(result.balances!.offnet.start), String(result.balances!.offnet.now), String(result.balances!.offnet.unlim), String(result.balances!.offnet.unlimConditions?.hours ?? ""), String(result.balances!.offnet.unlimConditions?.speed ?? "")])
+                        self.remainders_data.append([String(result.balances!.mb.start), String(result.balances!.mb.now), String(result.balances!.mb.unlim), String(result.balances!.mb.unlimConditions?.hours ?? ""), String(result.balances!.mb.unlimConditions?.speed ?? "")])
+                        self.remainders_data.append([String(result.balances!.sms.start), String(result.balances!.sms.now), String(result.balances!.sms.unlim), String(result.balances!.sms.unlimConditions?.hours ?? ""), String(result.balances!.sms.unlimConditions?.speed ?? "")])
                         
                         
-                        if result.microServices.count != 0 {
-                            for i in 0 ..< result.microServices.count {
-                                self.hot_services_data.append([String(result.microServices[i].id), String(result.microServices[i].iconUrl), String(result.microServices[i].microServiceName ?? "")])
+                        if result.microServices!.count != 0 {
+                            for i in 0 ..< result.microServices!.count {
+                                if String(result.microServices![i].id) != "7" {
+                                    self.hot_services_data.append([String(result.microServices![i].id), String(result.microServices![i].iconUrl), String(result.microServices![i].microServiceName ?? "")])
+                                }
+                                
                             }
                         }
                         
-                        if result.offers.count != 0 {
-                            for i in 0 ..< result.offers.count {
-                                self.slider_data.append([String(result.offers[i].id), String(result.offers[i].iconUrl), String(result.offers[i].url), String(result.offers[i].name ?? "")])
+                        if result.offers!.count != 0 {
+                            for i in 0 ..< result.offers!.count {
+                                self.slider_data.append([String(result.offers![i].id), String(result.offers![i].iconUrl), String(result.offers![i].url), String(result.offers![i].name ?? "")])
                             }
                         }
                         
-                        if result.services.count != 0 {
-                            for i in 0 ..< result.services.count {
+                        if result.services!.count != 0 {
+                            for i in 0 ..< result.services!.count {
                                 var disc_id = ""
                                 var disc_percent = ""
                                 
-                                if result.services[i].discount != nil {
-                                    disc_id = String(result.services[i].discount!.discountServiceId)
-                                    disc_percent = String(result.services[i].discount!.discountPercent)
+                                if result.services![i].discount != nil {
+                                    disc_id = String(result.services![i].discount!.discountServiceId)
+                                    disc_percent = String(result.services![i].discount!.discountPercent)
                                 }
                                 
-                                self.services_data.append([String(result.services[i].id), String(result.services[i].serviceName ?? ""), String(result.services[i].price ?? ""),  String(result.services[i].period ?? ""), disc_id, disc_percent, String(result.services[i].description ?? "")])
+                                self.services_data.append([String(result.services![i].id), String(result.services![i].serviceName ?? ""), String(result.services![i].price ?? ""),  String(result.services![i].period ?? ""), disc_id, disc_percent, String(result.services![i].description ?? "")])
                             }
                         }
                     
@@ -512,9 +572,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             }
     }
     
-    @objc func connectService(indexPath: Int) {
-        print(indexPath)
-        print("indexPath")
+    @objc func connectService(_ sender: UIButton) {
+        
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
@@ -536,9 +595,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
         view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
-        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(services_data[indexPath][1])?"
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(services_data[sender.tag][1])?"
         
-        view.ok.tag = indexPath
+        view.ok.tag = sender.tag
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         
@@ -546,7 +605,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        present(alert, animated: true, completion: nil)
+        sender.showAnimation { [self] in
+            present(alert, animated: true, completion: nil)
+        }
+    
     
         
     }
@@ -701,81 +763,138 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if services_data[indexPath.row][6] == "" {
-            return 110
-        } else {
-            
-            return 140
+        if tableView == table_balance {
+            return 60
         }
+        else {
+            if services_data[indexPath.row][6] == "" {
+                return 110
+            } else {
+                
+                return 140
+            }
+        }
+        
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return services_data.count
+        if tableView == table_balance {
+            return tableData.count
+        }
+        else {
+            return services_data.count
+        }
+        
   }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-        cell.separatorInset = UIEdgeInsets.init(top: 10.0, left: 20.0, bottom: 2.0, right: 20.0)
-        
-        if indexPath.row == services_data.count - 1 {
-            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-        }
-        cell.titleOne.text = services_data[indexPath.row][1]
-        cell.titleTwo.text = services_data[indexPath.row][6]
-        
-        if services_data[indexPath.row][6] == "" {
-            cell.titleThree.frame.origin.y = 50
-            cell.getButton.frame.origin.y = 60
-            cell.sale_title.frame.origin.y = 70
-        }
-        
-        let cost: NSString = "\(services_data[indexPath.row][2])" as NSString
-        let range = (cost).range(of: cost as String)
-        let costString = NSMutableAttributedString.init(string: cost as String)
-        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-        costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-        
-        let title_cost = " С/" + services_data[indexPath.row][3].uppercased() as NSString
-        let titleString = NSMutableAttributedString.init(string: title_cost as String)
-        let range2 = (title_cost).range(of: title_cost as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
-        
-        costString.append(titleString)
-        cell.titleThree.attributedText = costString
-        cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
-        if services_data[indexPath.row][5] != "" {
-            cell.sale_title.text = "-" + services_data[indexPath.row][5] + "%"
-            cell.sale_title.isHidden = false
+        if tableView == table_balance {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "add_balance_cell", for: indexPath) as! AddBalanceOptionViewCell
+            
+            let image = UIImage(named: "Stroke_next.png")
+                let checkmark  = UIImageView(frame:CGRect(x:0, y:0, width:(image?.size.width)!, height:(image?.size.height)!));
+                checkmark.image = image
+                cell.accessoryView = checkmark
+          
+            cell.titleOne.text = tableData[indexPath.row][1]
+            if indexPath.row == 0 {
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
+            }
+            else if indexPath.row == 1 {
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "second.png") : UIImage(named: "second_l.png"))
+            }
+            else {
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "third.png") : UIImage(named: "third_l.png"))
+            }
+            
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = .clear
+            cell.selectedBackgroundView = bgColorView
+            
+            return cell
         }
         else {
-            cell.sale_title.isHidden = true
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
+            cell.separatorInset = UIEdgeInsets.init(top: 10.0, left: 20.0, bottom: 2.0, right: 20.0)
+            
+            if indexPath.row == services_data.count - 1 {
+                cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            cell.titleOne.text = services_data[indexPath.row][1]
+            cell.titleTwo.text = services_data[indexPath.row][6]
+            
+            if services_data[indexPath.row][6] == "" {
+                cell.titleThree.frame.origin.y = 50
+                cell.getButton.frame.origin.y = 60
+                cell.sale_title.frame.origin.y = 70
+            }
+            
+            let cost: NSString = "\(services_data[indexPath.row][2])" as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
+            
+            var  period = " С/" + services_data[indexPath.row][3].uppercased()
+            if services_data[indexPath.row][3] == "" {
+                period = " С"
+            }
+            else {
+                period = " С/" + services_data[indexPath.row][3].uppercased()
+            }
+            let title_cost = period as NSString
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.darkGray , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
+            
+            costString.append(titleString)
+            cell.titleThree.attributedText = costString
+            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            if services_data[indexPath.row][5] != "" {
+                cell.sale_title.text = "-" + services_data[indexPath.row][5] + "%"
+                cell.sale_title.isHidden = false
+            }
+            else {
+                cell.sale_title.isHidden = true
+            }
+            
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = .clear
+            cell.selectedBackgroundView = bgColorView
+            
+            cell.getButton.tag = indexPath.row
+            cell.getButton.addTarget(self, action: #selector(connectService(_:)), for: .touchUpInside)
+            
+            
+            return cell
         }
         
-        let bgColorView = UIView()
-        bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
-        bgColorView.layer.borderColor = UIColor.orange.cgColor
-        bgColorView.layer.borderWidth = 1
-        bgColorView.layer.cornerRadius = 10
-        cell.selectedBackgroundView = bgColorView
-        
-        cell.actionDelegate = (self as? CellActionDelegate)
-        
-        return cell
   }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView == ServicesTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
-            cell.getButton.tag = indexPath.row
-            cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
+        if tableView == table_balance {
+            if indexPath.row == 0 {
+                self.dismiss(animated: true, completion: nil)
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                navigationController?.pushViewController(ZeroHelpViewController(), animated: true)
+            }
+            else if indexPath.row == 1 {
+                print("hhhh")
+                self.dismiss(animated: true, completion: nil)
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                navigationController?.pushViewController(AskFriendViewController(), animated: true)
+                
+                
+            }
         }
     }
 }
 
+@available(iOS 15.0, *)
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
@@ -784,10 +903,10 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         }
         else if collectionView == SliderView {
-            return CGSize(width: collectionView.frame.width * 0.75, height: collectionView.frame.height * 0.75)
+            return CGSize(width: UIScreen.main.bounds.size.width - 40, height: collectionView.frame.height * 0.75)
         }
         else {
-            return CGSize(width: collectionView.frame.width * 0.2, height: collectionView.frame.height)
+            return CGSize(width: 80, height: collectionView.frame.height)
         }
     }
     
@@ -811,6 +930,14 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.balance.text = balance_credit + " с."
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
+           // cell.image.image = UIImage(named: mainBannerUrl)
+            
+           /* if mainBannerUrl != "" {
+                cell.image.af_setImage(withURL: URL(string: mainBannerUrl)!)
+            }
+            else {
+               cell.image.image = UIImage(named: "BalanceBack")
+            }*/
             
             cell.titleTarif.frame = CGRect(x: 20, y: 105, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
             cell.settings.frame.origin.x = CGFloat(cell.titleTarif.text!.count * 10 + 40)
@@ -860,9 +987,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             else if hot_services_data[indexPath.row][0] == "6" {
                 cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_detalization_w") :  UIImage(named: "hot_detalization"))
             }
-            else if hot_services_data[indexPath.row][0] == "7" {
+            /*else if hot_services_data[indexPath.row][0] == "7" {
                 cell.image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIImage(named: "hot_search_w") :  UIImage(named: "hot_search"))
-            }
+            }*/
             
             cell.titleOne.text = hot_services_data[indexPath.row][2]
             
@@ -910,14 +1037,55 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 
 extension HomeViewController: CellBalanceActionDelegate {
     func didAddBalance(for cell: BalanceSliderCollectionViewCell) {
-        let next = AddBalanceOptionViewController()
+        /*let next = AddBalanceOptionViewController()
         next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
         self.halfModalTransitioningDelegate = HalfModalTransitioningTwoDelegate(viewController: self, presentingViewController: next)
         next.modalPresentationStyle = .custom
         //next.modalPresentationCapturesStatusBarAppearance = true
 
         next.transitioningDelegate = self.halfModalTransitioningDelegate
-        present(next, animated: true, completion: nil)
+        present(next, animated: true, completion: nil)*/
+        
+        print("hhhhhhlllll")
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n", message: "", preferredStyle: .actionSheet)
+        let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+        alert.view.removeConstraints(widthConstraints)
+        // Here you can enter any width that you want
+        let newWidth = UIScreen.main.bounds.width
+        // Adding constraint for alert base view
+        let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+        
+        let view = AddBalanceView()
+
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 200)
+        view.layer.cornerRadius = 20
+        view.close.addTarget(self, action: #selector(dismissDialog(_:)), for: .touchUpInside)
+        
+        table_balance.frame = CGRect(x:5, y: 60, width: Int(UIScreen.main.bounds.size.width) - 10, height: tableData.count * 60)
+        table_balance.register(AddBalanceOptionViewCell.self, forCellReuseIdentifier: "add_balance_cell")
+        table_balance.delegate = self
+        table_balance.dataSource = self
+        table_balance.rowHeight = 60
+        table_balance.estimatedRowHeight = 60
+        table_balance.alwaysBounceVertical = false
+        table_balance.separatorStyle = .none
+        table_balance.isScrollEnabled = false
+        table_balance.backgroundColor = contentColor
+        
+        alert.view.backgroundColor = .clear
+        alert.view.addSubview(view)
+        alert.view.addSubview(table_balance)
+        //alert.view.sendSubviewToBack(view)
+        
+        
+        present(alert, animated: true, completion: nil)
         
     }
     
@@ -932,16 +1100,3 @@ extension HomeViewController: CellBalanceActionDelegate {
     }
 }
 
-extension HomeViewController: CellActionDelegate {
-    func didServiceConnect(for cell: ServicesTableViewCell) {
-        if let indexPath = ServicesTableView.indexPath(for: cell) {
-            connectService(indexPath: indexPath.row)
-        }
-    }
-    
-    func didServiceReconnect(for cell: ServicesConnectTableViewCell) {
-        
-    }
-    
-    
-}

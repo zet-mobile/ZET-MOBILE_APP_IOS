@@ -12,7 +12,7 @@ class SliderCollectionViewCell: UICollectionViewCell {
     let image: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "")
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.backgroundColor = .clear
         return iv
     }()
@@ -21,7 +21,7 @@ class SliderCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.backgroundColor = .clear
         contentView.addSubview(image)
-        image.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 110, height: 100)
+        image.frame = CGRect(x: 10, y: 5, width: UIScreen.main.bounds.size.width - 60, height: 100)
         //image.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingLeft: 16)
         
     }

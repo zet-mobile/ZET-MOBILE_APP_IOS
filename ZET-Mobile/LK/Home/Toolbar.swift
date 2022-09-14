@@ -31,10 +31,10 @@ class Toolbar: UIView {
         user_name.numberOfLines = 0
         user_name.textColor = colorBlackWhite
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: 20)
+        user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 20) / 390)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
         user_name.textAlignment = .left
-        user_name.frame = CGRect(x: 20, y: 25, width: 200, height: 28)
+        user_name.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 40, height: 28)
         
         return user_name
     }()
@@ -56,10 +56,12 @@ class Toolbar: UIView {
         let openmenu = UIButton()
         openmenu.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "menu_white") : #imageLiteral(resourceName: "menu")), for: UIControl.State.normal)
         
-        openmenu.frame = CGRect(x: UIScreen.main.bounds.size.width - 40, y: 25, width: 20, height: 14)
+        openmenu.frame = CGRect(x: 20, y: 25, width: 20, height: 14)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return openmenu
     }()
+    
+    var view_menu = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,10 +77,16 @@ class Toolbar: UIView {
     private func setupView() {
         backgroundColor = toolbarColor
        
+        view_menu = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 60, y: 0, width: UIScreen.main.bounds.size.width - (UIScreen.main.bounds.size.width - 60), height: frame.height))
+        view_menu.backgroundColor = .clear
+        
+        view_menu.addSubview(openmenu)
+        self.addSubview(view_menu)
+        
         self.addSubview(welcome)
         self.addSubview(user_name)
         self.addSubview(icon_more)
-        self.addSubview(openmenu)
+       // self.addSubview(openmenu)
     }
 }
 

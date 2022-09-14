@@ -21,6 +21,29 @@ class SplashViewController: UIViewController {
         self.view.addSubview(imageViewBackground)
         self.view.sendSubviewToBack(imageViewBackground)
         
+        if self.traitCollection.userInterfaceStyle == .dark {
+            UserDefaults.standard.set("dark", forKey: "ThemeAppereance")
+        }
+        else {
+            UserDefaults.standard.set("light", forKey: "ThemeAppereance")
+        }
+        
+        colorLine = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
+
+        colorGrayWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
+
+        contentColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor.white)
+        
+        toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
+        
+        colorBlackWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor.white : UIColor.black)
+
+        colorLightDarkGray = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+
+        colorLightDarkGray2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+        
+        darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
+        
         _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(touches), userInfo: nil, repeats: false)
     }
 
@@ -48,9 +71,6 @@ class SplashViewController: UIViewController {
             navigationController?.pushViewController(PinCodeInputController(), animated: false)
         }
         else {
-            UserDefaults.standard.set(1, forKey: "language")
-            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
-            self.defaultLocalizer.setSelectedLanguage(lang: .ru)
             
               self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
               navigationController?.pushViewController(AuthorizationViewController(), animated: false)

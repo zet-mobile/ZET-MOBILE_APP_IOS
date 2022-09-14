@@ -95,7 +95,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         scrollView.addSubview(settings_view)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Настройки"
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Settings")
         toolbar.backgroundColor = contentColor
         
         // setup language field
@@ -285,20 +285,32 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     func restartApp() {
         
-        UserDefaults.standard.set(3, forKey: "language")
-        UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
-       
-        if langId_choosed == 1 {
-            self.defaultLocalizer.setSelectedLanguage(lang: .ru)
-        }
-        else if langId_choosed == 2 {
-            self.defaultLocalizer.setSelectedLanguage(lang: .en)
-        }
-        else if langId_choosed == 3 {
-            self.defaultLocalizer.setSelectedLanguage(lang: .tj)
-        }
-        else {
-            self.defaultLocalizer.setSelectedLanguage(lang: .uz)
+        switch langId_choosed {
+            case 1:
+                UserDefaults.standard.set(1, forKey: "language")
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                defaultLocalizer.setSelectedLanguage(lang: .ru)
+                break
+            case 2:
+                UserDefaults.standard.set(2, forKey: "language")
+                UserDefaults.standard.set(LanguageType.en.rawValue, forKey: "language_string")
+                defaultLocalizer.setSelectedLanguage(lang: .en)
+                break
+            case 3:
+                UserDefaults.standard.set(3, forKey: "language")
+                UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
+                defaultLocalizer.setSelectedLanguage(lang: .tj)
+                break
+            case 4:
+                UserDefaults.standard.set(4, forKey: "language")
+                UserDefaults.standard.set(LanguageType.uz.rawValue, forKey: "language_string")
+                defaultLocalizer.setSelectedLanguage(lang: .uz)
+                break
+            default:
+                UserDefaults.standard.set(1, forKey: "language")
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                defaultLocalizer.setSelectedLanguage(lang: .ru)
+                break
         }
         
         guard let window = UIApplication.shared.keyWindow else {

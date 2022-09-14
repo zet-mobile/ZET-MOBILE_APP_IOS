@@ -97,7 +97,7 @@ class DialogOfficesView: UIView {
     }
     
     private func setupView() {
-       // backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        backgroundColor = contentColor
     
         self.addSubview(title_push)
         self.addSubview(close)

@@ -53,13 +53,13 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
         tabCallCenter.tabBarItem = tabCallCenterBarItem4
         
         // Create Tab 4
-        let tabProfile = PinCodeInputController()
+        let tabProfile = ProfileViewController()
         let tabProfileBarItem5 = UITabBarItem(title: defaultLocalizer.stringForKey(key: "Profiles"), image: UIImage(named: "Profile")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "Profile_orange")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         
         tabProfile.tabBarItem = tabProfileBarItem5
 
         
-        self.viewControllers = [tabHome, tabWallet, tabUsage, tabCallCenter, tabProfile]
+        self.viewControllers = [tabHome, tabUsage, tabCallCenter]
     }
     
     // UITabBarControllerDelegate method

@@ -36,14 +36,14 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
     
-    titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
+    titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 50)
     titleOne.text = "+992 91 111 0611"
-    titleOne.numberOfLines = 2
+    titleOne.numberOfLines = 3
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 80, y: 40, width: 340, height: 30)
+    titleTwo.frame = CGRect(x: 80, y: 40, width: 340, height: 60)
     titleTwo.text = "Выполнено"
     titleTwo.numberOfLines = 1
     titleTwo.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)

@@ -24,12 +24,12 @@ struct balances_data: Decodable {
     let offnet: details_data
 }
 
-struct details_data: Decodable {
+struct details_data {
     //let unitName: String
     let unitId: Int
     let now: Int
     let start: Int
-    //let unlimConditions: unlimConditions_data
+    let unlimConditions: unlimConditions_data?
     let unlim: Bool
 }
 
@@ -146,4 +146,33 @@ extension connectedPackets_data: Decodable {
     }
 }
 
-
+extension details_data: Decodable {
+    
+    private enum details_dataCodingKeys: String, CodingKey {
+        
+        case unitId = "unitId"
+        case now = "now"
+        case start = "start"
+        case unlimConditions = "unlimConditions"
+        case unlim = "unlim"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: details_dataCodingKeys.self)
+        
+        unitId = try container.decode(Int.self, forKey: .unitId)
+        now = try container.decode(Int.self, forKey: .now)
+        start = try container.decode(Int.self, forKey: .start)
+        unlim = try container.decode(Bool.self, forKey: .unlim)
+        
+        do {
+            unlimConditions = try container.decode(unlimConditions_data.self, forKey: .unlimConditions)
+        }
+        catch {
+            unlimConditions = nil
+        }
+    
+        
+     
+    }
+}

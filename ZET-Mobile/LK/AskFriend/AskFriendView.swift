@@ -23,7 +23,7 @@ class AskFriendView: UIView {
         titleOne.text = defaultLocalizer.stringForKey(key: "Balance_and_packages")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
-        titleOne.font = UIFont(name: "", size: 10)
+        titleOne.font = UIFont.boldSystemFont(ofSize: 20)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
         titleOne.frame = CGRect(x: 20, y: 170, width: 300, height: 28)
@@ -68,7 +68,7 @@ class AskFriendView: UIView {
         user_to_number.textColor = colorBlackWhite
         user_to_number.text = "+992 "
         user_to_number.tag = 1
-        
+        user_to_number.keyboardType = .numberPad
         return user_to_number
     }()
     
@@ -95,7 +95,7 @@ class AskFriendView: UIView {
         titleTwo.font = UIFont(name: "", size: 10)
         titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleTwo.textAlignment = .left
-        titleTwo.frame = CGRect(x: 20, y: 350, width: 300, height: 20)
+        titleTwo.frame = CGRect(x: 20, y: 320, width: 300, height: 20)
         titleTwo.autoresizesSubviews = true
         titleTwo.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleTwo
@@ -103,36 +103,51 @@ class AskFriendView: UIView {
     
     lazy var count_transfer: UITextField = {
         let count_transfer = UITextField()
-        count_transfer.frame = CGRect(x: 20, y: 380, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        count_transfer.frame = CGRect(x: 20, y: 350, width: UIScreen.main.bounds.size.width - 40, height: 50)
         count_transfer.layer.cornerRadius = 16
         count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         count_transfer.layer.borderWidth = 1
         count_transfer.tag = 2
         count_transfer.textColor = colorBlackWhite
-        
+        count_transfer.keyboardType = .numberPad
         return count_transfer
     }()
    
     lazy var titleRed2: UILabel = {
         let titleRed = UILabel()
-        titleRed.text = defaultLocalizer.stringForKey(key: "Input cost")
+        titleRed.text = defaultLocalizer.stringForKey(key: "input_summa")
         titleRed.numberOfLines = 0
         titleRed.textColor = .red
         titleRed.font = UIFont(name: "", size: 9)
         titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleRed.textAlignment = .left
-        titleRed.frame = CGRect(x: 20, y: 440, width: 300, height: 20)
+        titleRed.frame = CGRect(x: 20, y: 410, width: 300, height: 20)
+        titleRed.autoresizesSubviews = true
+        titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed.isHidden = true
+        return titleRed
+    }()
+
+    lazy var titleGray: UILabel = {
+        let titleRed = UILabel()
+        titleRed.text = defaultLocalizer.stringForKey(key: "max_summa")
+        titleRed.numberOfLines = 0
+        titleRed.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+        titleRed.font = UIFont(name: "", size: 9)
+        titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed.textAlignment = .left
+        titleRed.frame = CGRect(x: 20, y: 410, width: 300, height: 20)
         titleRed.autoresizesSubviews = true
         titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         titleRed.isHidden = false
         return titleRed
     }()
-
+    
     lazy var sendButton: UIButton = {
         let sendButton = UIButton()
-        sendButton.frame = CGRect(x: 20, y: Int(UIScreen.main.bounds.size.height) - Int(ContainerViewController().tabBar.frame.size.height) - 200, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45)
+        sendButton.frame = CGRect(x: 20, y: 450, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45)
         sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Transfer"), for: .normal)
+        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Proceed"), for: .normal)
         sendButton.setTitleColor(.white, for: .normal)
         sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         sendButton.layer.cornerRadius = sendButton.frame.height / 2
@@ -153,7 +168,7 @@ class AskFriendView: UIView {
     private func setupView() {
         backgroundColor = .clear
        
-        let white_view_back2 = UIView(frame: CGRect(x: 0, y: 210, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - 330))
+        let white_view_back2 = UIView(frame: CGRect(x: 0, y: 210, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
         white_view_back2.backgroundColor = contentColor
         self.addSubview(white_view_back2)
@@ -175,6 +190,7 @@ class AskFriendView: UIView {
         self.addSubview(titleCount)
         self.addSubview(titleRed)
         self.addSubview(titleRed2)
+        self.addSubview(titleGray)
         self.addSubview(count_transfer)
         self.addSubview(sendButton)
     }

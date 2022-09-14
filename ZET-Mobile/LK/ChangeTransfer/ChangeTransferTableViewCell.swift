@@ -19,7 +19,8 @@ class ChangeTransferTableViewCell: UITableViewCell {
     let type_transfer = DropDown()
     let titleThree = UILabel()
     let count_transfer = UITextField()
-    let count_to_transfer = UITextField()
+    let titleRed = UILabel()
+    let count_to_transfer = UITextView()
     let slider = MultiSlider()
     let title_commission = UILabel()
     let title_info = UILabel()
@@ -42,6 +43,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
         contentView.addSubview(type_transfer)
         contentView.addSubview(titleThree)
         contentView.addSubview(count_transfer)
+        contentView.addSubview(titleRed)
         contentView.addSubview(count_to_transfer)
         contentView.addSubview(slider)
         contentView.addSubview(title_commission)
@@ -104,6 +106,18 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_transfer.tag = 1
         count_transfer.textColor = colorBlackWhite
         count_transfer.keyboardType = .numberPad
+        count_transfer.returnKeyType = .done
+        
+        titleRed.text = defaultLocalizer.stringForKey(key: "Invalid_recipient_number")
+        titleRed.numberOfLines = 0
+        titleRed.textColor = .red
+        titleRed.font = UIFont(name: "", size: 9)
+        titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed.textAlignment = .left
+        titleRed.frame = CGRect(x: 20, y: 360, width: UIScreen.main.bounds.size.width  - 60, height: 20)
+        titleRed.autoresizesSubviews = true
+        titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed.isHidden = true
         
         line.backgroundColor = colorBlackWhite
         line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - 25, y: 325, width: 30, height: 1)
@@ -114,7 +128,11 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_to_transfer.layer.borderWidth = 1
         count_to_transfer.tag = 2
         count_to_transfer.textColor = colorBlackWhite
-        count_to_transfer.keyboardType = .numberPad
+        count_to_transfer.font = UIFont.systemFont(ofSize: 17)
+        count_to_transfer.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 0, right: 0)
+        count_to_transfer.isEditable  = false
+        count_transfer.backgroundColor = .clear
+       // count_to_transfer.keyboardType = .numberPad
         
         title_commission.text = "Комиссия: "
         title_commission.numberOfLines = 0
@@ -160,7 +178,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
         slider.trackWidth = 5
         slider.snapStepSize = 1
         slider.thumbImage = UIImage(named: "slider_thumb")
-        slider.frame = CGRect(x: 10, y: 370, width: UIScreen.main.bounds.size.width - 40, height: 30)
+        slider.frame = CGRect(x: 10, y: 390, width: UIScreen.main.bounds.size.width - 40, height: 30)
         
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
@@ -168,8 +186,8 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_transfer.leftViewMode = .always
         
         let paddingView4: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-        count_to_transfer.leftView = paddingView4
-        count_to_transfer.leftViewMode = .always
+       // count_to_transfer.leftView = paddingView4
+       // count_to_transfer.leftViewMode = .always
         
         type_transfer.isSearchEnable = false
         type_transfer.selectedRowColor = .lightGray

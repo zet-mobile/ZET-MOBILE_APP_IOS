@@ -69,7 +69,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         window?.rootViewController = navController
       
         YMKMapKit.setApiKey("c60358d9-a157-4952-b448-7b1aea6c5e54")
+        YMKMapKit.sharedInstance()
         
+        switch UserDefaults.standard.integer(forKey: "language") {
+            case 1:
+                AMPLocalizeUtils.defaultLocalizer.setSelectedLanguage(lang: .ru)
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                break
+            case 2:
+                AMPLocalizeUtils.defaultLocalizer.setSelectedLanguage(lang: .en)
+                UserDefaults.standard.set(LanguageType.en.rawValue, forKey: "language_string")
+                break
+            case 3:
+                AMPLocalizeUtils.defaultLocalizer.setSelectedLanguage(lang: .tj)
+                UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
+                break
+            case 4:
+                AMPLocalizeUtils.defaultLocalizer.setSelectedLanguage(lang: .uz)
+                UserDefaults.standard.set(LanguageType.uz.rawValue, forKey: "language_string")
+                break
+            default:
+                AMPLocalizeUtils.defaultLocalizer.setSelectedLanguage(lang: .ru)
+                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                break
+        }
         
         return true
     }

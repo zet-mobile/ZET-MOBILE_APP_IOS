@@ -17,7 +17,7 @@ class MenuView: UIView {
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 0, y: 50, width: frame.width, height: 20)
+        title.frame = CGRect(x: 0, y: 30, width: frame.width, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = false
@@ -26,21 +26,21 @@ class MenuView: UIView {
     
     
     lazy var vk: UIButton = {
-        let button = UIButton(frame: CGRect(x: frame.width / 2 - 20 - 30 - 50, y: (UIScreen.main.bounds.size.height * 90) / 926, width: (UIScreen.main.bounds.size.height * 40) / 926, height: (UIScreen.main.bounds.size.height * 40) / 926))
+        let button = UIButton(frame: CGRect(x: (frame.width / 2) - 20 - 30 - 50, y: 60, width: 40, height: 40))
         
         button.setBackgroundImage(UIImage(named: "vk.png"), for: UIControl.State.normal)
         return button
     }()
     
     lazy var telegram: UIButton = {
-        let button = UIButton(frame: CGRect(x: frame.width / 2 - 20 , y: (UIScreen.main.bounds.size.height * 90) / 926, width: (UIScreen.main.bounds.size.height * 40) / 926, height: (UIScreen.main.bounds.size.height * 40) / 926))
+        let button = UIButton(frame: CGRect(x: (frame.width / 2) - 20 , y: 60, width: 40, height: 40))
         
         button.setBackgroundImage(UIImage(named: "telegram.png"), for: UIControl.State.normal)
         return button
     }()
     
     lazy var instagram: UIButton = {
-        let button = UIButton(frame: CGRect(x: frame.width / 2 + 20 + 30, y: (UIScreen.main.bounds.size.height * 90) / 926, width: (UIScreen.main.bounds.size.height * 40) / 926, height: (UIScreen.main.bounds.size.height * 40) / 926))
+        let button = UIButton(frame: CGRect(x: (frame.width / 2) + 20 + 30, y: 60, width: 40, height: 40))
         
         button.setBackgroundImage(UIImage(named: "instagram.png"), for: UIControl.State.normal)
         return button
@@ -54,7 +54,7 @@ class MenuView: UIView {
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 150) / 926, width: frame.width, height: 20)
+        title.frame = CGRect(x: 0, y: 110, width: frame.width, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 

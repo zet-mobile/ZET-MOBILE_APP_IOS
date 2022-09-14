@@ -52,6 +52,8 @@ class DetalizationViewCell: UITableViewCell {
         period.layer.cornerRadius = 16
         period.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         period.layer.borderWidth = 1
+        period.textColor = colorBlackWhite
+        
         
         title_commission.text = "Комиссия: 0.2 сомони"
         title_commission.numberOfLines = 0

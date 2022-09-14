@@ -25,11 +25,11 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
     
-    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 80)
+    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60)
     
-    ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
+    ico_image.frame = CGRect(x: 10, y: 10, width: 45, height: 45)
     
-    titleOne.frame = CGRect(x: 80, y: 0, width: 240, height: 80)
+    titleOne.frame = CGRect(x: 80, y: 0, width: 240, height: 60)
     titleOne.text = ""
     titleOne.numberOfLines = 2
     titleOne.textColor = colorBlackWhite

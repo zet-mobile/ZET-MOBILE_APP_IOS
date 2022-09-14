@@ -30,6 +30,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
+        textfield.textColor = colorBlackWhite
         //textfield.setView(.right, image: UIImage(named: "drop_icon"))
         return textfield
     }()
@@ -54,6 +55,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
+        textfield.textColor = colorBlackWhite
         textfield.setView(.right, image: UIImage(named: "drop_icon"))
         return textfield
     }()

@@ -22,7 +22,7 @@ struct detailData {
     let statusId: [String]
 }
 
-class DetalizationViewController: UIViewController , UIScrollViewDelegate {
+class DetalizationViewController: UIViewController , UIScrollViewDelegate, UITextFieldDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
@@ -79,11 +79,19 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     var inMail = ""
     var settings_data = [[String]]()
     
+    var table_height = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
+        
+        detalizationView = DetalizationView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        
+        self.detalizationView.email_text.delegate = self
+        self.detalizationView.email_text.tag = 1
+        
         sendRequest()
         
     }
@@ -102,6 +110,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -112,9 +121,34 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         navigationController?.popViewController(animated: true)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        detalizationView.email_text.resignFirstResponder()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("hhh")
+        TabPeriodCollectionView.frame.origin.y = 80
+        detalizationView.titleRed.isHidden = true
+        detalizationView.email_text.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        detalizationView.email_text.resignFirstResponder()
+        return true
+    }
+    
+    @objc func tableTouch() {
+        detalizationView.email_text.resignFirstResponder()
+    }
+    
     func setupView() {
         view.backgroundColor = toolbarColor
-  
+        
+        table_height = (HistoryData.count - 1) * 120
+       
+        table_height += 20
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -123,16 +157,20 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(table_height) + 850)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
-        detalizationView = DetalizationView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(detalizationView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "History")
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
@@ -145,8 +183,8 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         detalizationView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
         detalizationView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 40)
         
-        detalizationView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 3)
-        detalizationView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 3)
+        detalizationView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+        detalizationView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         detalizationView.tab1.isUserInteractionEnabled = true
@@ -169,6 +207,13 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         TabPeriodCollectionView.delegate = self
         TabPeriodCollectionView.dataSource = self
         TabPeriodCollectionView.alwaysBounceVertical = false
+        let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+        TabPeriodCollectionView.isUserInteractionEnabled = true
+        TabPeriodCollectionView.addGestureRecognizer(tapGestureRecognizer3)
+        
+        let tapGestureRecognizer4 = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+        detalizationView.isUserInteractionEnabled = true
+        detalizationView.addGestureRecognizer(tapGestureRecognizer4)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -202,7 +247,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     @objc func tab1Click() {
         detalizationView.tab1.textColor = colorBlackWhite
         detalizationView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        detalizationView.tab1Line.backgroundColor = .orange
+        detalizationView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         detalizationView.tab2Line.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
@@ -211,7 +256,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         detalizationView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         detalizationView.tab2.textColor = colorBlackWhite
         detalizationView.tab1Line.backgroundColor = .clear
-        detalizationView.tab2Line.backgroundColor = .orange
+        detalizationView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -255,7 +300,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                         
                         if result.history != nil {
                             
-                            for i in 0 ..< result.history!.count {
+                            for i in 0 ..< result.history.count {
                                 
                                 var tableData = [String]()
                                 var tableData1 = [String]()
@@ -268,20 +313,26 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                                 var tableData8 = [String]()
                                 var tableData9 = [String]()
                                
-                                for j in 0 ..< result.history![i].histories.count {
+                                for j in 0 ..< result.history[i].histories.count {
                                     
-                                    tableData.append(String(result.history![i].histories[j].phoneNumber))
-                                    tableData1.append(String(result.history![i].histories[j].status))
-                                    tableData2.append(String(result.history![i].histories[j].email))
-                                    tableData3.append(String(result.history![i].histories[j].dateFrom))
-                                    tableData4.append(String(result.history![i].histories[j].dateTo))
-                                    tableData5.append(String(result.history![i].histories[j].date))
-                                    tableData6.append(String(result.history![i].histories[j].id))
-                                    tableData7.append(String(result.history![i].histories[j].price))
-                                    tableData8.append(String(result.history![i].histories[j].statusId))
+                                    tableData.append(String(result.history[i].histories[j].phoneNumber))
+                                    tableData1.append(String(result.history[i].histories[j].status))
+                                    tableData2.append(String(result.history[i].histories[j].email))
+                                    tableData3.append(String(result.history[i].histories[j].dateFrom ?? ""))
+                                    tableData4.append(String(result.history[i].histories[j].dateTo ?? ""))
+                                    tableData5.append(String(result.history[i].histories[j].date))
+                                    tableData6.append(String(result.history[i].histories[j].id))
+                                    if  result.history[i].histories[j].price.truncatingRemainder(dividingBy: 1) == 0 {
+                                        tableData7.append(String(Int(result.history[i].histories[j].price)))
+                                    }
+                                    else {
+                                        tableData7.append(String(result.history[i].histories[j].price))
+                                    }
+                                    
+                                    tableData8.append(String(result.history[i].histories[j].statusId))
                                 }
                                 
-                                HistoryData.append(detailData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData1, email: tableData2, dateFrom: tableData3, dateTo: tableData4, date: tableData5, id: tableData6, price: tableData7, statusId: tableData8))
+                                HistoryData.append(detailData(date_header: String(result.history[i].date), phoneNumber: tableData, status: tableData1, email: tableData2, dateFrom: tableData3, dateTo: tableData4, date: tableData5, id: tableData6, price: tableData7, statusId: tableData8))
                             }
                             
                         }
@@ -365,7 +416,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
-        let title_cost2 = " \(detalizationView.email_text.text) " as NSString
+        let title_cost2 = " \(String(detalizationView.email_text.text!)) " as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
         titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
@@ -390,7 +441,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         costString3.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range3)
         costString3.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
         
-        var title_cost3 = " \(value_transfer) " as NSString
+        var title_cost3 = " \(String(Double(date_count) * 0.25) + " c.") " as NSString
             
         let titleString3 = NSMutableAttributedString.init(string: title_cost3 as String)
         let range3_1 = (title_cost3).range(of: title_cost3 as String)
@@ -407,24 +458,29 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         
         view.ok.setTitle(defaultLocalizer.stringForKey(key: "Send"), for: .normal)
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
         if detalizationView.email_text.text != "" && isValidEmail(detalizationView.email_text.text!) == true {
-           // cell.titleRed.isHidden = true
+            TabPeriodCollectionView.frame.origin.y = 80
+            detalizationView.titleRed.isHidden = true
             detalizationView.email_text.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            cell.sendButton.showAnimation {
-                self.present(self.alert, animated: true, completion: nil)
-              }
+            cell.sendButton.showAnimation { [self] in
+                present(alert, animated: true, completion: nil)
+               
+            }
         }
         else {
+            TabPeriodCollectionView.frame.origin.y = 90
+            detalizationView.titleRed.isHidden = false
             detalizationView.email_text.layer.borderColor = UIColor.red.cgColor
         }
         
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
+        print("ere i am")
         
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
@@ -468,7 +524,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
 
         
     }
@@ -476,14 +532,15 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     @objc func dismissDialog() {
         print("hello")
         alert.dismiss(animated: true, completion: nil)
+        hideActivityIndicator(uiView: view)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation {
-            self.alert.dismiss(animated: true, completion: nil)
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            showActivityIndicator(uiView: view)
         }
-        showActivityIndicator(uiView: view)
         
         print(sender.tag)
         
@@ -512,13 +569,14 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                             requestAnswer(status: true, message: String(result.message ?? ""))
                         }
                         else {
+                            print("hh")
                             requestAnswer(status: false, message: String(result.message ?? ""))
                         }
                     }
                 },
-                onError: { error in
-                   print(error.localizedDescription)
-                    DispatchQueue.main.async { [self] in
+                onError: { [self] error in
+                    print("and here")
+                    DispatchQueue.main.async {
                         requestAnswer(status: false, message: error.localizedDescription)
                         print(error.localizedDescription)
                         
@@ -526,7 +584,8 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
                 },
                 onCompleted: { [self] in
                     DispatchQueue.main.async {
-                        hideActivityIndicator(uiView: view)
+                       
+                      //  hideActivityIndicator(uiView: view)
                     }
                    print("Completed event.")
                     
@@ -569,11 +628,36 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate {
     }
     
     @objc func dismissCalendar(_ sender: UIButton) {
-        print("jlllllll")
-        nav.dismiss(animated: true) { [self] in
-            let indexPath = IndexPath(row: 0, section: 0)
-            let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+        print("dismissCalendar")
+        print(date_count)
+        print(fromDate)
+        print(to_Date)
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
+        if to_Date != ""  {
             cell.period.text = fromDate + " - " + to_Date
+        }
+        else {
+            cell.period.text = fromDate
+        }
+        
+        let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") + ": " as NSString
+        let range = (cost).range(of: cost as String)
+        let costString = NSMutableAttributedString.init(string: cost as String)
+        costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+        costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
+        
+        var title_cost = String(Double(date_count) * 0.25) + " c." as NSString
+        
+        let titleString = NSMutableAttributedString.init(string: title_cost as String)
+        let range2 = (title_cost).range(of: title_cost as String)
+        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+        titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
+        costString.append(titleString)
+        cell.title_commission.attributedText = costString
+        
+        nav.dismiss(animated: true) { [self] in
+            
         }
     }
 }
@@ -659,17 +743,21 @@ extension DetalizationViewController: UICollectionViewDelegateFlowLayout, UIColl
                 table.alwaysBounceVertical = false
                 table.separatorStyle = .none
                 table.backgroundColor = contentColor
-                table.allowsSelection = false                                                                        
+                table.allowsSelection = false
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tableTouch))
+                table.isUserInteractionEnabled = true
+                table.addGestureRecognizer(tapGestureRecognizer)
+                
                 cell.addSubview(table)
             }
             else {
                 table2.register(TraficHistoryViewCell.self, forCellReuseIdentifier: "history_transfer")
                 table2.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-                table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+                table2.frame = CGRect(x: 10, y: 0, width: Int(UIScreen.main.bounds.size.width) - 20, height: table_height)
                 table2.delegate = self
                 table2.dataSource = self
-                table2.rowHeight = 90
-                table2.estimatedRowHeight = 90
+                table2.rowHeight = 120
+                table2.estimatedRowHeight = 120
                 table2.alwaysBounceVertical = false
                 table2.separatorStyle = .none
                 table2.backgroundColor = contentColor
@@ -690,14 +778,14 @@ extension DetalizationViewController: UICollectionViewDelegateFlowLayout, UIColl
             if indexPath.row == 0 {
                 detalizationView.tab1.textColor = colorBlackWhite
                 detalizationView.tab2.textColor = .gray
-                detalizationView.tab1Line.backgroundColor = .orange
+                detalizationView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 detalizationView.tab2Line.backgroundColor = .clear
                 
             } else {
                 detalizationView.tab1.textColor = .gray
                 detalizationView.tab2.textColor = colorBlackWhite
                 detalizationView.tab1Line.backgroundColor = .clear
-                detalizationView.tab2Line.backgroundColor = .orange
+                detalizationView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
         else {
@@ -720,9 +808,26 @@ extension DetalizationViewController: CellTapPeriodActionDelegate {
                 let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
                 fromDate = dateFormatter2.string(from: lastDaysAgo!)
                 to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                date_count = 0
+                
                 let indexPath = IndexPath(row: 0, section: 0)
                 let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
                 cell.period.text = fromDate + " - " + to_Date
+                
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost")  + ": " as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
+                
+                var title_cost = "c." as NSString
+                
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
                 
             case 1:
                 let dateFormatter2 = DateFormatter()
@@ -730,14 +835,33 @@ extension DetalizationViewController: CellTapPeriodActionDelegate {
                 let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
                 fromDate = dateFormatter2.string(from: lastDaysAgo!)
                 to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                date_count = 1
+                
                 let indexPath = IndexPath(row: 0, section: 0)
                 let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
                 cell.period.text = fromDate + " - " + to_Date
+                
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") + ": " as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
+                
+                var title_cost = "0.25 c." as NSString
+                
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
 
             case 2:
                 let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())
                 let lastDaysAgo = Calendar.current.date(byAdding: .day, value: -1, to: Date())
                 let dateFormatter2 = DateFormatter()
+                date_count = 7
+                
                 dateFormatter2.dateFormat = "dd.MM.yyyy"
                 fromDate = dateFormatter2.string(from: sevenDaysAgo!)
                 to_Date = dateFormatter2.string(from: lastDaysAgo!)
@@ -745,6 +869,21 @@ extension DetalizationViewController: CellTapPeriodActionDelegate {
                 let indexPath = IndexPath(row: 0, section: 0)
                 let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
                 cell.period.text = fromDate + " - " + to_Date
+                
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") + ": " as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
+                
+                var title_cost = "1.75 c." as NSString
+                
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
                 
             case 3:
                 let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())
@@ -753,11 +892,27 @@ extension DetalizationViewController: CellTapPeriodActionDelegate {
                 dateFormatter2.dateFormat = "dd.MM.yyyy"
                 fromDate = dateFormatter2.string(from: sevenDaysAgo!)
                 to_Date = dateFormatter2.string(from: lastDaysAgo!)
+                date_count = 30
                 
                 let indexPath = IndexPath(row: 0, section: 0)
                 let cell = table.cellForRow(at: indexPath) as! DetalizationViewCell
                 cell.period.text = fromDate + " - " + to_Date
 
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") + ": " as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
+                
+                var title_cost = "7.5 c." as NSString
+                
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
+                
             default: break;
             }
             
@@ -830,8 +985,9 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
             fromDate = dateFormatter2.string(from: lastDaysAgo!)
             to_Date = dateFormatter2.string(from: lastDaysAgo!)
             
+            
             cell.period.text = fromDate + " - " + to_Date
-            value_transfer = "0.10 " +  defaultLocalizer.stringForKey(key: "somoni")
+            value_transfer = String(Double(date_count) * 0.25) + " c."
             
             let open_calendar = cell.period.setView(.right, image: UIImage(named: "calendar"))
             open_calendar.addTarget(self, action: #selector(openCalendar), for: .touchUpInside)
@@ -840,18 +996,18 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
             cell.icon_more.isUserInteractionEnabled = true
             cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
             
-            let cost: NSString = defaultLocalizer.stringForKey(key: "Commission") as NSString
+            let cost: NSString = defaultLocalizer.stringForKey(key: "Service_cost") + ": " as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
-            costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: range)
             
-            var title_cost = "0.10" + " " +  defaultLocalizer.stringForKey(key: "somoni") as NSString
+            var title_cost = "0 c." as NSString
             
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)], range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18)], range: range2)
             costString.append(titleString)
             cell.title_commission.attributedText = costString
             
@@ -861,9 +1017,23 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "history_transfer", for: indexPath) as! TraficHistoryViewCell
          
-            cell.titleOne.text = HistoryData[indexPath.section].phoneNumber[indexPath.row]
             cell.titleTwo.text = "" + HistoryData[indexPath.section].status[indexPath.row]
             cell.titleThree.text = HistoryData[indexPath.section].price[indexPath.row] + " c"
+            
+            if HistoryData[indexPath.section].dateFrom[indexPath.row] != "" &&  HistoryData[indexPath.section].dateTo[indexPath.row] != "" {
+                let dateFormatter1 = DateFormatter()
+                dateFormatter1.dateFormat = "yyyy-MM-dd"
+                let date1 = dateFormatter1.date(from: String(HistoryData[indexPath.section].dateFrom[indexPath.row]))
+                let date2 = dateFormatter1.date(from: String(HistoryData[indexPath.section].dateTo[indexPath.row]))
+                
+                let fromDate = Calendar.current.startOfDay(for: date1!) // <1>
+                let toDate = Calendar.current.startOfDay(for: date2!) // <2>
+                let numberOfDays = Calendar.current.dateComponents([.day], from: fromDate, to: toDate)
+                cell.titleOne.text = "Период \(Int(numberOfDays.day! + 1)) дн."
+            }
+            else {
+                cell.titleOne.text = "Неопределено"
+            }
             
             let dateFormatter1 = DateFormatter()
             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
@@ -872,21 +1042,36 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
             
             cell.titleFour.text = dateFormatter1.string(from: date!)
             
-            cell.titleTwo.frame = CGRect(x: 80, y: 40, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 110, height: 50)
+            cell.titleOne.frame = CGRect(x: 80, y: 10, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 40)
+            cell.titleTwo.frame = CGRect(x: 80, y: 50, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 60)
             
-            cell.titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleThree.text!.count * 15) - 30, y: 10, width: (cell.titleThree.text!.count * 15), height: 30)
+            print(cell.titleTwo.frame.size.width)
+            cell.titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleThree.text!.count * 15) - 30, y: 10, width: (cell.titleThree.text!.count * 15), height: 50)
             
-            cell.titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 30, y: 40, width: (cell.titleFour.text!.count * 10), height: 50)
+            cell.titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 30, y: 50, width: (cell.titleFour.text!.count * 10), height: 60)
+            
+            if HistoryData[indexPath.section].statusId[indexPath.row] != "200" {
+                cell.titleTwo.textColor = .red
+                cell.titleTwo.text = "✖︎ " + HistoryData[indexPath.section].status[indexPath.row]
+            }
+            else {
+                cell.titleTwo.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
+                cell.titleTwo.text = "✓ " + HistoryData[indexPath.section].status[indexPath.row]
+            }
+            
+            cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "money_w") : UIImage(named: "detail"))
+          
+            
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = .clear
+            cell.selectedBackgroundView = bgColorView
+            
             return cell
         }
        
     }
     
     @objc func openCalendar(_ sender: UIButton) {
-        
-        calendarViewController.calendar_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-        calendarViewController.calendar_view.cancel.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-        calendarViewController.calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         
         nav = UINavigationController(rootViewController: calendarViewController)
         nav.modalPresentationStyle = .pageSheet
@@ -903,9 +1088,15 @@ extension DetalizationViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             // Fallback on earlier versions
         }
-            
+    
+        calendarViewController.koyomi.unselectAll()
         sender.showAnimation { [self] in
-            present(nav, animated: true, completion: nil)
+            present(nav, animated: true) {
+                calendarViewController.calendar_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+                calendarViewController.calendar_view.cancel.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+                calendarViewController.calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
+                
+            }
         }
         
     }

@@ -36,7 +36,7 @@ class ReplyToZetView: UIView {
         textfield.text = "info@zet-mobile.com"
         textfield.isUserInteractionEnabled = false
         textfield.backgroundColor = colorLine
-        
+        textfield.textColor = colorBlackWhite
         return textfield
     }()
     
@@ -59,11 +59,12 @@ class ReplyToZetView: UIView {
         textfield.frame = CGRect(x: 20, y: 130, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        textfield.textColor = colorBlackWhite
         textfield.layer.borderWidth = 1
         textfield.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
         return textfield
     }()
-
+    
     lazy var titleThree: UILabel = {
         let titleOne = UILabel()
         titleOne.text = defaultLocalizer.stringForKey(key: "your_message")
@@ -91,10 +92,25 @@ class ReplyToZetView: UIView {
         return textfield
     }()
     
+    lazy var titleRed: UILabel = {
+        let titleRed = UILabel()
+        titleRed.text = defaultLocalizer.stringForKey(key: "Заполните поле 'Опишите проблему'")
+        titleRed.numberOfLines = 0
+        titleRed.textColor = .red
+        titleRed.font = UIFont(name: "", size: 9)
+        titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed.textAlignment = .left
+        titleRed.frame = CGRect(x: 20, y: 390, width: 300, height: 20)
+        titleRed.autoresizesSubviews = true
+        titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed.isHidden = true
+        return titleRed
+    }()
+
     lazy var button: UIButton = {
         let button = UIButton(frame: CGRect(x: 40, y: 400, width: Int(UIScreen.main.bounds.size.width) - 80, height: 40))
         button.backgroundColor = .clear
-        button.setTitle(defaultLocalizer.stringForKey(key: "Upload_Screenshot"), for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Upload_Screenshot") + " ", for: .normal)
         button.setTitleColor(.orange, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.borderColor = UIColor.orange.cgColor
@@ -139,6 +155,12 @@ class ReplyToZetView: UIView {
         type_message.leftView = paddingView2
         type_message.leftViewMode = .always
         
+        text_message.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 4, right: 4)
+        
+        let icon = UIImage(named: "Img_box_light")!
+        button.setImage(icon, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.semanticContentAttribute = .forceRightToLeft
         
         self.addSubview(titleOne)
         self.addSubview(titleTwo)
@@ -146,7 +168,7 @@ class ReplyToZetView: UIView {
         self.addSubview(email)
         self.addSubview(type_message)
         self.addSubview(text_message)
-        
+        self.addSubview(titleRed)
         self.addSubview(button)
         self.addSubview(button_send)
 

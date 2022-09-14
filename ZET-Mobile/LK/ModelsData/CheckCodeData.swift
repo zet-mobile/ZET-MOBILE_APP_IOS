@@ -8,9 +8,9 @@
 import Foundation
 
 struct CheckCodeData {
-    let message: String
+    let message: String?
     let accessToken: String?
-    let refreshToken: String
+    let refreshToken: String?
     let success: Bool
 }
 
@@ -25,13 +25,24 @@ extension CheckCodeData: Decodable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CheckCodeDataCodingKeys.self)
-        message = try container.decode(String.self, forKey: .message)
+        do {
+            message = try container.decode(String.self, forKey: .message)
+        } catch {
+            message = nil
+        }
+        
         do {
             accessToken = try container.decode(String.self, forKey: .accessToken)
         } catch {
             accessToken = nil
         }
-        refreshToken = try container.decode(String.self, forKey: .refreshToken)
+        
+        do {
+            refreshToken = try container.decode(String.self, forKey: .refreshToken)
+        } catch {
+            refreshToken = nil
+        }
+        
         success = try container.decode(Bool.self, forKey: .success)
     }
 }

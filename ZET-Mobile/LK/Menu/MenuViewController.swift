@@ -14,7 +14,7 @@ class MenuViewController: UIViewController {
     
     var tableView: UITableView!
     var tableData = [["Notification", "Notification-1", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", "roaming-1", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting menu", "Setting-1", defaultLocalizer.stringForKey(key: "Settings")], ["Message", "Message-1", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", "Info Square-1", defaultLocalizer.stringForKey(key: "About")], ["Logout", "Logout-1", defaultLocalizer.stringForKey(key: "Exit")]]
-    
+    var color = [UIColor.red, UIColor.green, UIColor.gray, UIColor.white, UIColor.yellow, UIColor.purple]
     
     var menuView = MenuView()
     
@@ -28,8 +28,11 @@ class MenuViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = toolbarColor
         configureTableView()
-        menuView = MenuView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926, width: UIScreen.main.bounds.size.width - 50, height: (UIScreen.main.bounds.size.height * 200) / 926))
-
+        menuView = MenuView(frame: CGRect(x: 0, y: tableView.frame.height - 30 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width - 110, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0))))
+        
+        menuView.vk.addTarget(self, action: #selector(vkClick), for: .touchUpInside)
+        menuView.telegram.addTarget(self, action: #selector(telegramClick), for: .touchUpInside)
+        menuView.instagram.addTarget(self, action: #selector(instagramClick), for: .touchUpInside)
         view.addSubview(menuView)
     }
     
@@ -38,14 +41,28 @@ class MenuViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(MenuViewCell.self, forCellReuseIdentifier: reuseIdentifer)
-        tableView.rowHeight = (UIScreen.main.bounds.size.height * 50) / 926
+        tableView.rowHeight = 50
+        //(UIScreen.main.bounds.size.height * 50) / 926
+        tableView.estimatedRowHeight = 50
+        //(UIScreen.main.bounds.size.height * 50) / 926
         tableView.separatorStyle = .none
-        tableView.frame = CGRect(x: 0, y: 10, width: UIScreen.main.bounds.size.width - 50, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
+        tableView.frame = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width - 110, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
         tableView.backgroundColor = contentColor
         view.addSubview(tableView)
 
     }
     
+    @objc func vkClick(_ sender: UIButton) {
+        open(scheme: "https://vk.com/zetmobile")
+    }
+    
+    @objc func telegramClick(_ sender: UIButton) {
+        open(scheme: "https://t.me/ZETMOBILE" )
+    }
+    
+    @objc func instagramClick(_ sender: UIButton) {
+        open(scheme: "https://www.instagram.com/zet_mobile/")
+    }
 }
 
 
@@ -59,6 +76,17 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! MenuViewCell
         cell.descriptionLabel.text = tableData[indexPath.row][2]
         cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: tableData[indexPath.row][1])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal) : UIImage(named: tableData[indexPath.row][0])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
+        
+        if indexPath.row == 2 {
+            cell.ico_image.frame = CGRect(x: 25, y: 20, width: 23, height: 23)
+        }
+       // cell.descriptionLabel.frame.origin.y = (UIScreen.main.bounds.size.height * 20) / 926
+      //  cell.ico_image.frame.origin.y = (UIScreen.main.bounds.size.height * 20) / 926
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = .clear
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
     }
 

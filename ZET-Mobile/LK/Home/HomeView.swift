@@ -195,7 +195,7 @@ class HomeView: UIView {
         
         self.addSubview(titleOne)
         self.addSubview(titleTwo)
-        self.addSubview(icon_more)
+        //self.addSubview(icon_more)
         self.addSubview(titleThree)
         self.addSubview(icon_more_services)
         self.addSubview(zero_help_view)

@@ -56,13 +56,17 @@ class SearchNumberViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = toolbarColor
   
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         search_number_view = SearchNumberView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(search_number_view)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Search_for_number")
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))

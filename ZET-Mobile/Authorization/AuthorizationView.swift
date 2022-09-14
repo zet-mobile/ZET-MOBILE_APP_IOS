@@ -36,20 +36,38 @@ class AuthorizationView: UIView {
         textfield.backgroundColor = colorLightDarkGray
         textfield.layer.cornerRadius = 10
         textfield.keyboardType = .numberPad
+        textfield.layer.cornerRadius = 16
+        textfield.layer.borderColor = colorLightDarkGray.cgColor
+        textfield.layer.borderWidth = 1
         /*textfield.placeholder = "Введите номер телефона"
         textfield.font = UIFont.systemFont(ofSize: 15)*/
         return textfield
     }()
     
+    lazy var title_number_info: UILabel = {
+        let title = UILabel()
+        title.text = defaultLocalizer.stringForKey(key: "Incorrect_number")
+        title.numberOfLines = 1
+        title.textColor = .red
+        title.font = UIFont.systemFont(ofSize: 14)
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.textAlignment = .left
+        title.frame = CGRect(x: 25, y: (UIScreen.main.bounds.size.height * 420) / 926, width: 200, height: 20)
+        title.autoresizesSubviews = true
+        title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        title.isHidden = true
+        return title
+    }()
+    
     lazy var title_info: UILabel = {
         let title = UILabel()
-        title.text = "Вы получите СМС с кодом для авторизации"
+        title.text = defaultLocalizer.stringForKey(key: "receive_SMS")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 420) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 410) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = false
@@ -57,7 +75,7 @@ class AuthorizationView: UIView {
     }()
     
     lazy var check_condition: UIButton = {
-        let button = UIButton(frame: CGRect(x: 30, y: (UIScreen.main.bounds.size.height * 490) / 926, width: 23, height: 23))
+        let button = UIButton(frame: CGRect(x: 30, y: (UIScreen.main.bounds.size.height * 470) / 926, width: 23, height: 23))
         button.backgroundColor = .clear
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -71,8 +89,8 @@ class AuthorizationView: UIView {
     }()
     
     lazy var get_sms: UIButton = {
-        let button = UIButton(frame: CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 560) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50))
-        button.setTitle("Получить СМС", for: .normal)
+        let button = UIButton(frame: CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 520) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50))
+        button.setTitle(defaultLocalizer.stringForKey(key: "Get_sms"), for: .normal)
         //button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -84,7 +102,7 @@ class AuthorizationView: UIView {
     }()
     
     lazy var lang_set: UIButton = {
-        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 70) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        let button = UIButton(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 70) / 926, width: 80, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("RU 🇷🇺", for: .normal)
         button.backgroundColor = colorLightDarkGray
         button.setTitleColor(colorBlackWhite, for: .normal)
@@ -101,26 +119,29 @@ class AuthorizationView: UIView {
     
     lazy var code_field: UITextField = {
         let textfield = UITextField()
-        textfield.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 460) / 926, width: 150, height: 50)
+        textfield.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 430) / 926, width: 150, height: 50)
         textfield.borderStyle = .none
         textfield.backgroundColor = colorLightDarkGray
         textfield.layer.cornerRadius = 10
-        textfield.placeholder = "Введите смс-код"
+        textfield.placeholder = defaultLocalizer.stringForKey(key: "Enter_SMS")
         textfield.font = UIFont.systemFont(ofSize: 15)
         textfield.isHidden = true
         textfield.keyboardType = .numberPad
+        textfield.layer.cornerRadius = 16
+        textfield.layer.borderColor = colorLightDarkGray.cgColor
+        textfield.layer.borderWidth = 1
         return textfield
     }()
     
     lazy var title_code_info: UILabel = {
         let title = UILabel()
-        title.text = "Неверный код"
+        title.text = defaultLocalizer.stringForKey(key: "Incorrect_code")
         title.numberOfLines = 1
         title.textColor = .red
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 25, y: (UIScreen.main.bounds.size.height * 520) / 926, width: 200, height: 20)
+        title.frame = CGRect(x: 25, y: (UIScreen.main.bounds.size.height * 490) / 926, width: 200, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -130,7 +151,7 @@ class AuthorizationView: UIView {
     lazy var time_symbol: UIImageView = {
         let im = UIImageView()
         im.image = UIImage(named: "clock.png")
-        im.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 20, height: 20)
+        im.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 20, height: 20)
         im.isHidden = true
         return im
     }()
@@ -143,7 +164,7 @@ class AuthorizationView: UIView {
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 210, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 20, height: 20)
+        title.frame = CGRect(x: 210, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 20, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -158,7 +179,7 @@ class AuthorizationView: UIView {
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 230, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 5, height: 20)
+        title.frame = CGRect(x: 230, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 5, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -173,7 +194,7 @@ class AuthorizationView: UIView {
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 235, y: (UIScreen.main.bounds.size.height * 465) / 926, width: 20, height: 20)
+        title.frame = CGRect(x: 235, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 20, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -182,13 +203,13 @@ class AuthorizationView: UIView {
     
     lazy var send_again: UILabel = {
         let title = UILabel()
-        title.text = "Отправить ещё раз"
+        title.text = defaultLocalizer.stringForKey(key: "Отправить ещё раз")
         title.numberOfLines = 1
         title.textColor = .orange
         title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 489) / 926, width: (UIScreen.main.bounds.size.width * 200) / 428, height: 20)
+        title.frame = CGRect(x: 185, y: (UIScreen.main.bounds.size.height * 459) / 926, width: (UIScreen.main.bounds.size.width * 200) / 428, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -198,7 +219,7 @@ class AuthorizationView: UIView {
     //language menu
     
     lazy var ru_button: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: (UIScreen.main.bounds.size.height * 50) / 926))
         button.setTitle("RU 🇷🇺", for: .normal)
         button.backgroundColor = .clear
         button.setTitleColor(colorBlackWhite, for: .normal)
@@ -210,8 +231,8 @@ class AuthorizationView: UIView {
     }()
     
     lazy var eng_but: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 50) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
-        button.setTitle("EN 🇺🇸", for: .normal)
+        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 50) / 926, width: 80, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        button.setTitle("ENG 🇺🇸", for: .normal)
         button.backgroundColor = .clear
         button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -222,8 +243,8 @@ class AuthorizationView: UIView {
     }()
     
     lazy var tj_but: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 100) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
-        button.setTitle("TJ 🇹🇯", for: .normal)
+        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 100) / 926, width: 80, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        button.setTitle("TJK 🇹🇯", for: .normal)
         button.backgroundColor = .clear
         button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -234,8 +255,8 @@ class AuthorizationView: UIView {
     }()
     
     lazy var uz_but: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 150) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 50) / 926))
-        button.setTitle("UZ 🇺🇿", for: .normal)
+        let button = UIButton(frame: CGRect(x: 0, y: (UIScreen.main.bounds.size.height * 150) / 926, width: 80, height: (UIScreen.main.bounds.size.height * 50) / 926))
+        button.setTitle("UZB 🇺🇿", for: .normal)
         button.backgroundColor = .clear
         button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -261,7 +282,7 @@ class AuthorizationView: UIView {
     private func setupView() {
         backgroundColor = .white
        
-        title_condition.frame = CGRect(x: 65, y: (UIScreen.main.bounds.size.height * 490) / 926, width: UIScreen.main.bounds.size.width - 70, height: 23)
+        title_condition.frame = CGRect(x: 65, y: (UIScreen.main.bounds.size.height * 470) / 926, width: UIScreen.main.bounds.size.width - 70, height: 23)
         let cost: NSString = defaultLocalizer.stringForKey(key: "Agree_with") as NSString
         let range = (cost).range(of: cost as String)
         let costString = NSMutableAttributedString.init(string: cost as String)
@@ -278,6 +299,7 @@ class AuthorizationView: UIView {
         title_condition.attributedText = costString
         title_condition.textAlignment = .left
         title_condition.isHidden = false
+        title_condition.frame.size.width = CGFloat(title_condition.text?.count ?? 0) * 10
         
         let code_number: NSString = "+992" as NSString
         let range3 = (code_number).range(of: code_number as String)
@@ -306,6 +328,7 @@ class AuthorizationView: UIView {
         view_lang = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 100, y: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 270) / 926, width: 70, height: (UIScreen.main.bounds.size.height * 200) / 926))
         view_lang.backgroundColor = .clear
         view_lang.isHidden = true
+    
         
         self.addSubview(zet_image_top)
         self.addSubview(image_top)
@@ -318,6 +341,7 @@ class AuthorizationView: UIView {
         self.addSubview(lang_set)
         
         self.addSubview(code_field)
+        self.addSubview(title_number_info)
         self.addSubview(title_code_info)
         self.addSubview(send_again)
         self.addSubview(timer_label)

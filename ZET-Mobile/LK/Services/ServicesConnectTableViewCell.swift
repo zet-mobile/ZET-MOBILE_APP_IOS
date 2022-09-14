@@ -19,6 +19,7 @@ class ServicesConnectTableViewCell: UITableViewCell {
     let ic_image = UIImageView()
     let spisanie = UILabel()
 
+    
 override func awakeFromNib() {
     super.awakeFromNib()
     
@@ -64,7 +65,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleThree.textAlignment = .left
     
     //getButton.setImage(#imageLiteral(resourceName: "turn_off"), for: UIControl.State.normal)
-    getButton.frame = CGRect(x: UIScreen.main.bounds.size.width - 190, y: 90, width: 160, height: 40)
+    getButton.frame = CGRect(x: UIScreen.main.bounds.size.width - 190, y: 90, width: 160, height: 35)
     getButton.backgroundColor = .clear
     getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
     getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)

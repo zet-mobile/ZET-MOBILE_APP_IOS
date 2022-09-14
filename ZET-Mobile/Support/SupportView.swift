@@ -11,7 +11,7 @@ class SupportView: UIView {
 
     lazy var title_info: UILabel = {
         let title = UILabel()
-        title.text = "Горячая линия"
+        title.text = defaultLocalizer.stringForKey(key: "Hot_line")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         title.font = UIFont.systemFont(ofSize: 16)
@@ -50,12 +50,12 @@ class SupportView: UIView {
     
     lazy var title1: UILabel = {
         let title = UILabel()
-        title.text = "Карта"
+        title.text = defaultLocalizer.stringForKey(key: "Map")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 17)
         title.textAlignment = .left
-        title.frame = CGRect(x: (white_view_back.frame.width / 2) - 90, y: 10, width: 80, height: 45)
+        title.frame = CGRect(x: (white_view_back.frame.width / 2) - 100, y: 10, width: 80, height: 45)
         
         return title
     }()
@@ -78,12 +78,12 @@ class SupportView: UIView {
     
     lazy var title2: UILabel = {
         let title = UILabel()
-        title.text = "Список"
+        title.text = defaultLocalizer.stringForKey(key: "List")
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: (white_view_back.frame.width / 2) + 60, y: 10, width: 80, height: 45)
+        title.frame = CGRect(x: (white_view_back.frame.width / 2) + 50, y: 10, width: 80, height: 45)
         
         return title
     }()
@@ -104,14 +104,15 @@ class SupportView: UIView {
     private func setupView() {
         backgroundColor = .clear
         
+        white_back.backgroundColor = contentColor
         white_view_back = UIView(frame: CGRect(x: 35, y: 150, width: UIScreen.main.bounds.size.width - 70, height: 65))
         
-        icon1.frame = CGRect(x: (white_view_back.frame.width / 2) - 130, y: 20, width: 30, height: 30)
-        icon2.frame = CGRect(x: (white_view_back.frame.width / 2) + 20, y: 20, width: 30, height: 30)
+        icon1.frame = CGRect(x: (white_view_back.frame.width / 2) - 130, y: 20, width: 25, height: 25)
+        icon2.frame = CGRect(x: (white_view_back.frame.width / 2) + 20, y: 20, width: 25, height: 25)
         line.frame = CGRect(x: white_view_back.frame.width / 2, y: 7, width: 2, height: 50)
         
         white_view_back.layer.cornerRadius = 20
-       // white_view_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        white_view_back.backgroundColor = colorGrayWhite
         white_view_back.layer.shadowRadius = 10
         white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
         white_view_back.layer.shadowOpacity = 1
@@ -123,8 +124,6 @@ class SupportView: UIView {
         white_view_back.addSubview(title2)
         white_view_back.addSubview(line)
         self.addSubview(white_view_back)
-        
-        //white_back.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
         self.addSubview(white_back)
         self.sendSubviewToBack(white_back)
         

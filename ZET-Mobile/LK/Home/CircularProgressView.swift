@@ -41,6 +41,17 @@ class CircularProgressView: UIView {
         return label
     }()
     
+    let text2: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.width == 320 ? 9 : 12, weight: .bold)
+        label.adjustsFontSizeToFitWidth = true
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.textAlignment = .center
+        label.textColor  = colorBlackWhite
+        return label
+    }()
+    
     let plusText: UIButton = {
         let button = UIButton()
         button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "plus-circle-w") : #imageLiteral(resourceName: "plus-circle")), for: UIControl.State.normal)
@@ -67,7 +78,12 @@ class CircularProgressView: UIView {
         
         createCircularPath(color1: color1, color2: color2)
         text.frame = CGRect(x: (frame.width / 2) - ((width - 25) / 2), y: (frame.height / 2) - ((height / 2) / 2), width: width - 25, height: height / 2)
+        
+        text2.frame = CGRect(x: (frame.width / 2) - ((width - 25) / 2), y: 0, width: width - 25, height: height)
+        
         addSubview(text)
+        addSubview(text2)
+        
         var paddingTop: CGFloat = 0
         if UIScreen.main.bounds.height <= 738 && UIScreen.main.bounds.height != 568 {
             paddingTop = frame.height - height - ((plusLayerHeight / 2) / 2) + 2
@@ -83,6 +99,8 @@ class CircularProgressView: UIView {
     
     
     func createCircularPath(color1: UIColor, color2: UIColor) {
+        print(frame.size.width)
+        print(frame.size.height)
         if frame.size.width != frame.size.height, frame.size.width < frame.size.height {
             width = frame.size.width - 5
             height = frame.size.width - 5

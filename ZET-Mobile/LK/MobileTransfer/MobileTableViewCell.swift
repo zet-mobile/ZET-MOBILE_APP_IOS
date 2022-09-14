@@ -17,6 +17,7 @@ class MobileTableViewCell: UITableViewCell {
     let titleRed = UILabel()
     let titleTwo = UILabel()
     let count_transfer = UITextField()
+    let titleRed2 = UILabel()
     let slider = MultiSlider()
     let title_commission = UILabel()
     let title_info = UILabel()
@@ -38,6 +39,7 @@ class MobileTableViewCell: UITableViewCell {
         contentView.addSubview(titleRed)
         contentView.addSubview(titleTwo)
         contentView.addSubview(count_transfer)
+        contentView.addSubview(titleRed2)
         contentView.addSubview(slider)
         contentView.addSubview(title_commission)
         contentView.addSubview(title_info)
@@ -94,6 +96,17 @@ class MobileTableViewCell: UITableViewCell {
         count_transfer.textColor = colorBlackWhite
         count_transfer.keyboardType = .numberPad
     
+        titleRed2.text = defaultLocalizer.stringForKey(key: "Invalid_recipient_number")
+        titleRed2.numberOfLines = 0
+        titleRed2.textColor = .red
+        titleRed2.font = UIFont(name: "", size: 9)
+        titleRed2.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed2.textAlignment = .left
+        titleRed2.frame = CGRect(x: 20, y: 240, width: 300, height: 20)
+        titleRed2.autoresizesSubviews = true
+        titleRed2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed2.isHidden = true
+        
         title_commission.text = ""
         title_commission.numberOfLines = 0
         title_commission.font = UIFont(name: "", size: 9)
@@ -137,7 +150,7 @@ class MobileTableViewCell: UITableViewCell {
         slider.trackWidth = 5
         slider.snapStepSize = 1
         slider.thumbImage = UIImage(named: "slider_thumb")
-        slider.frame = CGRect(x: 20, y: 260, width: UIScreen.main.bounds.size.width - 40, height: 30)
+        slider.frame = CGRect(x: 20, y: 270, width: UIScreen.main.bounds.size.width - 40, height: 30)
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         count_transfer.leftView = paddingView

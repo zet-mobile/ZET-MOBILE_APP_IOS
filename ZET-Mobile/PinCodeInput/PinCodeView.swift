@@ -18,7 +18,7 @@ class PinCodeView: UIView {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "ВВЕДИТЕ ПИН-КОД"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Enter_PIN").uppercased()
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -222,11 +222,11 @@ class PinCodeView: UIView {
     lazy var forget_but: UIButton = {
         let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) - (UIScreen.main.bounds.size.width * 150) / 428, y: (UIScreen.main.bounds.size.height * 580) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
-        button.setTitle("Забыли пароль?", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "FORGOT_PASSWORD?"), for: .normal)
         button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.titleLabel?.textAlignment = .center
-        button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.numberOfLines = 3
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         button.layer.cornerRadius = button.frame.height / 2

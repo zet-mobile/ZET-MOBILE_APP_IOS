@@ -15,8 +15,8 @@ struct ExchangeData: Decodable {
 }
 
 struct settings_exchange_data: Decodable {
-    let minValue: Double
-    let maxValue: Double
+    let minValue: Int
+    let maxValue: Int
     let midValue: Double
     let midPrice: Double
     let price: Double
@@ -58,8 +58,8 @@ struct histories_exchange_data: Decodable {
     let status: String
     let date: String
     let id: Int
-    let volumeA: Double
-    let volumeB: Double
+    let volumeA: Int
+    let volumeB: Int
     let unitA: String
     let unitB: String
     let price: Double

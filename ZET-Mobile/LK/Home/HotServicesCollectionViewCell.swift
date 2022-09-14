@@ -27,7 +27,7 @@ class HotServicesCollectionViewCell: UICollectionViewCell {
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 11)
         titleOne.textAlignment = .center
-        titleOne.frame = CGRect(x: 20, y: 65, width: 75, height: 60)
+        titleOne.frame = CGRect(x: 0, y: 60, width: 80, height: 50)
      
         return titleOne
     }()
@@ -38,7 +38,7 @@ class HotServicesCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
         contentView.addSubview(image)
         contentView.addSubview(titleOne)
-        image.frame = CGRect(x: 20, y: 5, width: 70, height: 70)
+        image.frame = CGRect(x: 10, y: 5, width: 60, height: 60)
         
         
         //image.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingLeft: 16)

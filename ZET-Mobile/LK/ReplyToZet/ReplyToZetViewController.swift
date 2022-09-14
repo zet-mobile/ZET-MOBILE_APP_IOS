@@ -42,6 +42,10 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
 
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = contentColor
+        
+        reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        reply_view.text_message.delegate = self
+        
         sendRequest()
         
     }
@@ -70,7 +74,37 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        reply_view.text_message.text = ""
+        
+        if reply_view.text_message.text == "Опишите проблему" {
+            reply_view.text_message.text = ""
+        }
+        reply_view.text_message.textColor = colorBlackWhite
+        
+        if reply_view.button.frame.origin.y == 430 {
+            reply_view.text_message.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            reply_view.button.frame.origin.y = 400
+            reply_view.titleRed.isHidden = true
+            
+            let buttons = getButtonsInView(view: scrollView)
+            for button in buttons {
+                if button.image(for: .normal) == UIImage(named: "correct") || button.image(for: .normal) == UIImage(named: "Trash_light") {
+                    button.frame.origin.y -= 30
+                }
+                
+            }
+            
+            let labels = getLabelsInView(view: self.scrollView)
+            for label in labels {
+                
+                if label.frame.origin.y >= 400 && label.text != defaultLocalizer.stringForKey(key: "Send") {
+                    label.frame.origin.y -= 30
+                }
+            }
+            
+            reply_view.button_send.frame.origin.y -= 30
+            y_pozition -= 30
+        }
+        
     }
     
     func setupView() {
@@ -88,7 +122,6 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         view.addSubview(scrollView)
         
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
          
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
@@ -104,8 +137,6 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Feedback")
         toolbar.backgroundColor = contentColor
-      
-        reply_view.text_message.delegate = self
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
@@ -173,7 +204,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     @objc func sendScreen() {
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -191,12 +222,16 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 300)
         view.layer.cornerRadius = 20
         
         view.name.text = defaultLocalizer.stringForKey(key: "Feedback")
-        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))?"
-        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Sent"), for: .normal)
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Send message"))?"
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Proceed"), for: .normal)
+        
+        view.name_content.frame.origin.y -= 20
+        view.name_content.font = UIFont.systemFont(ofSize: 19)
+        view.ok.frame.origin.y -= 20
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
@@ -205,13 +240,40 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        present(alert, animated: true, completion: nil)
+        if reply_view.text_message.text == "" || reply_view.text_message.text == "Опишите проблему" {
+            reply_view.text_message.layer.borderColor = UIColor.red.cgColor
+            reply_view.button.frame.origin.y = 430
+            reply_view.titleRed.isHidden = false
+            let buttons = getButtonsInView(view: scrollView)
+            for button in buttons {
+                if button.image(for: .normal) == UIImage(named: "correct") || button.image(for: .normal) == UIImage(named: "Trash_light") {
+                    button.frame.origin.y += 30
+                }
+                
+            }
+            
+            let labels = getLabelsInView(view: self.scrollView)
+            for label in labels {
+                
+                if label.frame.origin.y >= 430 && label.text != defaultLocalizer.stringForKey(key: "Send") {
+                    label.frame.origin.y += 30
+                }
+            }
+            
+            reply_view.button_send.frame.origin.y += 30
+            y_pozition += 30
+        }
+        else {
+            present(alert, animated: true, completion: nil)
+        }
+        
         
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
+        hideActivityIndicator(uiView: view)
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -229,10 +291,10 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 300)
         view.layer.cornerRadius = 20
         if status == true {
-            view.name.text = defaultLocalizer.stringForKey(key: "Your message successfully was sent")
+            view.name.text = defaultLocalizer.stringForKey(key: "Application_accepted")
             view.image_icon.image = UIImage(named: "correct_alert")
         }
         else {
@@ -243,43 +305,61 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
         
+        view.name_content.frame.origin.y -= 20
+        view.name_content.font = UIFont.systemFont(ofSize: 19)
+        view.ok.frame.origin.y -= 20
+        
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
-        hideActivityIndicator(uiView: self.view)
+        
         present(alert, animated: true, completion: nil)
-
         
     }
     
     @objc func dismissDialog(_ sender: UIButton) {
         print("hello")
-        sender.showAnimation { [self] in
-            alert.dismiss(animated: true, completion: nil)
-            hideActivityIndicator(uiView: view)
+        alert.dismiss(animated: true, completion: nil)
+        hideActivityIndicator(uiView: view)
+        
+        guard let window = UIApplication.shared.keyWindow else {
+            return
         }
+        
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        
+        let vc = ContainerViewController()
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+            window.rootViewController = vc
+        }, completion: nil)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation {
-            self.alert.dismiss(animated: true, completion: nil)
-        }
+        alert.dismiss(animated: true, completion: nil)
+      
         showActivityIndicator(uiView: view)
         
         let parametrs: [String: Any] = ["feedBackId": typeMessageChoosedID, "feedBackMessage":  String(reply_view.text_message.text!)]
         
         print(typeMessageChoosedID)
-        print(screenImg[0])
+       // print(screenImg[0])
         var mediaImages = [Media]()
         
-        for i in 0 ..< screenImg.count {
-           // guard let mediaImage = Media(withImage: screenImg[i], forKey: "file") else {return}
-            mediaImages.append(Media(withImage: screenImg[i], forKey: "file")!)
+        if screenImg.count != 0 {
+            for i in 0 ..< screenImg.count {
+                // guard let mediaImage = Media(withImage: screenImg[i], forKey: "file") else {return}
+                mediaImages.append(Media(withImage: screenImg[i], forKey: "file")!)
+            }
         }
+        
         
         let client = APIClient.shared
             do{
@@ -303,13 +383,12 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                    print(error.localizedDescription)
                     print("kkkkkkkkk")
                     DispatchQueue.main.async { [self] in
-                        requestAnswer(status: false, message: error.localizedDescription)
+                       // requestAnswer(status: false, message: error.localizedDescription)
                         print(error.localizedDescription)
                         
                     }
                 },
                 onCompleted: { [self] in
-                    print("")
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
@@ -319,7 +398,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     @objc func choosedScreenshot() {
-        let alert = UIAlertController(title: "Выбрать фото из: ", message: "", preferredStyle: .alert)
+       /* let alert = UIAlertController(title: "Выбрать фото из: ", message: "", preferredStyle: .alert)
         
         let gallery = UIAlertAction(title: "Галереи", style:.default){ [self] (action) in
             if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary)){
@@ -356,9 +435,16 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         alert.addAction(gallery)
         alert.addAction(camera)
         alert.addAction(cancel)
-        
+        */
         if screenName.count < 5 {
-            present(alert, animated: true, completion: nil)
+            //present(alert, animated: true, completion: nil)
+            if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary)){
+                self.imagePicker.delegate = self
+                self.imagePicker.allowsEditing = false
+                self.imagePicker.sourceType = .photoLibrary
+                //present(self.imagePicker, animated: true, completion: nil)
+                present(imagePicker, animated: true, completion: nil)
+            }
         }
         else {
             
@@ -370,12 +456,12 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
           //sendScreenToServer()
       }
       
+
       func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
           
           if let imageURL = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
               let result = PHAsset.fetchAssets(withALAssetURLs: [imageURL], options: nil)
-              let asset = result.firstObject
-              print(asset?.value(forKey: "filename"))
+              let asset = result.lastObject
          
               DispatchQueue.main.async { [self] in
                   UIView.setAnimationsEnabled(false)
@@ -393,7 +479,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                   title.textAlignment = .left
                   title.frame = CGRect(x: 45, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 90, height: 20)
                   
-                  title.text = asset?.value(forKey: "filename") as? String
+                  title.text = asset?.originalFilename ?? "image_\(screen_i)"
                   
                   let icon2 = UIButton()
                   icon2.setImage(UIImage(named: "Trash_light"), for: .normal)
@@ -417,7 +503,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     
                   screenImg.append(pickedImage!)
                   screenshotsData.append(data!)
-                  screenName.append(asset?.value(forKey: "filename") as! String)
+                  screenName.append(asset?.originalFilename ?? "image_\(screen_i)")
                 }
               }
           
@@ -433,6 +519,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         print(sender.tag)
         screenName.remove(at: sender.tag - 1)
         screenImg.remove(at: sender.tag - 1)
+        
         let buttons = getButtonsInView(view: scrollView)
         for button in buttons {
             if button.image(for: .normal) == UIImage(named: "correct") || button.image(for: .normal) == UIImage(named: "Trash_light") {
@@ -452,9 +539,17 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             }
         }
         
-        reply_view.button_send.frame.origin.y = 460
-        y_pozition = 430
-        but_pozition = 460
+        if reply_view.text_message.layer.borderColor == UIColor.red.cgColor {
+            reply_view.button_send.frame.origin.y = 490
+            y_pozition = 460
+            but_pozition = 490
+        }
+        else {
+            reply_view.button_send.frame.origin.y = 460
+            y_pozition = 430
+            but_pozition = 460
+        }
+        
         screen_i = 1
         
         for i in 0 ..< screenName.count {
@@ -547,5 +642,25 @@ extension UIImage {
         let cgImage: CGImage = ctx.makeImage()!
 
         //return UIImage(cgImage: cgImage)
+    }
+}
+
+extension PHAsset {
+    var originalFilename: String? {
+        var fileName: String?
+
+        if #available(iOS 9.0, *) {
+            let resources = PHAssetResource.assetResources(for: self)
+            if let resource = resources.last {
+                fileName = resource.originalFilename
+            }
+        }
+
+        if fileName == nil {
+            /// This is an undocumented workaround that works as of iOS 9.1
+            fileName = self.value(forKey: "filename") as? String
+        }
+
+        return fileName
     }
 }

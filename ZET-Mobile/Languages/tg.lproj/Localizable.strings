@@ -11,10 +11,10 @@
 "Top_up_balance" = "Пур кардан"    ;
 "Fast_services" = "Хизматрасониҳои зуд"    ;
 "Special_offers" = "Пешниҳодҳои махсус"    ;
-"View_all" = "Нигоҳ кардан (ҳамаро)"    ;
-"megabyte" = "Мегабайт"    ;
+"View_all" = "Все услуги"    ;
+"megabyte" = "мб"    ;
 "SMS" = "СМС"    ;
-"minutes" = "Дақиқаҳо"    ;
+"minutes" = "дақ"    ;
 "Services" = "Хизматрасонӣ (хизматрасониҳо)"    ;
 "Traffic_transfer" = "Интиқоли трафик"    ;
 "Traffic_exchange" = "Ивазкунии трафик"    ;
@@ -29,7 +29,7 @@
 "Payment_via " = "Пардохти 'Корти Миллӣ'"    ;
 "Ask_friend" = "Аз дӯстатон пурсед"    ;
 
-"Notifications" = "Огоҳинома"    ;
+"Notifications" = "Огоҳиномаҳо";
 "More_details" = "Муфассал"    ;
 "Connect" = "Пайваст кардан"    ;
 
@@ -79,7 +79,7 @@
 "History_of_exchanges" = "Таърихи ивазшавӣ"    ;
 "Exchange" = "Иваз кардан ба"    ;
 "Balance_and_packages" = "Тавозун ва бастаҳо"    ;
-"Translation_Amount" = "Маблағи интиқол (сомонӣ)"    ;
+"Translation_Amount" = "Маблағ"    ;
 "Purchase_package" = "Баста харидан"    ;
 "New_package" = "Бастаи нав"    ;
 "Query_history" = "Таърихи дархостҳо"    ;
@@ -128,23 +128,23 @@
 "Passport ID" = "Рақами шиноснома"    ;
 "Reserve" = "Брон кардан"    ;
 "Reserve_number" = "Брон кардани (ҳуҷра) (рақам)"    ;
-"About" = "Дар бораи замима (барнома)"    ;
+"About" = "Дар бораи замима"    ;
 "other_application" = "Дигар барномаҳои моро бинед ( дида бароед)"    ;
 "Privacy_Policy" = "Сиёсати махфият"    ;
 "Hot_line" = "Хати фаъол"    ;
 "Map" = "Харита"    ;
 "List" = "Рӯйхат"    ;
 "Zet_office" = "Идораи ZET Mobile"    ;
-"Language" = "Забон"    ;
+"Language" = "Забони барнома"    ;
 "Appearance" = "Намуди зоҳирӣ"    ;
 "App_theme" = "Мавзуи барнома"    ;
 "Push_notifications" = "Push-огоҳинома"    ;
 "Promotions" = "Аксияҳо, пешниҳодҳо"    ;
 "E-mail_newsletter" = "E-mail паёмакҳо"    ;
-"SMS_notifications" = "Паём (паёмак) огоҳиномаҳо"    ;
+"SMS_notifications" = "Паём огоҳиномаҳо"    ;
 "Security" = "Бехатарӣ"    ;
-"Change_PIN" = "Иваз кардани код-парол"    ;
-"Set_password" = "Насб кардани ( рамз) код-парол"    ;
+"Change_PIN" = "Иваз кардани пин-код"    ;
+"Set_password" = "Насб кардани пин-код"    ;
 "Biometric_Login" = "Воридшавӣ бо биометрӣ"    ;
 "Log_In" = "Воридшавӣ бо парол"    ;
 "Settings" = "Танзимот"    ;
@@ -168,7 +168,7 @@
 "English" = "Англисӣ"    ;
 "Next_charge_date" = "Санаи аз ҳисоб баровардани навбатӣ:"    ;
 "Enter_PIN" =  "Пин-кодро ворид кунед"    ;
-"FORGOT_PASSWORD?" = "Рамзро фаромущ кардед?"    ;
+"FORGOT_PASSWORD?" = "Рамзро фаромуш кардед?"    ;
 "Get_sms" = "Паём гирифтан"    ;
 "receive_SMS" = "Шумо СМС-ро бо рамз барои авторизатсия хоҳед гирифт"    ;
 "Enter_phone" = "Рақами телефонро ворид кунед"    ;
@@ -229,10 +229,17 @@
 "Error_mail" = "Иштибоҳ. Почтаро ворид кунед"    ;
 "Invalid_email" = "Иштибоҳ. Почтаи дурустро ворид кунед"    ;
 "Error_detail_period" = "Иштибоҳ. Давраи тафсилотро интихоб кунед"    ;
-"Error_maximum_limit" = "Иштибоҳ. Меъёри ниҳоӣ (максималӣ) зиёд карда шуд"    ;
+"Error_maximum_limit" = "Меъёри ниҳоӣ (максималӣ) зиёд карда шуд"    ;
 "Error_larger period" =  "Иштибоҳ. Бояд давраи дарозро интихоб кард"    ;
 "Error_traffic_translation" = "Иштибоҳ. Барои интиқол  (объем-миқдор, вусъат ) трафикро ворид кунед"    ;
 "Transfer_failed" = "Интиқол карда нашуд"    ;
 "transfer_successfully_completed" = "Ивазкунии трафик бомуваффақият анҷом ёфт"    ;
 "Failed_transfer" = "Ивазкунии трафик анҷом дода нашуд"    ;
 "Public_offer" = "Пешниҳоди оммавӣ"    ;
+
+
+"max_summa" = "Максимальная сумма запроса 5 с.";
+"input_summa" = "Введите сумму";
+"input_correct_summa" = "Маблағи дурустро ворид кунед";
+"zet_call" = "Звонки по РТ";
+"another_call" = "Звонки внутри сети";

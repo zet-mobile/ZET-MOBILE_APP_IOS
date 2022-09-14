@@ -12,8 +12,16 @@ var container2: UIView = UIView()
 
 extension Double {
     var clean: String {
-       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.2f", self) : String(self)
+       return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
     }
+    
+    func removeZerosFromEnd() -> String {
+            let formatter = NumberFormatter()
+            let number = NSNumber(value: self)
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 16 //maximum digits in Double after dot (maximum precision)
+         return String(format: "%.2f", number)
+        }
 }
 
 extension UIView {
@@ -139,6 +147,18 @@ extension UIViewController {
                 results += [labelView]
             } else {
                 results += getLabelsInView(view: subview)
+            }
+        }
+        return results
+    }
+    
+    func getImagesInView(view: UIView) -> [UIImageView] {
+        var results = [UIImageView]()
+        for subview in view.subviews as [UIView] {
+            if let labelView = subview as? UIImageView {
+                results += [labelView]
+            } else {
+                results += getImagesInView(view: subview)
             }
         }
         return results

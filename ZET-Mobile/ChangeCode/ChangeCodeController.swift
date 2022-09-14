@@ -189,9 +189,9 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
             toolbar.addGestureRecognizer(back)
             toolbar.icon_back.isHidden = false
             
-            change_code_view.titleOne.text = "Введите старый пароль"
-            change_code_view.titleTwo.text = "Новый пароль"
-            change_code_view.titleThree.text = "Повторите новый пароль"
+            change_code_view.titleOne.text = defaultLocalizer.stringForKey(key: "current_PIN")
+            change_code_view.titleTwo.text = defaultLocalizer.stringForKey(key: "New_PIN")
+            change_code_view.titleThree.text = defaultLocalizer.stringForKey(key: "Re-enter_PIN")
             change_code_view.titleTwo.frame.origin.y = 110
             change_code_view.new_code.frame.origin.y = 140
             change_code_view.gray_back.frame.origin.y = 360
@@ -216,6 +216,10 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
         change_code_view.title1.frame.origin.y = 10
         
         if UserDefaults.standard.string(forKey: "PinCode") == "" || UserDefaults.standard.string(forKey: "PinCode") == nil {
+            
+            change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             
             if change_code_view.old_code.text != change_code_view.new_code.text {
                 
@@ -247,47 +251,68 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
             
         }
         else {
+            change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            
             if change_code_view.old_code.text?.count != 4 {
                 change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
-            else {
-                change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            }
-            
-            
-            if change_code_view.old_code.text != UserDefaults.standard.string(forKey: "PinCode") {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Incorrect_code")
-                change_code_view.old_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
-            }
-            else {
-                change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            }
-            
-            if change_code_view.new_code.text != change_code_view.confirm_code.text {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
-                change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
-            }
-            else {
-                change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            }
-            
-            if change_code_view.confirm_code.text == "" {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_confirmation_password")
-                change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
-            }
-            else {
-                change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            }
-            
-            
-            if change_code_view.old_code.text == UserDefaults.standard.string(forKey: "PinCode") && change_code_view.new_code.text == change_code_view.confirm_code.text && change_code_view.new_code.text != "" && change_code_view.old_code.text != "" && change_code_view.confirm_code.text != "" {
+            else
+                if change_code_view.old_code.text != UserDefaults.standard.string(forKey: "PinCode") {
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Incorrect_code")
+                    change_code_view.old_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+                if change_code_view.new_code.text?.count != 4 {
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
+                    change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+                if change_code_view.confirm_code
+                    .text?.count != 4 {
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
+                    change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+                if change_code_view.new_code.text != change_code_view.confirm_code.text {
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
+                    change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+                if change_code_view.confirm_code.text == "" {
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_confirmation_password")
+                    change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+                if change_code_view.old_code.text == change_code_view.new_code.text{
+                    change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
+                    change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
+                }
+            else
+            if change_code_view.old_code.text == UserDefaults.standard.string(forKey: "PinCode") && change_code_view.new_code.text == change_code_view.confirm_code.text && change_code_view.new_code.text != "" && change_code_view.old_code.text != "" && change_code_view.confirm_code.text != "" &&  change_code_view.new_code.text?.count == 4 &&  change_code_view.confirm_code.text?.count == 4 {
                 
                 change_code_view.title2.text = "✓  " + defaultLocalizer.stringForKey(key: "Password_saved!")
                 change_code_view.title2.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
-                UserDefaults.standard.set(String(change_code_view.new_code.text!), forKey: "PinCode")
-                
+               
+                DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
+                    guard let window = UIApplication.shared.keyWindow else {
+                        return
+                    }
+                    guard let rootViewController = window.rootViewController else {
+                        return
+                    }
+                    let vc = UINavigationController(rootViewController: SplashViewController())
+                    vc.view.frame = rootViewController.view.frame
+                    vc.view.layoutIfNeeded()
+                    UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                        window.rootViewController = vc
+                    }, completion: { completed in
+                        UserDefaults.standard.set(String(self.change_code_view.new_code.text!), forKey: "PinCode")
+                    })
+                }
             }
         }
     }

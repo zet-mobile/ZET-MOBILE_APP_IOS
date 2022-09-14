@@ -110,6 +110,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(servicesView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Services")
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
@@ -118,7 +119,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     func setupSliderSection() {
         scrollView.addSubview(SliderView)
         SliderView.backgroundColor = .clear
-        SliderView.frame = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width, height: 120)
+        SliderView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 120)
         SliderView.delegate = self
         SliderView.dataSource = self
     }
@@ -129,8 +130,8 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         servicesView.tab1.frame = CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 40)
         servicesView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2 - 40, height: 40)
         
-        servicesView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 3)
-        servicesView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 40, height: 3)
+        servicesView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 40, height: 2)
+        servicesView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 + 20, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 40, height: 2)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         servicesView.tab1.isUserInteractionEnabled = true
@@ -175,7 +176,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     @objc func tab1Click() {
         servicesView.tab1.textColor = colorBlackWhite
         servicesView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        servicesView.tab1Line.backgroundColor = .orange
+        servicesView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         servicesView.tab2Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
@@ -184,7 +185,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         servicesView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         servicesView.tab2.textColor = colorBlackWhite
         servicesView.tab1Line.backgroundColor = .clear
-        servicesView.tab2Line.backgroundColor = .orange
+        servicesView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -206,6 +207,13 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                                 self.connected_data.append([String(result.connected[i].id), String(result.connected[i].serviceName ?? ""), String(result.connected[i].price ?? ""),  String(result.connected[i].period ?? ""), String(result.connected[i].description ?? ""), String(result.connected[i].nextChargeDate ?? "")])
                             }
                         }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: "Нет активных услуг")
+                            self.table.separatorStyle = .none
+                            self.table.backgroundView = emptyView
+                            }
+                        }
                         
                         if result.available.count != 0 {
                             for i in 0 ..< result.available.count {
@@ -219,6 +227,13 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                                 }
                                 
                                 self.availables_data.append([String(result.available[i].id), String(result.available[i].serviceName ?? ""), String(result.available[i].price ?? ""),  String(result.available[i].period ?? ""), disc_id, disc_percent, String(result.available[i].description ?? "")])
+                            }
+                        }
+                        else {
+                            DispatchQueue.main.async {
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: "Нет доступных услуг")
+                            self.table.separatorStyle = .none
+                            self.table.backgroundView = emptyView
                             }
                         }
                     }
@@ -277,11 +292,13 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
         if servicesView.tab1.textColor == checkColor {
             view.name.text = defaultLocalizer.stringForKey(key: "Disable_service")
             view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service"))\n \(connected_data[sender.tag][1])?"
+            view.ok.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
             view.ok.addTarget(self, action: #selector(disableService(_:)), for: .touchUpInside)
         }
         else {
             view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
             view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(availables_data[sender.tag][1])?"
+            view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect/Activate"), for: .normal)
             view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         }
         
@@ -340,6 +357,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                 view.name.text = "Услуга подключена!"
                 view.image_icon.image = UIImage(named: "correct_alert")
             }
+            
         }
         else {
             view.name.text = "Что-то пошло не так"
@@ -455,7 +473,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
        if collectionView == SliderView {
-            return CGSize(width: collectionView.frame.width * 0.75, height: collectionView.frame.height * 0.75)
+            return CGSize(width: UIScreen.main.bounds.size.width - 40, height: collectionView.frame.height * 0.75)
         }
         else {
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -496,6 +514,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table.alwaysBounceVertical = false
                 table.backgroundColor = contentColor
                 table.separatorColor = .lightGray
+                table.allowsSelection = false
                 cell.addSubview(table)
             }
             else {
@@ -508,6 +527,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
                 table2.alwaysBounceVertical = false
                 table2.backgroundColor = contentColor
                 table2.separatorColor = .lightGray
+                table2.allowsSelection = false
                 cell.addSubview(table2)
             }
             return cell
@@ -526,16 +546,34 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
             if indexPath.row == 0 {
                 servicesView.tab1.textColor = colorBlackWhite
                 servicesView.tab2.textColor = .gray
-                servicesView.tab1Line.backgroundColor = .orange
+                servicesView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 servicesView.tab2Line.backgroundColor = .clear
                 
             } else {
                 servicesView.tab1.textColor = .gray
                 servicesView.tab2.textColor = colorBlackWhite
                 servicesView.tab1Line.backgroundColor = .clear
-                servicesView.tab2Line.backgroundColor = .orange
+                servicesView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if collectionView == TabCollectionServiceView {
+            if indexPath.row == 0 {
+                servicesView.tab1.textColor = .gray
+                servicesView.tab2.textColor = colorBlackWhite
+                servicesView.tab1Line.backgroundColor = .clear
+                servicesView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                
+            } else {
+                servicesView.tab1.textColor = colorBlackWhite
+                servicesView.tab2.textColor = .gray
+                servicesView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                servicesView.tab2Line.backgroundColor = .clear
+          }
+        }
+        
     }
 }
 
@@ -592,7 +630,15 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = " С/" + connected_data[indexPath.row][3].uppercased()  as NSString
+            var  period = " С/" + connected_data[indexPath.row][3].uppercased()
+            if connected_data[indexPath.row][3] == "" {
+                period = " С"
+            }
+            else {
+                period = " С/" + connected_data[indexPath.row][3].uppercased()
+            }
+            
+            let title_cost = period  as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
@@ -609,7 +655,7 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             cell.selectedBackgroundView = bgColorView
             
             cell.getButton.tag = indexPath.row
-            cell.getButton.addTarget(self, action: #selector(disableService(_:)), for: .touchUpInside)
+            cell.getButton.addTarget(self, action: #selector(connectService), for: .touchUpInside)
             
             return cell
         }
@@ -636,7 +682,15 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            let title_cost = " С/" + availables_data[indexPath.row][3].uppercased() as NSString
+            var  period = " С/" + availables_data[indexPath.row][3].uppercased()
+            if availables_data[indexPath.row][3] == "" {
+                period = " С"
+            }
+            else {
+                period = " С/" + availables_data[indexPath.row][3].uppercased()
+            }
+            
+            let title_cost = period as NSString
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
             titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)

@@ -14,8 +14,8 @@ struct TransferData: Decodable {
 }
 
 struct settings_data: Decodable {
-    let minValue: Double
-    let maxValue: Double
+    let minValue: Int
+    let maxValue: Int
     let midValue: Double
     let midPrice: Double
     let price: Double

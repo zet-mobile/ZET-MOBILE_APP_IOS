@@ -22,7 +22,7 @@ struct roamingOperators_data: Decodable {
 }
 
 struct operatorCharges_data: Decodable {
-    let price: Int
+    let price: Double
     let description: String
 }
 

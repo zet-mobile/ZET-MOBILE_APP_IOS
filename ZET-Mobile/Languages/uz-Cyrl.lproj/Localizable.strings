@@ -11,10 +11,10 @@
 "Top_up_balance" =    "толдириш"    ;
 "Fast_services" =    "Тез xизмат курсатиш"    ;
 "Special_offers" =    "Маxсус таклифлар"    ;
-"View_all" =    "Хаммасини куриш"    ;
-"megabyte" =    "мегабайт"    ;
+"View_all" =    "Все услуги"    ;
+"megabyte" =    "мб"    ;
 "SMS" =    "СМС"    ;
-"minutes" =    "дақиқа"    ;
+"minutes" =    "дақ"    ;
 "Services" =    "Xизматлар"    ;
 "Traffic_transfer" =    "Трафикни узатиш"    ;
 "Traffic_exchange" =    "Трафик алмаштириш"    ;
@@ -29,7 +29,7 @@
 "Payment_via " =    "корти миллини толови"     ;
 "Ask_friend" =    "дустингиздан суранг"    ;
 
-"Notifications" =    "Билдиришнома"    ;
+"Notifications" =    "Билдиришнома";
 "More_details" =    "Батафсил маълумот"    ;
 "Connect" =    "уланиш"    ;
 
@@ -78,7 +78,7 @@
 "History_of_exchanges" =    "Бирялар тариxи"    ;
 "Exchange" =    "Биря"    ;
 "Balance_and_packages" =    "Баланс ва пакетлар"    ;
-"Translation_Amount" =    "Тарйима суммаси (Сомони)"    ;
+"Translation_Amount" =    "Суммаси"    ;
 "Purchase_package" =    "Xарид қутиси"    ;
 "New_package" =    "янги туплам"    ;
 "Query_history" =    "Суров таъриxи"    ;
@@ -229,10 +229,16 @@
 "Error_mail" =    "Xато. Почта киритинг"    ;
 "Invalid_email" =    "Xато. Тогри почтани  киритинг"     ;
 "Error_detail_period" =    "Xато. Тафсилотни танланг"    ;
-"Error_maximum_limit" =    "Xато. Максимал лимит ошди"   ;
+"Error_maximum_limit" =    "Максимал лимит ошди"   ;
 "Error_larger period" =    "Xато. Каттароқ даврни танлаш керак"    ;
 "Error_traffic_translation" =    "Xато. Трансфер учун трафикни киритинг"    ;
 "Transfer_failed" =    "утказолмади"     ;
 "transfer_successfully_completed" =    "Трафик алмашинуви муваффақиятли якунланди"    ;
 "Failed_transfer" =    "Трафик алмашинувини амалга ошириб булмади";
 "Public_offer" =    "Оммавий таклиф";
+
+"max_summa" = "Максимальная сумма запроса 5 с.";
+"input_summa" = "Введите сумму";
+"input_correct_summa" = "Тогри сумма киритинг";
+"zet_call" = "Звонки по РТ";
+"another_call" = "Звонки внутри сети";

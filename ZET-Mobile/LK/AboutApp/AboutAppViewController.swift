@@ -8,9 +8,13 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import StoreKit
 
-class AboutAppViewController: UIViewController , UIScrollViewDelegate {
+class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStoreProductViewControllerDelegate {
     
+    // Create a store product view controller.
+    var storeProductViewController = SKStoreProductViewController()
+    var nav = UINavigationController()
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     var halfModalTransitioningDelegate: HalfModalTransitioningDelegate?
@@ -27,6 +31,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         super.viewDidLoad()
 
         showActivityIndicator(uiView: self.view)
+        storeProductViewController.delegate = self
         
         sendRequest()
     }
@@ -51,8 +56,8 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     }
     
     func setupView() {
-        view.backgroundColor = toolbarColor
-  
+        view.backgroundColor = colorGrayandDark
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -66,7 +71,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         view.addSubview(scrollView)
         
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         about_view = AboutAppView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         let nsObject: AnyObject? = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as AnyObject?
@@ -77,14 +82,15 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(about_view)
-        
+        toolbar.backgroundColor = colorGrayandDark
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "О приложении"
-        
-        about_view.button.addTarget(self, action: #selector(openCondition), for: .touchUpInside)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "About")
+        
+        about_view.button.addTarget(self, action: #selector(openCondition), for: .touchUpInside)
         
         table.register(AboutViewCell.self, forCellReuseIdentifier: "about_cell")
         table.frame = CGRect(x: 10, y: CGFloat((Int(UIScreen.main.bounds.size.height) * 250) / 844), width: UIScreen.main.bounds.size.width - 20, height: (UIScreen.main.bounds.size.height * 320) / 844)
@@ -102,14 +108,28 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     
     @objc func openCondition(_ sender: UIButton) {
         sender.showAnimation { [self] in
-            let next = ConditionViewController()
-            next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
-            self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
-            next.modalPresentationStyle = .custom
-            next.modalPresentationCapturesStatusBarAppearance = true
             
-            next.transitioningDelegate = self.halfModalTransitioningDelegate
-            present(next, animated: true, completion: nil)
+            let detailViewController = ConditionViewController()
+            
+            detailViewController.condition_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+            
+            nav = UINavigationController(rootViewController: detailViewController)
+            nav.modalPresentationStyle = .pageSheet
+            nav.view.backgroundColor = contentColor
+            nav.isNavigationBarHidden = true
+            detailViewController.view.backgroundColor = colorGrayWhite
+            if #available(iOS 15.0, *) {
+                if let sheet = nav.sheetPresentationController {
+                    sheet.detents = [.medium(), .large()]
+                    sheet.selectedDetentIdentifier = .medium
+                    sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+
+                }
+            } else {
+                // Fallback on earlier versions
+            }
+                // 4
+            present(nav, animated: true, completion: nil)
         }
     }
 
@@ -191,6 +211,11 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate {
     @objc func dismissDialog() {
         alert.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func dismiss_view() {
+        print("jlllllll")
+        nav.dismiss(animated: true, completion: nil)
+    }
 }
 
 extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
@@ -201,13 +226,13 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "about_cell", for: indexPath) as! AboutViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-            
-        if indexPath.row == table_data.count - 1 {
-            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-        }
         
         cell.titleOne.text = table_data[indexPath.row][1]
         cell.titleTwo.text = table_data[indexPath.row][2]
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = .clear
+        cell.selectedBackgroundView = bgColorView
         
         return cell
         
@@ -215,19 +240,34 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if table_data[indexPath.row][0] == "1" {
-            open(scheme: table_data[indexPath.row][3])
-        }
-        else if table_data[indexPath.row][0] == "2"  {
-            open(scheme: table_data[indexPath.row][3])
-        }
-        else if table_data[indexPath.row][0] == "3"  {
-            open(scheme: table_data[indexPath.row][3])
-        }
-        else if table_data[indexPath.row][0] == "4"  {
-            open(scheme: table_data[indexPath.row][3])
-        }
+        print(table_data[indexPath.row][3])
+        let result = table_data[indexPath.row][3].trimmingCharacters(in: CharacterSet(charactersIn: "0123456789").inverted)
+        print(result)
+        let parametersDict = [SKStoreProductParameterITunesItemIdentifier: result]
+         
+                /* Attempt to load it, present the store product view controller if success
+                    and print an error message, otherwise. */
+        storeProductViewController.loadProduct(withParameters: parametersDict, completionBlock: { (status: Bool, error: Error?) -> Void in
+            if status {
+                self.present(self.storeProductViewController, animated: true, completion: nil)
+            }
+            else {
+                if let error = error {
+                print("Error: \(error.localizedDescription)")
+        }}})
     }
     
+    @objc func openAppStore(_ sender: UIButton) {
+        sender.showAnimation { [self] in
+            let next = AppStoreViewController()
+            next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
+            self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
+            next.modalPresentationStyle = .custom
+            next.modalPresentationCapturesStatusBarAppearance = true
+            
+            next.transitioningDelegate = self.halfModalTransitioningDelegate
+            present(next, animated: true, completion: nil)
+        }
+    }
 }
 

@@ -35,6 +35,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
     button.setImage(#imageLiteral(resourceName: "next_arrow"), for: UIControl.State.normal)
+    button.isUserInteractionEnabled = false
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
     titleOne.text = ""
@@ -47,7 +48,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleTwo.text = ""
     titleTwo.numberOfLines = 2
     titleTwo.textColor = .lightGray
-    titleTwo.font = UIFont.systemFont(ofSize: 17)
+    titleTwo.font = UIFont.systemFont(ofSize: 16)
     titleTwo.textAlignment = .left
     titleTwo.lineBreakMode = .byWordWrapping
 }

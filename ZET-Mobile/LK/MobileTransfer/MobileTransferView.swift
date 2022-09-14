@@ -34,7 +34,7 @@ class MobileTransferView: UIView {
     
     lazy var balance: UILabel = {
         let user_name = UILabel()
-        user_name.text = "45 somoni"
+        user_name.text = " "
         user_name.numberOfLines = 0
         user_name.textColor = colorBlackWhite
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -51,7 +51,7 @@ class MobileTransferView: UIView {
         iv.image = UIImage(named: "minutes")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
-        iv.frame = CGRect(x: 20, y: 10, width: 25, height: 25)
+        iv.frame = CGRect(x: 15, y: 10, width: 23, height: 23)
         return iv
     }()
     
@@ -62,7 +62,7 @@ class MobileTransferView: UIView {
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 0, width: 100, height: 45)
+        title.frame = CGRect(x: 50, y: 0, width: 100, height: 45)
         
         return title
     }()
@@ -81,7 +81,7 @@ class MobileTransferView: UIView {
     
     lazy var Line1: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 45, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.frame = CGRect(x: 50, y: 45, width: UIScreen.main.bounds.size.width - 105, height: 2)
         title.backgroundColor = colorLine
         return title
     }()
@@ -91,7 +91,7 @@ class MobileTransferView: UIView {
         iv.image = UIImage(named: "zet_minutes")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
-        iv.frame = CGRect(x: 20, y: 57, width: 25, height: 25)
+        iv.frame = CGRect(x: 15, y: 57, width: 23, height: 23)
         return iv
     }()
     
@@ -102,7 +102,7 @@ class MobileTransferView: UIView {
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 47, width: 200, height: 45)
+        title.frame = CGRect(x: 50, y: 47, width: 200, height: 45)
         
         return title
     }()
@@ -121,7 +121,7 @@ class MobileTransferView: UIView {
     
     lazy var Line2: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 92, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.frame = CGRect(x: 50, y: 92, width: UIScreen.main.bounds.size.width - 105, height: 2)
         title.backgroundColor = colorLine
         return title
     }()
@@ -131,7 +131,7 @@ class MobileTransferView: UIView {
         iv.image = UIImage(named: "internet")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
-        iv.frame = CGRect(x: 20, y: 104, width: 25, height: 25)
+        iv.frame = CGRect(x: 13, y: 104, width: 27, height: 27)
         return iv
     }()
     
@@ -142,7 +142,7 @@ class MobileTransferView: UIView {
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 94, width: 100, height: 45)
+        title.frame = CGRect(x: 50, y: 94, width: 100, height: 45)
         
         return title
     }()
@@ -161,7 +161,7 @@ class MobileTransferView: UIView {
     
     lazy var Line3: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 94, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.frame = CGRect(x: 50, y: 94, width: UIScreen.main.bounds.size.width - 105, height: 2)
         title.backgroundColor = colorLine
         return title
     }()
@@ -171,7 +171,7 @@ class MobileTransferView: UIView {
         iv.image = UIImage(named: "message")
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
-        iv.frame = CGRect(x: 20, y: 151, width: 25, height: 25)
+        iv.frame = CGRect(x: 18, y: 151, width: 20, height: 20)
         return iv
     }()
     
@@ -182,7 +182,7 @@ class MobileTransferView: UIView {
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 141, width: 100, height: 45)
+        title.frame = CGRect(x: 50, y: 141, width: 100, height: 45)
         
         return title
     }()
@@ -201,7 +201,7 @@ class MobileTransferView: UIView {
     
     lazy var Line4: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 141, width: UIScreen.main.bounds.size.width - 80, height: 2)
+        title.frame = CGRect(x: 50, y: 141, width: UIScreen.main.bounds.size.width - 105, height: 2)
         title.backgroundColor = colorLine
         return title
     }()
@@ -214,7 +214,7 @@ class MobileTransferView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width / 2, height: 50)
@@ -234,7 +234,7 @@ class MobileTransferView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: 550, width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)
@@ -249,7 +249,7 @@ class MobileTransferView: UIView {
         return title
     }()
     
-    let white_view_back = UIView(frame: CGRect(x: 20, y: 210, width: UIScreen.main.bounds.size.width - 40, height: 200))
+    let white_view_back = UIView(frame: CGRect(x: 20, y: 210, width: UIScreen.main.bounds.size.width - 40, height: 190))
 
     
     override init(frame: CGRect) {

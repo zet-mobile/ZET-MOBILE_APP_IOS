@@ -11,10 +11,10 @@
 "Top_up_balance" = "Пополнить";
 "Fast_services" = "Быстрые услуги";
 "Special_offers" = "Специальные предложения";
-"View_all" = "Посмотреть все";
-"megabyte" = "мегабайт";
+"View_all" = "Все услуги";
+"megabyte" = "мб";
 "SMS" = "СМС";
-"minutes" = "минут";
+"minutes" = "мин";
 "Services" = "Услуги";
 "Traffic_transfer" = "Трафик трансфер";
 "Traffic_exchange" = "Обмен трафика";
@@ -83,7 +83,7 @@
 "History_of_exchanges" =    "История обменов";
 "Exchange" =    "Обменять на";
 "Balance_and_packages" =    "Баланс и пакеты";
-"Translation_Amount" =    "Сумма перевода (сомони)";
+"Translation_Amount" =    "Сумма";
 "Purchase_package" =    "Приобрести пакет";
 "New_package" =    "Новый пакет";
 "Query_history" =    "История запросов";
@@ -145,7 +145,7 @@
 "Map" =    "Карта";
 "List" =    "Список";
 "Zet_office" =    "Офис ZET Mobile";
-"Language" =    "Язык";
+"Language" =    "Язык приложения";
 "Appearance" =    "Внешний вид";
 "App_theme" =    "Тема приложения";
 "Push_notifications" =    "Push-уведомления";
@@ -153,7 +153,7 @@
 "E-mail_newsletter" =    "E-mail рассылка";
 "SMS_notifications" =    "SMS уведомления";
 "Security" =    "Безопасность";
-"Change_PIN" =    "Изменить код-пароль";
+"Change_PIN" =    "Изменить пин-код";
 "Set_password" =    "Установить код-пароль";
 "Biometric_Login" =    "Вход по биометрии";
 "Log_In" =    "Вход по паролю";
@@ -239,10 +239,17 @@
 "Error_mail" =    "Ошибка. Введите почту";
 "Invalid_email" =    "Ошибка. Введите корректную почту";
 "Error_detail_period" =    "Ошибка. Выберите период детализации";
-"Error_maximum_limit" =    "Ошибка. Превышен максимальный лимит";
+"Error_maximum_limit" =    "Превышен максимальный лимит";
 "Error_larger period" = "Ошибка. Необходимо выбрать больший период";
 "Error_traffic_translation" = "Ошибка. Введите объем трафика для перевода";
 "Transfer_failed" = "Не удалось выполнить перевод";
 "transfer_successfully_completed" = "Обмен трафика успешно выполнен";
 "Failed_transfer" = "Не удалось выполнить обмен трафика";
 "Public_offer" = "Публичная оферта.";
+
+
+"max_summa" = "Максимальная сумма запроса 5 с.";
+"input_summa" = "Введите сумму";
+"input_correct_summa" = "Введите корректную сумму";
+"zet_call" = "Звонки по РТ";
+"another_call" = "Звонки внутри сети";

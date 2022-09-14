@@ -85,7 +85,7 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        cellClick = String(indexPath.row)
+        
         print("hi")
         if indexPath.row == 0 {
             self.dismiss(animated: true, completion: nil)
@@ -145,5 +145,48 @@ class AddBalanceOptionView: UIView {
         self.addSubview(title_push)
         self.addSubview(close)
 
+    }
+}
+
+
+class AddBalanceView: UIView {
+
+    lazy var close: UIButton = {
+        let button = UIButton()
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+        button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
+        button.isUserInteractionEnabled = true
+        //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var title_push: UILabel = {
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.text = defaultLocalizer.stringForKey(key: "Top_account")
+        title.numberOfLines = 1
+        title.textColor = colorBlackWhite
+        title.font = UIFont.boldSystemFont(ofSize: 20)
+        title.textAlignment = .left
+        
+        return title
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupView()
+        
+    }
+    
+    private func setupView() {
+        backgroundColor = contentColor
+    
+        self.addSubview(title_push)
+        self.addSubview(close)
     }
 }

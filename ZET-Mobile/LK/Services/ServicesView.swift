@@ -17,7 +17,7 @@ class ServicesView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width / 2, height: 50)
@@ -37,7 +37,7 @@ class ServicesView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: 550, width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)

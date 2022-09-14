@@ -34,7 +34,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         toolbar.number_user_name.text = "Уведомления"
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
@@ -70,7 +70,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
         
         if notif_data.count == 0 {
             emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table.frame.width, height: table.frame.height), text: """
-            У вас нет никаких уведомлений
+            На данный момент уведомлений нет
             """)
             table.separatorStyle = .none
             table.backgroundView = emptyView

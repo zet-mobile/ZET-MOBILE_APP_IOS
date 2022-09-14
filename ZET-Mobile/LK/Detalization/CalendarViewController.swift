@@ -10,6 +10,7 @@ import Koyomi
 
 var fromDate = ""
 var to_Date = ""
+var date_count = 0
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate {
 
@@ -48,7 +49,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         koyomi.weeks = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         koyomi.style = .standard
         koyomi.dayPosition = .center
-        koyomi.weekdayColor = .black
+        koyomi.weekdayColor = colorBlackWhite
         koyomi.weekColor = .gray
         koyomi.otherMonthColor = .gray
         //koyomi.isHiddenOtherMonth = true
@@ -57,6 +58,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         koyomi
             .setDayFont(size: 14)
             .setWeekFont(size: 10)
+        
         calendar_view.addSubview(koyomi)
         calendar_view.layer.cornerRadius = 10
         
@@ -73,6 +75,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         calendar_view.close.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         view.addSubview(calendar_view)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        koyomi.unselectAll()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -104,19 +110,45 @@ extension CalendarViewController: KoyomiDelegate {
             print("More than \(invalidPeriodLength) days are invalid period.")
             return false
         }*/
+        var toDay = Calendar.current.startOfDay(for: Date())
+        
         let dateFormatter1 = DateFormatter()
         dateFormatter1.dateFormat = "dd.MM.yyyy"
         dateFormatter1.locale = Locale(identifier: "ru_RU")
         
-        fromDate = dateFormatter1.string(from: date!)
+        if date != nil && Calendar.current.startOfDay(for: date!) <= toDay {
+            fromDate = dateFormatter1.string(from: date!)
+            calendar_view.ok.isEnabled = true
+            calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+            if date != nil  && toDate != nil {
+                if  Calendar.current.startOfDay(for: date!) >= toDay ||  Calendar.current.startOfDay(for: toDate!) >= toDay {
+                    print("kkkkk")
+                    calendar_view.ok.isEnabled = false
+                    calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                }
+                else  {
+                    calendar_view.ok.isEnabled = true
+                    calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+                }
+                
+            }
+        }
+        else {
+            calendar_view.ok.isEnabled = false
+            calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        }
+        
         if toDate != nil {
             to_Date = dateFormatter1.string(from: toDate!)
+            date_count = length
         }
         else {
             to_Date = ""
         }
-        print(date)
-        print(toDate)
+        
+        print(date_count)
+        print(fromDate)
+        print(to_Date)
         return true
     }
     
@@ -135,9 +167,10 @@ extension CalendarViewController: KoyomiDelegate {
         koyomi.display(in: month)
     }
     
-    @objc func dismissCalendar() {
-        dismiss(animated: true) {
-            print("jjj")
+    @objc func dismissCalendar(_ sender: UIButton) {
+        sender.showAnimation { [self] in
+            dismiss(animated: true)
+            
         }
     }
     
@@ -213,7 +246,7 @@ class CalendarView: UIView {
     
     lazy var cancel: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: 20, y: 410, width: UIScreen.main.bounds.size.width - 40, height: 45)
+        button.frame = CGRect(x: 20, y: 400, width: UIScreen.main.bounds.size.width - 40, height: 45)
         button.backgroundColor = .clear
         button.setTitle(defaultLocalizer.stringForKey(key: "Cancel"), for: .normal)
         button.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)

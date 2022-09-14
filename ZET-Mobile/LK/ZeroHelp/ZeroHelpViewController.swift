@@ -111,13 +111,18 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(zeroView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         
         zeroView.balance.text = balance
@@ -136,8 +141,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
         zeroView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 40)
         
-        zeroView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 3)
-        zeroView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 3)
+        zeroView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+        zeroView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         zeroView.tab1.isUserInteractionEnabled = true
@@ -188,7 +193,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     @objc func tab1Click() {
         zeroView.tab1.textColor = colorBlackWhite
         zeroView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        zeroView.tab1Line.backgroundColor = .orange
+        zeroView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         zeroView.tab2Line.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
@@ -197,7 +202,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         zeroView.tab2.textColor = colorBlackWhite
         zeroView.tab1Line.backgroundColor = .clear
-        zeroView.tab2Line.backgroundColor = .orange
+        zeroView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -264,7 +269,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                   print(result)
                     DispatchQueue.main.async { [self] in
                         
-                        if result.history?.count != 0 {
+                        if result.history?.count != nil {
                             
                             print(result.history!.count)
                             for i in 0 ..< result.history!.count {
@@ -303,7 +308,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                             print("empty history")
                             DispatchQueue.main.async {
                             emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: """
-                                Вы еще не воспользовались услугой "Обмен трафика"
+                                Вы еще не воспользовались услугой "Помощь при нуле"
                                 """)
                             self.table2.separatorStyle = .none
                             self.table2.backgroundView = emptyView
@@ -650,7 +655,7 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
         else {
             table2.register(ZeroHistoryViewCell.self, forCellReuseIdentifier: "history_transfer")
             table2.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table2.delegate = self
             table2.dataSource = self
             table2.rowHeight = 90
@@ -659,15 +664,15 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             table2.separatorStyle = .none
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
-            cell.addSubview(table2)
             
-            if HistoryData.count == 0 {
+            if HistoryData.count == 1 {
                 emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
                 Вы еще не воспользовались услугой "Помощь при нуле"
                 """)
                 table2.separatorStyle = .none
                 table2.backgroundView = emptyView
             }
+            cell.addSubview(table2)
         }
         return cell
     }
@@ -681,14 +686,14 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
             if indexPath.row == 0 {
                 zeroView.tab1.textColor = colorBlackWhite
                 zeroView.tab2.textColor = .gray
-                zeroView.tab1Line.backgroundColor = .orange
+                zeroView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 zeroView.tab2Line.backgroundColor = .clear
                 
             } else {
                 zeroView.tab1.textColor = .gray
                 zeroView.tab2.textColor = colorBlackWhite
                 zeroView.tab1Line.backgroundColor = .clear
-                zeroView.tab2Line.backgroundColor = .orange
+                zeroView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
     }

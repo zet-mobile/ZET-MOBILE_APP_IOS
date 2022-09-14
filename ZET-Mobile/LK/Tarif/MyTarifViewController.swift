@@ -120,7 +120,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
             label.removeFromSuperview()
         }
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         tarifView = TarifView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Tariff_plan")
@@ -136,11 +136,31 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         tarifView.titleOneRes.text = info_data[0][1]
         
         y_pozition = 240
+        var max_lengh = 0
+        
+        var font = UIFont.systemFont(ofSize: 15)
+        var fontAttributes = [NSAttributedString.Key.font: font]
+        var text = ""
+        var size = (text as NSString).size(withAttributes: fontAttributes)
+        var size2 = (text as NSString).size(withAttributes: fontAttributes)
         
         for i in 0 ..< overChargings_data.count {
+            size2 = (overChargings_data[i][2] as NSString).size(withAttributes: fontAttributes)
+            if Int(size2.width) > max_lengh {
+                max_lengh = Int(size2.width)
+            }
+        }
+        print(max_lengh)
+            
+        for i in 0 ..< overChargings_data.count {
+            
+            font = UIFont.systemFont(ofSize: 15)
+            fontAttributes = [NSAttributedString.Key.font: font]
+            size = (overChargings_data[i][0] as NSString).size(withAttributes: fontAttributes)
+           
             let title = UILabel()
             title.text = overChargings_data[i][0]
-            title.frame = CGRect(x: 20, y: y_pozition, width: title.text!.count * 10, height: 25)
+            title.frame = CGRect(x: 20, y: y_pozition, width: Int(size.width) + 16, height: 25)
             title.numberOfLines = 0
             title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
             title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -148,9 +168,12 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
             title.lineBreakMode = NSLineBreakMode.byWordWrapping
             title.textAlignment = .left
             
+            
+            size2 = (overChargings_data[i][2] as NSString).size(withAttributes: fontAttributes)
+            
             let title2 = UILabel()
             title2.text = overChargings_data[i][2]
-            title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_pozition, width: title2.text!.count * 10, height: 25)
+            title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (Int(size2.width) + 16 + 15), y: y_pozition, width: Int(size2.width) + 16, height: 25)
             title2.numberOfLines = 0
             title2.textColor = colorBlackWhite
             title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -159,7 +182,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
             title2.textAlignment = .right
             
             let title_line = UILabel()
-            title_line.frame = CGRect(x: (title.text!.count * 10), y: y_pozition + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
+            title_line.frame = CGRect(x: (Int(title.frame.width) + 20), y: y_pozition + 12, width: Int(UIScreen.main.bounds.size.width) - (max_lengh + 31) - (Int(title.frame.width) + 20), height: 1)
             title_line.backgroundColor = colorLightDarkGray
             
             scrollView.addSubview(title)
@@ -267,7 +290,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     func setupTarifBalanceViewSection() {
         scrollView.addSubview(TarifBalanceView)
         TarifBalanceView.backgroundColor = .clear
-        TarifBalanceView.frame = CGRect(x: 0, y: 80, width: UIScreen.main.bounds.size.width, height: 120)
+        TarifBalanceView.frame = CGRect(x: 10, y: 80, width: UIScreen.main.bounds.size.width - 20, height: 120)
         TarifBalanceView.delegate = self
         TarifBalanceView.dataSource = self
     }
@@ -275,19 +298,22 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     func setupTabCollectionView() {
         y_pozition = y_pozition + 70
         
-        tarifView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
-        tarifView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 45)
+        tarifView.tab1.frame = CGRect(x: (Int(UIScreen.main.bounds.size.width) / 2) / 2 , y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
+        tarifView.tab1Line.frame = CGRect(x: (Int(UIScreen.main.bounds.size.width) / 2) / 2, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2, height: 2)
         
-        tarifView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 20, height: 3)
-        tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 20, height: 3)
+        //tarifView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
+        //tarifView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 45)
+        
+        //tarifView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 20, height: 2)
+       // tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 20, height: 2)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         tarifView.tab1.isUserInteractionEnabled = true
         tarifView.tab1.addGestureRecognizer(tapGestureRecognizer)
         
-        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        /*let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
         tarifView.tab2.isUserInteractionEnabled = true
-        tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)*/
         
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = contentColor
@@ -471,7 +497,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     @objc func tab1Click() {
         tarifView.tab1.textColor = colorBlackWhite
         tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        tarifView.tab1Line.backgroundColor = .orange
+        tarifView.tab1Line.backgroundColor = UIColor(red: 0.95, green: 0.70, blue: 0.45, alpha: 1.00)
         tarifView.tab2Line.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
@@ -480,7 +506,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         tarifView.tab2.textColor = colorBlackWhite
         tarifView.tab1Line.backgroundColor = .clear
-        tarifView.tab2Line.backgroundColor = .orange
+        tarifView.tab2Line.backgroundColor = UIColor(red: 0.95, green: 0.70, blue: 0.45, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -534,6 +560,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                                 }
                             }
                         }
+                        self.overChargings_data.append([String(result.connected.period ?? ""), "", String(result.connected.price ?? "")])
                         
                         if result.available.count != 0 {
                             for i in 0 ..< result.available.count {
@@ -568,13 +595,13 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
         if collectionView == TabCollectionView {
             return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
         } else {
-            return CGSize(width: collectionView.frame.width * 0.2, height: collectionView.frame.height)
+            return CGSize(width: 80, height: collectionView.frame.height)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == TabCollectionView {
-            return 2
+            return 1
         } else {
             return balances_data.count
         }
@@ -595,23 +622,23 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
             }
             
             if balances_data[indexPath.row][0] == "1" {
-                cell.image.image = UIImage(named: "internet_tarif")
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "internet_tarif.png") : UIImage(named: "Item-3.png")
             }
             else if balances_data[indexPath.row][0] == "2"  {
-                cell.image.image = UIImage(named: "minuti_zet_tarif")
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "minuti_zet_tarif.png") : UIImage(named: "Item-2.png")
             }
             else if balances_data[indexPath.row][0] == "3"  {
-                cell.image.image = UIImage(named: "minuti_tarif")
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "minuti_tarif.png") : UIImage(named: "Item.png")
             }
             else if balances_data[indexPath.row][0] == "4"  {
-                cell.image.image = UIImage(named: "sms_tarif")
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Item-4.png") : UIImage(named: "sms_tarif.png")
             }
             
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionViewCell
             if indexPath.row == 0 {
-                table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
+                table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
                 table.register(TarifTabViewCell.self, forCellReuseIdentifier: "tarif_tab_cell")
                 table.delegate = self
                 table.dataSource = self
@@ -634,13 +661,13 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
             if indexPath.row == 0 {
                 tarifView.tab1.textColor = colorBlackWhite
                 tarifView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-                tarifView.tab1Line.backgroundColor = .orange
+                tarifView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 tarifView.tab2Line.backgroundColor = .clear
           } else {
                 tarifView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
                 tarifView.tab2.textColor = colorBlackWhite
                 tarifView.tab1Line.backgroundColor = .clear
-                tarifView.tab2Line.backgroundColor = .orange
+                tarifView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
     }

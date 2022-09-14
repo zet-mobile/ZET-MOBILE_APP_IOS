@@ -10,8 +10,8 @@ import Foundation
 struct MoneyTransferData: Decodable {
     let subscriberBalance: Double
     let balances: balances_data
-    let minValue: Double
-    let maxValue: Double
+    let minValue: Int
+    let maxValue: Int
     let price: Double
     let monthlyQuantityLimitA: Double
     let quantityLimitA: Double

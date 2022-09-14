@@ -42,7 +42,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     let table2 = UITableView()
     
     var x_pozition = 20
-    var y_pozition = 390
+    var y_pozition = 380
     
     let TabCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -70,6 +70,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        to_phone = ""
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
         sendRequest()
@@ -126,16 +127,18 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         mobileView = MobileTransferView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(mobileView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Mobile_transfer")
         
         self.mobileView.balance.text = balance
@@ -158,11 +161,11 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     func setupTabCollectionView() {
         y_pozition = y_pozition + 55
         
-        mobileView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
-        mobileView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 40)
+        mobileView.tab1.frame = CGRect(x: 10, y: y_pozition, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 40)
+        mobileView.tab2.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 40)
         
-        mobileView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 3)
-        mobileView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 3)
+        mobileView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 2)
+        mobileView.tab2Line.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 2)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         mobileView.tab1.isUserInteractionEnabled = true
@@ -213,7 +216,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
     @objc func tab1Click() {
         mobileView.tab1.textColor = colorBlackWhite
         mobileView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        mobileView.tab1Line.backgroundColor = .orange
+        mobileView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         mobileView.tab2Line.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
@@ -222,7 +225,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         mobileView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         mobileView.tab2.textColor = colorBlackWhite
         mobileView.tab1Line.backgroundColor = .clear
-        mobileView.tab2Line.backgroundColor = .orange
+        mobileView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -363,7 +366,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        var title_cost = " \(String(cell.count_transfer.text ?? "")) " + defaultLocalizer.stringForKey(key: "somoni") as NSString
+        var title_cost = " \(String(cell.count_transfer.text ?? "")) c."  as NSString
             
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
@@ -421,12 +424,15 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
         
         if to_phone != "" {
             if to_phone == UserDefaults.standard.string(forKey: "mobPhone") {
-                self.view.makeToast("Ошибка, введите другой номер", duration: 5.0, position: .bottom, style: style); return
+                cell.titleRed.isHidden = false
+                cell.user_to_number.layer.borderColor = UIColor.red.cgColor
             }
             else {
                 cell.titleRed.isHidden = true
                 cell.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-                present(alert, animated: true, completion: nil)
+                cell.sendButton.showAnimation {
+                    self.present(self.alert, animated: true, completion: nil)
+                }
             }
         }
         else {
@@ -617,7 +623,7 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
         else {
             table2.register(MobileHistoryViewCell.self, forCellReuseIdentifier: "history_transfer")
             table2.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table2.delegate = self
             table2.dataSource = self
             table2.rowHeight = 90
@@ -650,14 +656,14 @@ extension MobileTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             if indexPath.row == 0 {
                 mobileView.tab1.textColor = colorBlackWhite
                 mobileView.tab2.textColor = .gray
-                mobileView.tab1Line.backgroundColor = .orange
+                mobileView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 mobileView.tab2Line.backgroundColor = .clear
                 
             } else {
                 mobileView.tab1.textColor = .gray
                 mobileView.tab2.textColor = colorBlackWhite
                 mobileView.tab1Line.backgroundColor = .clear
-                mobileView.tab2Line.backgroundColor = .orange
+                mobileView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
     }
@@ -726,12 +732,12 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             let contacts = cell.user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
             contacts.addTarget(self, action: #selector(openContacts), for: .touchUpInside)
             if to_phone != "" {
-                cell.user_to_number.text = "992" + to_phone
+                cell.user_to_number.text = "+992 " + to_phone
             }
             else {
                 cell.user_to_number.text = "+992 "
             }
-            value_transfer = "0.10 " +  defaultLocalizer.stringForKey(key: "somoni")
+            value_transfer = "0.1 c."
             
             cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
             cell.count_transfer.text = String(Int((cell.slider.value[0])))
@@ -748,7 +754,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
             
-            var title_cost = "0.10" + " " +  defaultLocalizer.stringForKey(key: "somoni") as NSString
+            var title_cost = "0.1 c." as NSString
             
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
@@ -798,13 +804,13 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         
         if  Double(settings_data[0][9])! > 0
         {
-             var discountPrice = (Double(settings_data[0][2])! *  Double(settings_data[0][9])!) / 100
-             var finallCost = Double(settings_data[0][2])! - discountPrice
-             value_transfer = String(format: "%.2f", finallCost) + " " +  defaultLocalizer.stringForKey(key: "somoni")
+             let discountPrice = (Double(settings_data[0][2])! *  Double(settings_data[0][9])!) / 100
+             let finallCost = Double(settings_data[0][2])! - discountPrice
+             value_transfer = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
         }
         else
         {
-            value_transfer = String(format: "%.2f", Double(settings_data[0][2])!) + " " +  defaultLocalizer.stringForKey(key: "somoni")
+            value_transfer = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[0][2])!))!) + " c."
 
         }
 
@@ -814,7 +820,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
         
-        var title_cost = value_transfer as NSString
+        let title_cost = value_transfer as NSString
         
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
@@ -837,16 +843,19 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
     func textFieldDidBeginEditing(_ textField: UITextField) {
         let indexPath = IndexPath(item: 0, section: 0);
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
-        to_phone = ""
+
         if textField.tag == 1 {
             cell.user_to_number.text! = "+992 "
             cell.user_to_number.textColor = colorBlackWhite
             cell.user_to_number.font = UIFont.systemFont(ofSize: 15)
+            cell.titleRed.isHidden = true
+            cell.titleRed2.isHidden = true
+            cell.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         }
         else if textField.tag == 2 {
             cell.count_transfer.text! = ""
             cell.count_transfer.textColor = colorBlackWhite
-            cell.user_to_number.font = UIFont.systemFont(ofSize: 15)
+            cell.count_transfer.font = UIFont.systemFont(ofSize: 15)
         }
         
     }
@@ -855,7 +864,7 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
         let indexPath = IndexPath(item: 0, section: 0);
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
         if textField.tag == 1 {
-            cell.user_to_number.text! = "992" + to_phone
+            cell.user_to_number.text! = "+992 " + to_phone
             cell.user_to_number.textColor = colorBlackWhite
             cell.user_to_number.font = UIFont.systemFont(ofSize: 15)
         }
@@ -869,17 +878,22 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        var return_status = true
         let indexPath = IndexPath(item: 0, section: 0);
         let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
+        var amount = cell.count_transfer.text! + string
         
         let tag = textField.tag
         
         if string  == "" {
-            if tag == 1 {
+            if tag == 1 && cell.user_to_number.text != "+992 " {
                 to_phone = (to_phone as String).substring(to: to_phone.index(before: to_phone.endIndex))
             }
+            else if tag == 1 && cell.user_to_number.text == "+992 " {
+                return false
+            }
             else {
-                value_transfer = (value_transfer as String).substring(to: value_transfer.index(before: value_transfer.endIndex))
+                amount = (amount as String).substring(to: amount.index(before: amount.endIndex))
             }
         }
         
@@ -891,25 +905,66 @@ extension MobileTransferViewController: UITableViewDataSource, UITableViewDelega
             print(to_phone)
         }
         
-        return true
+        if amount != "" {
+            cell.slider.value[0] = CGFloat(Double(amount)!)
+            if Double(amount)! < Double(settings_data[0][0])! {
+                cell.titleRed2.text = defaultLocalizer.stringForKey(key: "minimum_limit:") + " " + settings_data[0][0]
+                cell.titleRed2.isHidden = false
+                cell.count_transfer.layer.borderColor = UIColor.red.cgColor
+                cell.sendButton.isEnabled = false
+                cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                return_status = true
+            }
+            else if string != "" && Double(amount)! > Double(settings_data[0][1])!  {
+                cell.titleRed2.text = defaultLocalizer.stringForKey(key: "maximum_limit:") + " " + settings_data[0][1]
+                cell.titleRed2.isHidden = false
+                cell.count_transfer.layer.borderColor = UIColor.red.cgColor
+                cell.sendButton.isEnabled = false
+                cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+               return_status = false
+            }
+            else {
+                cell.titleRed2.isHidden = true
+                cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+                cell.sendButton.isEnabled = true
+                cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+                return_status = true
+            }
+        }
+        
+        if amount != "" {
+            if  Double(settings_data[0][9])! > 0
+            {
+                 let discountPrice = (Double(settings_data[0][2])! *  Double(settings_data[0][9])!) / 100
+                 let finallCost = Double(settings_data[0][2])! - discountPrice
+                 value_transfer = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
+            }
+            else
+            {
+                value_transfer = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[0][2])!))!) + " c."
+
+            }
+            
+            let cost: NSString = defaultLocalizer.stringForKey(key: "Commission") as NSString
+            let range = (cost).range(of: cost as String)
+            let costString = NSMutableAttributedString.init(string: cost as String)
+            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+            costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
+            
+            let title_cost = value_transfer as NSString
+            
+            let titleString = NSMutableAttributedString.init(string: title_cost as String)
+            let range2 = (title_cost).range(of: title_cost as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)], range: range2)
+            costString.append(titleString)
+            cell.title_commission.attributedText = costString
+          }
+        return return_status
     }
     
     @objc func openContacts() {
-       /* guard let window = UIApplication.shared.keyWindow else {
-            return
-        }
-        guard let rootViewController = window.rootViewController else {
-            return
-        }
-        let vc = UINavigationController(rootViewController: ContactsViewController())
-        vc.view.frame = rootViewController.view.frame
-        vc.view.layoutIfNeeded()
-        UIView.transition(with: window, duration: 0.0, options: .transitionFlipFromLeft, animations: {
-            window.rootViewController = vc
-        }, completion: { completed in
-            
-        })*/
-        
+
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(ContactsViewController(), animated: false)
         

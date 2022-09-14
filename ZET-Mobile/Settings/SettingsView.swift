@@ -12,7 +12,7 @@ class SettingsView: UIView {
 
     lazy var title: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Внешний вид"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Appearance")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -26,7 +26,7 @@ class SettingsView: UIView {
     
     lazy var titleOne: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Язык"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Language")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 16)
@@ -50,7 +50,7 @@ class SettingsView: UIView {
     
     lazy var titleTwo: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Тема приложения"
+        titleOne.text = defaultLocalizer.stringForKey(key: "App_theme")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 16)
@@ -74,7 +74,7 @@ class SettingsView: UIView {
     
     lazy var title_push: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Уведомления"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Notifications")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -96,7 +96,7 @@ class SettingsView: UIView {
     
     lazy var push_t: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Push-уведомления"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Push_notifications")
         titleOne.numberOfLines = 0
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -118,7 +118,7 @@ class SettingsView: UIView {
     
     lazy var sales_t: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Акции, предложения"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Promotions")
         titleOne.numberOfLines = 0
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -141,7 +141,7 @@ class SettingsView: UIView {
     
     lazy var sms_t: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "SMS уведомления"
+        titleOne.text = defaultLocalizer.stringForKey(key: "SMS_notifications")
         titleOne.numberOfLines = 0
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -155,7 +155,7 @@ class SettingsView: UIView {
     
     lazy var title_code: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Безопасность"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Security")
         titleOne.numberOfLines = 0
         titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -169,7 +169,7 @@ class SettingsView: UIView {
     
     lazy var code_change_t: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Изменить пароль"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Change_PIN")
         titleOne.numberOfLines = 0
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)
@@ -199,7 +199,7 @@ class SettingsView: UIView {
     
     lazy var enter_t: UILabel = {
         let titleOne = UILabel()
-        titleOne.text = "Вход по биометрии"
+        titleOne.text = defaultLocalizer.stringForKey(key: "Biometric_Login")
         titleOne.numberOfLines = 0
         titleOne.textColor = colorBlackWhite
         titleOne.font = UIFont.systemFont(ofSize: 18)

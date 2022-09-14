@@ -7,18 +7,22 @@
 
 import Foundation
 
-struct HomeData: Decodable {
+struct HomeData {
     
-    let currentVersion: String
-   // let subscriberName: String
-    let subscriberBalance: Double
-    let subscriberCredit: Double
-    let notificationsCount: Int
-    let balances: balances_data
-    let priceplan: priceplan_data
-    let microServices: [microServices_data]
-    let offers: [offers_data]
-    let services: [services_data]
+    let currentVersion: String?
+    let welcomePhrase: String?
+    let subscriberName: String?
+    let mainBannerUrl: String?
+    let subscriberBalance: Double?
+    let subscriberCredit: Double?
+    let notificationsCount: Int?
+    let languageId: Int?
+    let themeId: Int?
+    let balances: balances_data?
+    let priceplan: priceplan_data?
+    let microServices: [microServices_data]?
+    let offers: [offers_data]?
+    let services: [services_data]?
 }
 
 struct priceplan_data {
@@ -30,6 +34,129 @@ struct microServices_data {
     let id: Int
     let iconUrl: String
     let microServiceName: String?
+}
+
+extension HomeData: Decodable {
+    
+    private enum HomeDataCodingKeys: String, CodingKey {
+  
+        case currentVersion = "currentVersion"
+        case welcomePhrase = "welcomePhrase"
+        case subscriberName = "subscriberName"
+        case mainBannerUrl = "mainBannerUrl"
+        case subscriberBalance = "subscriberBalance"
+        case subscriberCredit = "subscriberCredit"
+        case notificationsCount = "notificationsCount"
+        case languageId = "languageId"
+        case themeId = "themeId"
+        case balances = "balances"
+        case priceplan = "priceplan"
+        case microServices = "microServices"
+        case offers = "offers"
+        case services = "services"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: HomeDataCodingKeys.self)
+        
+        do {
+            currentVersion = try container.decode(String.self, forKey: .currentVersion)
+        }
+        catch {
+            currentVersion = nil
+        }
+       
+        do {
+            welcomePhrase = try container.decode(String.self, forKey: .welcomePhrase)
+        }
+        catch {
+            welcomePhrase = nil
+        }
+        
+        do {
+            subscriberName = try container.decode(String.self, forKey: .subscriberName)
+        }
+        catch {
+            subscriberName = nil
+        }
+        
+        do {
+            mainBannerUrl = try container.decode(String.self, forKey: .mainBannerUrl)
+        }
+        catch {
+            mainBannerUrl = nil
+        }
+        
+        do {
+            subscriberBalance = try container.decode(Double.self, forKey: .subscriberBalance)
+        }
+        catch {
+            subscriberBalance = nil
+        }
+        
+        do {
+            subscriberCredit = try container.decode(Double.self, forKey: .subscriberCredit)
+        }
+        catch {
+            subscriberCredit = nil
+        }
+        
+        do {
+            notificationsCount = try container.decode(Int.self, forKey: .notificationsCount)
+        }
+        catch {
+            notificationsCount = nil
+        }
+        
+        do {
+            languageId = try container.decode(Int.self, forKey: .languageId)
+        }
+        catch {
+            languageId = nil
+        }
+        
+        do {
+            themeId = try container.decode(Int.self, forKey: .themeId)
+        }
+        catch {
+            themeId = nil
+        }
+        
+        do {
+            balances = try container.decode(balances_data.self, forKey: .balances)
+        }
+        catch {
+            balances = nil
+        }
+        
+        do {
+            priceplan = try container.decode(priceplan_data.self, forKey: .priceplan)
+        }
+        catch {
+            priceplan = nil
+        }
+        
+        do {
+            microServices = try container.decode([microServices_data].self, forKey: .microServices)
+        }
+        catch {
+            microServices = nil
+        }
+        
+        do {
+            offers = try container.decode([offers_data].self, forKey: .offers)
+        }
+        catch {
+            offers = nil
+        }
+        
+        do {
+            services = try container.decode([services_data].self, forKey: .services)
+        }
+        catch {
+            services = nil
+        }
+    }
 }
 
 extension microServices_data: Decodable {

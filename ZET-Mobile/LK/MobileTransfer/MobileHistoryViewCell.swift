@@ -37,7 +37,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
-    titleOne.text = "+992 91 111 0611"
+    titleOne.text = "+992 "
     titleOne.numberOfLines = 2
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)

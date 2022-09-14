@@ -87,7 +87,7 @@ class TarifView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width / 2, height: 50)
@@ -107,9 +107,10 @@ class TarifView: UIView {
         title.numberOfLines = 0
         title.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
+        title.isHidden = true
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: 550, width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)
             
         return title
@@ -119,6 +120,7 @@ class TarifView: UIView {
         let title = UILabel()
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: 600, width: UIScreen.main.bounds.size.width / 2, height: 10)
         title.backgroundColor = .clear
+        title.isHidden = true
         return title
     }()
     

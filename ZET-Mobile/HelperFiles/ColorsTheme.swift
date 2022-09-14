@@ -30,4 +30,8 @@ var colorLightDarkGray = (UserDefaults.standard.string(forKey: "ThemeAppereance"
 // #303133 in dark  and #F5F5F5 in light
 var colorLightDarkGray2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
 
+// #2B2B2B in dark  and #F5F5F5 in light
+var colorGrayandDark = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+
+// #404040 in dark and #F5F5F5 in light
 

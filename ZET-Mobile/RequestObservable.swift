@@ -114,7 +114,31 @@ public class RequestObservable {
                     }
                 },
                 onError: { error in
-                   
+                    
+                    DispatchQueue.main.async {
+                        
+                        guard let window = UIApplication.shared.keyWindow else {
+                            return
+                        }
+                        guard let rootViewController = window.rootViewController else {
+                            return
+                        }
+                        let vc = UINavigationController(rootViewController: SplashViewController())
+                        vc.view.frame = rootViewController.view.frame
+                        vc.view.layoutIfNeeded()
+                        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+                            window.rootViewController = vc
+                        }, completion: { completed in
+                            UserDefaults.standard.set("", forKey: "mobPhone")
+                            UserDefaults.standard.set(1, forKey: "language")
+                            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+                            UserDefaults.standard.set("", forKey: "PinCode")
+                            UserDefaults.standard.set(true, forKey: "BiometricEnter")
+                            UserDefaults.standard.set("", forKey: "token")
+                            UserDefaults.standard.set("", forKey: "refresh_token")
+                        })
+                        
+                    }
                    print(error.localizedDescription)
                 },
                 onCompleted: {

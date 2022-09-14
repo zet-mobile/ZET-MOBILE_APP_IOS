@@ -25,7 +25,7 @@ class TarifBalanceCollectionViewCell: UICollectionViewCell {
         titleOne.font = UIFont.boldSystemFont(ofSize: 16)
         //titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .center
-        titleOne.frame = CGRect(x: 20, y: 50, width: 80, height: 30)
+        titleOne.frame = CGRect(x: 10, y: 40, width: 70, height: 30)
         
         return titleOne
     }()
@@ -36,7 +36,7 @@ class TarifBalanceCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(image)
         contentView.sendSubviewToBack(image)
         contentView.addSubview(titleOne)
-        image.frame = CGRect(x: 20, y: 5, width: 80, height: 80)
+        image.frame = CGRect(x: 10, y: 5, width: 70, height: 70)
         //image.anchor(top: contentView.topAnchor, left: contentView.leftAnchor, bottom: contentView.bottomAnchor, right: contentView.rightAnchor, paddingLeft: 16)
         
     }

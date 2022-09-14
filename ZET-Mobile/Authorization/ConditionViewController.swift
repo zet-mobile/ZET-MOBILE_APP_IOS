@@ -28,6 +28,7 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
         scrollView.backgroundColor = .clear
         
         condition_view.layer.cornerRadius = 10
+        
         condition_view.content.frame.size.height = CGFloat.greatestFiniteMagnitude
         condition_view.content.textColor = darkGrayLight
         condition_view.content.numberOfLines = 0
@@ -35,13 +36,14 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
         condition_view.content.sizeToFit()
       
         print(condition_view.content.frame.height)
-        condition_view.content.frame = CGRect(x: 20, y: 160, width: UIScreen.main.bounds.size.width - 40, height: condition_view.content.frame.height)
+        condition_view.content.frame.origin.y = 160
         scrollView.contentSize = CGSize(width: view.frame.width, height: condition_view.content.frame.height + 210)
         condition_view.frame.size.height = condition_view.content.frame.height + 210
         
         scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (bottomPadding ?? 0))
         view.addSubview(scrollView)
         scrollView.addSubview(condition_view)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -59,6 +61,20 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.scrollView == scrollView {
+            if scrollView.contentOffset.y > condition_view.image.frame.origin.y {
+                print("large")
+                modalPresentationStyle = .pageSheet
+                if #available(iOS 15.0, *) {
+                    sheetPresentationController?.selectedDetentIdentifier = .large
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+        }
+    }
+    
 }
 
 class ConditionView: UIView {
@@ -72,9 +88,9 @@ class ConditionView: UIView {
     
     lazy var close: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 20, height: 20)
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
         button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
-        button.isUserInteractionEnabled = false
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()

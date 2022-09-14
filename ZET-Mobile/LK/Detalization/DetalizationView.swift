@@ -11,14 +11,17 @@ class DetalizationView: UIView {
 
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
+    let titleRed = UILabel()
+    
     lazy var email_text: UITextField = {
         let textfield = UITextField()
         textfield.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.layer.cornerRadius = 16
-        textfield.layer.borderColor = UIColor.white.cgColor
+        textfield.layer.borderColor = colorGrayWhite.cgColor
         textfield.layer.borderWidth = 1
-        textfield.backgroundColor = UIColor.white
+        textfield.backgroundColor = colorGrayWhite
         textfield.placeholder = defaultLocalizer.stringForKey(key: "Enter_e-mail")
+        textfield.textColor = colorBlackWhite
         return textfield
     }()
     
@@ -48,7 +51,7 @@ class DetalizationView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: 550, width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)
@@ -80,12 +83,24 @@ class DetalizationView: UIView {
     private func setupView() {
         backgroundColor = toolbarColor
        
+        titleRed.text = defaultLocalizer.stringForKey(key: "Error_mail")
+        titleRed.numberOfLines = 0
+        titleRed.textColor = .red
+        titleRed.font = UIFont(name: "", size: 9)
+        titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed.textAlignment = .left
+        titleRed.frame = CGRect(x: 20, y: 70, width: 300, height: 20)
+        titleRed.autoresizesSubviews = true
+        titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed.isHidden = true
+        
         let white_view_back2 = UIView(frame: CGRect(x: 0, y: 150, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         white_view_back2.backgroundColor = contentColor
         self.addSubview(white_view_back2)
         self.sendSubviewToBack(white_view_back2)
         
         self.addSubview(email_text)
+        self.addSubview(titleRed)
         self.addSubview(tab1)
         self.addSubview(tab2)
         self.addSubview(tab1Line)
@@ -94,6 +109,12 @@ class DetalizationView: UIView {
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         email_text.leftView = paddingView
         email_text.leftViewMode = .always
+        
+        email_text.attributedPlaceholder = NSAttributedString(
+            string: defaultLocalizer.stringForKey(key: "Enter_e-mail"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        )
+    
     }
 
 }

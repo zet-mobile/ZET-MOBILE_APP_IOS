@@ -9,7 +9,7 @@ import UIKit
 
 class PushMoreViewController: UIViewController {
 
-    let push_view = PushMoreView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+    let push_view = PushMoreView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
     override func viewDidLoad() {
         super.viewDidLoad()

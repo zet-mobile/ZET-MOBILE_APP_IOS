@@ -36,7 +36,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         auth_view = AuthorizationView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         auth_view.get_sms.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
         auth_view.check_condition.addTarget(self, action: #selector(check_Condition), for: .touchUpInside)
@@ -45,6 +45,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.code_field.delegate = self
         auth_view.numberField.tag = 1
         auth_view.code_field.tag = 2
+        
         auth_view.backgroundColor = contentColor
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
@@ -55,6 +56,70 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.send_again.isUserInteractionEnabled = true
         auth_view.send_again.addGestureRecognizer(tapSendAgain)
     
+        auth_view.code_field.placeholder = defaultLocalizer.stringForKey(key: "Enter_SMS")
+        
+       /* if user_phone != "" {
+            auth_view.numberField.text! = "+992 " + user_phone
+            auth_view.numberField.textColor = colorBlackWhite
+            auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
+        }
+        */
+        print(auth_view.code_field.isHidden)
+        
+        if auth_view.code_field.isHidden == false {
+            auth_view.numberField.text = "992" + user_phone
+            auth_view.numberField.textColor = colorBlackWhite
+            auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
+            
+            auth_view.title_info.isHidden = true
+            auth_view.check_condition.isHidden = true
+            auth_view.title_condition.isHidden = true
+            
+            auth_view.title_code_info.isHidden = true
+            auth_view.send_again.isHidden = true
+            
+            auth_view.code_field.isHidden = false
+            auth_view.time_symbol.isHidden = false
+            auth_view.timer_label.isHidden = false
+            auth_view.second_label.isHidden = false
+            auth_view.symbol_label.isHidden = false
+            auth_view.get_sms.setTitle(defaultLocalizer.stringForKey(key: "Confirm"), for: .normal)
+            auth_view.numberField.isEnabled = false
+        }
+        
+        switch UserDefaults.standard.integer(forKey: "language") {
+        case 1:
+            auth_view.lang_set.setTitle("RU 🇷🇺", for: .normal)
+            break
+        case 2:
+            auth_view.lang_set.setTitle("ENG 🇺🇸", for: .normal)
+            break
+        case 3:
+            auth_view.lang_set.setTitle("TJK 🇹🇯", for: .normal)
+            break
+        case 4:
+            auth_view.lang_set.setTitle("UZB 🇺🇿", for: .normal)
+            break
+        default:
+            auth_view.lang_set.setTitle("RU 🇷🇺", for: .normal)
+            break
+       }
+        
+        if UIScreen.main.bounds.size.height < 812 {
+            auth_view.numberField.frame.origin.y = (UIScreen.main.bounds.size.height * 360) / 926
+            auth_view.title_number_info.frame.origin.y = (UIScreen.main.bounds.size.height * 430) / 926
+            auth_view.title_info.frame.origin.y = (UIScreen.main.bounds.size.height * 420) / 926
+            auth_view.check_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 490) / 926
+            auth_view.get_sms.frame.origin.y = (UIScreen.main.bounds.size.height * 560) / 926
+            auth_view.code_field.frame.origin.y = (UIScreen.main.bounds.size.height * 460) / 926
+            auth_view.title_code_info.frame.origin.y = (UIScreen.main.bounds.size.height * 540) / 926
+            auth_view.time_symbol.frame.origin.y = (UIScreen.main.bounds.size.height * 465) / 926
+            auth_view.timer_label.frame.origin.y = (UIScreen.main.bounds.size.height * 465) / 926
+            auth_view.symbol_label.frame.origin.y = (UIScreen.main.bounds.size.height * 465) / 926
+            auth_view.second_label.frame.origin.y = (UIScreen.main.bounds.size.height * 465) / 926
+            auth_view.send_again.frame.origin.y = (UIScreen.main.bounds.size.height * 489) / 926
+            auth_view.title_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 489) / 926
+        }
         
         self.view.addSubview(auth_view)
         
@@ -122,11 +187,37 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             auth_view.numberField.text! = "+992 " + user_phone
             auth_view.numberField.textColor = colorBlackWhite
             auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
+            
+            auth_view.title_number_info.isHidden = true
+            if UIScreen.main.bounds.size.height < 812 {
+                auth_view.title_info.frame.origin.y = (UIScreen.main.bounds.size.height * 420) / 926
+                auth_view.check_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 490) / 926
+                auth_view.title_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 490) / 926
+                auth_view.get_sms.frame.origin.y = (UIScreen.main.bounds.size.height * 560) / 926
+            }
+            else {
+                auth_view.title_info.frame.origin.y = (UIScreen.main.bounds.size.height * 410) / 926
+                auth_view.check_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 470) / 926
+                auth_view.title_condition.frame.origin.y = (UIScreen.main.bounds.size.height * 470) / 926
+                auth_view.get_sms.frame.origin.y = (UIScreen.main.bounds.size.height * 520) / 926
+            }
+            
+            auth_view.numberField.layer.borderColor = colorLightDarkGray.cgColor
         }
         else if textField.tag == 2 {
             auth_view.code_field.text! = user_code
             auth_view.code_field.textColor = colorBlackWhite
             auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
+            
+            auth_view.title_code_info.isHidden = true
+            auth_view.code_field.layer.borderColor = colorLightDarkGray.cgColor
+            
+            if UIScreen.main.bounds.size.height < 812 {
+                auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 560) / 926) + 20
+            }
+            else {
+                auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 520) / 926) + 20
+            }
         }
         
     }
@@ -206,22 +297,15 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func openCondition() {
-       /* let next = ConditionViewController()
-        next.view.frame = (view.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)))
-        self.halfModalTransitioningDelegate = HalfModalTransitioningDelegate(viewController: self, presentingViewController: next)
-        next.modalPresentationStyle = .custom
-        next.modalPresentationCapturesStatusBarAppearance = true
         
-        next.transitioningDelegate = self.halfModalTransitioningDelegate
-        present(next, animated: true, completion: nil)*/
-        
-        ConditionViewController().condition_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        let detailViewController = ConditionViewController()
+        detailViewController.condition_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
     
-        nav = UINavigationController(rootViewController: ConditionViewController())
+        nav = UINavigationController(rootViewController: detailViewController)
         nav.modalPresentationStyle = .pageSheet
         nav.view.backgroundColor = contentColor
         nav.isNavigationBarHidden = true
-        ConditionViewController().view.backgroundColor = colorGrayWhite
+        detailViewController.view.backgroundColor = colorGrayWhite
         if #available(iOS 15.0, *) {
             if let sheet = nav.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
@@ -248,6 +332,49 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             auth_view.view_lang.isHidden = true
         }
         
+        if auth_view.lang_set.titleLabel?.text == "RU 🇷🇺" {
+            auth_view.ru_button.isHidden = true
+            auth_view.eng_but.isHidden = false
+            auth_view.tj_but.isHidden = false
+            auth_view.uz_but.isHidden = false
+            auth_view.ru_button.frame.origin.y = 0
+            auth_view.eng_but.frame.origin.y = (UIScreen.main.bounds.size.height * 50) / 926
+            auth_view.tj_but.frame.origin.y = (UIScreen.main.bounds.size.height * 100) / 926
+            auth_view.uz_but.frame.origin.y = (UIScreen.main.bounds.size.height * 150) / 926
+        }
+        else if auth_view.lang_set.titleLabel?.text == "ENG 🇺🇸" {
+            auth_view.ru_button.isHidden = false
+            auth_view.eng_but.isHidden = true
+            auth_view.tj_but.isHidden = false
+            auth_view.uz_but.isHidden = false
+            
+            auth_view.ru_button.frame.origin.y = (UIScreen.main.bounds.size.height * 50) / 926
+            auth_view.tj_but.frame.origin.y = (UIScreen.main.bounds.size.height * 100) / 926
+            auth_view.uz_but.frame.origin.y = (UIScreen.main.bounds.size.height * 150) / 926
+        }
+        else if auth_view.lang_set.titleLabel?.text == "TJK 🇹🇯" {
+            auth_view.ru_button.isHidden = false
+            auth_view.eng_but.isHidden = false
+            auth_view.tj_but.isHidden = true
+            auth_view.uz_but.isHidden = false
+            
+            auth_view.ru_button.frame.origin.y = (UIScreen.main.bounds.size.height * 50) / 926
+            auth_view.eng_but.frame.origin.y = (UIScreen.main.bounds.size.height * 100) / 926
+            auth_view.uz_but.frame.origin.y = (UIScreen.main.bounds.size.height * 150) / 926
+            
+        }
+        else if auth_view.lang_set.titleLabel?.text == "UZB 🇺🇿" {
+            auth_view.ru_button.isHidden = false
+            auth_view.eng_but.isHidden = false
+            auth_view.tj_but.isHidden = false
+            auth_view.uz_but.isHidden = true
+            
+            auth_view.ru_button.frame.origin.y = (UIScreen.main.bounds.size.height * 50) / 926
+            auth_view.eng_but.frame.origin.y = (UIScreen.main.bounds.size.height * 100) / 926
+            auth_view.tj_but.frame.origin.y = (UIScreen.main.bounds.size.height * 150) / 926
+            
+        }
+        
         auth_view.ru_button.addTarget(self, action: #selector(ru_choosed), for: .touchUpInside)
         auth_view.eng_but.addTarget(self, action: #selector(en_choosed), for: .touchUpInside)
         auth_view.tj_but.addTarget(self, action: #selector(tj_choosed), for: .touchUpInside)
@@ -258,24 +385,62 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.lang_set.setTitle("RU 🇷🇺", for: .normal)
         auth_view.view_lang.isHidden = true
         lang_id = 1
+        updateView()
     }
     
     @objc func en_choosed() {
-        auth_view.lang_set.setTitle("EN 🇺🇸", for: .normal)
+        auth_view.lang_set.setTitle("ENG 🇺🇸", for: .normal)
         auth_view.view_lang.isHidden = true
         lang_id = 2
+        updateView()
     }
     
     @objc func tj_choosed() {
-        auth_view.lang_set.setTitle("TJ 🇹🇯", for: .normal)
+        auth_view.lang_set.setTitle("TJK 🇹🇯", for: .normal)
         auth_view.view_lang.isHidden = true
         lang_id = 3
+        updateView()
     }
     
     @objc func uz_choosed() {
-        auth_view.lang_set.setTitle("UZ 🇺🇿", for: .normal)
+        print("uzz")
+        auth_view.lang_set.setTitle("UZB 🇺🇿", for: .normal)
         auth_view.view_lang.isHidden = true
         lang_id = 4
+        updateView()
+    }
+    
+    func updateView() {
+        print(lang_id)
+        switch lang_id {
+        case 1:
+            UserDefaults.standard.set(1, forKey: "language")
+            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .ru)
+            break
+        case 2:
+            UserDefaults.standard.set(2, forKey: "language")
+            UserDefaults.standard.set(LanguageType.en.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .en)
+            break
+        case 3:
+            UserDefaults.standard.set(3, forKey: "language")
+            UserDefaults.standard.set(LanguageType.tj.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .tj)
+            break
+        case 4:
+            UserDefaults.standard.set(4, forKey: "language")
+            UserDefaults.standard.set(LanguageType.uz.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .uz)
+            break
+        default:
+            UserDefaults.standard.set(1, forKey: "language")
+            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .ru)
+            break
+       }
+        
+        viewDidLoad()
     }
     
     @objc func buttonClick(_ sender: UIButton) {
@@ -283,17 +448,30 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.code_field.resignFirstResponder()
         
         sender.showAnimation { [self] in
-            if user_code == "" {
+            if user_code == "" && auth_view.code_field.isHidden == true {
                 print(user_phone)
                 let length = user_phone.count
                 let str = user_phone.prefix(3)
                 let str2 = user_phone.prefix(2)
                 
-                if Int(user_phone) == nil || length < 9 {
-                  self.view.makeToast("Ошибка, введите номер", duration: 5.0, position: .bottom, style: style); return
-                 }
-                else
-                 if str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" {
+                if user_phone == "" || length < 9 {
+                    auth_view.title_number_info.isHidden = false
+                    auth_view.numberField.layer.borderColor = UIColor.red.cgColor
+                    
+                    if UIScreen.main.bounds.size.height < 812 {
+                        auth_view.title_info.frame.origin.y = ((UIScreen.main.bounds.size.height * 420) / 926) + 20
+                        auth_view.check_condition.frame.origin.y = ((UIScreen.main.bounds.size.height * 490) / 926) + 20
+                        auth_view.title_condition.frame.origin.y = ((UIScreen.main.bounds.size.height * 490) / 926) + 20
+                        auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 560) / 926) + 20
+                    }
+                    else {
+                        auth_view.title_info.frame.origin.y = ((UIScreen.main.bounds.size.height * 410) / 926) + 20
+                        auth_view.check_condition.frame.origin.y = ((UIScreen.main.bounds.size.height * 470) / 926) + 20
+                        auth_view.title_condition.frame.origin.y = ((UIScreen.main.bounds.size.height * 470) / 926) + 20
+                        auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 520) / 926) + 20
+                    }
+                }
+                else if str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" {
                      print("i am here")
                   get_Code_Request()
                 }
@@ -303,7 +481,21 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             else {
-                checkCode()
+                if user_code == "" || user_code.count < 6 {
+                    auth_view.title_code_info.isHidden = false
+                    auth_view.code_field.layer.borderColor = UIColor.red.cgColor
+                    
+                    if UIScreen.main.bounds.size.height < 812 {
+                        auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 560) / 926) + 20
+                    }
+                    else {
+                        auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 520) / 926) + 20
+                    }
+                }
+                else {
+                    checkCode()
+                }
+               //
             }
           }
         
@@ -319,7 +511,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             do{
                 try client.authPost(jsonBody: parametr).subscribe (
                 onNext: { result in
-                    self.hashString = result.hashString
+                    self.hashString = result.hashString ?? ""
                     
                     DispatchQueue.main.async { [self] in
                         auth_view.numberField.text = "992" + user_phone
@@ -338,7 +530,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                         auth_view.timer_label.isHidden = false
                         auth_view.second_label.isHidden = false
                         auth_view.symbol_label.isHidden = false
-                        auth_view.get_sms.setTitle("Подтвердить", for: .normal)
+                        auth_view.get_sms.setTitle(defaultLocalizer.stringForKey(key: "Confirm"), for: .normal)
                         auth_view.numberField.isEnabled = false
                         
                         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
@@ -381,13 +573,22 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 try client.checkSmsCode(jsonBody: parametr).subscribe (
                 onNext: { result in
                     print("hello")
-                    self.accessToken = String(result.accessToken!)
-                    DispatchQueue.main.async {
-                        UserDefaults.standard.set("Bearer \(self.accessToken)", forKey: "token")
-                        UserDefaults.standard.set("Bearer \(String(result.refreshToken))", forKey: "refresh_token")
-                        UserDefaults.standard.set("\(self.user_phone)", forKey: "mobPhone")
-                        self.setPass()
+                    if result.success == true {
+                        self.accessToken = String(result.accessToken ?? "")
+                        DispatchQueue.main.async {
+                            UserDefaults.standard.set("Bearer \(self.accessToken ?? "")", forKey: "token")
+                            UserDefaults.standard.set("Bearer \(String(result.refreshToken ?? ""))", forKey: "refresh_token")
+                            UserDefaults.standard.set("\(self.user_phone)", forKey: "mobPhone")
+                            self.setPass()
+                        }
                     }
+                    else {
+                        DispatchQueue.main.async {
+                            self.requestAnswer(message: String(result.message ?? ""))
+                            self.hideActivityIndicator2(uiView: self.view)
+                        }
+                    }
+                    
                 },
                 onError: { error in
                     DispatchQueue.main.async {
@@ -420,6 +621,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         else if seconds < 1 && minute < 1 {
             timer.invalidate()
             auth_view.send_again.isHidden = false
+            auth_view.get_sms.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         } else {
             seconds -= 1
             auth_view.second_label.text = String(format: "%02d", seconds)
@@ -430,6 +632,10 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     @objc func sendAgain() {
         
         auth_view.numberField.isEnabled = false
+        auth_view.get_sms.isEnabled = true
+        auth_view.get_sms.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+        auth_view.title_code_info.isHidden = true
+        auth_view.get_sms.frame.origin.y = (UIScreen.main.bounds.size.height * 560) / 926
         
         minute = 01
         seconds = 59
@@ -441,7 +647,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 try client.authPost(jsonBody: parametr).subscribe(
                     onNext: { [self] result in
                     print("hello")
-                    hashString = result.hashString
+                        hashString = result.hashString ?? ""
                     DispatchQueue.main.async { [self] in
                         auth_view.timer_label.text = "01"
                         auth_view.second_label.text = "59"

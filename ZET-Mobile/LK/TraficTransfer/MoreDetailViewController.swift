@@ -9,7 +9,7 @@ import UIKit
 
 class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
     
-    let more_view = MoreDetailView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 10, height: UIScreen.main.bounds.size.height))
+    let more_view = MoreDetailView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
     let scrollView = UIScrollView()
     
@@ -18,7 +18,7 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
 
         modalPresentationCapturesStatusBarAppearance = false
         
-        if #available(iOS 11.0, *) {
+        if #available(iOS 14.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
             // Fallback on earlier versions
@@ -26,20 +26,23 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
+        scrollView.isScrollEnabled = true
         
         more_view.layer.cornerRadius = 10
-        more_view.content.frame.size.height = CGFloat.greatestFiniteMagnitude
         more_view.content.textColor = darkGrayLight
+      
+        more_view.content.frame.size.height = CGFloat.greatestFiniteMagnitude
         more_view.content.numberOfLines = 0
         more_view.content.lineBreakMode = NSLineBreakMode.byWordWrapping
         more_view.content.sizeToFit()
+
+        more_view.content.frame.origin.y = (UIScreen.main.bounds.size.width - 40) + 140
+        scrollView.contentSize = CGSize(width: view.frame.width, height: more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 280)
+        more_view.frame.size.height = more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 280
+        
+        more_view.close_banner.frame.origin.y = more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 160
       
-        print(more_view.content.frame.height)
-        more_view.content.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: more_view.content.frame.height)
-        more_view.close_banner.frame.origin.y = more_view.content.frame.height + 520
-        scrollView.contentSize = CGSize(width: view.frame.width, height: more_view.content.frame.height + 850)
-        more_view.frame.size.height = more_view.content.frame.height + 850
-        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 104)
+        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (topPadding ?? 0) + (bottomPadding ?? 0))
         view.addSubview(scrollView)
         scrollView.addSubview(more_view)
 
@@ -52,7 +55,7 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if #available(iOS 11.0, *) {
+        if #available(iOS 14.0, *) {
             scrollView.scrollIndicatorInsets = view.safeAreaInsets
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
         } else {
@@ -61,7 +64,19 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.scrollView == scrollView {
+            if scrollView.contentOffset.y > more_view.image.frame.origin.y {
+                print("large")
+                modalPresentationStyle = .pageSheet
+                if #available(iOS 15.0, *) {
+                    sheetPresentationController?.selectedDetentIdentifier = .large
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+        }
+    }
 }
 
 class MoreDetailView: UIView {
@@ -77,7 +92,7 @@ class MoreDetailView: UIView {
     
     lazy var close: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 20, height: 20)
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
         button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
         button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
@@ -86,11 +101,10 @@ class MoreDetailView: UIView {
     
     lazy var title_top: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
-    
+        title.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 30)
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 20)
         title.textAlignment = .left
         return title
     }()
@@ -101,7 +115,7 @@ class MoreDetailView: UIView {
         title.text = defaultLocalizer.stringForKey(key: "Conditions")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
-        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.font = UIFont.boldSystemFont(ofSize: 20)
         title.textAlignment = .left
         
         return title
@@ -110,8 +124,8 @@ class MoreDetailView: UIView {
     lazy var content: UILabel = {
         let title = UILabel()
         title.textColor = darkGrayLight
-        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: 700)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.textAlignment = .left
         title.text = ""
         return title

@@ -40,9 +40,11 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     var long = ""
     var lat = ""
     var mapView = YMKMapView()
+    var y_pozition = 150
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         view.backgroundColor = toolbarColor
         setupView()
@@ -81,9 +83,11 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
+        //scrollView.isScrollEnabled = false
+        
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: 60))
         support_view = SupportView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(mapClick))
@@ -102,18 +106,24 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         support_view.icon2.isUserInteractionEnabled = true
         support_view.icon2.addGestureRecognizer(tapGestureRecognizer4)
         
-        mapView = YMKMapView(frame: CGRect(x: 0, y: 220, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        
+        mapView = YMKMapView(frame: CGRect(x: 0, y: 215 + 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        
+        mapView.mapWindow.map.mapType = .map
         
         self.view.addSubview(toolbar)
+        self.view.addSubview(mapView)
         scrollView.addSubview(support_view)
-        scrollView.addSubview(mapView)
         
         setMapView()
         
-        toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = "Поддержка"
+        toolbar.icon_back.isHidden = true
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Support")
         
         support_view.number.text = supportdata[0][1]
+        let tapGestureRecognizer5 = UITapGestureRecognizer(target: self, action: #selector(numberClick))
+        support_view.number.isUserInteractionEnabled = true
+        support_view.number.addGestureRecognizer(tapGestureRecognizer5)
         
         /* if let url = URL(string: "tel://800"), UIApplication.shared.canOpenURL(url) {
          if #available(iOS 10, *) {
@@ -127,6 +137,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         SupportCollectionView.delegate = self
         SupportCollectionView.dataSource = self
         SupportCollectionView.alwaysBounceVertical = false
+        SupportCollectionView.isHidden = false
         scrollView.addSubview(SupportCollectionView)
         
         table.register(SupportListCell.self, forCellReuseIdentifier: "support_list_cell")
@@ -137,7 +148,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         table.estimatedRowHeight = 80
         table.alwaysBounceVertical = false
         table.isHidden = true
-        table.backgroundColor = contentColor
+        table.backgroundColor = .clear
         support_view.white_back.isHidden = true
         scrollView.addSubview(table)
         
@@ -145,7 +156,68 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    @objc func numberClick(_ sender: UIButton) {
+        if let url = URL(string: "tel://\(supportdata[0][2])"), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10, *) {
+                UIApplication.shared.open(url)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.scrollView == scrollView {
+            if scrollView.contentOffset.y > support_view.white_view_back.frame.origin.y {
+                SupportCollectionView.isHidden = true
+                support_view.title_info.isHidden = true
+                support_view.number.isHidden = true
+                self.scrollView.contentOffset.y = 0
+                support_view.white_view_back.frame.origin.y = 0
+                mapView.frame.origin.y = 70 + 60 + (topPadding ?? 0)
+                table.frame.origin.y = 70
+                support_view.white_back.frame.origin.y = 30
+                //self.scrollView.isScrollEnabled = false
+            }
+            if scrollView.contentOffset.y < -10 && SupportCollectionView.isHidden == true {
+                SupportCollectionView.isHidden = false
+                support_view.title_info.isHidden = false
+                support_view.number.isHidden = false
+                self.scrollView.contentOffset.y = 60 + (topPadding ?? 0)
+                support_view.white_view_back.frame.origin.y = CGFloat(y_pozition)
+                mapView.frame.origin.y = 200 + 60 + (topPadding ?? 0)
+                table.frame.origin.y = CGFloat(y_pozition + 70)
+                support_view.white_back.frame.origin.y = 180
+            }
+        }
+    }
+    
+    @objc private func didSwipe(_ sender: UISwipeGestureRecognizer) {
+        print("Any")
+        SupportCollectionView.isHidden = false
+        support_view.title_info.isHidden = false
+        support_view.number.isHidden = false
+        self.scrollView.frame.origin.y = 60 + (topPadding ?? 0)
+        support_view.white_view_back.frame.origin.y = CGFloat(y_pozition)
+        mapView.frame.origin.y = 215 + 60 + (topPadding ?? 0)
+        table.frame.origin.y = CGFloat(y_pozition + 70)
+        support_view.white_back.frame.origin.y = 180
+    }
+    
+    @objc private func didSwipe2(_ sender: UISwipeGestureRecognizer) {
+        print("Any")
+        SupportCollectionView.isHidden = true
+        support_view.title_info.isHidden = true
+        support_view.number.isHidden = true
+        self.scrollView.frame.origin.y = 0
+        support_view.white_view_back.frame.origin.y = 0
+        mapView.frame.origin.y = 70 + 60 + (topPadding ?? 0)
+        table.frame.origin.y = 70
+        support_view.white_back.frame.origin.y = 30
+    }
+    
     func setMapView() {
+        
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: YMKPoint(latitude: 38.53575, longitude: 68.77905), zoom: 10, azimuth: 0, tilt: 0),
             animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
@@ -237,7 +309,7 @@ extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
        
-        return CGSize(width: collectionView.frame.width * 0.2, height: collectionView.frame.height)
+        return CGSize(width: collectionView.frame.width * 0.15, height: collectionView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -247,15 +319,35 @@ extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SupportCollectionCell", for: indexPath) as! SupportCollectionViewCell
+        if supportdata[indexPath.row + 1][1] == "Facebook" {
+            cell.button.setImage(UIImage(named: "facebook"), for: .normal)
+        }
+        else if supportdata[indexPath.row + 1][1] == "VK" {
+            cell.button.setImage(UIImage(named: "vks"), for: .normal)
+        }
+        else if supportdata[indexPath.row + 1][1] == "Instagram" {
+            cell.button.setImage(UIImage(named: "instagrams"), for: .normal)
+        }
+        else if supportdata[indexPath.row + 1][1] == "Telegram" {
+            cell.button.setImage(UIImage(named: "telegrams"), for: .normal)
+        }
+        else if supportdata[indexPath.row + 1][1] == "OK" {
+            cell.button.setImage(UIImage(named: "telegrams"), for: .normal)
+        }
+        
+        cell.button.tag = indexPath.row
         cell.button.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
+        
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       open(scheme: supportdata[indexPath.row + 1][2])
+        print(supportdata[indexPath.row + 1][2])
+        //open(scheme: supportdata[indexPath.row + 1][2])
     }
     
     @objc func buttonClick(_ sender: UIButton) {
+        print(supportdata[sender.tag + 1][2])
         open(scheme: supportdata[sender.tag + 1][2])
     }
 }
@@ -278,6 +370,11 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.titleOne.text = officesdata[indexPath.row][1]
         cell.titleTwo.text = officesdata[indexPath.row][0]
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = .clear
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
         
     }

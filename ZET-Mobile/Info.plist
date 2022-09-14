@@ -37,6 +37,8 @@
 	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

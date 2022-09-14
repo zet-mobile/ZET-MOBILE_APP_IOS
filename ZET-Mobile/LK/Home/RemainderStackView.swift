@@ -20,11 +20,12 @@ class RemainderStackView: UIStackView {
         return view
     }()
     
-    lazy var messagesRemainder: CircularProgressView = {
+   /* lazy var messagesRemainder: CircularProgressView = {
         let view = CircularProgressView()
         return view
-    }()
+    }()*/
     
+    let messagesRemainder = CircularProgressView()
     
     
     override init(frame: CGRect) {
@@ -45,6 +46,7 @@ class RemainderStackView: UIStackView {
         isLayoutMarginsRelativeArrangement = true
         layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 20, right: 16)
         messagesRemainder.plusText.isHidden = false
+  
         addArrangedSubview(minutesRemainder)
         addArrangedSubview(internetRemainder)
         addArrangedSubview(messagesRemainder)

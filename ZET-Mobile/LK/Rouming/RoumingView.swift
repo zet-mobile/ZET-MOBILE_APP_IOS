@@ -15,7 +15,7 @@ class RoumingView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: 0, y: 550, width: UIScreen.main.bounds.size.width / 2, height: 50)
@@ -35,7 +35,7 @@ class RoumingView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.boldSystemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
         //title.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: 550, width: UIScreen.main.bounds.size.width / 2 - 20, height: 50)
@@ -63,7 +63,7 @@ class RoumingView: UIView {
     }
     
     private func setupView() {
-       // backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        backgroundColor = contentColor
         
         self.addSubview(tab1)
         self.addSubview(tab2)

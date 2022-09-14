@@ -11,7 +11,7 @@ class AboutAppView: UIView {
     
     let logo: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "about_app")
+        iv.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "about_app_b") : UIImage(named: "about_app"))
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .clear
         
@@ -81,7 +81,7 @@ class AboutAppView: UIView {
     }
     
     private func setupView() {
-        //backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        backgroundColor = contentColor
         
         logo.frame = CGRect(x: (Int(UIScreen.main.bounds.size.width) / 2) - 75, y: (Int(UIScreen.main.bounds.size.height) * 40) / 844, width: 150, height: (Int(UIScreen.main.bounds.size.height) * 80) / 844)
         

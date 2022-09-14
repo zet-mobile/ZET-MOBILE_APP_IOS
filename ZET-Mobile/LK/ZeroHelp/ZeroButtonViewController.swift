@@ -125,7 +125,7 @@ class ZeroButtonViewController: UIViewController {
         view.ok.setTitle(defaultLocalizer.stringForKey(key: "Pay"), for: .normal)
         
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .allTouchEvents)
+        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         

@@ -10,8 +10,8 @@ import UIKit
 class SupportCollectionViewCell: UICollectionViewCell {
     
     lazy var button: UIButton = {
-        let button = UIButton(frame: CGRect(x: 13, y: 0, width: 75, height: 50))
-        button.setImage(#imageLiteral(resourceName: "telegram"), for: UIControl.State.normal)
+        let button = UIButton(frame: CGRect(x: 10, y: 0, width: 40, height: 40))
+        button.setImage(UIImage(named: "instagrams"), for: .normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return button
     }()

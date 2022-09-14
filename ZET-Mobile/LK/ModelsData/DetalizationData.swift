@@ -16,8 +16,8 @@ struct Detailing: Decodable {
     let discountPercent: Double
 }
 
-struct DetailingHistory {
-    let history: [history_detailing_data]?
+struct DetailingHistory: Decodable {
+    let history: [history_detailing_data]
 }
 
 struct history_detailing_data: Decodable {
@@ -25,35 +25,57 @@ struct history_detailing_data: Decodable {
     let histories: [histories_detailing_data]
 }
 
-struct histories_detailing_data: Decodable {
+struct histories_detailing_data {
     let phoneNumber: String
     let status: String
     let email: String
-    let dateFrom: String
-    let dateTo: String
+    let dateFrom: String?
+    let dateTo: String?
     let date: String
     let id: Int
     let price: Double
     let statusId: Int
 }
 
-extension DetailingHistory: Decodable {
+extension histories_detailing_data: Decodable {
     
     private enum DetailingHistoryCodingKeys: String, CodingKey {
-        case history = "history"
-        
+        case dateFrom = "dateFrom"
+        case dateTo = "dateTo"
+        case phoneNumber = "phoneNumber"
+        case status = "status"
+        case email = "email"
+        case date = "date"
+        case id = "id"
+        case price = "price"
+        case statusId = "statusId"
     }
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: DetailingHistoryCodingKeys.self)
       
+        
         do {
-            history = try container.decode([history_detailing_data].self, forKey: .history)
+            dateFrom = try container.decode(String.self, forKey: .dateFrom)
         }
         catch {
-            history = nil
+            dateFrom = nil
+        }
+        
+        do {
+            dateTo = try container.decode(String.self, forKey: .dateTo)
+        }
+        catch {
+            dateTo = nil
         }
   
+        phoneNumber = try container.decode(String.self, forKey: .phoneNumber)
+        status = try container.decode(String.self, forKey: .status)
+        email = try container.decode(String.self, forKey: .email)
+        date = try container.decode(String.self, forKey: .date)
+        id = try container.decode(Int.self, forKey: .id)
+        price = try container.decode(Double.self, forKey: .price)
+        statusId = try container.decode(Int.self, forKey: .statusId)
     
     }
 }

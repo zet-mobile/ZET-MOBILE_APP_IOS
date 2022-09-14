@@ -24,7 +24,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "history_transfer")
     backgroundColor = .clear
     
-    ico_image.image = UIImage(named: "internet_transfer")
+    //ico_image.image = UIImage(named: "internet_transfer")
     
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
@@ -34,11 +34,11 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
     
-    ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
+    ico_image.frame = CGRect(x: 10, y: 35, width: 45, height: 45)
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
     titleOne.text = ""
-    titleOne.numberOfLines = 1
+    titleOne.numberOfLines = 3
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
@@ -53,7 +53,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     titleThree.text = ""
     titleThree.textColor = colorBlackWhite
-    titleThree.font = UIFont.systemFont(ofSize: 18)
+    titleThree.font = UIFont.boldSystemFont(ofSize: 18)
     titleThree.textAlignment = .right
     
     

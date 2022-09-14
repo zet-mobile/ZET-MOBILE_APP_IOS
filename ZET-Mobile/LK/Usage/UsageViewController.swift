@@ -37,7 +37,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     
     var usages_data = [[String]]()
     var history_data = [[String]]()
-    
+    var activePage = 0
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -79,10 +79,11 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 805)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: 44, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Expenses")
         toolbar.icon_back.isHidden = true
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         usage_view.tab1.isUserInteractionEnabled = true
         usage_view.tab1.addGestureRecognizer(tapGestureRecognizer)
@@ -105,9 +106,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
 
     func setupUsages() {
         
-        UsageCollectionView.backgroundColor = colorGrayWhite
+        UsageCollectionView.backgroundColor = .clear
         UsageCollectionView.layer.cornerRadius = 10
-        UsageCollectionView.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 250)
+        UsageCollectionView.frame = CGRect(x: 0, y: 70, width: UIScreen.main.bounds.size.width, height: 240)
         UsageCollectionView.delegate = self
         UsageCollectionView.dataSource = self
         scrollView.addSubview(UsageCollectionView)
@@ -144,10 +145,11 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
             usage_view.tab1.textColor = colorBlackWhite
             usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-            usage_view.tab1Line.backgroundColor = .orange
+            usage_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             usage_view.tab2Line.backgroundColor = .clear
             usage_view.tab3Line.backgroundColor = .clear
             UsageCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+            activePage = 0
         }
     }
     
@@ -157,9 +159,10 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
             usage_view.tab2.textColor = colorBlackWhite
             usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab1Line.backgroundColor = .clear
-            usage_view.tab2Line.backgroundColor = .orange
+            usage_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             usage_view.tab3Line.backgroundColor = .clear
             UsageCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+            
         }
     }
     
@@ -170,8 +173,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
             usage_view.tab3.textColor = colorBlackWhite
             usage_view.tab1Line.backgroundColor = .clear
             usage_view.tab2Line.backgroundColor = .clear
-            usage_view.tab3Line.backgroundColor = .orange
+            usage_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             UsageCollectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+            activePage = 2
         }
         
     }
@@ -194,6 +198,14 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
                         if result.history != nil {
                             for i in 0 ..< result.history!.count {
                                 self.history_data.append([String(result.history![i].serviceName!), String(result.history![i].balanceChange!), String(result.history![i].transactionDate!)])
+                            }
+                        }
+                        else {
+                            print("empty history")
+                            DispatchQueue.main.async {
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_expenses"))
+                            self.table.separatorStyle = .none
+                            self.table.backgroundView = emptyView
                             }
                         }
                     }
@@ -220,7 +232,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
 extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        return CGSize(width: UIScreen.main.bounds.size.width, height: collectionView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -236,11 +248,11 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
             cell.rez4.text = String(Int(Double(usages_data[indexPath.row][3])!))
             cell.rez5.text = usages_data[indexPath.row][4]
             
-            cell.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez1.text!.count * 15) - 45, y: 0, width: cell.rez1.text!.count * 15, height: 45)
-            cell.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez2.text!.count * 15 + 45), y: 47, width: cell.rez2.text!.count * 15, height: 45)
-            cell.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez3.text!.count * 15 + 45), y: 94, width: cell.rez3.text!.count * 15, height: 45)
-            cell.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez4.text!.count * 15 + 45), y: 141, width: cell.rez4.text!.count * 15, height: 45)
-            cell.rez5.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez5.text!.count * 15 + 45), y: 188, width: cell.rez5.text!.count * 15, height: 45)
+            cell.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez1.text!.count * 15) - 55, y: 0, width: cell.rez1.text!.count * 15, height: 45)
+            cell.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez2.text!.count * 15) - 55, y: 47, width: cell.rez2.text!.count * 15, height: 45)
+            cell.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez3.text!.count * 15) - 55, y: 94, width: cell.rez3.text!.count * 15, height: 45)
+            cell.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez4.text!.count * 15) - 55, y: 141, width: cell.rez4.text!.count * 15, height: 45)
+            cell.rez5.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez5.text!.count * 15) - 55, y: 188, width: cell.rez5.text!.count * 15, height: 45)
         }
         
         return cell
@@ -262,41 +274,75 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
       
+        print("indexPath.row")
+        print(indexPath.row)
         if indexPath.row == 0 {
+            
             usage_view.tab1.textColor = colorBlackWhite
-            usage_view.tab2.textColor = .gray
-            usage_view.tab3.textColor = .gray
-            usage_view.tab1Line.backgroundColor = .orange
+            usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             usage_view.tab2Line.backgroundColor = .clear
             usage_view.tab3Line.backgroundColor = .clear
-        } else if indexPath.row == 2 {
-            usage_view.tab1.textColor = .gray
-            usage_view.tab2.textColor = .gray
+            activePage = 0
+        }
+        else if indexPath.row == 1 {
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab2.textColor = colorBlackWhite
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab1Line.backgroundColor = .clear
+            usage_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            usage_view.tab3Line.backgroundColor = .clear
+         
+        }
+        else if indexPath.row == 2 {
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab3.textColor = colorBlackWhite
             usage_view.tab1Line.backgroundColor = .clear
             usage_view.tab2Line.backgroundColor = .clear
-            usage_view.tab3Line.backgroundColor = .orange
+            usage_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            activePage = 2
         }
           
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         //print(indexPath.row == 0)
+        print("indexPath.row2")
+        print(indexPath.row)
         if indexPath.row == 0 {
-            print("d")
-            usage_view.tab1.textColor = .gray
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab2.textColor = colorBlackWhite
-            usage_view.tab3.textColor = .gray
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab1Line.backgroundColor = .clear
-            usage_view.tab2Line.backgroundColor = .orange
+            usage_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             usage_view.tab3Line.backgroundColor = .clear
         }
+        else if indexPath.row == 1 {
+            if activePage == 0  {
+                usage_view.tab1.textColor = colorBlackWhite
+                usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                usage_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                usage_view.tab2Line.backgroundColor = .clear
+                usage_view.tab3Line.backgroundColor = .clear
+            }
+            else if activePage == 2 {
+                usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                usage_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                usage_view.tab3.textColor = colorBlackWhite
+                usage_view.tab1Line.backgroundColor = .clear
+                usage_view.tab2Line.backgroundColor = .clear
+                usage_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            }
+        }
         else if indexPath.row == 2 {
-            usage_view.tab1.textColor = .gray
+            usage_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab2.textColor = colorBlackWhite
-            usage_view.tab3.textColor = .gray
+            usage_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             usage_view.tab1Line.backgroundColor = .clear
-            usage_view.tab2Line.backgroundColor = .orange
+            usage_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             usage_view.tab3Line.backgroundColor = .clear
         }
     }
