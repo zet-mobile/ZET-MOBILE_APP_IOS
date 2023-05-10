@@ -34,6 +34,7 @@ struct microServices_data {
     let id: Int
     let iconUrl: String
     let microServiceName: String?
+    let bannerUrl: String?
 }
 
 extension HomeData: Decodable {
@@ -165,6 +166,7 @@ extension microServices_data: Decodable {
         case id = "id"
         case iconUrl = "iconUrl"
         case microServiceName = "microServiceName"
+        case bannerUrl = "bannerUrl"
     }
         
     init(from decoder: Decoder) throws {
@@ -177,7 +179,12 @@ extension microServices_data: Decodable {
         catch {
             microServiceName = nil
         }
-       
+        do {
+            bannerUrl = try container.decode(String.self, forKey: .bannerUrl)
+        }
+        catch {
+            bannerUrl = nil
+        }
     }
 }
 

@@ -29,9 +29,10 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "serv_connect")
     backgroundColor = .clear
     
-    ico_image.image = UIImage(named: "services_cell_img")
+    ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
     ic_image.image = UIImage(named: "Ellipse")
- 
+    ic_image.contentMode = .scaleAspectFit
+    
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
     contentView.addSubview(titleTwo)
@@ -43,7 +44,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
     
     ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
-    ic_image.frame = CGRect(x: 70, y: 136, width: 8, height: 8)
+    ic_image.frame = CGRect(x: 70, y: 110, width: 10, height: 60)
     
     titleOne.frame = CGRect(x: 70, y: 10, width: 240, height: 50)
     titleOne.text = ""
@@ -53,7 +54,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.textAlignment = .left
     titleTwo.lineBreakMode = .byWordWrapping
     
-    titleTwo.frame = CGRect(x: 70, y: 35, width: UIScreen.main.bounds.size.width - 100, height: 60)
+    titleTwo.frame = CGRect(x: 70, y: 60, width: UIScreen.main.bounds.size.width - 100, height: 60)
     titleTwo.text = ""
     titleTwo.numberOfLines = 2
     titleTwo.textColor = darkGrayLight
@@ -73,12 +74,13 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     getButton.layer.cornerRadius = getButton.frame.height / 2
     getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
     getButton.layer.borderWidth = 1
+    getButton.isUserInteractionEnabled = true
     
-    spisanie.frame = CGRect(x: 90, y: 110, width: 200, height: 60)
+    spisanie.frame = CGRect(x: 90, y: 110, width: UIScreen.main.bounds.size.width - 130, height: 60)
     spisanie.text = ""
     spisanie.numberOfLines = 2
     spisanie.textColor = .lightGray
-    spisanie.font = UIFont.systemFont(ofSize: 15)
+    spisanie.font = UIFont.systemFont(ofSize: 14)
     spisanie.textAlignment = .left
 }
 

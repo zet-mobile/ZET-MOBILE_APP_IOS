@@ -36,11 +36,18 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
         more_view.content.lineBreakMode = NSLineBreakMode.byWordWrapping
         more_view.content.sizeToFit()
 
-        more_view.content.frame.origin.y = (UIScreen.main.bounds.size.width - 40) + 140
-        scrollView.contentSize = CGSize(width: view.frame.width, height: more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 280)
-        more_view.frame.size.height = more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 280
+        if more_view.image.image != nil {
+            more_view.image.frame = CGRect(x: 20, y: 90, width: more_view.image.contentClippingRect.width, height: more_view.image.contentClippingRect.height)
+        }
+        else {
+            more_view.image.frame = CGRect(x: 20, y: 90, width: 0, height: 0)
+        }
+        more_view.content.frame.origin.y = more_view.image.frame.size.height + 120
         
-        more_view.close_banner.frame.origin.y = more_view.content.frame.height + (UIScreen.main.bounds.size.width - 40) + 160
+        scrollView.contentSize = CGSize(width: view.frame.width, height: more_view.content.frame.height + more_view.image.frame.size.height + 220)
+        more_view.frame.size.height = more_view.content.frame.height + more_view.image.frame.size.height + 220
+        
+        more_view.close_banner.frame.origin.y = more_view.content.frame.height + more_view.image.frame.size.height + 140
       
         scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (topPadding ?? 0) + (bottomPadding ?? 0))
         view.addSubview(scrollView)
@@ -85,8 +92,8 @@ class MoreDetailView: UIView {
     
     lazy var image: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "transfer")
         image.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40)
+        image.isHidden = true
         return image
     }()
     
@@ -101,7 +108,7 @@ class MoreDetailView: UIView {
     
     lazy var title_top: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 30)
+        title.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 70, height: 30)
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 20)
@@ -111,7 +118,7 @@ class MoreDetailView: UIView {
     
     lazy var title: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 90, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title.text = defaultLocalizer.stringForKey(key: "Conditions")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
@@ -124,7 +131,7 @@ class MoreDetailView: UIView {
     lazy var content: UILabel = {
         let title = UILabel()
         title.textColor = darkGrayLight
-        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.width - 40) + 140, width: UIScreen.main.bounds.size.width - 40, height: 700)
+        title.frame = CGRect(x: 20, y: 120, width: UIScreen.main.bounds.size.width - 40, height: 700)
         title.font = UIFont.systemFont(ofSize: 18)
         title.textAlignment = .left
         title.text = ""
@@ -133,7 +140,7 @@ class MoreDetailView: UIView {
     
     lazy var close_banner: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: 10, y: (UIScreen.main.bounds.size.width - 40) + 600, width: UIScreen.main.bounds.size.width - 20, height: 50)
+        button.frame = CGRect(x: 10, y: 580, width: UIScreen.main.bounds.size.width - 20, height: 50)
         button.isUserInteractionEnabled = true
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitle(defaultLocalizer.stringForKey(key: "Close"), for: .normal)
@@ -168,3 +175,23 @@ class MoreDetailView: UIView {
     }
 }
 
+extension UIImageView {
+    var contentClippingRect: CGRect {
+        guard let image = image else { return bounds }
+        guard contentMode == .scaleAspectFit else { return bounds }
+        guard image.size.width > 0 && image.size.height > 0 else { return bounds }
+
+        let scale: CGFloat
+        if image.size.width > image.size.height {
+            scale = bounds.width / image.size.width
+        } else {
+            scale = bounds.height / image.size.height
+        }
+
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let x = (bounds.width - size.width) / 2.0
+        let y = (bounds.height - size.height) / 2.0
+
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
+    }
+}

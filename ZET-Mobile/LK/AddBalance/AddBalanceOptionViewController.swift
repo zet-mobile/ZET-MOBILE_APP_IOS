@@ -40,6 +40,10 @@ class AddBalanceOptionViewController: UIViewController {
         
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @objc func close_view() {
         dismiss(animated: true, completion: nil)
     }
@@ -67,9 +71,9 @@ extension AddBalanceOptionViewController: UITableViewDelegate, UITableViewDataSo
         if indexPath.row == 0 {
             cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
         }
-        else if indexPath.row == 1 {
+        /*else if indexPath.row == 1 {
             cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "second.png") : UIImage(named: "second_l.png"))
-        }
+        }*/
         else {
             cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "third.png") : UIImage(named: "third_l.png"))
         }

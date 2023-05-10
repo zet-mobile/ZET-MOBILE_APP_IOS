@@ -11,9 +11,14 @@ import Firebase
 import FirebaseMessaging
 import UserNotifications
 
+import LocalAuthentication
+import CoreLocation
+import SideMenu
+
     var window = UIApplication.shared.keyWindow
     var topPadding = window?.safeAreaInsets.top
     var bottomPadding = window?.safeAreaInsets.bottom
+
 
 extension UIApplication {
     
@@ -42,9 +47,10 @@ extension UIApplication {
 }
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, CLLocationManagerDelegate {
     
     var window: UIWindow?
+    var locationManager: CLLocationManager = CLLocationManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -68,6 +74,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         let navController = UINavigationController(rootViewController: SplashViewController())
         window?.rootViewController = navController
       
+        locationManager.delegate = self
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        if (CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways){
+          //  locationManager.requestLocation()
+            locationManager.startUpdatingLocation()
+        }
+        
         YMKMapKit.setApiKey("c60358d9-a157-4952-b448-7b1aea6c5e54")
         YMKMapKit.sharedInstance()
         
@@ -114,11 +129,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
+    
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+  
+    func setupLocationManager(){
+        
+        locationManager.delegate = self
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        if(CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways){
+            //  locationManager.requestLocation()
+            locationManager.startUpdatingLocation()
+        }
+        
+    }
+    
+    // Below method will provide you current location.
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let lastLocation: CLLocation = locations[locations.count - 1]
+        lat = String(format: "%.6f", lastLocation.coordinate.latitude)
+        long = String(format: "%.6f", lastLocation.coordinate.longitude)
+        accur = String(format: "%.6f", lastLocation.verticalAccuracy)
+    }
+    
+    // Below Mehtod will print error if not able to update location.
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("location manager authorization status changed")
+        
+        if(status == .authorizedWhenInUse || status == .authorizedAlways){
+           // manager.requestLocation()
+            manager.startUpdatingLocation()
+        }
     }
 
 }
@@ -129,7 +180,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
       
     // show the notification alert (banner), and with sound
-    completionHandler([.alert, .sound])
+       completionHandler([.alert, .sound])
   }
     
   // This function will be called right after user tap on the notification

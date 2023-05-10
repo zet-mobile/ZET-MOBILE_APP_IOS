@@ -8,6 +8,8 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Alamofire
+import AlamofireImage
 
 class PushViewController: UIViewController, UIGestureRecognizerDelegate {
 
@@ -34,15 +36,6 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        toolbar.number_user_name.text = "Уведомления"
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
-        toolbar.isUserInteractionEnabled = true
-        toolbar.addGestureRecognizer(tapGestureRecognizer)
-        
-        self.view.addSubview(toolbar)
-        
         sendRequest()
         
     }
@@ -52,12 +45,34 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+       // navigationController?.popViewController(animated: true)
+        
+        guard let window = UIApplication.shared.keyWindow else {
+            return
+        }
+        
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        
+        let vc = ContainerViewController()
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        window.rootViewController = vc
+        
     }
     
     func setupView() {
         view.backgroundColor = toolbarColor
 
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Notifications")
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
+        self.view.addSubview(toolbar)
+        
         table.register(PushPhotoTypeViewCell.self, forCellReuseIdentifier: "push_photo_cell")
         table.register(PushTableViewCell.self, forCellReuseIdentifier: "push_cell")
         table.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
@@ -69,9 +84,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
         //table.allowsSelection = false
         
         if notif_data.count == 0 {
-            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table.frame.width, height: table.frame.height), text: """
-            На данный момент уведомлений нет
-            """)
+            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table.frame.width, height: table.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_push"))
             table.separatorStyle = .none
             table.backgroundView = emptyView
         }
@@ -82,20 +95,26 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
     func sendRequest() {
         let client = APIClient.shared
             do{
-              try client.getNotificationRequest().subscribe(
+              try client.getNotificationRequest().subscribe (
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async {
                         if result.notifications!.count != 0 {
                             for i in 0 ..< result.notifications!.count {
-                                self.notif_data.append([String(result.notifications![i].id), String(result.notifications![i].title), String(result.notifications![i].image), String(result.notifications![i].icon), String(result.notifications![i].statusId)])
+                                if result.notifications![i].service != nil {
+                                    self.notif_data.append([String(result.notifications![i].id), String(result.notifications![i].notificationId), String(result.notifications![i].title ?? ""), String(result.notifications![i].body ?? ""), String(result.notifications![i].shortDescription ?? ""), String(result.notifications![i].image ?? ""), String(result.notifications![i].icon ?? ""), String(result.notifications![i].statusId), String(result.notifications![i].service!.id)])
+                                } else {
+                                    self.notif_data.append([String(result.notifications![i].id), String(result.notifications![i].notificationId), String(result.notifications![i].title ?? ""), String(result.notifications![i].body ?? ""), String(result.notifications![i].shortDescription ?? ""), String(result.notifications![i].image ?? ""), String(result.notifications![i].icon ?? ""), String(result.notifications![i].statusId), ""])
+                                }
                             }
                         }
                     }
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    //self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -112,7 +131,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func requestAnswer(status: Bool, message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -130,7 +149,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         var checkColor = UIColor.black
         
@@ -147,7 +166,7 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
             
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
         }
         
@@ -177,10 +196,13 @@ class PushViewController: UIViewController, UIGestureRecognizerDelegate {
 extension PushViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == show_more_tapped_ind && show_more_tapped == true  || indexPath.row == show_more_tapped_ind2 && show_more_tapped2 == true {
-            return 180
-        } else {
+        if notif_data[indexPath.row][6] == "" && indexPath.row == show_more_tapped_ind && show_more_tapped == true  || indexPath.row == show_more_tapped_ind2 && show_more_tapped2 == true {
+            return 170
+        }
+        else if notif_data[indexPath.row][6] != "" && indexPath.row == show_more_tapped_ind && show_more_tapped == true  || indexPath.row == show_more_tapped_ind2 && show_more_tapped2 == true {
+            return 200
             
+        } else {
             return 120
         }
     }
@@ -191,130 +213,171 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-            let cell = tableView.dequeueReusableCell(withIdentifier: "push_photo_cell", for: indexPath) as! PushPhotoTypeViewCell
-            if indexPath.row == show_more_tapped_ind && show_more_tapped == true {
-                cell.view_cell.frame.size.height = 160
-                cell.about.frame.size.height = 60
-                cell.about.numberOfLines = 4
-                cell.icon_show_more.isHidden = false
-                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
-          
-            } else {
-                cell.view_cell.frame.size.height = 100
-                cell.about.frame.size.height = 30
-                cell.about.numberOfLines = 1
-                cell.icon_show_more.isHidden = true
-                cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
-             
-            }
-            
-            cell.title.text = notif_data[indexPath.row][1]
-            cell.about.text = notif_data[indexPath.row][2]
-            
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = .clear
-            cell.selectedBackgroundView = bgColorView
-            
-            cell.icon_show_more.addTarget(self, action: #selector(openMore), for: .touchUpInside)
-            return cell
-       /* }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "push_photo_cell", for: indexPath) as! PushPhotoTypeViewCell
+        
+        if notif_data[indexPath.row][7] == "2" {
+            cell.sign.isHidden = false
+        }
         else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "push_cell", for: indexPath) as! PushTableViewCell
+            cell.sign.isHidden = true
+        }
+        
+        if notif_data[indexPath.row][6] == "" {
+            cell.ico_image.isHidden = true
+            cell.title.frame.origin.x =  20
+            cell.about.frame.origin.x = 20
+            cell.icon_show_more.frame.origin.x = 20
+        }
+        else {
+            cell.ico_image.isHidden = false
+            cell.title.frame.origin.x =  70
+            cell.about.frame.origin.x = 70
+            cell.icon_show_more.frame.origin.x = 70
             
-            if indexPath.row == show_more_tapped_ind2 && show_more_tapped2 == true {
-                cell.view_cell.frame.size.height = 160
+            cell.ico_image.af_setImage(withURL: URL(string: notif_data[indexPath.row][6])!)
+        }
+        
+        if notif_data[indexPath.row][6] == ""  {
+            cell.icon_show_more.isHidden = true
+            
+            if indexPath.row == show_more_tapped_ind && show_more_tapped == true {
+                print("1 type")
+                cell.view_cell.frame.size.height = 150
+                cell.title.frame.size.height = 70
                 cell.about.frame.size.height = 60
+                cell.about.frame.origin.y = 70
                 cell.about.numberOfLines = 4
+                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
+          
+            } else {
+                print("2 type")
+                cell.view_cell.frame.size.height = 100
+                cell.title.frame.size.height = 50
+                cell.about.frame.size.height = 30
+                cell.about.frame.origin.y = 60
+                cell.about.numberOfLines = 1
+                cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
+             
+            }
+        }
+        else {
+            cell.icon_show_more.isHidden = false
+            if indexPath.row == show_more_tapped_ind && show_more_tapped == true {
+                print("3 type")
+                cell.view_cell.frame.size.height = 180
+                cell.title.frame.size.height = 70
+                cell.about.frame.size.height = 60
+                cell.about.frame.origin.y = 70
+                cell.about.numberOfLines = 4
+                cell.icon_show_more.frame.origin.y = 130
                 cell.icon_show_more.isHidden = false
                 cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
           
             } else {
+                print("4 type")
                 cell.view_cell.frame.size.height = 100
+                cell.title.frame.size.height = 50
                 cell.about.frame.size.height = 30
+                cell.about.frame.origin.y = 60
                 cell.about.numberOfLines = 1
+                cell.icon_show_more.frame.origin.y = 100
                 cell.icon_show_more.isHidden = true
                 cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
              
             }
-            
-            return cell
-        }*/
+        }
+        
+        cell.icon_show_more.tag = indexPath.row
+        cell.title.text = notif_data[indexPath.row][2]
+        cell.about.text = notif_data[indexPath.row][4]
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = .clear
+        cell.selectedBackgroundView = bgColorView
+        
+        cell.icon_show_more.addTarget(self, action: #selector(openMore), for: .touchUpInside)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("hhhttt")
-    
-            let cell = tableView.dequeueReusableCell(withIdentifier: "push_photo_cell", for: indexPath) as! PushPhotoTypeViewCell
+       
+        let cell = tableView.dequeueReusableCell(withIdentifier: "push_photo_cell", for: indexPath) as! PushPhotoTypeViewCell
+
+        print("indexPath.row")
+        print(indexPath.row)
         
-            if show_more_tapped == false {
-                show_more_tapped = true
-                show_more_tapped_ind = indexPath.row
-                cell.view_cell.frame.size.height = 160
-                cell.about.frame.size.height = 60
-                cell.about.numberOfLines = 4
-                cell.icon_show_more.isHidden = false
-                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            } else if show_more_tapped == true && show_more_tapped_ind != indexPath.row {
-                show_more_tapped = true
-                show_more_tapped_ind = indexPath.row
-                cell.view_cell.frame.size.height = 160
-                cell.about.frame.size.height = 60
-                cell.about.numberOfLines = 4
-                cell.icon_show_more.isHidden = false
-                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            } else {
-                show_more_tapped = false
-                show_more_tapped_ind = indexPath.row
-                cell.view_cell.frame.size.height = 100
-                cell.about.frame.size.height = 30
-                cell.about.numberOfLines = 1
-                cell.icon_show_more.isHidden = true
-                cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            }
-       /* }
+        if notif_data[indexPath.row][7] == "2" {
+            readPush(pushID: indexPath.row)
+        }
+        
+        if notif_data[indexPath.row][6] != "" && show_more_tapped == false {
+            print("1 type")
+            show_more_tapped = true
+            show_more_tapped_ind = indexPath.row
+            cell.view_cell.frame.size.height = 180
+            cell.about.frame.size.height = 60
+            cell.about.numberOfLines = 4
+            cell.icon_show_more.isHidden = false
+            cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
+            table.reloadData()
+        }
+        else if notif_data[indexPath.row][6] != "" && show_more_tapped == true && show_more_tapped_ind != indexPath.row {
+            print("2 type")
+            show_more_tapped = true
+            show_more_tapped_ind = indexPath.row
+            cell.view_cell.frame.size.height = 180
+            cell.about.frame.size.height = 60
+            cell.about.numberOfLines = 4
+            cell.icon_show_more.isHidden = false
+            cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
+            table.reloadData()
+        }
+        else if notif_data[indexPath.row][6] == "" && show_more_tapped == false {
+            print("3 type")
+            show_more_tapped = true
+            show_more_tapped_ind = indexPath.row
+            cell.view_cell.frame.size.height = 150
+            cell.about.frame.size.height = 60
+            cell.about.numberOfLines = 4
+            cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
+            table.reloadData()
+        }
+        else if notif_data[indexPath.row][6] == "" && show_more_tapped == true && show_more_tapped_ind != indexPath.row {
+            print("4 type")
+            show_more_tapped = true
+            show_more_tapped_ind = indexPath.row
+            cell.view_cell.frame.size.height = 150
+            cell.about.frame.size.height = 60
+            cell.about.numberOfLines = 4
+            cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
+            table.reloadData()
+        }
         else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "push_cell", for: indexPath) as! PushTableViewCell
-            
-            if show_more_tapped2 == false {
-                show_more_tapped2 = true
-                show_more_tapped_ind2 = indexPath.row
-                cell.view_cell.frame.size.height = 160
-                cell.about.frame.size.height = 60
-                cell.about.numberOfLines = 4
-                cell.icon_show_more.isHidden = false
-                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            } else if show_more_tapped2 == true && show_more_tapped_ind2 != indexPath.row {
-                show_more_tapped2 = true
-                show_more_tapped_ind2 = indexPath.row
-                cell.view_cell.frame.size.height = 160
-                cell.about.frame.size.height = 60
-                cell.about.numberOfLines = 4
-                cell.icon_show_more.isHidden = false
-                cell.icon_more.setImage(#imageLiteral(resourceName: "opened_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            } else {
-                show_more_tapped2 = false
-                show_more_tapped_ind2 = indexPath.row
-                cell.view_cell.frame.size.height = 100
-                cell.about.frame.size.height = 30
-                cell.about.numberOfLines = 1
-                cell.icon_show_more.isHidden = true
-                cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
-                table.reloadData()
-            }
-        }*/
+            print("5 type")
+            show_more_tapped = false
+            show_more_tapped_ind = indexPath.row
+            cell.view_cell.frame.size.height = 100
+            cell.about.frame.size.height = 30
+            cell.about.numberOfLines = 1
+            cell.icon_show_more.isHidden = true
+            cell.icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
+            table.reloadData()
+        }
+        
         
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "push_photo_cell", for: indexPath) as! PushPhotoTypeViewCell
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = .clear
+        cell.selectedBackgroundView = bgColorView
+        
         // Archive action
         let delete = UIContextualAction(style: .normal, title: "") { [weak self] (action, view, completionHandler) in
-            self?.handleMoveToArchive(pushID: self!.notif_data[indexPath.row][0] )
+            self?.handleMoveToArchive(pushID: indexPath.row)
           completionHandler(true)
         }
         
@@ -327,13 +390,13 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
         return configuration
         }
     
-    private func handleMoveToArchive(pushID: String) {
+    private func handleMoveToArchive(pushID: Int) {
            print("Moved to archive")
         showActivityIndicator(uiView: view)
         
          let client = APIClient.shared
              do{
-               try client.deleteNotificationRequest(parametr: pushID).subscribe(
+               try client.deleteNotificationRequest(parametr: notif_data[pushID][0]).subscribe(
                  onNext: { [self] result in
                    print(result)
                      DispatchQueue.main.async {
@@ -347,15 +410,91 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
                     
                  },
                  onError: { [self] error in
-                     DispatchQueue.main.async {
-                         requestAnswer(status: false, message: error.localizedDescription)
-                         print(error.localizedDescription)
-                         
+                     DispatchQueue.main.async { [self] in
+                         hideActivityIndicator(uiView: self.view)
                      }
                      
                  },
                  onCompleted: { [self] in
                     // sender.hideLoading()
+                     DispatchQueue.main.async { [self] in
+                         sendRequest2()
+                     }
+                    print("Completed event.")
+                     
+                 }).disposed(by: disposeBag)
+               }
+               catch{
+             }
+       }
+    
+    func sendRequest2() {
+        notif_data.removeAll()
+        
+        let client = APIClient.shared
+            do{
+              try client.getNotificationRequest().subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async {
+                        if result.notifications!.count != 0 {
+                            for i in 0 ..< result.notifications!.count {
+                                if result.notifications![i].service != nil {
+                                    self.notif_data.append([String(result.notifications![i].id), String(result.notifications![i].notificationId), String(result.notifications![i].title ?? ""), String(result.notifications![i].body ?? ""), String(result.notifications![i].shortDescription ?? ""), String(result.notifications![i].image ?? ""), String(result.notifications![i].icon ?? ""), String(result.notifications![i].statusId), String(result.notifications![i].service!.id)])
+                                } else {
+                                    self.notif_data.append([String(result.notifications![i].id), String(result.notifications![i].notificationId), String(result.notifications![i].title ?? ""), String(result.notifications![i].body ?? ""), String(result.notifications![i].shortDescription ?? ""), String(result.notifications![i].image ?? ""), String(result.notifications![i].icon ?? ""), String(result.notifications![i].statusId), ""])
+                                }
+                            }
+                        }
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                    }
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        table.reloadData()
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    @objc func readPush(pushID: Int) {
+        print(notif_data[pushID][0])
+        
+         let client = APIClient.shared
+             do{
+               try client.postNotificationRequest(parametr: notif_data[pushID][0]).subscribe(
+                 onNext: { [self] result in
+                   print(result)
+                     DispatchQueue.main.async {
+                         if result.success == true {
+                           //  sendUpdateRequest(pushID: pushID)
+                         }
+                         else {
+                             
+                         }
+                     }
+                    
+                 },
+                 onError: { [self] error in
+                     DispatchQueue.main.async {
+                         print(error.localizedDescription)
+                         self.hideActivityIndicator(uiView: self.view)
+                     }
+                     
+                 },
+                 onCompleted: { [self] in
+                     DispatchQueue.main.async { [self] in
+                         sendUpdateRequest(pushID: pushID)
+                     }
                      
                     print("Completed event.")
                      
@@ -365,13 +504,79 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
              }
        }
     
-    @objc func openMore() {
-       // detailViewController.more_view.content.text = notif_data[trasfer_type_choosed_id][15]
-        detailViewController.more_view.image.image = UIImage(named: "transfer")
-        detailViewController.more_view.title_top.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
+    func sendUpdateRequest(pushID: Int) {
+        print("pushID")
+        print(pushID)
         
-        detailViewController.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        let client = APIClient.shared
+            do{
+              try client.getNotificationRequest().subscribe(
+                onNext: { result in
+                    DispatchQueue.main.async { [self] in
+                        if result.notifications!.count != 0 {
+                            for i in 0 ..< result.notifications!.count {
+                                
+                                if String(result.notifications![i].id) == notif_data[pushID][0] {
+                                    print("notif_data[pushID][0]")
+                                    print(notif_data[pushID][0])
+                                    
+                                    notif_data[pushID][7] = String(result.notifications![i].statusId)
+                                }
+                            }
+                        }
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        let indexPath = IndexPath(row: pushID, section: 0)
+                        let cell = table.cellForRow(at: indexPath) as! PushPhotoTypeViewCell
+                        
+                        cell.sign.isHidden = true
+                        //table.reloadRows(at: [indexPath], with: .none)
+                        print(notif_data[pushID][7])
+                       
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    @objc func openMore(_  sender: UIButton) {
+       // detailViewController.more_view.content.text = notif_data[trasfer_type_choosed_id][15]
+        detailViewController.more_view.image.isHidden = false
+        if notif_data[sender.tag][5] != "" {
+            detailViewController.more_view.image.contentMode = .scaleAspectFit
+            detailViewController.more_view.image.af_setImage(withURL: URL(string: notif_data[sender.tag][5])!)
+        }
+        detailViewController.more_view.title_top.text = notif_data[sender.tag][2]
+        detailViewController.more_view.title_top.frame.size.height = 50
+        detailViewController.more_view.title_top.numberOfLines = 2
+       // detailViewController.more_view.image.frame.origin.y = 90
+        
+        detailViewController.more_view.title.isHidden = true
+        detailViewController.more_view.content.text = notif_data[sender.tag][3]
+       
+        
+        if notif_data[sender.tag][8] == "" {
+            detailViewController.more_view.close_banner.setTitle(defaultLocalizer.stringForKey(key: "Close"), for: .normal)
+            detailViewController.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        }
+        else  {
+            detailViewController.more_view.close_banner.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
+            detailViewController.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        }
         detailViewController.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        
     
         nav = UINavigationController(rootViewController: detailViewController)
         nav.modalPresentationStyle = .pageSheet

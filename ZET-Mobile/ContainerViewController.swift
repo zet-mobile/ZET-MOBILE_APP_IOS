@@ -12,16 +12,14 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("tabBar.frame.size.height")
-        print(tabBar.frame.size.height)
-        tabBar.tintColor = .orange
+        self.tabBar.tintColor = colorBlackWhite
         tabBar.barTintColor = contentColor
         tabBar.backgroundColor = contentColor
         //Assign self for delegate for that ViewController can respond to UITabBarControllerDelegate methods
         self.delegate = self
         
     }
-    
+   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -64,7 +62,7 @@ class ContainerViewController: UITabBarController, UITabBarControllerDelegate {
     
     // UITabBarControllerDelegate method
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        tabBar.tintColor = .orange
+        tabBar.tintColor = colorBlackWhite
     }
 }
 

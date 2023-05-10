@@ -19,19 +19,148 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     var pas = ""
     var tryCode = 2
     
-    var minute = 00
-    var seconds = 20
     var timer = Timer()
+    var tryTimer = 1
+    var totalTime = 59
+    
+    var timerCounting: Bool = false
+    var startTime: Date?
+    var stopTime: Date?
+    
+    let userDefaults = UserDefaults.standard
+    let START_TIME_KEY = "startTime"
+    let COUNTING_KEY = "countingKey"
+    let TOTAL_TIME_KEY = "totalTime"
+    let TRY_TIMER_KEY = "tryTimer"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(appWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+            selector: #selector(appDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+        
         setupView()
+        
+        startTime = userDefaults.object(forKey: START_TIME_KEY) as? Date
+        timerCounting = userDefaults.bool(forKey: COUNTING_KEY)
+        totalTime = userDefaults.integer(forKey: TOTAL_TIME_KEY)
+        tryTimer = userDefaults.integer(forKey: TRY_TIMER_KEY)
+        
+        if timerCounting == true {
+            let diff = Date().timeIntervalSince(startTime!)
+            totalTime -= Int(diff)
+            let time = secondsToHoursMinutesSeconds(totalTime)
+            let timeString = makeTimeString(min: time.0, sec: time.1)
+            
+            if totalTime >= 0 {
+                pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + timeString
+                pincode_view.titleTryies.isHidden = false
+                let buttons = getButtonsInView(view: pincode_view)
+                for button in buttons {
+                    button.isUserInteractionEnabled = false
+                    button.isEnabled = false
+                }
+            }
+            else {
+                timer.invalidate()
+                setTimerCounting(false)
+                pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  + "00:00"
+                pincode_view.titleTryies.isHidden = true
+                
+                let buttons = getButtonsInView(view: pincode_view)
+                for button in buttons {
+                    button.isUserInteractionEnabled = true
+                    button.isEnabled = true
+                }
+                
+            }
+            
+            print(startTime)
+            print(Int(diff))
+            print("totalTime")
+            print(totalTime)
+            totalTime -= 1
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        }
+        else {
+            if timer != nil
+            {
+                timer.invalidate()
+            }
+            setTimerCounting(false)
+            
+        }
+        
+        print("timerCounting")
+        print(timerCounting)
+    }
+    
+    @objc func appWillEnterForeground() {
+        startTime = userDefaults.object(forKey: START_TIME_KEY) as? Date
+        timerCounting = userDefaults.bool(forKey: COUNTING_KEY)
+        totalTime = userDefaults.integer(forKey: TOTAL_TIME_KEY)
+       
+        if timerCounting == true {
+            let diff = Date().timeIntervalSince(startTime!)
+            totalTime -= Int(diff)
+            let time = secondsToHoursMinutesSeconds(totalTime)
+            let timeString = makeTimeString(min: time.0, sec: time.1)
+            
+            if totalTime >= 0 {
+                pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + timeString
+                pincode_view.titleTryies.isHidden = false
+                
+                let buttons = getButtonsInView(view: pincode_view)
+                for button in buttons {
+                    button.isUserInteractionEnabled = false
+                    button.isEnabled = false
+                }
+            }
+            else {
+                timer.invalidate()
+                setTimerCounting(false)
+                pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  + "00:00"
+                pincode_view.titleTryies.isHidden = true
+                let buttons = getButtonsInView(view: pincode_view)
+                for button in buttons {
+                    button.isUserInteractionEnabled = true
+                    button.isEnabled = true
+                }
+            }
+            
+            print(startTime)
+            print(Int(diff))
+            print("totalTime")
+            print(totalTime)
+            
+            totalTime -= 1
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        }
+        else {
+            if timer != nil
+            {
+                timer.invalidate()
+            }
+            setTimerCounting(false)
+        }
+    }
+    
+    @objc func appDidEnterBackground() {
+       setStartTime(date: Date())
     }
     
     func setupView() {
         view.backgroundColor = contentColor
-  
+        
         pincode_view = PinCodeView(frame: CGRect(x: 0, y: 104, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         enterPlace.append(pincode_view.number1)
@@ -41,8 +170,11 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         
         let buttons = getButtonsInView(view: pincode_view)
         for button in buttons {
-            if Int((button.titleLabel?.text)!) != nil {
-                button.addTarget(self, action: #selector(clickButton(sender:)), for: .touchUpInside)
+            button.isUserInteractionEnabled =  true
+            if button.titleLabel?.text != "" {
+                if button.titleLabel?.text?.count == 1 {
+                    button.addTarget(self, action: #selector(clickButton(sender:)), for: .touchUpInside)
+                }
             }
         }
         pincode_view.forget_but.addTarget(self, action: #selector(forgetPass), for: .touchUpInside)
@@ -56,6 +188,7 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -67,9 +200,9 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         
         //context.localizedCancelTitle = "Ввести пин-код"
         var error: NSError?
-        
+
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            let reason = "Приложите палец к сканеру"
+            let reason = defaultLocalizer.stringForKey(key: "touch_ask")
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) {
                 [unowned self] success, authenticationError in
                 
@@ -114,17 +247,19 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                             print("Authentication failed")
                             self.hideTouchID(uiView: self.view)
                         }
-                        
+                        print("jjjjj")
                         print(authenticationError!._code)
                     }
                 }
             }
         } else {
+            print("fegregre")
             print(error?.localizedDescription as Any)
             hideTouchID(uiView: self.view)
         }
         
     }
+
     
     func showTouchId(uiView: UIView) {
         container.frame = uiView.frame
@@ -139,7 +274,7 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
             self.hideTouchID(uiView: self.view)
         }
         
-    }
+   }
     
     func hideTouchID(uiView: UIView) {
         container.removeFromSuperview()
@@ -147,10 +282,15 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     }
     
     @objc func clickButton(sender: UIButton) {
-        print(sender.titleLabel?.text)
         
-        sender.showAnimation {
-            print("hi")
+        sender.showAnimation { [self] in
+        }
+        
+        if enterPlace[2].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[3].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[4].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) {
+            
+            enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+            enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+            enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
         }
         
         enterPlace[clickTime].backgroundColor = UIColor.orange
@@ -159,7 +299,11 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         pas = pas + String(sender.titleLabel!.text!)
         print(pas)
         
+        pincode_view.titleTryies.isHidden = true
+    
+        
         if (clickTime == 5) {
+            
             if (pas == UserDefaults.standard.string(forKey: "PinCode")) {
                 clickTime = 1
                 pas = ""
@@ -174,8 +318,13 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                     button.isUserInteractionEnabled = false
                     button.isEnabled = false
                 }
+                timer.invalidate()
+                setTimerCounting(false)
+                totalTime = 59
+                userDefaults.set(1, forKey: TRY_TIMER_KEY)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
+                    
                     guard let window = UIApplication.shared.keyWindow else {
                        return
                     }
@@ -200,19 +349,24 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 enterPlace[4].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 
                 pincode_view.titleTryies.isHidden = false
-                pincode_view.titleTryies.text = "Код неверный. Попыток осталось " + String(tryCode)
+                pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "wrong_code_try_count") + String(tryCode)
                 tryCode = tryCode - 1
                 clickTime = 1
                 pas = ""
-               
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
-                    enterPlace[1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-                    enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-                    enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-                    enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-                    
+                    if enterPlace[2].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[3].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[4].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) {
+                        
+                        enterPlace[1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+                        enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+                        enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+                        enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+                    }
                     pincode_view.titleTryies.isHidden = true
+                    pincode_view.titleTryies.text = ""
                 }
+                
+              //  }
        }
             else {
                 enterPlace[1].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
@@ -220,7 +374,25 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 enterPlace[3].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[4].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 pincode_view.titleTryies.isHidden = false
-                pincode_view.titleTryies.text = "Вы заблокированы. \n Пожалуйста подождите 20:00"
+                
+                switch tryTimer {
+                case 1:
+                    pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + "01:00"
+                    totalTime = 59
+                    break
+                case 2:
+                    pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + "10:00"
+                    totalTime = 599
+                    break
+                case 3:
+                    pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + "20:00"
+                    totalTime = 1199
+                    break
+                default:
+                    tryTimer = 1
+                    totalTime = 59
+                    break
+               }
                 
                 let buttons = getButtonsInView(view: pincode_view)
                 for button in buttons {
@@ -230,21 +402,27 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 clickTime = 1
                 pas = ""
                 tryCode = 2
-                
-                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
-               }
+                tryTimer += 1
+                userDefaults.set(tryTimer, forKey: TRY_TIMER_KEY)
+                timer.invalidate()
+                timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+            }
         }
-
     }
     
     @objc func updateTimer() {
-        if seconds < 1 && minute != 0{
-            minute -= 1
-            seconds = 59
-            pincode_view.titleTryies.text = "Вы заблокированы. \n Пожалуйста подождите \(String(format: "%02d", minute)):\(String(format: "%02d", seconds))"
-        }
-        else if seconds < 1 && minute < 1 {
+        
+        if totalTime > 0 {
+            print(totalTime)
+            let time = secondsToHoursMinutesSeconds(totalTime)
+            let timeString = makeTimeString(min: time.0, sec: time.1)
+            pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + timeString
+            totalTime -= 1  // decrease counter timer
+            setTimerCounting(true)
+            setTotalTime(totalTime)
+        } else {
             timer.invalidate()
+            setTimerCounting(false)
             let buttons = getButtonsInView(view: pincode_view)
             for button in buttons {
                 button.isUserInteractionEnabled = true
@@ -256,12 +434,37 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
             enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
             enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
             enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-            
-        } else {
-            seconds -= 1
-            pincode_view.titleTryies.text = "Вы заблокированы. \n Пожалуйста подождите \(String(format: "%02d", minute)):\(String(format: "%02d", seconds))"
-            }
         }
+    }
+    
+    func secondsToHoursMinutesSeconds(_ ms: Int) -> (Int, Int) {
+        let min = (ms % 3600) / 60
+        let sec = (ms % 3600) % 60
+        return (min, sec)
+    }
+        
+    func makeTimeString(min: Int, sec: Int) -> String {
+        var timeString = ""
+        timeString += String(format: "%02d", min)
+        timeString += ":"
+        timeString += String(format: "%02d", sec)
+        return timeString
+    }
+    
+    func setStartTime(date: Date?) {
+        startTime = date
+        userDefaults.set(startTime, forKey: START_TIME_KEY)
+    }
+        
+    func setTimerCounting(_ val: Bool) {
+        timerCounting = val
+        userDefaults.set(timerCounting, forKey: COUNTING_KEY)
+    }
+    
+    func setTotalTime(_ val: Int) {
+        totalTime = val
+        userDefaults.set(totalTime, forKey: TOTAL_TIME_KEY)
+    }
     
     @objc func deleteSymbol() {
         if pas.count == 0 {
@@ -296,7 +499,7 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         
         let view = AlertView4()
 
-        view.backgroundColor = contentColor
+        view.backgroundColor = alertColor
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 280)
         view.layer.cornerRadius = 20
         view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
@@ -324,6 +527,10 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
             alert.dismiss(animated: true, completion: nil)
             
         }
+        timer.invalidate()
+        setTimerCounting(false)
+        totalTime = 59
+        userDefaults.set(1, forKey: TRY_TIMER_KEY)
         
         guard let window = UIApplication.shared.keyWindow else {
             return
@@ -336,10 +543,17 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         vc.view.layoutIfNeeded()
         UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
             window.rootViewController = vc
-        }, completion: { completed in
+        }, completion: { [self] completed in
             UserDefaults.standard.set("", forKey: "mobPhone")
             UserDefaults.standard.set("", forKey: "PinCode")
-            UserDefaults.standard.set(true, forKey: "BiometricEnter")
+            
+            UserDefaults.standard.set(1, forKey: "language")
+            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+            self.setTimerCounting(false)
+            self.defaultLocalizer.setSelectedLanguage(lang: .ru)
+           // UserDefaults.standard.set(true, forKey: "BiometricEnter")
         })
     }
+    
+   
 }

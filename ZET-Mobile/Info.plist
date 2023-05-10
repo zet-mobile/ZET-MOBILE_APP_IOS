@@ -37,6 +37,10 @@
 	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>ZET-MOBILE использует геолокацию для отображения ближайших офисов обслуживания</string>
+	<key>NSLocationUsageDescription</key>
+	<string>ZET-MOBILE использует геолокацию для отображения ближайших офисов обслуживания</string>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
@@ -58,10 +62,16 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

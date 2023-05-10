@@ -13,8 +13,8 @@ class MobileTransferView: UIView {
     
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "mobile_mini")
         image.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
+        image.contentMode = .scaleAspectFit
         return image
     }()
     

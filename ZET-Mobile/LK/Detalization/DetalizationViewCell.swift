@@ -17,7 +17,7 @@ class DetalizationViewCell: UITableViewCell {
     let title_info = UILabel()
     let icon_more = UIButton()
     let sendButton = UIButton()
-    
+    let titleRed = UILabel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,6 +34,7 @@ class DetalizationViewCell: UITableViewCell {
         contentView.addSubview(title_info)
         contentView.addSubview(icon_more)
         contentView.addSubview(sendButton)
+        contentView.addSubview(titleRed)
         
         contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 500)
         
@@ -52,8 +53,18 @@ class DetalizationViewCell: UITableViewCell {
         period.layer.cornerRadius = 16
         period.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         period.layer.borderWidth = 1
-        period.textColor = colorBlackWhite
+        period.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         
+        titleRed.text = defaultLocalizer.stringForKey(key: "Error_detail_period")
+        titleRed.numberOfLines = 0
+        titleRed.textColor = .red
+        titleRed.font = UIFont.systemFont(ofSize: 15)
+        titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
+        titleRed.textAlignment = .left
+        titleRed.frame = CGRect(x: 20, y: 100, width: UIScreen.main.bounds.size.width - 40, height: 20)
+        titleRed.autoresizesSubviews = true
+        titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        titleRed.isHidden = true
         
         title_commission.text = "Комиссия: 0.2 сомони"
         title_commission.numberOfLines = 0
@@ -69,14 +80,15 @@ class DetalizationViewCell: UITableViewCell {
         title_info.numberOfLines = 5
         title_info.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         title_info.font = UIFont(name: "", size: 10)
-        title_info.lineBreakMode = NSLineBreakMode.byWordWrapping
         title_info.textAlignment = .left
         title_info.frame = CGRect(x: 20, y: 130, width: UIScreen.main.bounds.size.width - 40, height: 90)
         title_info.autoresizesSubviews = true
         title_info.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        title_info.adjustsFontSizeToFitWidth = false
+        title_info.lineBreakMode = .byTruncatingTail
         
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 230, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 230, width: UIScreen.main.bounds.size.width  - 40, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "More_about_the_service"))  >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)

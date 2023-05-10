@@ -19,6 +19,9 @@ var colorGrayWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") ==
 // white view in light and #303133 in dark
 var contentColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor.white)
 
+// white view in light and #303133 in dark
+var alertColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.26, green: 0.26, blue: 0.26, alpha: 1) : UIColor.white)
+
 // #303133 in dark and #ECECEC
 var toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.20, green: 0.20, blue: 0.21, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
 

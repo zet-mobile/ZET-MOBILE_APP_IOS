@@ -8,6 +8,8 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Contacts
+import ContactsUI
 
 class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
 
@@ -51,10 +53,7 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         self.navigationController?.tabBarController?.tabBar.isHidden = false
         if to_phone != "" {
-            askFriendView.user_to_number.text = "+992 " + to_phone
-        }
-        else {
-            askFriendView.user_to_number.text = "+992 "
+            askFriendView.user_to_number.text = to_phone
         }
         
     }
@@ -119,49 +118,108 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField.tag == 1 {
-            askFriendView.user_to_number.text! = "+992 "
             askFriendView.titleRed.isHidden = true
             askFriendView.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             askFriendView.titleCount.frame.origin.y = 320
             askFriendView.count_transfer.frame.origin.y = 350
-            askFriendView.titleGray.frame.origin.y = 410
-            askFriendView.sendButton.frame.origin.y = 450
+            if askFriendView.titleRed2.isHidden == false {
+                askFriendView.titleRed2.frame.origin.y = 410
+                askFriendView.titleGray.frame.origin.y = 440
+                askFriendView.sendButton.frame.origin.y = 480
+            }
+            else {
+                askFriendView.titleRed2.frame.origin.y = 410
+                askFriendView.titleGray.frame.origin.y = 410
+                askFriendView.sendButton.frame.origin.y = 450
+            }
         }
         else if textField.tag == 2 {
             askFriendView.titleRed2.isHidden = true
             askFriendView.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            askFriendView.titleGray.frame.origin.y = 410
-            askFriendView.sendButton.frame.origin.y = 450
+            if askFriendView.titleRed.isHidden == true {
+                askFriendView.titleGray.frame.origin.y = 410
+                askFriendView.sendButton.frame.origin.y = 450
+            }
+            else {
+                askFriendView.titleGray.frame.origin.y = 440
+                askFriendView.sendButton.frame.origin.y = 480
+            }
         }
         
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         if textField.tag == 1 {
-            askFriendView.user_to_number.text! = "+992 " + to_phone
             askFriendView.user_to_number.textColor = colorBlackWhite
-            askFriendView.user_to_number.font = UIFont.systemFont(ofSize: 15)
-        }
-        else if textField.tag == 2 {
-           // auth_view.code_field.text! = user_code
-            //auth_view.code_field.textColor = .black
-            //auth_view.code_field.font = UIFont.systemFont(ofSize: 15)
         }
         
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        var amount = askFriendView.count_transfer.text! + string
+        askFriendView.titleRed.isHidden = true
+        askFriendView.user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        askFriendView.titleCount.frame.origin.y = 320
+        askFriendView.count_transfer.frame.origin.y = 350
+        if askFriendView.titleRed2.isHidden == false {
+            askFriendView.titleRed2.frame.origin.y = 410
+            askFriendView.titleGray.frame.origin.y = 440
+            askFriendView.sendButton.frame.origin.y = 480
+        }
+        else {
+            askFriendView.titleRed2.frame.origin.y = 410
+            askFriendView.titleGray.frame.origin.y = 410
+            askFriendView.sendButton.frame.origin.y = 450
+        }
+        
+        askFriendView.titleRed2.isHidden = true
+        askFriendView.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        if askFriendView.titleRed.isHidden == true {
+            askFriendView.titleGray.frame.origin.y = 410
+            askFriendView.sendButton.frame.origin.y = 450
+        }
+        else {
+            askFriendView.titleGray.frame.origin.y = 440
+            askFriendView.sendButton.frame.origin.y = 480
+        }
         
         let tag = textField.tag
+        var amount = ""
+        
+        let cursorPosition = askFriendView.count_transfer.offset(from: askFriendView.count_transfer.beginningOfDocument, to: askFriendView.count_transfer.selectedTextRange!.start)
+        
+        let cursorPosition2 = askFriendView.user_to_number.offset(from: askFriendView.user_to_number.beginningOfDocument, to: askFriendView.user_to_number.selectedTextRange!.start)
+        
+        if textField == askFriendView.count_transfer && string == "0" {
+           
+            if textField.text!.count == 0 || cursorPosition == 0 {
+                return false
+            }
+        }
+        
+        if cursorPosition == 0 && textField == askFriendView.count_transfer {
+            amount = string + askFriendView.count_transfer.text!
+        }
+        else {
+            amount = askFriendView.count_transfer.text! + string
+        }
+        
+        if tag == 1 {
+            to_phone = askFriendView.user_to_number.text! + string
+        }
+        else {
+            amount = askFriendView.count_transfer.text! + string
+        }
         
         if string  == "" {
-            if tag == 1 && askFriendView.user_to_number.text != "+992 " {
-                to_phone = (to_phone as String).substring(to: to_phone.index(before: to_phone.endIndex))
-            }
-            else if tag == 1 && askFriendView.user_to_number.text == "+992 " {
+            if cursorPosition2 <= 5 && textField == askFriendView.user_to_number {
                 return false
+            }
+            else if textField == askFriendView.user_to_number && askFriendView.user_to_number.text == "+992 " {
+                return false
+            }
+            else if textField == askFriendView.user_to_number && askFriendView.user_to_number.text != "+992 " {
+                to_phone = (to_phone as String).substring(to: to_phone.index(before: to_phone.endIndex))
             }
             else {
                 amount = (amount as String).substring(to: amount.index(before: amount.endIndex))
@@ -170,10 +228,6 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         
         if tag == 1 && string != "" && askFriendView.user_to_number.text!.count == 14 {
             return false
-        }
-        else if tag == 1 {
-            to_phone = to_phone + string
-            print(to_phone)
         }
         
         if tag == 2 && string != "" && askFriendView.count_transfer.text!.count == 9 {
@@ -219,8 +273,10 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         askFriendView.user_to_number.delegate = self
         askFriendView.count_transfer.delegate = self
         print(to_phone)
-        let contacts = askFriendView.user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
-        contacts.addTarget(self, action: #selector(openContacts), for: .touchUpInside)
+        DispatchQueue.main.async { [self] in
+            let contacts = askFriendView.user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
+            contacts.addTarget(self, action: #selector(openContacts), for: .touchUpInside)
+        }
         
         self.askFriendView.sendButton.addTarget(self, action:  #selector(translateTrafic), for: .touchUpInside)
         
@@ -241,12 +297,16 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
                   print(result)
                     DispatchQueue.main.async {
                         
-                        self.balance = String(result.subscriberBalance) + " с."
+                        self.balance = String(result.subscriberBalance) + " " + self.defaultLocalizer.stringForKey(key: "tjs")
                     }
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        setupView()
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -262,8 +322,43 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
     }
     
     @objc func openContacts() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(ContactsViewController(), animated: false)
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .authorized:
+               self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+               navigationController?.pushViewController(ContactsViewController(), animated: false)
+            
+        case .notDetermined:
+            CNContactStore().requestAccess(for: .contacts){succeeded, err in
+                guard err == nil && succeeded else{
+                  return
+                }
+                DispatchQueue.main.async {
+                    self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                    self.navigationController?.pushViewController(ContactsViewController(), animated: false)
+                }
+              }
+            default:
+            let alertController = UIAlertController (title: "Title", message: "Go to Settings?", preferredStyle: .alert)
+
+                let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                }
+                alertController.addAction(settingsAction)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+                alertController.addAction(cancelAction)
+
+                present(alertController, animated: true, completion: nil)
+            
+              print("Not handled")
+            }
         
     }
     
@@ -296,7 +391,7 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
         costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range)
         
-        var title_cost = " \(String(askFriendView.count_transfer.text ?? "")) с."  as NSString
+        var title_cost = " \(String(askFriendView.count_transfer.text ?? "")) " + defaultLocalizer.stringForKey(key: "tjs") as NSString
             
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
@@ -341,19 +436,43 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         alert.view.addSubview(view)
         
         if askFriendView.user_to_number.text != "+992 " && askFriendView.count_transfer.text != "" {
-            if Int(askFriendView.count_transfer.text!) ?? 0 > 5 {
+            if askFriendView.user_to_number.text!.count != 14 {
+                askFriendView.titleRed.isHidden = false
+                askFriendView.user_to_number.layer.borderColor = UIColor.red.cgColor
+                askFriendView.titleCount.frame.origin.y = 350
+                askFriendView.count_transfer.frame.origin.y = 380
+                askFriendView.titleGray.frame.origin.y = 440
+                askFriendView.sendButton.frame.origin.y = 480
+            }
+            else if Int(askFriendView.count_transfer.text!) ?? 0 > 5 {
                 askFriendView.titleRed2.isHidden = false
                 askFriendView.titleRed2.text = defaultLocalizer.stringForKey(key: "Error_maximum_limit")
                 askFriendView.count_transfer.layer.borderColor = UIColor.red.cgColor
-                askFriendView.titleGray.frame.origin.y = 440
-                askFriendView.sendButton.frame.origin.y = 480
+                if askFriendView.titleRed.isHidden == true {
+                    askFriendView.titleRed2.frame.origin.y = 410
+                    askFriendView.titleGray.frame.origin.y = 440
+                    askFriendView.sendButton.frame.origin.y = 480
+                }
+                else {
+                    askFriendView.titleRed2.frame.origin.y = 440
+                    askFriendView.titleGray.frame.origin.y = 480
+                    askFriendView.sendButton.frame.origin.y = 520
+                }
             }
             else if Int(askFriendView.count_transfer.text!) ?? 0 == 0 {
                 askFriendView.titleRed2.isHidden = false
                 askFriendView.titleRed2.text = defaultLocalizer.stringForKey(key: "input_correct_summa")
                 askFriendView.count_transfer.layer.borderColor = UIColor.red.cgColor
-                askFriendView.titleGray.frame.origin.y = 440
-                askFriendView.sendButton.frame.origin.y = 480
+                if askFriendView.titleRed.isHidden == true {
+                    askFriendView.titleRed2.frame.origin.y = 410
+                    askFriendView.titleGray.frame.origin.y = 440
+                    askFriendView.sendButton.frame.origin.y = 480
+                }
+                else {
+                    askFriendView.titleRed2.frame.origin.y = 440
+                    askFriendView.titleGray.frame.origin.y = 480
+                    askFriendView.sendButton.frame.origin.y = 520
+                }
             }
             else {
                 if askFriendView.user_to_number.text == UserDefaults.standard.string(forKey: "mobPhone") {
@@ -375,7 +494,8 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
             }
             
         }
-        else if askFriendView.user_to_number.text == "+992 " {
+        
+        if askFriendView.user_to_number.text == "+992 " {
             askFriendView.titleRed.isHidden = false
             askFriendView.user_to_number.layer.borderColor = UIColor.red.cgColor
             askFriendView.titleCount.frame.origin.y = 350
@@ -383,18 +503,28 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
             askFriendView.titleGray.frame.origin.y = 440
             askFriendView.sendButton.frame.origin.y = 480
         }
-        else if askFriendView.count_transfer.text == "" {
+       
+        if askFriendView.count_transfer.text == "" {
+            if askFriendView.titleRed.isHidden == true {
+                askFriendView.titleRed2.frame.origin.y = 410
+                askFriendView.titleGray.frame.origin.y = 440
+                askFriendView.sendButton.frame.origin.y = 480
+            }
+            else {
+                askFriendView.titleRed2.frame.origin.y = 440
+                askFriendView.titleGray.frame.origin.y = 480
+                askFriendView.sendButton.frame.origin.y = 520
+            }
             askFriendView.titleRed2.isHidden = false
             askFriendView.count_transfer.layer.borderColor = UIColor.red.cgColor
-            askFriendView.titleGray.frame.origin.y = 440
-            askFriendView.sendButton.frame.origin.y = 480
+            
         }
         
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -412,14 +542,14 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         if status == true {
             view.name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange_completed")
             view.image_icon.image = UIImage(named: "correct_alert")
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
         }
         
@@ -453,7 +583,10 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
         
         showActivityIndicator(uiView: view)
     
-        let parametr: [String: Any] = ["inPhoneNumber": String(askFriendView.user_to_number.text ?? ""), "value": Int(askFriendView.count_transfer.text ?? "0")]
+        to_phone = to_phone.replacingOccurrences(of: "+", with: "")
+        to_phone = to_phone.replacingOccurrences(of: " ", with: "")
+        
+        let parametr: [String: Any] = ["inPhoneNumber": to_phone, "value": Int(askFriendView.count_transfer.text ?? "0")]
         
         let client = APIClient.shared
             do{
@@ -472,9 +605,7 @@ class AskFriendViewController: UIViewController, UIScrollViewDelegate, UITextFie
                 onError: { error in
                    print(error.localizedDescription)
                     DispatchQueue.main.async { [self] in
-                        //requestAnswer(status: false, message: error.localizedDescription)
-                        print(error.localizedDescription)
-                        
+                        hideActivityIndicator(uiView: self.view)
                     }
                 },
                 onCompleted: { [self] in

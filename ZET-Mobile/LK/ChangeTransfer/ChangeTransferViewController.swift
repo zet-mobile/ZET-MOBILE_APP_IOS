@@ -10,6 +10,8 @@ import RxSwift
 import RxCocoa
 import MultiSlider
 import iOSDropDown
+import Alamofire
+import AlamofireImage
 
 struct exchangeData {
     let date_header: String
@@ -47,7 +49,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
     var toolbar = TarifToolbarView()
     var changeView = ChangeTransferView()
     let table = UITableView()
-    let table2 = UITableView()
+    var table2 = UITableView(frame: .zero, style: .grouped)
     
     var x_pozition = 20
     var y_pozition = 380
@@ -84,13 +86,23 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
     var value = ""
     var countTransfer = "0"
     
-    var detent = UISheetPresentationController.Detent.Identifier.medium
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
+        
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        
+        self.view.addSubview(toolbar)
+        
+        toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
+        toolbar.isUserInteractionEnabled = true
+        toolbar.addGestureRecognizer(tapGestureRecognizer)
+        
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
         
         sendRequest()
     }
@@ -111,12 +123,17 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
     }
     
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+        if let destinationViewController = navigationController?.viewControllers
+                                                                .filter(
+                                              {$0 is HomeViewController})
+                                                                .first {
+            navigationController?.popToViewController(destinationViewController, animated: true)
+        }
     }
     
     func setupView() {
         view.backgroundColor = toolbarColor
-  
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -128,28 +145,33 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 850)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        //toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         changeView = ChangeTransferView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
-        self.view.addSubview(toolbar)
+        
         scrollView.addSubview(changeView)
         
-        toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
+        /*toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
         
-        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")*/
         
+        for i in 0 ..< hot_services_data.count {
+            if hot_services_data[i][0] == "3" {
+                changeView.image_banner.af_setImage(withURL: URL(string: hot_services_data[i][3])!)
+            }
+        }
         self.changeView.balance.text = balance
+        
         if balances_data.count != 0 {
             changeView.rez1.text = balances_data[0][0]
             changeView.rez2.text = balances_data[0][1]
             changeView.rez3.text = balances_data[0][2]
             changeView.rez4.text = balances_data[0][3]
         }
-        
         
         changeView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez1.text!.count * 15) - 50, y: 0, width: (changeView.rez1.text!.count * 15), height: 45)
         changeView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez2.text!.count * 15) - 50, y: 47, width: (changeView.rez2.text!.count * 15), height: 45)
@@ -185,7 +207,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView {
+        if self.scrollView == scrollView || table == scrollView || table2 == scrollView  {
             if scrollView.contentOffset.y > changeView.tab1.frame.origin.y {
                 changeView.titleOne.isHidden = true
                 changeView.balance.isHidden = true
@@ -203,7 +225,6 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 changeView.balance.isHidden = false
                 changeView.image_banner.isHidden = false
                 changeView.white_view_back.isHidden = false
-                self.scrollView.contentOffset.y = 104
                 changeView.tab1.frame.origin.y = CGFloat(y_pozition)
                 changeView.tab2.frame.origin.y = CGFloat(y_pozition)
                 changeView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
@@ -212,6 +233,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                
             }
         }
+        
         
     }
     
@@ -243,7 +265,14 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                         
                         self.balances_data.append([String(result.balances.offnet.now) , String(result.balances.onnet.now), String(result.balances.mb.now), String(result.balances.sms.now)])
                         
-                        self.balance = String(result.subscriberBalance) + " с."
+                        if String(result.subscriberBalance) != "" {
+                            self.balance = String(format: "%g", Double(String(format: "%.2f", Double(String(result.subscriberBalance))!))!) + " " + self.defaultLocalizer.stringForKey(key: "tjs")
+                        }
+                        else {
+                            self.balance = String(result.subscriberBalance) + " " + self.defaultLocalizer.stringForKey(key: "tjs")
+                        }
+                        
+                      //  self.balance = String(result.subscriberBalance) + " " + self.defaultLocalizer.stringForKey(key: "tjs")
                         
                         if result.settings.count != 0 {
                             for i in 0 ..< result.settings.count {
@@ -273,7 +302,12 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupTabCollectionView()
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -289,7 +323,6 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
     
     func sendHistoryRequest() {
         HistoryData.removeAll()
-        
         let client = APIClient.shared
             do{
               try client.exchangeHistoryRequest().subscribe(
@@ -297,9 +330,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                   print(result)
                     DispatchQueue.main.async { [self] in
                         
-                        if result.history?.count != 0 {
-                            
-                            print(result.history!.count)
+                        if result.history?.count != nil {
                             for i in 0 ..< result.history!.count {
                                 
                                 var tableData = [String]()
@@ -315,15 +346,26 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                                 var tableData10 = [String]()
                                 var tableData11 = [String]()
                                 var tableData12 = [String]()
-                               
+                                
                                 for j in 0 ..< result.history![i].histories.count {
                                     
                                     tableData.append(String(result.history![i].histories[j].phoneNumber))
                                     tableData2.append(String(result.history![i].histories[j].status))
                                     tableData3.append(String(result.history![i].histories[j].date))
                                     tableData4.append(String(result.history![i].histories[j].id))
-                                    tableData5.append(String(result.history![i].histories[j].volumeA))
-                                    tableData6.append(String(result.history![i].histories[j].volumeB))
+                                    
+                                    if (result.history![i].histories[j].volumeA as? Int) != nil {
+                                        tableData5.append(String(result.history![i].histories[j].volumeA as! Int))
+                                    } else {
+                                        tableData5.append(String(result.history![i].histories[j].volumeA as! Double))
+                                    }
+                                        
+                                    if (result.history![i].histories[j].volumeB as? Int) != nil {
+                                        tableData6.append(String(result.history![i].histories[j].volumeB as! Int))
+                                    } else {
+                                        tableData6.append(String(result.history![i].histories[j].volumeB as! Double))
+                                    }
+                                        
                                     tableData7.append(String(result.history![i].histories[j].unitA))
                                     tableData8.append(String(result.history![i].histories[j].unitB))
                                     tableData9.append(String(result.history![i].histories[j].price))
@@ -332,10 +374,13 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                                     tableData12.append(String(result.history![i].histories[j].transactionId))
                                 }
                                 
-                                HistoryData.append(exchangeData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData2, date: tableData3, id: tableData4, volumeA: tableData5, volumeB: tableData6, unitA: tableData7, unitB: tableData8, price: tableData9, exchangeType: tableData10, statusId: tableData11, transactionId: tableData12))
+                                if String(result.history![i].date) != "" {
+                                    
+                                    HistoryData.append(exchangeData(date_header: String(result.history![i].date), phoneNumber: tableData, status: tableData2, date: tableData3, id: tableData4, volumeA: tableData5, volumeB: tableData6, unitA: tableData7, unitB: tableData8, price: tableData9, exchangeType: tableData10, statusId: tableData11, transactionId: tableData12))
+                                }
                             }
-                            
                         }
+                        
                         else {
                             print("empty history")
                             DispatchQueue.main.async {
@@ -349,7 +394,10 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -395,8 +443,8 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         view.name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
         
        if exchangeType == "1" {
-           view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
-           view.image_icon2.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "min_transfer_w") : UIImage(named: "min_transfer"))
+           view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_black") : UIImage(named: "sms_white"))
+           view.image_icon2.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
         }
         else if exchangeType == "2" {
             view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "min_transfer_w") : UIImage(named: "min_transfer"))
@@ -419,10 +467,10 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
             title_cost = " \(String(cell.count_transfer.text ?? "")) \(defaultLocalizer.stringForKey(key: "SMS"))" as NSString
         }
         else if exchangeType == "2" {
-            title_cost = " \(String(cell.count_transfer.text ?? "")) мин" as NSString
+            title_cost = " \(String(cell.count_transfer.text ?? ""))" + defaultLocalizer.stringForKey(key: "minutes") as NSString
         }
         else if exchangeType == "3" {
-            title_cost = " \(String(cell.count_transfer.text ?? "")) мб" as NSString
+            title_cost = " \(String(cell.count_transfer.text ?? ""))" + defaultLocalizer.stringForKey(key: "megabyte") as NSString
         }
         let titleString = NSMutableAttributedString.init(string: title_cost as String)
         let range2 = (title_cost).range(of: title_cost as String)
@@ -432,21 +480,23 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         view.value_title.attributedText = costString
         
         
-        let cost2: NSString = "на" as NSString
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "on_the") as NSString
         let range2_1 = (cost2).range(of: cost2 as String)
         let costString2 = NSMutableAttributedString.init(string: cost2 as String)
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
+        cell.count_transfer.text = String(Int(cell.count_transfer.text ?? "1") ?? 1)
+        
         var title_cost2 = " \(String(cell.count_to_transfer.text ?? "")) " as NSString
         if exchangeType == "1" {
-            title_cost2 = " \(String(cell.count_to_transfer.text ?? "")) мб" as NSString
+            title_cost2 = " \(String(cell.count_to_transfer.text ?? ""))" + defaultLocalizer.stringForKey(key: "megabyte") as NSString
         }
         else if exchangeType == "2" {
-            title_cost2 = " \(String(cell.count_to_transfer.text ?? "")) мб" as NSString
+            title_cost2 = " \(String(cell.count_to_transfer.text ?? ""))"  + defaultLocalizer.stringForKey(key: "megabyte") as NSString
         }
         else if exchangeType == "3" {
-            title_cost2 = " \(String(cell.count_to_transfer.text ?? "")) мин" as NSString
+            title_cost2 = " \(String(cell.count_to_transfer.text ?? ""))"  + defaultLocalizer.stringForKey(key: "minutes") as NSString
         }
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
@@ -477,24 +527,46 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         costString3.append(titleString3)
         view.cost_title.attributedText = costString3
         
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
-        view.name.isUserInteractionEnabled = true
-        view.name.addGestureRecognizer(tapGestureRecognizer)
-        
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Exchange"), for: .normal)
+        view.cancel.addTarget(self, action: #selector(cancelDialog), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
+       if cell.count_transfer.text == "" {
+            cell.titleRed.text = defaultLocalizer.stringForKey(key: "error_trafic_count")
+            cell.titleRed.isHidden = false
+            cell.count_transfer.layer.borderColor = UIColor.red.cgColor
+            cell.sendButton.isEnabled = false
+            cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        }
+        else if cell.count_transfer.text != ""{
+            if Double(cell.count_transfer.text ?? "0")! < Double(settings_data[trasfer_type_choosed_id][0])! {
+                cell.titleRed.text = defaultLocalizer.stringForKey(key: "minimum_limit:") + " " + settings_data[trasfer_type_choosed_id][0]
+                cell.titleRed.isHidden = false
+                cell.count_transfer.layer.borderColor = UIColor.red.cgColor
+                cell.sendButton.isEnabled = false
+                cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+             
+            }
+            else if Double(cell.count_transfer.text ?? "0")! > Double(settings_data[trasfer_type_choosed_id][1])!  {
+                cell.titleRed.text = defaultLocalizer.stringForKey(key: "maximum_limit:") + " " + String(Int(settings_data[trasfer_type_choosed_id][1])!)
+                cell.titleRed.isHidden = false
+                cell.count_transfer.layer.borderColor = UIColor.red.cgColor
+                cell.sendButton.isEnabled = false
+                cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            }
+            else {
+                present(alert, animated: true, completion: nil)
+            }
+        }
         
-        present(alert, animated: true, completion: nil)
         
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -509,29 +581,53 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                                                      constant: newWidth)
         alert.view.addConstraint(widthConstraint)
         
-        let view = AlertView()
+        let view = AlertView3()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 360)
         view.layer.cornerRadius = 20
+        
+        
+        
         if status == true {
             view.name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange_completed")
-            view.image_icon.image = UIImage(named: "correct_alert")
+            view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+            view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+            
+            if exchangeType == "1" {
+                view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_black") : UIImage(named: "sms_white"))
+                view.image_icon2.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
+             }
+             else if exchangeType == "2" {
+                 view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "min_transfer_w") : UIImage(named: "min_transfer"))
+                 view.image_icon2.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
+             }
+             else if exchangeType == "3" {
+                 view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
+                 view.image_icon2.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "min_transfer_w") : UIImage(named: "min_transfer"))
+             }
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
+            view.cancel.addTarget(self, action: #selector(cancelDialog), for: .touchUpInside)
+            view.ok.addTarget(self, action: #selector(cancelDialog), for: .touchUpInside)
         }
         
-        view.name_content.text = "\(message)"
+        view.value_title.text = "\(message)"
+        view.value_title.numberOfLines = 4
+        view.value_title.textColor = colorBlackWhite
+        view.value_title.font = UIFont.systemFont(ofSize: 17)
+        view.value_title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        view.value_title.textAlignment = .center
+        view.value_title.frame = CGRect(x: 20, y: 188, width: UIScreen.main.bounds.size.width - 80, height: 60)
+        
+        
+        view.ok.frame = CGRect(x: 20, y: 275, width: UIScreen.main.bounds.size.width - 80, height: 45)
         view.ok.setTitle("OK", for: .normal)
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
-        view.name.isUserInteractionEnabled = true
-        view.name.addGestureRecognizer(tapGestureRecognizer)
         
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        
+        view.cancel.frame.origin.x = UIScreen.main.bounds.size.width - 80
+        view.name.frame.size.width = UIScreen.main.bounds.size.width - 80
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
@@ -541,20 +637,25 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         
     }
     
+    @objc func cancelDialog() {
+        alert.dismiss(animated: true, completion: nil)
+        hideActivityIndicator(uiView: view)
+    }
+    
     @objc func dismissDialog(_ sender: UIButton) {
-        print("hello")
+        
         sender.showAnimation { [self] in
             alert.dismiss(animated: true, completion: nil)
-            hideActivityIndicator(uiView: view)
         }
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(ChangeTransferViewController(), animated: false)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation { [self] in
-            alert.dismiss(animated: true, completion: nil)
-            showActivityIndicator(uiView: view)
-        }
+        alert.dismiss(animated: true, completion: nil)
+        showActivityIndicator(uiView: view)
         
         print(sender.tag)
         let indexPath = IndexPath(row: 0, section: 0)
@@ -581,9 +682,9 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                  onError: { [self] error in
                      print("and here")
                      DispatchQueue.main.async {
-                         requestAnswer(status: false, message: error.localizedDescription)
+                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                          print(error.localizedDescription)
-                         
+                         self.hideActivityIndicator(uiView: self.view)
                      }
                      
                  },
@@ -602,7 +703,6 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         print(settings_data[trasfer_type_choosed_id][11])
         
         detailViewController.more_view.content.text = settings_data[trasfer_type_choosed_id][15]
-        detailViewController.more_view.image.image = UIImage(named: "transfer")
         detailViewController.more_view.title_top.text = defaultLocalizer.stringForKey(key: "Traffic_exchange")
        
         detailViewController.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
@@ -616,7 +716,7 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         if #available(iOS 15.0, *) {
             if let sheet = nav.sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
-                sheet.selectedDetentIdentifier = detent
+                sheet.selectedDetentIdentifier = .medium
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
 
             }
@@ -637,8 +737,6 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
         let cell = table.cellForRow(at: indexPath) as! ChangeTransferTableViewCell
         cell.count_transfer.resignFirstResponder()
         cell.count_to_transfer.resignFirstResponder()
-        cell.sendButton.isEnabled = true
-        cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
     }
 }
 
@@ -660,7 +758,7 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
         if indexPath.row == 0 {
             table.register(ChangeTransferTableViewCell.self, forCellReuseIdentifier: "cell_transfer")
             table.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - 150)
+            table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
             table.delegate = self
             table.dataSource = self
             table.rowHeight = 750
@@ -678,20 +776,18 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
         else {
             table2.register(TraficHistoryViewCell.self, forCellReuseIdentifier: "history_transfer")
             table2.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            table2.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table2.delegate = self
             table2.dataSource = self
-            table2.rowHeight = 120
-            table2.estimatedRowHeight = 120
+            table2.rowHeight = 150
+            table2.estimatedRowHeight = 150
             table2.alwaysBounceVertical = false
             table2.separatorStyle = .none
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
             
-           /* if HistoryData.count == 1 {
-                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: """
-                Вы еще не воспользовались услугой "Обмен трафика"
-                """)
+           /* if HistoryData.count == 0 {
+                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: table2.frame.width, height: table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "not_used_exchange"))
                 table2.separatorStyle = .none
                 table2.backgroundView = emptyView
             }*/
@@ -702,10 +798,6 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
-    }
- 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
@@ -719,6 +811,24 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
                 changeView.tab2.textColor = colorBlackWhite
                 changeView.tab1Line.backgroundColor = .clear
                 changeView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+          }
+       }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print(indexPath.row)
+        if collectionView == TabCollectionView {
+            if indexPath.row == 0 {
+                changeView.tab1.textColor = .gray
+                changeView.tab2.textColor = colorBlackWhite
+                changeView.tab1Line.backgroundColor = .clear
+                changeView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+          }
+         else {
+             changeView.tab1.textColor = colorBlackWhite
+             changeView.tab2.textColor = .gray
+             changeView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+             changeView.tab2Line.backgroundColor = .clear
           }
        }
     }
@@ -754,6 +864,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         }
     }
     
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
         print(HistoryData[section].date_header)
@@ -775,25 +886,34 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == table {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell_transfer", for: indexPath) as! ChangeTransferTableViewCell
-           // cell.count_to_transfer.delegate = self
+            cell.count_to_transfer.delegate = self
             cell.count_transfer.delegate = self
            // cell.count_to_transfer.isUserInteractionEnabled = false
             
-            trasfer_type_choosed = units_data[0].unitName
-            to_trasfer_type_choosed = units_data[0].unitB_unitName[0]
-            exchangeType = units_data[0].exchangeType[0]
-            trasfer_type_choosed_id = 0
-            value = "1 " +  "c."
-            countTransfer = String(Int(Double(settings_data[0][0])!))
+            if  units_data.count != 0 {
+                trasfer_type_choosed = units_data[0].unitName
+                to_trasfer_type_choosed = units_data[0].unitB_unitName[0]
+                exchangeType = units_data[0].exchangeType[0]
+                trasfer_type_choosed_id = 0
+                value = "1 " + defaultLocalizer.stringForKey(key: "tjs")
+                countTransfer = String(Int(Double(settings_data[0][0])!))
+                
+                cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
+                cell.slider.minimumValue = CGFloat(Double(settings_data[0][0])!)
+                cell.slider.maximumValue = CGFloat(Double(settings_data[0][1])!)
+                cell.user_to_number.text = trasfer_type_choosed
+                cell.type_transfer.text = to_trasfer_type_choosed
+                cell.count_transfer.text = String(Int(Double(settings_data[0][0])!))
+                cell.count_to_transfer.text = String(Int(Double(cell.slider.value[0]) * Double(settings_data[0][12])!))
+                cell.title_info.text = settings_data[0][15]
+                
+                
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
+                cell.icon_more.isUserInteractionEnabled = true
+                cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
             
-            cell.slider.value = [CGFloat(Double(settings_data[0][0])!)]
-            cell.slider.minimumValue = CGFloat(Double(settings_data[0][0])!)
-            cell.slider.maximumValue = CGFloat(Double(settings_data[0][1])!)
-            cell.user_to_number.text = trasfer_type_choosed
-            cell.type_transfer.text = to_trasfer_type_choosed
-            cell.count_transfer.text = String(Int(Double(settings_data[0][0])!))
-            cell.count_to_transfer.text = String(Int(Double(cell.slider.value[0]) * Double(settings_data[0][12])!))
-            
+                cell.sendButton.addTarget(self, action:  #selector(translateTrafic), for: .touchUpInside)
+            }
             
             for i in 0 ..< units_data.count {
                 cell.user_to_number.optionArray.append(units_data[i].unitName)
@@ -807,6 +927,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
                 trasfer_type_choosed_id = index
                 to_trasfer_type_choosed = units_data[index].unitB_unitName[0]
                 exchangeType = units_data[index].exchangeType[0]
+                value = "1 " + defaultLocalizer.stringForKey(key: "tjs")
                 
                 for i in 0 ..< settings_data.count {
                     if exchangeType == settings_data[i][14] {
@@ -814,9 +935,15 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
                         cell.slider.maximumValue = CGFloat(Double(settings_data[i][1])!)
                         cell.slider.value = [CGFloat(Double(settings_data[i][0])!)]
                         cell.count_transfer.text = String(Int((cell.slider.value[0])))
-                        cell.count_to_transfer.text = String(Int(cell.slider.value[0]) * Int(Double(settings_data[i][12])!))
+                        cell.count_to_transfer.text = String(Int(Double(settings_data[index][0])! * Double(settings_data[index][12])!))
+                        
+                        cell.titleRed.isHidden = true
+                        cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+                        cell.sendButton.isEnabled = true
+                        cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                         break
                     }
+                
                     
                 }
                 
@@ -829,6 +956,21 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
                     cell.type_transfer.optionArray.append(units_data[trasfer_type_choosed_id].unitB_unitName[j])
                     cell.type_transfer.optionIds?.append(Int(units_data[trasfer_type_choosed_id].exchangeType[j])!)
                 }
+                
+                let cost: NSString = defaultLocalizer.stringForKey(key: "Commission") as NSString
+                let range = (cost).range(of: cost as String)
+                let costString = NSMutableAttributedString.init(string: cost as String)
+                costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
+                costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
+                
+                var title_cost = "1 " + defaultLocalizer.stringForKey(key: "tjs") as NSString
+                
+                let titleString = NSMutableAttributedString.init(string: title_cost as String)
+                let range2 = (title_cost).range(of: title_cost as String)
+                titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2)
+                titleString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)], range: range2)
+                costString.append(titleString)
+                cell.title_commission.attributedText = costString
             }
             
             cell.type_transfer.didSelect { [self] (selectedText, index, id) in
@@ -842,6 +984,11 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
                         cell.slider.value = [CGFloat(Double(settings_data[i][0])!)]
                         cell.count_transfer.text = String(Int((cell.slider.value[0])))
                         cell.count_to_transfer.text = String(Int(cell.slider.value[0]) * Int(Double(settings_data[i][12])!))
+                        
+                        cell.titleRed.isHidden = true
+                        cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+                        cell.sendButton.isEnabled = true
+                        cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                         break
                     }
                 }
@@ -853,7 +1000,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], range: range)
             
-            var title_cost = "1 c." as NSString
+            var title_cost = value as NSString
             
             let titleString = NSMutableAttributedString.init(string: title_cost as String)
             let range2 = (title_cost).range(of: title_cost as String)
@@ -862,13 +1009,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             costString.append(titleString)
             cell.title_commission.attributedText = costString
             
-        
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openCondition))
-            cell.icon_more.isUserInteractionEnabled = true
-            cell.icon_more.addGestureRecognizer(tapGestureRecognizer)
-            
             cell.slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
-            cell.sendButton.addTarget(self, action:  #selector(translateTrafic), for: .touchUpInside)
             
             let bgColorView = UIView()
             bgColorView.backgroundColor = .clear
@@ -879,9 +1020,9 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "history_transfer", for: indexPath) as! TraficHistoryViewCell
          
-            cell.titleOne.text = HistoryData[indexPath.section].volumeA[indexPath.row] + " " + HistoryData[indexPath.section].unitA[indexPath.row] + " на " + HistoryData[indexPath.section].volumeB[indexPath.row] + " " + HistoryData[indexPath.section].unitB[indexPath.row]
+            cell.titleOne.text = HistoryData[indexPath.section].volumeA[indexPath.row] + " " + HistoryData[indexPath.section].unitA[indexPath.row] + " " + defaultLocalizer.stringForKey(key: "on_the") + " " + HistoryData[indexPath.section].volumeB[indexPath.row] + " " + HistoryData[indexPath.section].unitB[indexPath.row]
             
-            cell.titleThree.text = String(format: "%g", Double(String(format: "%.2f", Double(HistoryData[indexPath.section].price[indexPath.row])!))!) + " c."
+            cell.titleThree.text = String(format: "%g", Double(String(format: "%.2f", Double(HistoryData[indexPath.section].price[indexPath.row])!))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
             
             let dateFormatter1 = DateFormatter()
             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
@@ -890,27 +1031,40 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             
             cell.titleFour.text = dateFormatter1.string(from: date!)
             
-            print(Int(UIScreen.main.bounds.size.width))
-            print((cell.titleFour.text!.count * 15) - 30)
+            cell.titleOne.frame = CGRect(x: 80, y: 10, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 130, height: 50)
             
-            cell.titleOne.frame = CGRect(x: 80, y: 10, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 50)
             cell.titleTwo.frame = CGRect(x: 80, y: 60, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 60)
             
-            print(cell.titleTwo.frame.size.width)
             cell.titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleThree.text!.count * 15) - 30, y: 10, width: (cell.titleThree.text!.count * 15), height: 50)
             
             cell.titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 30, y: 60, width: (cell.titleFour.text!.count * 10), height: 60)
             
-            if HistoryData[indexPath.section].statusId[indexPath.row] != "200" {
+            if HistoryData[indexPath.section].statusId[indexPath.row] != "45" {
                 cell.titleTwo.textColor = .red
                 cell.titleTwo.text = "✖︎ " + HistoryData[indexPath.section].status[indexPath.row]
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Transer_Traffic_Default_dark") : UIImage(named: "Transer_Traffic_Default"))
             }
             else {
                 cell.titleTwo.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
                 cell.titleTwo.text = "✓ " + HistoryData[indexPath.section].status[indexPath.row]
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Tranfer_Traffic_Active_1_dark") : UIImage(named: "Tranfer_Traffic_Active_1"))
             }
             
-            if HistoryData[indexPath.section].exchangeType[indexPath.row] == "1" {
+            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
+            cell.titleTwo.numberOfLines = 0
+            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.titleTwo.sizeToFit()
+          
+            cell.titleTwo.frame.origin.y = 60
+            
+            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
+            
+            cell.titleFour.frame.size.height =  cell.titleTwo.frame.size.height
+            
+            cell.frame.size.height = cell.titleTwo.frame.height + 70
+            table2.rowHeight = cell.titleTwo.frame.height + 70
+            
+           /* if HistoryData[indexPath.section].exchangeType[indexPath.row] == "1" {
                 cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
              }
              else if HistoryData[indexPath.section].exchangeType[indexPath.row] == "2" {
@@ -918,7 +1072,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
              }
              else if HistoryData[indexPath.section].exchangeType[indexPath.row] == "3" {
                  cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
-             }
+             }*/
             
             let bgColorView = UIView()
             bgColorView.backgroundColor = .clear
@@ -931,6 +1085,12 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
     @objc func sliderChanged(_ slider: MultiSlider) {
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = table.cellForRow(at: indexPath) as! ChangeTransferTableViewCell
+        
+        cell.sendButton.isEnabled = true
+        cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+        cell.titleRed.isHidden = true
+        cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        
         var index = 0
         
         for i in 0 ..< settings_data.count {
@@ -941,40 +1101,40 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         }
         
         cell.count_transfer.text = String(Int(slider.value[0]))
-        cell.count_to_transfer.text = String(format: "%g", Double(String(format: "%.2f", Double(slider.value[0]) * Double(settings_data[index][12])!))!)
+        cell.count_to_transfer.text = String(format: "%g", Double(String(format: "%.2f", Double(slider.value[0]) * Double(settings_data[trasfer_type_choosed_id][12])!))!)
         
         countTransfer = String(Int(slider.value[0]))
         
-        if Double(slider.value[0]) >= Double(settings_data[index][0])! && Double(slider.value[0]) <= Double(settings_data[index][2])! {
+        if Double(slider.value[0]) >= Double(settings_data[trasfer_type_choosed_id][0])! && Double(slider.value[0]) <= Double(settings_data[trasfer_type_choosed_id][2])! {
             
             if Double(settings_data[index][11])! > 0
             {
-                let discountPrice = (Double(settings_data[index][4])! * Double(settings_data[index][11])!) / 100
+                let discountPrice = (Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[index][11])!) / 100
                 
-                let finallCost = (Double(settings_data[index][4])! - discountPrice)
+                let finallCost = (Double(settings_data[trasfer_type_choosed_id][4])! - discountPrice)
             
-                value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
+                value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
             }
             else
             {
-                value = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[index][3])!))!) + " c."
+                value = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[trasfer_type_choosed_id][3])!))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
             }
 
         }
-        else if Double(slider.value[0]) > Double(settings_data[index][2])! && Double(slider.value[0]) <= Double(settings_data[index][1])! {
+        else if Double(slider.value[0]) > Double(settings_data[trasfer_type_choosed_id][2])! && Double(slider.value[0]) <= Double(settings_data[trasfer_type_choosed_id][1])! {
 
-            if Double(settings_data[index][11])! > 0
+            if Double(settings_data[trasfer_type_choosed_id][11])! > 0
             {
-                let firstPrice = Double(slider.value[0]) * Double(settings_data[index][4])! * Double(settings_data[index][5])!
-                let discountPrice = (firstPrice * Double(settings_data[index][11])!) / 100
+                let firstPrice = Double(slider.value[0]) * Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[trasfer_type_choosed_id][5])!
+                let discountPrice = (firstPrice * Double(settings_data[trasfer_type_choosed_id][11])!) / 100
                 let finallCost = (firstPrice - discountPrice)
                 
-                value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
+                value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " "  + defaultLocalizer.stringForKey(key: "tjs")
                
             }
             else
             {
-                value = String(format: "%g", Double(String(format: "%.2f", Double(slider.value[0]) * Double(settings_data[index][4])! * Double(settings_data[index][5])!))!) + " c."
+                value = String(format: "%g", Double(String(format: "%.2f", Double(slider.value[0]) * Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[trasfer_type_choosed_id][5])!))!) + " "  + defaultLocalizer.stringForKey(key: "tjs")
             }
         }
         
@@ -1002,6 +1162,16 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         cell.titleRed.isHidden = true
         cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+        
+        if textField == cell.count_to_transfer {
+            print("hello san francisco")
+            cell.count_to_transfer.resignFirstResponder()
+        }
+        
+        if units_data.count == 0 {
+            cell.count_transfer.resignFirstResponder()
+        }
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -1011,6 +1181,7 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         cell.sendButton.isEnabled = true
         cell.sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         cell.titleRed.isHidden = true
+        cell.count_transfer.text = String(Int(cell.count_transfer.text ?? "1") ?? 1)
         cell.count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
     }
     
@@ -1031,13 +1202,8 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         var return_status = true
         let indexPath = IndexPath(row: 0, section: 0)
         let cell = table.cellForRow(at: indexPath) as! ChangeTransferTableViewCell
-        var amount = cell.count_transfer.text! + string
+        var amount = ""
         var index = 0
-        
-        /*if textField == cell.count_to_transfer {
-            dismissKeyboard()
-            return false
-        }*/
         
         for i in 0 ..< settings_data.count {
             if Int(exchangeType) == i {
@@ -1046,21 +1212,43 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             }
         }
         
+        let cursorPosition = cell.count_transfer.offset(from: cell.count_transfer.beginningOfDocument, to: cell.count_transfer.selectedTextRange!.start)
+        
+        if textField == cell.count_transfer && string == "0" {
+           
+            if textField.text!.count == 0 || cursorPosition == 0 {
+                return false
+            }
+        }
+        
+        if cursorPosition == 0 && textField == cell.count_transfer {
+            amount = string + cell.count_transfer.text!
+        }
+        else {
+            amount = cell.count_transfer.text! + string
+        }
+        
+        print("cursorPosition")
+        print(cursorPosition)
+        
         if string  == "" {
-            amount = (amount as String).substring(to: amount.index(before: amount.endIndex))
+            var i = amount.index(amount.startIndex, offsetBy: cursorPosition - 1)
+            amount.remove(at: i)
+            amount = String(Int(amount ?? "1") ?? 1)
         }
         
         if amount != "" {
-            if Double(amount)! < Double(settings_data[index][0])! {
-                cell.titleRed.text = defaultLocalizer.stringForKey(key: "minimum_limit:") + " " + settings_data[index][0]
+            print(amount)
+            if Double(amount)! < Double(settings_data[trasfer_type_choosed_id][0])! {
+                cell.titleRed.text = defaultLocalizer.stringForKey(key: "minimum_limit:") + " " + settings_data[trasfer_type_choosed_id][0]
                 cell.titleRed.isHidden = false
                 cell.count_transfer.layer.borderColor = UIColor.red.cgColor
                 cell.sendButton.isEnabled = false
                 cell.sendButton.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
                 return_status = true
             }
-            else if string != "" && Double(amount)! > Double(settings_data[index][1])!  {
-                cell.titleRed.text = defaultLocalizer.stringForKey(key: "maximum_limit:") + " " + String(Int(settings_data[index][1])!)
+            else if string != "" && Double(amount)! > Double(settings_data[trasfer_type_choosed_id][1])!  {
+                cell.titleRed.text = defaultLocalizer.stringForKey(key: "maximum_limit:") + " " + String(Int(settings_data[trasfer_type_choosed_id][1])!)
                 cell.titleRed.isHidden = false
                 cell.count_transfer.layer.borderColor = UIColor.red.cgColor
                 cell.sendButton.isEnabled = false
@@ -1078,38 +1266,38 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
         
         if amount != "" {
             cell.slider.value[0] = CGFloat(Double(amount)!)
-            cell.count_to_transfer.text = String(format: "%g", Double(String(format: "%.2f", Double(cell.slider.value[0]) * Double(settings_data[index][12])!))!)
+            cell.count_to_transfer.text = String(format: "%g", Double(String(format: "%.2f", Double(cell.slider.value[0]) * Double(settings_data[trasfer_type_choosed_id][12])!))!)
             
-            if Double(amount)! >= Double(settings_data[index][0])! && Double(amount)! <= Double(settings_data[index][2])! {
+            if Double(amount)! >= Double(settings_data[trasfer_type_choosed_id][0])! && Double(amount)! <= Double(settings_data[trasfer_type_choosed_id][2])! {
                 
-                if Double(settings_data[index][11])! > 0
+                if Double(settings_data[trasfer_type_choosed_id][11])! > 0
                 {
-                    let discountPrice = (Double(settings_data[index][4])! * Double(settings_data[index][11])!) / 100
+                    let discountPrice = (Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[trasfer_type_choosed_id][11])!) / 100
                     
-                    let finallCost = (Double(settings_data[index][4])! - discountPrice)
+                    let finallCost = (Double(settings_data[trasfer_type_choosed_id][4])! - discountPrice)
                 
-                    value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
+                    value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
                 }
                 else
                 {
-                    value = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[index][3])!))!) + " c."
+                    value = String(format: "%g", Double(String(format: "%.2f", Double(settings_data[index][3])!))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
                 }
 
             }
-            else if Double(amount)! > Double(settings_data[index][2])! && Double(amount)! <= Double(settings_data[index][1])! {
+            else if Double(amount)! > Double(settings_data[trasfer_type_choosed_id][2])! && Double(amount)! <= Double(settings_data[trasfer_type_choosed_id][1])! {
 
-                if Double(settings_data[index][11])! > 0
+                if Double(settings_data[trasfer_type_choosed_id][11])! > 0
                 {
-                    let firstPrice = Double(cell.slider.value[0]) * Double(settings_data[index][4])! * Double(settings_data[index][5])!
-                    let discountPrice = (firstPrice * Double(settings_data[index][11])!) / 100
+                    let firstPrice = Double(cell.slider.value[0]) * Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[trasfer_type_choosed_id][5])!
+                    let discountPrice = (firstPrice * Double(settings_data[trasfer_type_choosed_id][11])!) / 100
                     let finallCost = (firstPrice - discountPrice)
                     
-                    value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " c."
+                    value = String(format: "%g", Double(String(format: "%.2f", finallCost))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
                    
                 }
                 else
                 {
-                    value = String(format: "%g", Double(String(format: "%.2f", Double(amount)! * Double(settings_data[index][4])! * Double(settings_data[index][5])!))!) + " c."
+                    value = String(format: "%g", Double(String(format: "%.2f", Double(amount)! * Double(settings_data[trasfer_type_choosed_id][4])! * Double(settings_data[trasfer_type_choosed_id][5])!))!) + " " + defaultLocalizer.stringForKey(key: "tjs")
                 }
             }
             

@@ -53,13 +53,13 @@ struct history_exchange_datas: Decodable {
     let histories: [histories_exchange_data]
 }
 
-struct histories_exchange_data: Decodable {
+struct histories_exchange_data {
     let phoneNumber: String
     let status: String
     let date: String
     let id: Int
-    let volumeA: Int
-    let volumeB: Int
+    let volumeA: Any?
+    let volumeB: Any?
     let unitA: String
     let unitB: String
     let price: Double
@@ -86,6 +86,54 @@ extension ExchangeDataHistory: Decodable {
         }
   
     
+    }
+}
+
+extension histories_exchange_data: Decodable {
+    
+    private enum histories_exchange_dataCodingKeys: String, CodingKey {
+        case phoneNumber = "phoneNumber"
+        case status = "status"
+        case date = "date"
+        case id = "id"
+        case volumeA = "volumeA"
+        case volumeB = "volumeB"
+        case unitA = "unitA"
+        case unitB = "unitB"
+        case price = "price"
+        case exchangeType = "exchangeType"
+        case statusId = "statusId"
+        case transactionId = "transactionId"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: histories_exchange_dataCodingKeys.self)
+      
+        phoneNumber = try container.decode(String.self, forKey: .phoneNumber)
+        status = try container.decode(String.self, forKey: .status)
+        date = try container.decode(String.self, forKey: .date)
+        id = try container.decode(Int.self, forKey: .id)
+        
+        do {
+            volumeA = try container.decode(Int.self, forKey: .volumeA)
+        }
+        catch {
+            volumeA = try container.decode(Double?.self, forKey: .volumeA)
+        }
+  
+        do {
+            volumeB = try container.decode(Int.self, forKey: .volumeB)
+        }
+        catch {
+            volumeB = try container.decode(Double?.self, forKey: .volumeB)
+        }
+        
+        unitA = try container.decode(String.self, forKey: .unitA)
+        unitB = try container.decode(String.self, forKey: .unitB)
+        price = try container.decode(Double.self, forKey: .price)
+        exchangeType = try container.decode(Int.self, forKey: .exchangeType)
+        statusId = try container.decode(Int.self, forKey: .statusId)
+        transactionId = try container.decode(Int.self, forKey: .transactionId)
     }
 }
 

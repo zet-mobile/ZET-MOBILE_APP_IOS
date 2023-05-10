@@ -35,8 +35,8 @@ class ContactsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //showActivityIndicator(uiView: self.view)
+        
+        showActivityIndicator(uiView: self.view)
         view.backgroundColor = contentColor
         fetchContacts()
         
@@ -90,7 +90,7 @@ class ContactsViewController: UIViewController {
                             
                         }
                         
-                        if  number.prefix(3) == "911" || number.prefix(3) == "915" || number.prefix(3) == "917" || number.prefix(3) == "919" || number.prefix(2) == "80" || number.prefix(2) == "40"  {
+                        if (number.prefix(3) == "911" || number.prefix(3) == "915" || number.prefix(3) == "917" || number.prefix(3) == "919" || number.prefix(2) == "80" || number.prefix(2) == "40") && number.count < 10  {
                           
                             print(number)
                             self.tableData1.append([String(contact.givenName), String(contact.familyName), String(number)])
@@ -102,11 +102,16 @@ class ContactsViewController: UIViewController {
                         }*/
                         
                     })
-                    setupView()
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                    }
+                    
                 } catch let error {
                     print("Failed to enumerate contact", error)
                 }
             } else {
+                hideActivityIndicator(uiView: self.view)
+                dismiss(animated: true)
                 print("access denied")
             }
         }
@@ -156,9 +161,12 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         contactsView.searchField.placeholder = ""
+        DispatchQueue.main.async { [self] in
         contactsView.searchField.setView(.left, image: nil)
         let close = contactsView.searchField.setView(.right, image: UIImage(named: "close_icon"))
         close.addTarget(self, action: #selector(clearAll), for: .touchUpInside)
+        }
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -166,7 +174,7 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
         contactsView.searchField.endEditing(true)
         contactsView.searchField.setView(.left, image: UIImage(named: "Search"))
         contactsView.searchField.setView(.right, image: nil)
-        contactsView.searchField.placeholder = "Искать номер"
+        contactsView.searchField.placeholder = defaultLocalizer.stringForKey(key: "Number_search")
         tableData1 = tableData2
         table.reloadData()
     }
@@ -180,6 +188,11 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
         if string  == "" {
             searchText = (searchText as String).substring(to: searchText.index(before: searchText.endIndex))
         }
+        
+        if textField == contactsView.searchField && string != "" && contactsView.searchField.text!.count == 14 {
+            return false
+        }
+        
         
         tableData1 = searchText.isEmpty ? tableData2 : tableData2.filter { (dataArray:[String]) -> Bool in
             return dataArray.filter({ (string) -> Bool in
@@ -213,7 +226,7 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
-        to_phone = tableData1[indexPath.row][2]
+        to_phone = "+992 " + tableData1[indexPath.row][2]
         navigationController?.popViewController(animated: true)
     }
     
@@ -235,7 +248,8 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate, UI
             contactsView.searchField.endEditing(true)
             contactsView.searchField.setView(.left, image: UIImage(named: "Search"))
             contactsView.searchField.setView(.right, image: nil)
-            contactsView.searchField.placeholder = "Искать номер"
+            
+            contactsView.searchField.placeholder = defaultLocalizer.stringForKey(key: "Number_search")
             tableData1 = tableData2
             table.reloadData()
         }
@@ -248,14 +262,14 @@ class ContactsView: UIView {
     
     lazy var searchField: UITextField = {
         let textfield = UITextField()
-        textfield.keyboardType = .numberPad
+        //textfield.keyboardType = .numberPad
         textfield.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.borderStyle = .none
         textfield.backgroundColor = .clear
         textfield.layer.cornerRadius = 20
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
-        textfield.placeholder = "Искать номер"
+        textfield.textColor = colorBlackWhite
         textfield.setView(.left, image: UIImage(named: "Search"))
         return textfield
     }()
@@ -275,6 +289,11 @@ class ContactsView: UIView {
     private func setupView() {
         backgroundColor = contentColor
      
+        searchField.attributedPlaceholder = NSAttributedString(
+            string: defaultLocalizer.stringForKey(key: "Number_search"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        )
+        
         self.addSubview(searchField)
     }
 }

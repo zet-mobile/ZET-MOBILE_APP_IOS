@@ -6,9 +6,41 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import Alamofire
+import AlamofireImage
 
 var container: UIView = UIView()
 var container2: UIView = UIView()
+
+extension UIButton {
+    
+    func animateWhenPressed(disposeBag: DisposeBag) {
+        let pressDownTransform = rx.controlEvent([.touchDown, .touchDragEnter])
+            .map({ CGAffineTransform.identity.scaledBy(x: 0.95, y: 0.95) })
+        
+        let pressUpTransform = rx.controlEvent([.touchDragExit, .touchCancel, .touchUpInside, .touchUpOutside])
+            .map({ CGAffineTransform.identity })
+        
+        Observable.merge(pressDownTransform, pressUpTransform)
+            .distinctUntilChanged()
+            .subscribe(onNext: animate(_:))
+            .disposed(by: disposeBag)
+    }
+    
+    private func animate(_ transform: CGAffineTransform) {
+        UIView.animate(withDuration: 0.4,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 3,
+                       options: [.curveEaseInOut],
+                       animations: {
+                        self.transform = transform
+            }, completion: nil)
+    }
+    
+}
 
 extension Double {
     var clean: String {
@@ -22,6 +54,12 @@ extension Double {
             formatter.maximumFractionDigits = 16 //maximum digits in Double after dot (maximum precision)
          return String(format: "%.2f", number)
         }
+}
+
+extension CGFloat {
+    func toRadians() -> CGFloat {
+        return self * CGFloat(Double.pi) / 180.0
+    }
 }
 
 extension UIView {
@@ -80,7 +118,8 @@ extension UITextField {
         button.setImage(image, for: .normal)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         button.sizeToFit()
-        button.imageView!.contentMode = .scaleAspectFit
+        //button.imageView!.contentMode = .scaleAspectFit
+        
         setView(view, with: button)
         return button
     }
@@ -168,7 +207,7 @@ extension UIViewController {
         let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
         container.frame = uiView.frame
         container.center = uiView.center
-        container.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0, green: 0, blue: 0, alpha: 0.5) : UIColor(red: 1, green: 1, blue: 1, alpha: 0.5))
+        container.backgroundColor = .clear
         activityIndicator.frame = CGRect(x: UIScreen.main.bounds.size.width/2 - 5, y: ((UIScreen.main.bounds.size.height/2) - 5), width: 10.0, height: 10.0)
         activityIndicator.style = UIActivityIndicatorView.Style.white
         activityIndicator.color = .orange
@@ -218,6 +257,28 @@ public extension UIView {
                            options: .curveLinear,
                            animations: { [weak self] in
                                 self?.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+            }) { [weak self] (_) in
+                self?.isUserInteractionEnabled = true
+                completionBlock()
+            }
+        }
+    }
+    
+    func showAnimation2(_ completionBlock: @escaping () -> Void) {
+      isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.1,
+                       delay: 0,
+                       options: .curveLinear,
+                       animations: { [weak self] in
+                            self?.transform = CGAffineTransform.init(scaleX: 0.95, y: 0.95)
+            self!.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        }) {  (done) in
+            UIView.animate(withDuration: 0.1,
+                           delay: 0,
+                           options: .curveLinear,
+                           animations: { [weak self] in
+                                self?.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+                self?.backgroundColor = .clear
             }) { [weak self] (_) in
                 self?.isUserInteractionEnabled = true
                 completionBlock()

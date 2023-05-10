@@ -32,9 +32,9 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     contentView.addSubview(titleThree)
     contentView.addSubview(titleFour)
     
-    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
+    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 150)
     
-    ico_image.frame = CGRect(x: 10, y: 35, width: 45, height: 45)
+    ico_image.frame = CGRect(x: 20, y: 20, width: 45, height: 45)
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
     titleOne.text = ""
@@ -53,9 +53,8 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     titleThree.text = ""
     titleThree.textColor = colorBlackWhite
-    titleThree.font = UIFont.boldSystemFont(ofSize: 18)
+    titleThree.font = UIFont.boldSystemFont(ofSize: 17)
     titleThree.textAlignment = .right
-    
     
     titleFour.text = ""
     titleFour.numberOfLines = 1

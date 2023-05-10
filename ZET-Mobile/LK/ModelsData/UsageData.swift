@@ -8,9 +8,9 @@
 import Foundation
 
 struct UsageData {
-    let lastDay: last_data
-    let lastWeek: last_data
-    let lastMonth: last_data
+    let lastDay: last_data?
+    let lastWeek: last_data?
+    let lastMonth: last_data?
     let history: [history_data]?
 }
 
@@ -24,7 +24,7 @@ struct last_data {
 
 struct history_data {
     let serviceName: String?
-    let balanceChange: Double?
+    let balanceChange: String?
     let transactionDate: String?
 }
 
@@ -39,10 +39,25 @@ extension UsageData: Decodable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: UsageDataCodingKeys.self)
-        lastDay = try container.decode(last_data.self, forKey: .lastDay)
-        lastWeek = try container.decode(last_data.self, forKey: .lastWeek)
-        lastMonth = try container.decode(last_data.self, forKey: .lastMonth)
-      
+
+        do {
+            lastDay = try container.decode(last_data.self, forKey: .lastDay)
+        } catch {
+            lastDay = nil
+        }
+        
+        do {
+            lastWeek = try container.decode(last_data.self, forKey: .lastWeek)
+        } catch {
+            lastWeek = nil
+        }
+        
+        do {
+            lastMonth = try container.decode(last_data.self, forKey: .lastMonth)
+        } catch {
+            lastMonth = nil
+        }
+        
         do {
             history = try container.decode([history_data].self, forKey: .history)
         } catch {
@@ -113,7 +128,7 @@ extension history_data: Decodable {
         }
         
         do {
-            balanceChange = try container.decode(Double.self, forKey: .balanceChange)
+            balanceChange = try container.decode(String.self, forKey: .balanceChange)
         } catch {
             balanceChange = nil
         }

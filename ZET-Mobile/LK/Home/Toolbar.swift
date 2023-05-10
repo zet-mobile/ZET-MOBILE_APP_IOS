@@ -28,14 +28,13 @@ class Toolbar: UIView {
     lazy var user_name: UILabel = {
         let user_name = UILabel()
         user_name.text = ""
-        user_name.numberOfLines = 0
+        user_name.numberOfLines = 2
         user_name.textColor = colorBlackWhite
         user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 20) / 390)
+        user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 18) / 390)
         user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
         user_name.textAlignment = .left
-        user_name.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 40, height: 28)
-        
+        user_name.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 60, height: 35)
         return user_name
     }()
     
@@ -48,6 +47,23 @@ class Toolbar: UIView {
         icon_more.isUserInteractionEnabled = true
         icon_more.isEnabled = false
         icon_more.isHidden = true
+        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        return icon_more
+    }()
+    
+    
+    lazy var icon_push: UIButton = {
+        let icon_more = UIButton()
+       // icon_more.setImage(#imageLiteral(resourceName: "push_count"), for: UIControl.State.normal)
+        icon_more.setBackgroundImage(UIImage(named: "push_count"), for: .normal)
+        icon_more.setTitle("40", for: .normal)
+        icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 11)
+        icon_more.setTitleColor(.black, for: .normal)
+        icon_more.titleLabel?.textAlignment = .center
+        icon_more.frame = CGRect(x: 28, y: 13, width: 22, height: 18)
+        icon_more.isUserInteractionEnabled = true
+        //icon_more.isEnabled = false
+       // icon_more.isHidden = true
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return icon_more
     }()
@@ -81,6 +97,7 @@ class Toolbar: UIView {
         view_menu.backgroundColor = .clear
         
         view_menu.addSubview(openmenu)
+        view_menu.addSubview(icon_push)
         self.addSubview(view_menu)
         
         self.addSubview(welcome)

@@ -54,6 +54,8 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     var minuti_data = [[String]]()
     var sms_data = [[String]]()
     
+    var activePage = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,7 +85,12 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+        if let destinationViewController = navigationController?.viewControllers
+                                                                .filter(
+                                              {$0 is HomeViewController})
+                                                                .first {
+            navigationController?.popToViewController(destinationViewController, animated: true)
+        }
     }
     
     func setupView() {
@@ -104,7 +111,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view = AddionalTraficsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Connect_package")
-        addional_view.balance.text = balance_credit + " c."
+        addional_view.balance.text = balance_credit + " " + defaultLocalizer.stringForKey(key: "tjs")
         self.view.addSubview(toolbar)
         scrollView.addSubview(addional_view)
         
@@ -127,151 +134,158 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         var number_data = ""
         var size = 18
         
-        if remainders_data[0][1] == "0" {
-            textColor = .red
-            textColor2 = .red
-        }
-        else {
-            textColor = colorBlackWhite
-            textColor2 = .lightGray
+        if remainders_data.count != 0 {
+            if remainders_data[0][1] == "0" {
+                textColor = .red
+                textColor2 = .red
+            }
+            else {
+                textColor = colorBlackWhite
+                textColor2 = .lightGray
+            }
+            
+            if remainders_data[0][2] == "true" {
+                number_data = "∞"
+                size = 22
+                textColor = .orange
+                textColor2 = .lightGray
+            }
+            else {
+                size = 18
+                number_data = remainders_data[0][1]
+            }
+            
+            var number_label: NSString = number_data as NSString
+            var range = (number_label).range(of: number_label as String)
+            var number_label_String = NSMutableAttributedString.init(string: number_label as String)
+            number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
+            number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
+            
+            var title_label = "\n \(defaultLocalizer.stringForKey(key: "minutes")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[0][0])" as NSString
+            var titleString = NSMutableAttributedString.init(string: title_label as String)
+            var range2 = (title_label).range(of: title_label as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+            
+            number_label_String.append(titleString)
+            
+            if number_data == "∞" {
+                remainderView.minutesRemainder.text2.attributedText = number_label_String
+            }
+            else {
+                remainderView.minutesRemainder.text.attributedText = number_label_String
+            }
+           
+            if remainders_data[1][1] == "0" {
+                textColor = .red
+                textColor2 = .red
+            }
+            else {
+                textColor = colorBlackWhite
+                textColor2 = .lightGray
+            }
+            
+            if remainders_data[1][2] == "true" {
+                number_data = "∞"
+                size = 30
+                textColor = .orange
+                textColor2 = .lightGray
+            }
+            else {
+                size = 18
+                number_data = remainders_data[1][1]
+            }
+            number_label = number_data as NSString
+            range = (number_label).range(of: number_label as String)
+            number_label_String = NSMutableAttributedString.init(string: number_label as String)
+            number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+            number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
+            
+            number_label = "7060" as NSString
+            
+            title_label = "\n \(defaultLocalizer.stringForKey(key: "megabyte")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[1][0])" as NSString
+            titleString = NSMutableAttributedString.init(string: title_label as String)
+            range2 = (title_label).range(of: title_label as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+            
+            number_label_String.append(titleString)
+            
+            if number_data == "∞" {
+                remainderView.internetRemainder.text2.attributedText = number_label_String
+            }
+            else {
+                remainderView.internetRemainder.text.attributedText = number_label_String
+            }
+            
+            if remainders_data[2][1] == "0" {
+                textColor = .red
+                textColor2 = .red
+            }
+            else {
+                textColor = colorBlackWhite
+                textColor2 = .lightGray
+            }
+            
+            if remainders_data[2][2] == "true" {
+                number_data = "∞"
+                size = 30
+                textColor = .orange
+                textColor2 = .lightGray
+            }
+            else {
+                size = 18
+                number_data = remainders_data[2][1]
+            }
+            number_label = number_data as NSString
+            range = (number_label).range(of: number_label as String)
+            number_label_String = NSMutableAttributedString.init(string: number_label as String)
+            number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
+            number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
+            
+            title_label = "\n \(defaultLocalizer.stringForKey(key: "SMS")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[2][0])" as NSString
+            titleString = NSMutableAttributedString.init(string: title_label as String)
+            range2 = (title_label).range(of: title_label as String)
+            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value:textColor2, range: range2)
+            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
+            
+            number_label_String.append(titleString)
+            if number_data == "∞" {
+                remainderView.messagesRemainder.text2.attributedText = number_label_String
+            }
+            else {
+                remainderView.messagesRemainder.text.attributedText = number_label_String
+            }
+            
+            
+            remainderView.messagesRemainder.plusText.isHidden = true
+            remainderView.messagesRemainder.backgroundColor = .clear
+            
+            
+            if remainders_data[0][2] == "true" || Double(remainders_data[0][0])! < Double(remainders_data[0][1])! {
+                remainderView.minutesRemainder.spentProgress = CGFloat(1)
+            }
+            else {
+                remainderView.minutesRemainder.spentProgress = CGFloat(Double(remainders_data[0][1])! / Double(remainders_data[0][0])!)
+            }
+            
+            if remainders_data[1][2] == "true" || Double(remainders_data[1][0])! < Double(remainders_data[1][1])! {
+                remainderView.internetRemainder.spentProgress = CGFloat(1)
+            }
+            else {
+                remainderView.internetRemainder.spentProgress = CGFloat(Double(remainders_data[1][1])! / Double(remainders_data[1][0])!)
+            }
+            
+            if remainders_data[2][2] == "true" || Double(remainders_data[2][0])! < Double(remainders_data[2][1])! {
+                remainderView.messagesRemainder.spentProgress = CGFloat(1)
+            }
+            else {
+                remainderView.messagesRemainder.spentProgress = CGFloat(Double(remainders_data[2][1])! / Double(remainders_data[2][0])!)
+            }
+            
+            
         }
         
-        if remainders_data[0][2] == "true" {
-            number_data = "∞"
-            size = 22
-            textColor = .orange
-            textColor2 = .lightGray
-        }
-        else {
-            size = 18
-            number_data = remainders_data[0][1]
-        }
-        
-        var number_label: NSString = number_data as NSString
-        var range = (number_label).range(of: number_label as String)
-        var number_label_String = NSMutableAttributedString.init(string: number_label as String)
-        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor , range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
-        
-        var title_label = "\n \(defaultLocalizer.stringForKey(key: "minutes")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[0][0])" as NSString
-        var titleString = NSMutableAttributedString.init(string: title_label as String)
-        var range2 = (title_label).range(of: title_label as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
-        
-        number_label_String.append(titleString)
-        
-        if number_data == "∞" {
-            remainderView.minutesRemainder.text2.attributedText = number_label_String
-        }
-        else {
-            remainderView.minutesRemainder.text.attributedText = number_label_String
-        }
-       
-        if remainders_data[1][1] == "0" {
-            textColor = .red
-            textColor2 = .red
-        }
-        else {
-            textColor = colorBlackWhite
-            textColor2 = .lightGray
-        }
-        
-        if remainders_data[1][2] == "true" {
-            number_data = "∞"
-            size = 30
-            textColor = .orange
-            textColor2 = .lightGray
-        }
-        else {
-            size = 18
-            number_data = remainders_data[1][1]
-        }
-        number_label = number_data as NSString
-        range = (number_label).range(of: number_label as String)
-        number_label_String = NSMutableAttributedString.init(string: number_label as String)
-        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
-        
-        number_label = "7060" as NSString
-        
-        title_label = "\n \(defaultLocalizer.stringForKey(key: "megabyte")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[1][0])" as NSString
-        titleString = NSMutableAttributedString.init(string: title_label as String)
-        range2 = (title_label).range(of: title_label as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor2, range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
-        
-        number_label_String.append(titleString)
-        
-        if number_data == "∞" {
-            remainderView.internetRemainder.text2.attributedText = number_label_String
-        }
-        else {
-            remainderView.internetRemainder.text.attributedText = number_label_String
-        }
-        
-        if remainders_data[2][1] == "0" {
-            textColor = .red
-            textColor2 = .red
-        }
-        else {
-            textColor = colorBlackWhite
-            textColor2 = .lightGray
-        }
-        
-        if remainders_data[2][2] == "true" {
-            number_data = "∞"
-            size = 30
-            textColor = .orange
-            textColor2 = .lightGray
-        }
-        else {
-            size = 18
-            number_data = remainders_data[2][1]
-        }
-        number_label = number_data as NSString
-        range = (number_label).range(of: number_label as String)
-        number_label_String = NSMutableAttributedString.init(string: number_label as String)
-        number_label_String.addAttribute(NSAttributedString.Key.foregroundColor, value: textColor, range: range)
-        number_label_String.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: CGFloat(size))], range: range)
-        
-        title_label = "\n \(defaultLocalizer.stringForKey(key: "SMS")) \(defaultLocalizer.stringForKey(key: "from")) \(remainders_data[2][0])" as NSString
-        titleString = NSMutableAttributedString.init(string: title_label as String)
-        range2 = (title_label).range(of: title_label as String)
-        titleString.addAttribute(NSAttributedString.Key.foregroundColor, value:textColor2, range: range2)
-        titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11)], range: range2)
-        
-        number_label_String.append(titleString)
-        if number_data == "∞" {
-            remainderView.messagesRemainder.text2.attributedText = number_label_String
-        }
-        else {
-            remainderView.messagesRemainder.text.attributedText = number_label_String
-        }
-        
-        
-        remainderView.messagesRemainder.plusText.isHidden = true
-        remainderView.messagesRemainder.backgroundColor = .clear
-        if remainders_data[0][2] == "true" || Double(remainders_data[0][0])! < Double(remainders_data[0][1])! {
-            remainderView.minutesRemainder.spentProgress = CGFloat(1)
-        }
-        else {
-            remainderView.minutesRemainder.spentProgress = CGFloat(Double(remainders_data[0][1])! / Double(remainders_data[0][0])!)
-        }
-        
-        if remainders_data[1][2] == "true" || Double(remainders_data[1][0])! < Double(remainders_data[1][1])! {
-            remainderView.internetRemainder.spentProgress = CGFloat(1)
-        }
-        else {
-            remainderView.internetRemainder.spentProgress = CGFloat(Double(remainders_data[1][1])! / Double(remainders_data[1][0])!)
-        }
-        
-        if remainders_data[2][2] == "true" || Double(remainders_data[2][0])! < Double(remainders_data[2][1])! {
-            remainderView.messagesRemainder.spentProgress = CGFloat(1)
-        }
-        else {
-            remainderView.messagesRemainder.spentProgress = CGFloat(Double(remainders_data[2][1])! / Double(remainders_data[2][0])!)
-        }
     }
 
     func setupTabCollectionView() {
@@ -307,7 +321,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView {
+        if self.scrollView == scrollView || table == scrollView || table2 == scrollView || table3 == scrollView {
             if scrollView.contentOffset.y > addional_view.tab1.frame.origin.y {
                 remainderView.isHidden = true
                 //servicesView.searchField.isHidden = true
@@ -319,12 +333,11 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 addional_view.tab3.frame.origin.y = 0
                 addional_view.tab3Line.frame.origin.y = 40
                 TabCollectionServiceView.frame.origin.y = 45
-                table.isScrollEnabled = true
             }
             if scrollView.contentOffset.y < -10 && remainderView.isHidden == true {
                 remainderView.isHidden = false
                 //servicesView.searchField.isHidden = false
-                self.scrollView.contentOffset.y = 104
+               // self.scrollView.contentOffset.y = 104
                 addional_view.tab1.frame.origin.y = CGFloat(y_pozition)
                 addional_view.tab2.frame.origin.y = CGFloat(y_pozition)
                 addional_view.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
@@ -332,7 +345,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 addional_view.tab3.frame.origin.y = CGFloat(y_pozition)
                 addional_view.tab3Line.frame.origin.y = CGFloat(y_pozition + 40)
                 TabCollectionServiceView.frame.origin.y = CGFloat(y_pozition + 45)
-               
+                
             }
         }
     }
@@ -345,6 +358,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        activePage = 0
     }
     
     @objc func tab2Click() {
@@ -355,6 +369,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         addional_view.tab3Line.backgroundColor = .clear
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+       
     }
     
     @objc func tab3Click() {
@@ -365,6 +380,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab2Line.backgroundColor = .clear
         addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionServiceView.scrollToItem(at: IndexPath(item: 2, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+        activePage = 2
     }
     
     func sendRequest() {
@@ -379,29 +395,49 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         self.remainders_data.append([String(result.balances.offnet.start), String(result.balances.offnet.now), String(result.balances.offnet.unlim)])
                         self.remainders_data.append([String(result.balances.mb.start), String(result.balances.mb.now), String(result.balances.mb.unlim)])
                         self.remainders_data.append([String(result.balances.sms.start), String(result.balances.sms.now), String(result.balances.sms.unlim)])
+                    
                         
                         if result.connectedPackets.count != 0 {
                             for i in 0 ..< result.connectedPackets.count {
-                                if result.connectedPackets[i].unitType == 1 {
-                                    self.internet_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                
+                                var disc_id = ""
+                                var disc_percent = ""
+                                
+                                if result.connectedPackets[i].discount != nil {
+                                    disc_id = String(result.connectedPackets[i].discount!.discountServiceId)
+                                    disc_percent = String(result.connectedPackets[i].discount!.discountPercent)
                                 }
-                                else if result.connectedPackets[i].unitType == 3 {
-                                    self.minuti_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                
+                                if result.connectedPackets[i].unitType == 3 {
+                                    self.internet_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName ?? ""), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? ""), String(result.connectedPackets[i].period ?? ""), "connected", disc_id, disc_percent])
                                 }
-                                else if result.connectedPackets[i].unitType == 4 {
-                                    self.sms_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? "")])
+                                else if result.connectedPackets[i].unitType == 1 {
+                                    self.minuti_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName ?? ""), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? ""), String(result.connectedPackets[i].period ?? ""), "connected", disc_id, disc_percent])
+                                }
+                                else if result.connectedPackets[i].unitType == 2 {
+                                    self.sms_data.append([String(result.connectedPackets[i].id), String(result.connectedPackets[i].packetName ?? ""), String(result.connectedPackets[i].price),  String(result.connectedPackets[i].packetStatus), String(result.connectedPackets[i].nextApplyDate ?? ""), String(result.connectedPackets[i].description ?? ""), String(result.connectedPackets[i].period ?? ""), "connected", disc_id, disc_percent])
                                 }
                             }
                         }
                         
                         if result.internetAvailablePackets.count != 0 {
                             for i in 0 ..< result.internetAvailablePackets.count {
-                                self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus), String(result.internetAvailablePackets[i].nextApplyDate ?? ""), String(result.internetAvailablePackets[i].description ?? "")])
+                                
+                                var disc_id1 = ""
+                                var disc_percent1 = ""
+                                
+                                if result.internetAvailablePackets[i].discount != nil {
+                                    disc_id1 = String(result.internetAvailablePackets[i].discount!.discountServiceId)
+                                    disc_percent1 = String(result.internetAvailablePackets[i].discount!.discountPercent)
+                                }
+                                
+                                
+                                self.internet_data.append([String(result.internetAvailablePackets[i].id), String(result.internetAvailablePackets[i].packetName  ?? ""), String(result.internetAvailablePackets[i].price),  String(result.internetAvailablePackets[i].packetStatus), String(result.internetAvailablePackets[i].nextApplyDate ?? ""), String(result.internetAvailablePackets[i].description ?? ""), String(result.internetAvailablePackets[i].period ?? ""), "available", disc_id1, disc_percent1])
                             }
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: "Нет доступных интернет-пакетов")
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_internet"))
                             self.table.separatorStyle = .none
                             self.table.backgroundView = emptyView
                             }
@@ -409,12 +445,19 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.offnetAvailablePackets.count != 0 {
                             for i in 0 ..< result.offnetAvailablePackets.count {
-                                self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus), String(result.offnetAvailablePackets[i].nextApplyDate ?? "") , String(result.offnetAvailablePackets[i].description ?? "") ])
+                               
+                                var disc_id2 = ""
+                                var disc_percent2 = ""
+                                if result.offnetAvailablePackets[i].discount != nil {
+                                    disc_id2 = String(result.offnetAvailablePackets[i].discount!.discountServiceId)
+                                    disc_percent2 = String(result.offnetAvailablePackets[i].discount!.discountPercent)
+                                }
+                                self.minuti_data.append([String(result.offnetAvailablePackets[i].id), String(result.offnetAvailablePackets[i].packetName  ?? ""), String(result.offnetAvailablePackets[i].price),  String(result.offnetAvailablePackets[i].packetStatus), String(result.offnetAvailablePackets[i].nextApplyDate ?? "") , String(result.offnetAvailablePackets[i].description ?? ""),String(result.offnetAvailablePackets[i].period ?? ""), "available", disc_id2, disc_percent2])
                             }
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: "Нет доступных голосовых-пакетов")
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_minutes"))
                             self.table2.separatorStyle = .none
                             self.table2.backgroundView = emptyView
                             }
@@ -422,12 +465,18 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         
                         if result.smsAvailablePackets.count != 0 {
                             for i in 0 ..< result.smsAvailablePackets.count {
-                                self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus), String(result.smsAvailablePackets[i].nextApplyDate ?? ""), String(result.smsAvailablePackets[i].description ?? "")])
+                                var disc_id3 = ""
+                                var disc_percent3 = ""
+                                if result.smsAvailablePackets[i].discount != nil {
+                                    disc_id3 = String(result.smsAvailablePackets[i].discount!.discountServiceId)
+                                    disc_percent3 = String(result.smsAvailablePackets[i].discount!.discountPercent)
+                                }
+                                self.sms_data.append([String(result.smsAvailablePackets[i].id), String(result.smsAvailablePackets[i].packetName ?? ""), String(result.smsAvailablePackets[i].price),  String(result.smsAvailablePackets[i].packetStatus), String(result.smsAvailablePackets[i].nextApplyDate ?? ""), String(result.smsAvailablePackets[i].description ?? ""), String(result.smsAvailablePackets[i].period ?? ""), "available", disc_id3, disc_percent3])
                             }
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table3.frame.height), text: "Нет доступных смс-пакетов")
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table3.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_SMS"))
                             self.table3.separatorStyle = .none
                             self.table3.backgroundView = emptyView
                             }
@@ -436,7 +485,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription, type_request: "")
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupRemaindersSection()
+                        setupTabCollectionView()
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"), type_request: "")
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -455,7 +510,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func connectPackets(_ sender: UIButton) {
       
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -473,9 +528,8 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
-        view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
         
         var checkColor = UIColor.black
         
@@ -485,38 +539,50 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         else {
             checkColor = .black
         }
+        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
         if addional_view.tab1.textColor == checkColor {
-            if internet_data[sender.tag][4] != "" {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service"))\n \(internet_data[sender.tag][1])?"
+            if internet_data[sender.tag][7] == "connected"  {
+                view.name.text = defaultLocalizer.stringForKey(key: "Disable_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service2")) \"\(internet_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Disable_service2_1"))?"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 view.ok.addTarget(self, action: #selector(disablePackets(_:)), for: .touchUpInside)
             }
             else {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(internet_data[sender.tag][1])?"
+                view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service2")) \"\(internet_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Connect_service2_1"))"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
             }
         } else if addional_view.tab2.textColor == checkColor{
-            if minuti_data[sender.tag][4] != "" {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service"))\n \(minuti_data[sender.tag][1])?"
+            if minuti_data[sender.tag][7] == "connected"  {
+                view.name.text = defaultLocalizer.stringForKey(key: "Disable_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service2")) \"\(minuti_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Disable_service2_1"))?"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 view.ok.addTarget(self, action: #selector(disablePackets(_:)), for: .touchUpInside)
             }
             else {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(minuti_data[sender.tag][1])?"
+                view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service2")) \"\(minuti_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Connect_service2_1"))"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
             }
         } else {
-            if sms_data[sender.tag][4] != "" {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service"))\n \(sms_data[sender.tag][1])?"
+            if sms_data[sender.tag][7] == "connected" {
+                view.name.text = defaultLocalizer.stringForKey(key: "Disable_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Disable_service2")) \"\(sms_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Disable_service2_1"))?"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 view.ok.addTarget(self, action: #selector(disablePackets(_:)), for: .touchUpInside)
             }
             else {
-                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service"))\n \(sms_data[sender.tag][1])?"
+                view.name.text = defaultLocalizer.stringForKey(key: "Connect_service")
+                view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Connect_service2")) \"\(sms_data[sender.tag][1])\" \(defaultLocalizer.stringForKey(key: "Connect_service2_1"))"
+                view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
             }
         }
         
         view.ok.tag = sender.tag
-        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.cancel.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
@@ -525,13 +591,13 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         sender.showAnimation { [self] in
             present(alert, animated: true, completion: nil)
         }
-    
+       // sender.backgroundColor = .clear
         
     }
     
     @objc func requestAnswer(status: Bool, message: String, type_request: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -549,7 +615,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         if status == true {
             if type_request == "post" {
@@ -560,44 +626,48 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 view.name.text = defaultLocalizer.stringForKey(key: "service_disabled")
                 view.image_icon.image = UIImage(named: "correct_alert")
             }
-            
+            view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
+            view.ok.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         }
         
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
-        
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
         present(alert, animated: true, completion: nil)
-
-        
     }
     
     @objc func dismissDialog(_ sender: UIButton) {
         print("hello")
+        alert.dismiss(animated: true, completion: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(AddionalTraficsViewController(), animated: false)
+        hideActivityIndicator(uiView: view)
+    }
+    
+    @objc func dismissDialogCancel(_ sender: UIButton) {
+        print(sender.backgroundColor)
+        
+       
         sender.showAnimation { [self] in
             alert.dismiss(animated: true, completion: nil)
-            hideActivityIndicator(uiView: view)
+            //hideActivityIndicator(uiView: view)
         }
+        hideActivityIndicator(uiView: view)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation { [self] in
-            alert.dismiss(animated: true, completion: nil)
-            showActivityIndicator(uiView: view)
-        }
-        print(sender.tag)
-        print(internet_data[sender.tag][0])
+        alert.dismiss(animated: true, completion: nil)
+        showActivityIndicator(uiView: view)
+        
         var parametr: [String: Any] = ["packetId": 0, "discountId": discount_id]
         
         var checkColor = UIColor.black
@@ -633,12 +703,10 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                     
                  },
                  onError: { [self] error in
-                     print("hhhhh")
                      DispatchQueue.main.async {
-                         requestAnswer(status: false, message: error.localizedDescription, type_request: "post")
+                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"), type_request: "post")
                          print(error.localizedDescription)
                      }
-                     
                  },
                  onCompleted: { [self] in
                     // sender.hideLoading()
@@ -654,10 +722,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     
     
     @objc func disablePackets(_ sender: UIButton) {
-        sender.showAnimation { [self] in
-            alert.dismiss(animated: true, completion: nil)
-            showActivityIndicator(uiView: view)
-        }
+        alert.dismiss(animated: true, completion: nil)
+        showActivityIndicator(uiView: view)
+        
         var parametr = ""
         
         var checkColor = UIColor.black
@@ -694,7 +761,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 onError: { error in
                    print(error.localizedDescription)
                     DispatchQueue.main.async { [self] in
-                        requestAnswer(status: false, message: error.localizedDescription, type_request: "delete")
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"), type_request: "delete")
                         print(error.localizedDescription)
                         
                     }
@@ -726,7 +793,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionServiceViewCell
         if indexPath.row == 0 {
             table.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table.delegate = self
             table.dataSource = self
             table.rowHeight = 140
@@ -734,12 +801,13 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table.alwaysBounceVertical = false
             table.showsVerticalScrollIndicator = false
             table.backgroundColor = contentColor
-            table.isScrollEnabled = false
+            table.separatorColor = .lightGray
+            table.allowsSelection = false
             cell.addSubview(table)
         }
         else if indexPath.row == 1 {
             table2.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table2.delegate = self
             table2.dataSource = self
             table2.rowHeight = 140
@@ -747,12 +815,13 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table2.alwaysBounceVertical = false
             table2.showsVerticalScrollIndicator = false
             table2.backgroundColor = contentColor
-            table2.isScrollEnabled = false
+            table2.separatorColor = .lightGray
+            table2.allowsSelection = false
             cell.addSubview(table2)
         }
         else if indexPath.row == 2 {
             table3.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table3.delegate = self
             table3.dataSource = self
             table3.rowHeight = 140
@@ -760,7 +829,8 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.alwaysBounceVertical = false
             table3.showsVerticalScrollIndicator = false
             table3.backgroundColor = contentColor
-            table3.isScrollEnabled = false
+            table3.separatorColor = .lightGray
+            table3.allowsSelection = false
             cell.addSubview(table3)
         }
         
@@ -776,29 +846,9 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             addional_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab2Line.backgroundColor = .clear
             addional_view.tab3Line.backgroundColor = .clear
-        } else if indexPath.row == 2 {
-            addional_view.tab1.textColor = .gray
-            addional_view.tab2.textColor = .gray
-            addional_view.tab3.textColor = colorBlackWhite
-            addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = .clear
-            addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            activePage = 0
         }
-       if indexPath.row == 1 {
-            addional_view.tab1.textColor = .gray
-            addional_view.tab2.textColor = colorBlackWhite
-            addional_view.tab3.textColor = .gray
-            addional_view.tab1Line.backgroundColor = .clear
-            addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-            addional_view.tab3Line.backgroundColor = .clear
-        }
-          
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        //print(indexPath.row == 0)
-        if indexPath.row == 0 {
-            print("d")
+       else if indexPath.row == 1 {
             addional_view.tab1.textColor = .gray
             addional_view.tab2.textColor = colorBlackWhite
             addional_view.tab3.textColor = .gray
@@ -808,8 +858,47 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
         }
         else if indexPath.row == 2 {
             addional_view.tab1.textColor = .gray
+            addional_view.tab2.textColor = .gray
+            addional_view.tab3.textColor = colorBlackWhite
+            addional_view.tab1Line.backgroundColor = .clear
+            addional_view.tab2Line.backgroundColor = .clear
+            addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            activePage = 2
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        //print(indexPath.row == 0)
+        if indexPath.row == 0 {
+            addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             addional_view.tab2.textColor = colorBlackWhite
-            addional_view.tab3.textColor = .gray
+            addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            addional_view.tab1Line.backgroundColor = .clear
+            addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            addional_view.tab3Line.backgroundColor = .clear
+        }
+        else if indexPath.row == 1 {
+            if activePage == 0  {
+                addional_view.tab1.textColor = colorBlackWhite
+                addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                addional_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                addional_view.tab2Line.backgroundColor = .clear
+                addional_view.tab3Line.backgroundColor = .clear
+            }
+            else if activePage == 2 {
+                addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                addional_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                addional_view.tab3.textColor = colorBlackWhite
+                addional_view.tab1Line.backgroundColor = .clear
+                addional_view.tab2Line.backgroundColor = .clear
+                addional_view.tab3Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            }
+        }
+        else if indexPath.row == 2 {
+            addional_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+            addional_view.tab2.textColor = colorBlackWhite
+            addional_view.tab3.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             addional_view.tab1Line.backgroundColor = .clear
             addional_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
             addional_view.tab3Line.backgroundColor = .clear
@@ -833,36 +922,54 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         if tableView == table {
-            if internet_data[indexPath.row][4] != "" {
-                table.rowHeight = 160
-                cell.contentView.frame.size.height = 160
+            if indexPath.row == internet_data.count - 1 {
+              //  cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            
+            if internet_data[indexPath.row][7] == "connected" {
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                 let date = dateFormatter1.date(from: internet_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd MMMM"
-                dateFormatter1.locale = Locale(identifier: "ru_RU")
-                let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
-                
-                cell.titleTwo.text = internet_data[indexPath.row][1] + "\n" + next_apply_date
+                dateFormatter1.dateFormat = "dd-MM-yyyy"
+                var next_apply_date  =  ""
+                if internet_data[indexPath.row][4] != "" {
+                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
+                    cell.titleTwo.text = internet_data[indexPath.row][5] + "\n" + next_apply_date
+                }
+                else {
+                    cell.titleTwo.text = internet_data[indexPath.row][5]
+                }
                 cell.getButton.backgroundColor = .clear
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
                 cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
                 cell.getButton.layer.borderWidth = 1
-                cell.getButton.frame.origin.y = 110
-                cell.titleThree.frame.origin.y = 100
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
+            
             }
             else {
-                table.rowHeight = 140
-                cell.contentView.frame.size.height = 140
-                cell.titleTwo.text = internet_data[indexPath.row][1]
+                cell.titleTwo.text = internet_data[indexPath.row][5]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 cell.getButton.setTitleColor(.white, for: .normal)
-                cell.getButton.frame.origin.y = 90
-                cell.titleThree.frame.origin.y = 80
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
             }
             cell.titleOne.text = internet_data[indexPath.row][1]
+            
+            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
+            cell.titleTwo.numberOfLines = 0
+            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.titleTwo.sizeToFit()
+          
+            cell.titleTwo.frame.origin.y = 60
+            
+            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
+            
+            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
+            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
+            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
+            cell.frame.size.height = cell.titleTwo.frame.height + 120
+            table.rowHeight = cell.titleTwo.frame.height + 120
             
             let cost: NSString = "\(internet_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
@@ -870,12 +977,12 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            var  period = " С/" + internet_data[indexPath.row][3].uppercased()
-            if internet_data[indexPath.row][3] == "" || internet_data[indexPath.row][3] == "0.0" {
-                period = " С"
+            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + internet_data[indexPath.row][6].uppercased()
+            if internet_data[indexPath.row][6] == "" || internet_data[indexPath.row][6] == "0.0" {
+                period = " " + defaultLocalizer.stringForKey(key: "TJS")
             }
             else {
-                period = " С/" + internet_data[indexPath.row][3].uppercased()
+                period = " " + defaultLocalizer.stringForKey(key: "TJS") +  "/" + internet_data[indexPath.row][6].uppercased()
             }
             
             let title_cost = period as NSString
@@ -887,39 +994,70 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.append(titleString)
             cell.titleThree.attributedText = costString
             
+            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            
+            if internet_data[indexPath.row][9] != "" {
+                cell.sale_title.text = "-" + internet_data[indexPath.row][9] + "%"
+                cell.sale_title.isHidden = false
+            }
+            else {
+                cell.sale_title.isHidden = true
+            }
+            
             cell.getButton.tag = indexPath.row
+            cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         else if tableView == table2 {
-            if minuti_data[indexPath.row][4] != "" {
-                table2.rowHeight = 160
-                cell.contentView.frame.size.height = 160
+            
+            if indexPath.row == minuti_data.count - 1 {
+               // cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            
+            if minuti_data[indexPath.row][7] == "connected"  {
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                 let date = dateFormatter1.date(from: minuti_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd MMMM"
-                dateFormatter1.locale = Locale(identifier: "ru_RU")
-                let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                dateFormatter1.dateFormat = "dd-MM-yyyy"
                 
-                cell.titleTwo.text = internet_data[indexPath.row][1] + "\n" + next_apply_date
+                var next_apply_date  =  ""
+                if minuti_data[indexPath.row][4] != "" {
+                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
+                    cell.titleTwo.text = minuti_data[indexPath.row][5] + "\n" + next_apply_date
+                }
+                else {
+                    cell.titleTwo.text = minuti_data[indexPath.row][5]
+                }
+                
                 cell.getButton.backgroundColor = .clear
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
                 cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
                 cell.getButton.layer.borderWidth = 1
-                cell.getButton.frame.origin.y = 110
-                cell.titleThree.frame.origin.y = 100
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
             }
             else {
-                table2.rowHeight = 140
-                cell.contentView.frame.size.height = 140
-                cell.titleTwo.text = minuti_data[indexPath.row][1]
+                cell.titleTwo.text = minuti_data[indexPath.row][5]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 cell.getButton.setTitleColor(.white, for: .normal)
-                cell.getButton.frame.origin.y = 90
-                cell.titleThree.frame.origin.y = 80
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
             }
+            
+            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
+            cell.titleTwo.numberOfLines = 0
+            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.titleTwo.sizeToFit()
+          
+            cell.titleTwo.frame.origin.y = 60
+            
+            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
+            
+            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
+            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
+            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
+            cell.frame.size.height = cell.titleTwo.frame.height + 120
+            table2.rowHeight = cell.titleTwo.frame.height + 120
             
             cell.titleOne.text = minuti_data[indexPath.row][1]
             let cost: NSString = "\(minuti_data[indexPath.row][2])" as NSString
@@ -928,12 +1066,12 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            var  period = " С/" + minuti_data[indexPath.row][3].uppercased()
-            if minuti_data[indexPath.row][3] == "" || minuti_data[indexPath.row][3] == "0.0" {
-                period = " С"
+            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + minuti_data[indexPath.row][6].uppercased()
+            if minuti_data[indexPath.row][6] == "" || minuti_data[indexPath.row][6] == "0.0" {
+                period = " " + defaultLocalizer.stringForKey(key: "TJS")
             }
             else {
-                period = " С/" + minuti_data[indexPath.row][3].uppercased()
+                period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + minuti_data[indexPath.row][6].uppercased()
             }
             
             let title_cost = period as NSString
@@ -945,53 +1083,84 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.append(titleString)
             cell.titleThree.attributedText = costString
             
+            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            
+            if minuti_data[indexPath.row][9] != "" {
+                cell.sale_title.text = "-" + minuti_data[indexPath.row][9] + "%"
+                cell.sale_title.isHidden = false
+            }
+            else {
+                cell.sale_title.isHidden = true
+            }
+            
             cell.getButton.tag = indexPath.row
+            cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         else {
-            if sms_data[indexPath.row][4] != "" {
-                table3.rowHeight = 160
-                cell.contentView.frame.size.height = 160
+            if indexPath.row == sms_data.count - 1 {
+               // cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
+            }
+            
+            if sms_data[indexPath.row][7] == "connected" {
                 let dateFormatter1 = DateFormatter()
                 dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                 let date = dateFormatter1.date(from: sms_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd MMMM"
-                dateFormatter1.locale = Locale(identifier: "ru_RU")
-                let next_apply_date = "Активен до \(dateFormatter1.string(from: date!))"
+                dateFormatter1.dateFormat = "dd-MM-yyyy"
                 
-                cell.titleTwo.text = sms_data[indexPath.row][1] + "\n" + next_apply_date
+                var next_apply_date  =  ""
+                if sms_data[indexPath.row][4] != "" {
+                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
+                    cell.titleTwo.text = sms_data[indexPath.row][5] + "\n" + next_apply_date
+                }
+                else {
+                    cell.titleTwo.text = sms_data[indexPath.row][5]
+                }
+                
                 cell.getButton.backgroundColor = .clear
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
                 cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
                 cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
                 cell.getButton.layer.borderWidth = 1
-                cell.getButton.frame.origin.y = 110
-                cell.titleThree.frame.origin.y = 100
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
             }
             else {
-                table3.rowHeight = 140
-                cell.contentView.frame.size.height = 140
-                cell.titleTwo.text = sms_data[indexPath.row][1]
+                cell.titleTwo.text = sms_data[indexPath.row][5]
                 cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
                 cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
                 cell.getButton.setTitleColor(.white, for: .normal)
-                cell.getButton.frame.origin.y = 90
-                cell.titleThree.frame.origin.y = 80
+                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
             }
             
             cell.titleOne.text = sms_data[indexPath.row][1]
+            
+            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
+            cell.titleTwo.numberOfLines = 0
+            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.titleTwo.sizeToFit()
+          
+            cell.titleTwo.frame.origin.y = 60
+
+            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
+            
+            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
+            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
+            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
+            cell.frame.size.height = cell.titleTwo.frame.height + 120
+            table3.rowHeight = cell.titleTwo.frame.height + 120
+            
             let cost: NSString = "\(sms_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
             costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
             costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
             
-            var  period = " С/" + sms_data[indexPath.row][3].uppercased()
-            if sms_data[indexPath.row][3] == "" || sms_data[indexPath.row][3] == "0.0" {
-                period = " С"
+            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + sms_data[indexPath.row][6].uppercased()
+            if sms_data[indexPath.row][6] == "" || sms_data[indexPath.row][6] == "0.0" {
+                period = " " + defaultLocalizer.stringForKey(key: "TJS")
             }
             else {
-                period = " С/" + sms_data[indexPath.row][3].uppercased()
+                period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + sms_data[indexPath.row][6].uppercased()
             }
             
             let title_cost = period as NSString
@@ -1003,24 +1172,27 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
             costString.append(titleString)
             cell.titleThree.attributedText = costString
             
+            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            
+            if sms_data[indexPath.row][9] != "" {
+                cell.sale_title.text = "-" + sms_data[indexPath.row][9] + "%"
+                cell.sale_title.isHidden = false
+            }
+            else {
+                cell.sale_title.isHidden = true
+            }
+            
             cell.getButton.tag = indexPath.row
+            cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
         }
         
-        if indexPath.row == indexPath.last! {
-            cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-        }
-        
         let bgColorView = UIView()
-        bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
-        bgColorView.layer.borderColor = UIColor.orange.cgColor
-        bgColorView.layer.borderWidth = 1
-        bgColorView.layer.cornerRadius = 10
+        bgColorView.backgroundColor = .clear
         cell.selectedBackgroundView = bgColorView
         
         return cell
         
     }
-    
     
 }

@@ -63,18 +63,18 @@ class AlertView: UIView {
     lazy var name_content: UILabel = {
         let title = UILabel()
         title.text = "Подключить пакет Чаккон+ “30 Гб”?"
-        title.numberOfLines = 2
+        title.numberOfLines = 4
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 20, y: 188, width: UIScreen.main.bounds.size.width - 80, height: 44)
+        title.frame = CGRect(x: 20, y: 188, width: UIScreen.main.bounds.size.width - 80, height: 60)
         return title
     }()
     
     lazy var ok: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: 20, y: 249, width: UIScreen.main.bounds.size.width - 80, height: 45)
+        button.frame = CGRect(x: 20, y: 275, width: UIScreen.main.bounds.size.width - 80, height: 45)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitle("Подключить", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -180,7 +180,7 @@ class AlertView2: UIView {
         let button = UIButton()
         button.frame = CGRect(x: 20, y: 300, width: UIScreen.main.bounds.size.width - 120, height: 45)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle(defaultLocalizer.stringForKey(key: "Transfer"), for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Transfer2"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
@@ -307,7 +307,7 @@ class AlertView3: UIView {
         let button = UIButton()
         button.frame = CGRect(x: 20, y: 300, width: UIScreen.main.bounds.size.width - 120, height: 45)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle(defaultLocalizer.stringForKey(key: "Transfer"), for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Transfer2"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
@@ -404,6 +404,83 @@ class AlertView4: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
         
+        
+        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        return button
+    }()
+  
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupView()
+        
+    }
+    
+    private func setupView() {
+        //backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? colorFrom1 : colorTo1)
+        
+        self.addSubview(name)
+        self.addSubview(value_title)
+        self.addSubview(ok)
+        self.addSubview(cancel)
+
+    }
+}
+
+class AlertView5: UIView {
+    
+    let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+
+    lazy var name: UILabel = {
+        let title = UILabel()
+        title.text = defaultLocalizer.stringForKey(key: "submit")
+        title.numberOfLines = 0
+        title.textColor = colorBlackWhite
+        title.font = UIFont.boldSystemFont(ofSize: 20)
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.textAlignment = .left
+        title.frame = CGRect(x: 20, y: 30, width: UIScreen.main.bounds.size.width - 80, height: 35)
+        return title
+    }()
+    
+    lazy var value_title: UILabel = {
+        let title = UILabel()
+        title.text = defaultLocalizer.stringForKey(key: "confirm_exit")
+        title.numberOfLines = 2
+        title.textColor = colorBlackWhite
+        title.font = UIFont.systemFont(ofSize: 18)
+        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+        title.textAlignment = .left
+        title.frame = CGRect(x: 20, y: 60, width: UIScreen.main.bounds.size.width - 80, height: 80)
+        return title
+    }()
+
+    lazy var ok: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .clear
+        button.setTitle(defaultLocalizer.stringForKey(key: "Exit"), for: .normal)
+        button.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+       // button.frame = CGRect(x: 20, y: 150, width: UIScreen.main.bounds.size.width - 80, height: 45)
+        button.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ((button.titleLabel?.text!.count)! * 12) - 80, y: 130, width: (button.titleLabel?.text!.count)! * 12, height: 45)
+        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        return button
+    }()
+    
+    lazy var cancel: UIButton = {
+        let button = UIButton()
+        
+        button.backgroundColor = .clear
+        button.setTitle(defaultLocalizer.stringForKey(key: "Cancel"), for: .normal)
+        button.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.layer.cornerRadius = button.frame.height / 2
+        button.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ((button.titleLabel?.text!.count)! * 12) - ((ok.titleLabel?.text!.count)! * 10) - 100, y: 130, width: (button.titleLabel?.text!.count)! * 12, height: 45)
         
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         return button

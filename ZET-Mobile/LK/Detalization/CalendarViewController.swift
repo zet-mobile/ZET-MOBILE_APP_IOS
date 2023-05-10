@@ -16,6 +16,10 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
 
     var calendar_view = CalendarView()
 
+    var fromD = ""
+    var toD = ""
+    var dateC = 0
+    
     fileprivate let invalidPeriodLength = 90
     
     let koyomi: Koyomi = {
@@ -35,6 +39,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print("ouyt")
         modalPresentationCapturesStatusBarAppearance = false
         
         view.backgroundColor = colorGrayWhite
@@ -53,32 +58,45 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
         koyomi.weekColor = .gray
         koyomi.otherMonthColor = .gray
         //koyomi.isHiddenOtherMonth = true
+    
         koyomi.selectionMode = .sequence(style: .semicircleEdge)
         koyomi.selectedStyleColor = UIColor(red: 1.00, green: 0.68, blue: 0.40, alpha: 1.00)
         koyomi
             .setDayFont(size: 14)
             .setWeekFont(size: 10)
-        
         calendar_view.addSubview(koyomi)
         calendar_view.layer.cornerRadius = 10
+        
         
         let dateFormatter1 = DateFormatter()
         let date = Date()
         dateFormatter1.dateFormat = "LLLL yyyy"
-        dateFormatter1.locale = Locale(identifier: "ru_RU")
+        dateFormatter1.locale = Locale(identifier: defaultLocalizer.stringForKey(key: "locale_lang"))
         
         calendar_view.month.text = dateFormatter1.string(from: date)
         
-        calendar_view.next_button.addTarget(self, action: #selector(nextMonth), for: .touchUpInside)
         calendar_view.prev_button.addTarget(self, action: #selector(prevMonth), for: .touchUpInside)
+        calendar_view.next_button.addTarget(self, action: #selector(nextMonth), for: .touchUpInside)
+        
         calendar_view.cancel.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         calendar_view.ok.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         calendar_view.close.addTarget(self, action: #selector(dismissCalendar), for: .touchUpInside)
         view.addSubview(calendar_view)
+        
+        calendar_view.ok.isEnabled = false
+        calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        koyomi.unselectAll()
+        print("lop")
+        koyomi.calendarDelegate = self
+        print(dateC)
+        print(fromD)
+        print(toD)
+        fromDate = fromD
+        to_Date = toD
+        date_count = dateC
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -90,6 +108,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate {
 extension CalendarViewController: KoyomiDelegate {
     func koyomi(_ koyomi: Koyomi, didSelect date: Date?, forItemAt indexPath: IndexPath) {
         print("You Selected: \(date)")
+       // calendar_view.ok.isEnabled = true
+      //  calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
     }
     
     func koyomi(_ koyomi: Koyomi, currentDateString dateString: String) {
@@ -99,7 +119,7 @@ extension CalendarViewController: KoyomiDelegate {
         dateFormatter1.dateFormat = "MM/yyyy"
         let date = dateFormatter1.date(from: dateString)
         dateFormatter1.dateFormat = "LLLL yyyy"
-        dateFormatter1.locale = Locale(identifier: "ru_RU")
+        dateFormatter1.locale = Locale(identifier: defaultLocalizer.stringForKey(key: "locale_lang"))
         
         calendar_view.month.text = dateFormatter1.string(from: date!)
     }
@@ -110,28 +130,43 @@ extension CalendarViewController: KoyomiDelegate {
             print("More than \(invalidPeriodLength) days are invalid period.")
             return false
         }*/
+        
         var toDay = Calendar.current.startOfDay(for: Date())
         
         let dateFormatter1 = DateFormatter()
         dateFormatter1.dateFormat = "dd.MM.yyyy"
-        dateFormatter1.locale = Locale(identifier: "ru_RU")
+        dateFormatter1.locale = Locale(identifier: defaultLocalizer.stringForKey(key: "locale_lang"))
+        
+        /*if date == nil  && toDate == nil {
+            calendar_view.ok.isEnabled = false
+            calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        }*/
         
         if date != nil && Calendar.current.startOfDay(for: date!) <= toDay {
-            fromDate = dateFormatter1.string(from: date!)
-            calendar_view.ok.isEnabled = true
-            calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-            if date != nil  && toDate != nil {
-                if  Calendar.current.startOfDay(for: date!) >= toDay ||  Calendar.current.startOfDay(for: toDate!) >= toDay {
-                    print("kkkkk")
-                    calendar_view.ok.isEnabled = false
-                    calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-                }
-                else  {
-                    calendar_view.ok.isEnabled = true
-                    calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-                }
-                
+            if date! < Calendar.current.dateWith2(year: 2023, month: 1, day: 2)!{
+                print("hi  date2")
+                calendar_view.ok.isEnabled = false
+                calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
             }
+            else {
+                fromDate = dateFormatter1.string(from: date!)
+                fromD = dateFormatter1.string(from: date!)
+                calendar_view.ok.isEnabled = true
+                calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+                if date != nil  && toDate != nil {
+                    if  Calendar.current.startOfDay(for: date!) >= toDay ||  Calendar.current.startOfDay(for: toDate!) >= toDay {
+                        print("kkkkk")
+                        calendar_view.ok.isEnabled = false
+                        calendar_view.ok.backgroundColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+                    }
+                    else  {
+                        calendar_view.ok.isEnabled = true
+                        calendar_view.ok.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
+                    }
+                    
+                }
+            }
+            
         }
         else {
             calendar_view.ok.isEnabled = false
@@ -141,9 +176,12 @@ extension CalendarViewController: KoyomiDelegate {
         if toDate != nil {
             to_Date = dateFormatter1.string(from: toDate!)
             date_count = length
+            toD = dateFormatter1.string(from: toDate!)
+            dateC = length
         }
         else {
             to_Date = ""
+            toD = ""
         }
         
         print(date_count)
@@ -161,16 +199,32 @@ extension CalendarViewController: KoyomiDelegate {
     }
     
     @objc func prevMonth() {
+        
+        print(koyomi.currentDateString())
+        print(koyomi.currentDateFormat)
+        let isoDate = koyomi.currentDateString()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/yyyy"
+        let date = dateFormatter.date(from: isoDate)!
+        
         let month: MonthType = {
-            return .previous
+            
+            if date > Calendar.current.dateWith(year: 2023, month: 1) ?? Date.distantFuture {
+                print("ok")
+                return .previous
+            } else {
+                print("no ok")
+                return .current
+            }
+
         }()
         koyomi.display(in: month)
     }
     
     @objc func dismissCalendar(_ sender: UIButton) {
         sender.showAnimation { [self] in
-            dismiss(animated: true)
             
+            dismiss(animated: true)
         }
     }
     
@@ -191,7 +245,7 @@ class CalendarView: UIView {
     lazy var title_calendar: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
-        title.text = "Выберите период"
+        title.text = defaultLocalizer.stringForKey(key: "choose_period")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)
@@ -281,3 +335,19 @@ class CalendarView: UIView {
     }
 }
 
+extension Calendar {
+    func dateWith(year: Int, month: Int) -> Date? {
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        return date(from: dateComponents)
+    }
+    
+    func dateWith2(year: Int, month: Int, day: Int) -> Date? {
+        var dateComponents = DateComponents()
+        dateComponents.year = year
+        dateComponents.month = month
+        dateComponents.day = day
+        return date(from: dateComponents)
+    }
+}

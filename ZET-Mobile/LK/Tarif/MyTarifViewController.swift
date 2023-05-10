@@ -71,6 +71,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     var overChargings_data = [[String]]()
     var availables_data = [[String]]()
     var unlim_data = [[String]]()
+    var options_element = [[String]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,7 +98,12 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     }
     
     @objc func goBack() {
-        self.navigationController?.popViewController(animated: true)
+        if let destinationViewController = navigationController?.viewControllers
+                                                                .filter(
+                                              {$0 is HomeViewController})
+                                                                .first {
+            navigationController?.popToViewController(destinationViewController, animated: true)
+        }
     }
     
     func setupView() {
@@ -114,15 +120,9 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 896)
         view.addSubview(scrollView)
         
-        
-        let labels = getLabelsInView(view: self.view)
-        for label in labels {
-            label.removeFromSuperview()
-        }
-        
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         tarifView = TarifView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
-        
+        tarifView.zetImage.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Active_Tarif — dark") : UIImage(named: "Active_Tarif"))
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Tariff_plan")
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
@@ -130,12 +130,13 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
         
-        tarifView.welcome.text = info_data[0][1]
-        tarifView.user_name.text = info_data[0][2]
+        if info_data.count != 0 {
+            tarifView.welcome.text = info_data[0][1]
+            tarifView.user_name.text = info_data[0][2]
+            
+            tarifView.titleOneRes.text = info_data[0][1]
+        }
         
-        tarifView.titleOneRes.text = info_data[0][1]
-        
-        y_pozition = 240
         var max_lengh = 0
         
         var font = UIFont.systemFont(ofSize: 15)
@@ -160,9 +161,14 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
            
             let title = UILabel()
             title.text = overChargings_data[i][0]
-            title.frame = CGRect(x: 20, y: y_pozition, width: Int(size.width) + 16, height: 25)
+            if size.width < UIScreen.main.bounds.size.width {
+                title.frame = CGRect(x: 20, y: y_pozition, width: Int(size.width) + 16, height: 25)
+            } else {
+                title.frame = CGRect(x: 20, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 100, height: 40)
+                y_pozition += 10
+            }
             title.numberOfLines = 0
-            title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
+            title.textColor = darkGrayLight
             title.font = UIFont.preferredFont(forTextStyle: .subheadline)
             title.font = UIFont.systemFont(ofSize: 15)
             title.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -191,85 +197,56 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
             y_pozition = y_pozition + 30
         }
         
-        if icon_count != 0 {
-            y_pozition = y_pozition + 20
-        }
-        
-        for i in 0 ..< icon_count {
-            let unlimits = UIImageView()
-            unlimits.image = UIImage(named: "VK_black")
-            
-            if x_pozition > 378 {
-                x_pozition = 20
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                y_pozition = y_pozition + 40
-            }
-            else {
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                x_pozition = x_pozition + 45
-            }
-            scrollView.addSubview(unlimits)
-        
-        }
-        
-        if 428 - x_pozition < 250 {
-            y_pozition = y_pozition + 45
+        for i in 0 ..< unlim_data.count {
+            print(options_element[i].count)
             x_pozition = 20
-        }
-        
-        let title = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: 250, height: 35))
-        title.text = "Безлимит на социальные сети"
-        title.numberOfLines = 0
-        title.textColor = darkGrayLight
-        title.font = UIFont.systemFont(ofSize: 15)
-        title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .left
-        
-        if icon_count != 0  {
-            scrollView.addSubview(title)
-        }
-        
-        if icon_count2 != 0  {
-            x_pozition = 20
-            y_pozition = y_pozition + 55
-        }
-        
-        for i in 0 ..< icon_count2 {
-            let unlimits = UIImageView()
-            unlimits.image = UIImage(named: "VK_black")
+            y_pozition += 10
+            for j in 0 ..< options_element[i].count {
+                
+                let unlimits = UIImageView()
+              //  unlimits.image = UIImage(named: "VK_black")
+                if options_element[i][j] != "" {
+                    unlimits.af_setImage(withURL: URL(string: options_element[i][j])!)
+                }
+                else {
+                    unlimits.image = UIImage(named: "VK_black")
+                }
+                
+                if Int(UIScreen.main.bounds.size.width) - x_pozition < 55 {
+                    x_pozition = 20
+                    y_pozition = y_pozition + 40
+                    unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 30, height: 30)
+                }
+                else {
+                    unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 30, height: 30)
+                    x_pozition = x_pozition + 35
+                }
+                scrollView.addSubview(unlimits)
+            }
             
-            if x_pozition > 378 {
-                x_pozition = 20
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
+            if Int(UIScreen.main.bounds.size.width) - x_pozition < unlim_data[i][0].count * 10 {
                 y_pozition = y_pozition + 45
+                x_pozition = 20
             }
-            else {
-                unlimits.frame = CGRect(x: x_pozition, y: y_pozition, width: 35, height: 35)
-                x_pozition = x_pozition + 45
-            }
-            scrollView.addSubview(unlimits)
-        
+            
+            let title = UILabel(frame: CGRect(x: x_pozition + 10, y: y_pozition, width: unlim_data[i][0].count * 10, height: 35))
+            title.text = unlim_data[i][0]
+            title.numberOfLines = 0
+            title.textColor = darkGrayLight
+            title.font = UIFont.systemFont(ofSize: 15)
+            title.lineBreakMode = NSLineBreakMode.byWordWrapping
+            title.textAlignment = .left
+            
+            scrollView.addSubview(title)
+            
+            y_pozition += 30
         }
         
-        if 428 - x_pozition < 200 {
-            y_pozition = y_pozition + 45
-            x_pozition = 20
+        if unlim_data.count != 0 {
+            y_pozition += 45
         }
-        
-        let title2 = UILabel(frame: CGRect(x: x_pozition, y: y_pozition, width: 200, height: 35))
-        title2.text = "Ночной безлимит"
-        title2.numberOfLines = 0
-        title2.textColor = darkGrayLight
-        title2.font = UIFont.systemFont(ofSize: 15)
-        title2.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title2.textAlignment = .left
-        
-        if icon_count2 != 0 {
-            scrollView.addSubview(title2)
-        }
-        
-        if icon_count != 0 && icon_count2 != 0 {
-            y_pozition = y_pozition + 50
+        else {
+            y_pozition += 10
         }
         
         let ReconnectBut = UIButton(frame: CGRect(x: 20, y: y_pozition + 10, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
@@ -301,31 +278,23 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         tarifView.tab1.frame = CGRect(x: (Int(UIScreen.main.bounds.size.width) / 2) / 2 , y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
         tarifView.tab1Line.frame = CGRect(x: (Int(UIScreen.main.bounds.size.width) / 2) / 2, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2, height: 2)
         
-        //tarifView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 45)
-        //tarifView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 20, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 45)
-        
-        //tarifView.tab1Line.frame = CGRect(x: 20, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width) / 2 - 20, height: 2)
-       // tarifView.tab2Line.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition + 40), width: UIScreen.main.bounds.size.width / 2 - 20, height: 2)
-        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         tarifView.tab1.isUserInteractionEnabled = true
         tarifView.tab1.addGestureRecognizer(tapGestureRecognizer)
         
-        /*let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
-        tarifView.tab2.isUserInteractionEnabled = true
-        tarifView.tab2.addGestureRecognizer(tapGestureRecognizer2)*/
-        
+        print("y_pozition 1")
+        print(y_pozition)
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = contentColor
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
         TabCollectionView.delegate = self
         TabCollectionView.dataSource = self
-        TabCollectionView.alwaysBounceVertical = false
+        TabCollectionView.alwaysBounceVertical = true
         TabCollectionView.showsVerticalScrollIndicator = false
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView {
+        if self.scrollView == scrollView  {
             if scrollView.contentOffset.y > tarifView.tab1.frame.origin.y {
                 tarifView.zetImage.isHidden = true
                 tarifView.welcome.isHidden = true
@@ -340,6 +309,40 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                 TabCollectionView.frame.origin.y = 45
             }
             if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
+                print("y_pozition 2")
+                print(y_pozition)
+                tarifView.zetImage.isHidden = false
+                tarifView.welcome.isHidden = false
+                tarifView.user_name.isHidden = false
+                tarifView.titleOne.isHidden = false
+                TarifBalanceView.isHidden = false
+                self.scrollView.contentOffset.y = 104
+                tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
+                tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
+                tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
+               
+            }
+        }
+        
+        if table == scrollView {
+            if scrollView.contentOffset.y > 10 {
+                tarifView.zetImage.isHidden = true
+                tarifView.welcome.isHidden = true
+                tarifView.user_name.isHidden = true
+                tarifView.titleOne.isHidden = true
+                TarifBalanceView.isHidden = true
+                self.scrollView.contentOffset.y = 0
+                tarifView.tab1.frame.origin.y = 0
+                tarifView.tab2.frame.origin.y = 0
+                tarifView.tab1Line.frame.origin.y = 40
+                tarifView.tab2Line.frame.origin.y = 40
+                TabCollectionView.frame.origin.y = 45
+            }
+            if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
+                print("y_pozition 2")
+                print(y_pozition)
                 tarifView.zetImage.isHidden = false
                 tarifView.welcome.isHidden = false
                 tarifView.user_name.isHidden = false
@@ -358,7 +361,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     
 
     @objc func goToChangeTarif(_ sender: UIButton) {
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -376,14 +379,15 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "Re-activate")
-        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Re-activate")) \(info_data[0][1])?"
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Re-activate2")) \"\(info_data[0][1])\" \(defaultLocalizer.stringForKey(key: "Re-activate2_1"))?"
         view.name_content.numberOfLines = 2
-        
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Ellipse 27-2_dark2") : UIImage(named: "Ellipse 27-2"))
+        view.cancel.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Reconnect"), for: .normal)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
@@ -396,7 +400,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     
     @objc func requestAnswer(status: Bool, message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -414,15 +418,20 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
+        
         if status == true {
-            view.name.text = "Тариф переподключен!"
+            view.name.text = defaultLocalizer.stringForKey(key: "Tariff_reconnected")
             view.image_icon.image = UIImage(named: "correct_alert")
+            view.cancel.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
+            view.ok.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
+            view.cancel.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
+            view.ok.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         }
         
         view.name_content.text = "\(message)"
@@ -430,9 +439,6 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
         view.name.isUserInteractionEnabled = true
         view.name.addGestureRecognizer(tapGestureRecognizer)
-        
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
@@ -445,19 +451,24 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     
     @objc func dismissDialog(_ sender: UIButton) {
         print("hello")
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(MyTarifViewController(), animated: false)
+    }
+    
+    @objc func dismissDialogCancel(_ sender: UIButton) {
+        print("hello")
         sender.showAnimation { [self] in
             alert.dismiss(animated: true, completion: nil)
-            hideActivityIndicator(uiView: view)
+           // hideActivityIndicator(uiView: view)
         }
+        hideActivityIndicator(uiView: view)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation { [self] in
-            alert.dismiss(animated: true, completion: nil)
-            showActivityIndicator(uiView: view)
-        }
-    
+        alert.dismiss(animated: true, completion: nil)
+        showActivityIndicator(uiView: view)
+        
         print(sender.tag)
         let parametr: [String: Any] = ["priceplanForUserId": info_data[0][0], "discountId": discount_id]
         
@@ -478,7 +489,8 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                 },
                 onError: { [self] error in
                     DispatchQueue.main.async {
-                        requestAnswer(status: false, message: error.localizedDescription)
+                        self.hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                         print(error.localizedDescription)
                         
                     }
@@ -521,9 +533,8 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                             let dateFormatter1 = DateFormatter()
                             dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                             let date = dateFormatter1.date(from: String(result.connected.nextApplyDate!))
-                            dateFormatter1.dateFormat = "dd MMMM"
-                            dateFormatter1.locale = Locale(identifier: "ru_RU")
-                            spisanie_data = "Активен до: \(dateFormatter1.string(from: date!))"
+                            dateFormatter1.dateFormat = "dd-MM-yyyy"
+                            spisanie_data = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
                          }
                         else {
                             spisanie_data = ""
@@ -547,10 +558,25 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                         }
                         
                         if result.connected.unlimOptions != nil {
-                            if result.connected.unlimOptions!.count != 0 {
-                                self.icon_count = result.connected.unlimOptions!.count
-                                self.icon_count2 = result.connected.unlimOptions!.count
+                            
+                            self.options_element = [[String]](repeating: [String](repeating: "hh", count: 1), count: result.connected.unlimOptions!.count)
+                            
+                            for i in 0 ..< result.connected.unlimOptions!.count {
+                                self.options_element[i] = [String](repeating: "", count: result.connected.unlimOptions![i].dpiUnlimElements.count)
                             }
+                            
+                            for i in 0 ..< result.connected.unlimOptions!.count {
+                                
+                                self.unlim_data.append([result.connected.unlimOptions![i].optionName])
+                               
+                                for j in 0 ..< result.connected.unlimOptions![i].dpiUnlimElements.count {
+                                    
+                                    self.options_element[i][j] = result.connected.unlimOptions![i].dpiUnlimElements[j].iconUrl
+                                }
+                                print(self.options_element)
+                                
+                            }
+                            
                         }
                         
                         if result.connected.overCharging != nil {
@@ -564,14 +590,20 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                         
                         if result.available.count != 0 {
                             for i in 0 ..< result.available.count {
-                                self.availables_data.append([String(result.available[i].id), String(result.available[i].priceplanName), String(result.available[i].price), String(result.available[i].currencyAndPeriod)])
+                                self.availables_data.append([String(result.available[i].id), String(result.available[i].priceplanName), String(result.available[i].price ?? ""), String(result.available[i].currencyAndPeriod ?? ""), String(result.available[i].description ?? "")])
                             }
                         }
                     }
                 },  
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        setupTarifBalanceViewSection()
+                        setupTabCollectionView()
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -621,16 +653,16 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 cell.titleOne.font = UIFont.boldSystemFont(ofSize: 16)
             }
             
-            if balances_data[indexPath.row][0] == "1" {
-                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "internet_tarif.png") : UIImage(named: "Item-3.png")
-            }
-            else if balances_data[indexPath.row][0] == "2"  {
-                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "minuti_zet_tarif.png") : UIImage(named: "Item-2.png")
-            }
-            else if balances_data[indexPath.row][0] == "3"  {
-                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "light" ? UIImage(named: "minuti_tarif.png") : UIImage(named: "Item.png")
+            if balances_data[indexPath.row][0] == "3" {
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Item-3.png") : UIImage(named: "internet_tarif.png")
             }
             else if balances_data[indexPath.row][0] == "4"  {
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Item-2.png") : UIImage(named: "minuti_zet_tarif.png")
+            }
+            else if balances_data[indexPath.row][0] == "1"  {
+                cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Item.png") : UIImage(named: "minuti_tarif.png")
+            }
+            else if balances_data[indexPath.row][0] == "2"  {
                 cell.image.image = UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Item-4.png") : UIImage(named: "sms_tarif.png")
             }
             
@@ -642,9 +674,9 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 table.register(TarifTabViewCell.self, forCellReuseIdentifier: "tarif_tab_cell")
                 table.delegate = self
                 table.dataSource = self
-                table.rowHeight = 100
-                table.estimatedRowHeight = 100
-                table.alwaysBounceVertical = false
+                table.rowHeight = UITableView.automaticDimension
+                table.estimatedRowHeight = 120
+                table.alwaysBounceVertical = true
                 table.backgroundColor = contentColor
                 table.separatorColor = .lightGray
                 cell.addSubview(table)
@@ -674,6 +706,15 @@ extension MyTarifViewController: UICollectionViewDelegateFlowLayout, UICollectio
 }
 
 extension MyTarifViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if availables_data[indexPath.row][4] == "" {
+             return 90
+         }
+         else {
+             return 120
+         }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if availables_data.count != 0 {
             return availables_data.count
@@ -687,7 +728,11 @@ extension MyTarifViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tarif_tab_cell", for: indexPath) as! TarifTabViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
      
+        cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Ellipse 27-2_dark2") : UIImage(named: "Ellipse 27-2"))
         cell.titleOne.text = availables_data[indexPath.row][1]
+        cell.titleTwo.text = availables_data[indexPath.row][4]
+        
+        cell.titleTwo.numberOfLines = 3
         
         let cost: NSString = availables_data[indexPath.row][2] as NSString
         let range = (cost).range(of: cost as String)

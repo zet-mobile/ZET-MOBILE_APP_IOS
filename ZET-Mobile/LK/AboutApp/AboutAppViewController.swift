@@ -9,6 +9,8 @@ import UIKit
 import RxCocoa
 import RxSwift
 import StoreKit
+import Alamofire
+import AlamofireImage
 
 class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStoreProductViewControllerDelegate {
     
@@ -32,7 +34,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
 
         showActivityIndicator(uiView: self.view)
         storeProductViewController.delegate = self
-        
+        view.backgroundColor = toolbarColor
         sendRequest()
     }
     
@@ -47,6 +49,10 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden =  true
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? .lightContent : .darkContent)
     }
@@ -56,7 +62,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
     }
     
     func setupView() {
-        view.backgroundColor = colorGrayandDark
+        view.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00)  : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
         
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
@@ -82,7 +88,9 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(about_view)
-        toolbar.backgroundColor = colorGrayandDark
+        
+        toolbar.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?  UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00)  : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
+        
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
@@ -111,7 +119,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
             
             let detailViewController = ConditionViewController()
             
-            detailViewController.condition_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+            detailViewController.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
             
             nav = UINavigationController(rootViewController: detailViewController)
             nav.modalPresentationStyle = .pageSheet
@@ -144,7 +152,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
                         
                         if result.data.count != 0 {
                             for i in 0 ..< result.data.count {
-                                self.table_data.append([String(result.data[i].id), String(result.data[i].title), String(result.data[i].description), String(result.data[i].url)])
+                                self.table_data.append([String(result.data[i].id), String(result.data[i].title), String(result.data[i].description), String(result.data[i].url), String(result.data[i].iconUrl)])
                             }
                         }
                         
@@ -152,7 +160,10 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
@@ -187,9 +198,9 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
-        view.name.text = "Что-то пошло не так"
+        view.name.text = defaultLocalizer.stringForKey(key: "error_title")
         view.image_icon.image = UIImage(named: "uncorrect_alert")
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
@@ -230,6 +241,13 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
         cell.titleOne.text = table_data[indexPath.row][1]
         cell.titleTwo.text = table_data[indexPath.row][2]
         
+        if table_data[indexPath.row][4] != "" {
+            cell.icon.af_setImage(withURL: URL(string: table_data[indexPath.row][4])!)
+        }
+        else {
+           cell.icon.image = UIImage(named: "BalanceBack")
+        }
+        
         let bgColorView = UIView()
         bgColorView.backgroundColor = .clear
         cell.selectedBackgroundView = bgColorView
@@ -241,6 +259,9 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(table_data[indexPath.row][3])
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         let result = table_data[indexPath.row][3].trimmingCharacters(in: CharacterSet(charactersIn: "0123456789").inverted)
         print(result)
         let parametersDict = [SKStoreProductParameterITunesItemIdentifier: result]
@@ -256,6 +277,7 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
                 print("Error: \(error.localizedDescription)")
         }}})
     }
+    
     
     @objc func openAppStore(_ sender: UIButton) {
         sender.showAnimation { [self] in

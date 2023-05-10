@@ -9,6 +9,14 @@ import UIKit
 import RxCocoa
 import RxSwift
 import iOSDropDown
+import LocalAuthentication
+
+var langId_choosed = 1
+var themeID_choosed = 1
+var smsNotification = false
+var emailNotification = false
+var pushNotification = false
+var promotionNotification = false
 
 class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDropDelegate {
     
@@ -27,20 +35,13 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     var lang_choosed = ""
     var theme_choosed = ""
     
-    var langId_choosed = 0
-    var themeID_choosed = 0
-    
-    var smsNotification = false
-    var emailNotification = false
-    var pushNotification = false
-    var promotionNotification = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = toolbarColor
         
-        sendRequest()
+        putRequest2()
     }
     
     override func viewDidLayoutSubviews() {
@@ -111,7 +112,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         settings_view.lang.leftViewMode = .always
         settings_view.lang.didSelect { [self] (selectedText, index, id) in
             self.lang_choosed = selectedText
-            self.langId_choosed = Int(lang_data[index][0])!
+            langId_choosed = Int(lang_data[index][0])!
             putRequest(type: "lang")
         }
         
@@ -134,7 +135,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         settings_view.app_theme.didSelect { [self] (selectedText, index, id) in
             self.theme_choosed = selectedText
             print(Int(appearance_data[index][0])!)
-            self.themeID_choosed = Int(appearance_data[index][0])!
+            themeID_choosed = Int(appearance_data[index][0])!
             if Int(appearance_data[index][0])! == 1 {
                 UserDefaults.standard.set("light", forKey: "ThemeAppereance")
             }
@@ -142,21 +143,25 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                 UserDefaults.standard.set("dark", forKey: "ThemeAppereance")
             }
             
+            darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
+
             colorLine = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
 
             colorGrayWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
 
             contentColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor.white)
-            
-            toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
-            
+
+            alertColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1) : UIColor.white)
+
+            toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.20, green: 0.20, blue: 0.21, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
+
             colorBlackWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor.white : UIColor.black)
 
             colorLightDarkGray = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
 
             colorLightDarkGray2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
-            
-            darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
+
+            colorGrayandDark = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
             
             putRequest(type: "theme")
         }
@@ -197,8 +202,11 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     }
     
     @objc func switchEnterChange(_ sender: Any) {
-        
+        //let context = LAContext()
+
+        //context.touchIDAuthenticationAllowableReuseDuration
         UserDefaults.standard.set(settings_view.switch_enter.isOn, forKey: "BiometricEnter")
+     
     }
     
     
@@ -236,12 +244,15 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async {
-                        self.setupView()
                         self.hideActivityIndicator(uiView: self.view)
+                        self.setupView()
                     }
                    print("Completed event.")
                     
@@ -253,7 +264,7 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     @objc func putRequest(type: String) {
         
-        self.showActivityIndicator(uiView: self.view)
+        //self.showActivityIndicator(uiView: self.view)
         let parametr: [String: Any] = ["promotionNotification": promotionNotification, "pushNotification": pushNotification, "emailNotification" : emailNotification, "smsNotification" : smsNotification, "languageId": langId_choosed, "themeId" : themeID_choosed]
         print(parametr)
         let client = APIClient.shared
@@ -269,12 +280,55 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                      //  hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                    print("Completed event.")
                     DispatchQueue.main.async {
-                        self.hideActivityIndicator(uiView: self.view)
+                        //self.hideActivityIndicator(uiView: self.view)
+                    }
+                }).disposed(by: disposeBag)
+              }
+              catch{
+                  
+            }
+    }
+    
+    @objc func putRequest2() {
+        
+        if UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" {
+            themeID_choosed = 2
+        }
+        else {
+            themeID_choosed = 1
+        }
+        langId_choosed = UserDefaults.standard.integer(forKey: "language")
+        
+        let parametr: [String: Any] = ["promotionNotification": promotionNotification, "pushNotification": pushNotification, "emailNotification" : emailNotification, "smsNotification" : smsNotification, "languageId": langId_choosed, "themeId" : themeID_choosed]
+        print(parametr)
+        let client = APIClient.shared
+            do{
+                try client.settingsPutRequest(jsonBody: parametr).subscribe (
+                onNext: { result in
+                    print("hello")
+                    DispatchQueue.main.async { [self] in
+                        sendRequest()
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
+                },
+                onCompleted: {
+                   print("Completed event.")
+                    DispatchQueue.main.async {
+                       // self.hideActivityIndicator(uiView: self.view)
                     }
                 }).disposed(by: disposeBag)
               }
@@ -327,11 +381,13 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
             window.rootViewController = vc
         }, completion: nil)
+        
+        print("themeId = \(themeID_choosed)")
     }
 
     @objc func requestAnswer(message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -348,10 +404,10 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         
         let view = AlertView()
 
-        view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.backgroundColor = alertColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
-        view.name.text = "Что-то пошло не так"
+        view.name.text = defaultLocalizer.stringForKey(key: "error_title")
         view.image_icon.image = UIImage(named: "uncorrect_alert")
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)

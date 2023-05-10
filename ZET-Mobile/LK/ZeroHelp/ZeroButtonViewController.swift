@@ -22,7 +22,7 @@ class ZeroButtonViewController: UIViewController {
     var alert = UIAlertController()
     let scrollView = UIScrollView()
     
-    let zero_button_view = ZeroButtonView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - 200, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 5))
+    let zero_button_view = ZeroButtonView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - 180, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +31,12 @@ class ZeroButtonViewController: UIViewController {
        
         view.addSubview(zero_button_view)
         
-        zero_button_view.sendButton.addTarget(self, action: #selector(translateTrafic), for: .touchUpInside)
+        zero_button_view.sendButton.addTarget(self, action: #selector(okTrueDialog), for: .touchUpInside)
         
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func translateTrafic(_ sender: UIButton) {
@@ -53,11 +57,11 @@ class ZeroButtonViewController: UIViewController {
         alert.view.addConstraint(widthConstraint)
         
         let view = AlertView2()
-        view.backgroundColor = contentColor
+        view.backgroundColor = alertColor
         view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
         view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
-        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "sms_transfer_w") : UIImage(named: "sms_transfer"))
+        view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
         
         let cost: NSString = defaultLocalizer.stringForKey(key: "Connect_the_package") as NSString
         let range = (cost).range(of: cost as String)
@@ -83,7 +87,7 @@ class ZeroButtonViewController: UIViewController {
         costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
         costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
-        let title_cost2 = " " + packet_sum + " с."  as NSString
+        let title_cost2 = " " + packet_sum + " " + defaultLocalizer.stringForKey(key: "tjs")  as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
         let range2_2 = (title_cost2).range(of: title_cost2 as String)
         titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
@@ -107,7 +111,7 @@ class ZeroButtonViewController: UIViewController {
         costString3.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range3)
         costString3.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range3)
         
-        var title_cost3 = " " + packet_tax + " с." as NSString
+        var title_cost3 = " " + packet_tax + " " + defaultLocalizer.stringForKey(key: "tjs") as NSString
             
         let titleString3 = NSMutableAttributedString.init(string: title_cost3 as String)
         let range3_1 = (title_cost3).range(of: title_cost3 as String)
@@ -122,22 +126,22 @@ class ZeroButtonViewController: UIViewController {
         view.name.isUserInteractionEnabled = true
         view.name.addGestureRecognizer(tapGestureRecognizer)
         
-        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Pay"), for: .normal)
+        view.ok.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
         
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(okClickDialog(_:)), for: .touchUpInside)
+        view.cancel.addTarget(self, action: #selector(cancelDialog), for: .touchUpInside)
+        view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         
-        sender.showAnimation {
-            self.present(self.alert, animated: true, completion: nil)
-           
-          }
+        present(alert, animated: true, completion: nil)
+    
     }
     
     @objc func requestAnswer(status: Bool, message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        hideActivityIndicator(uiView: view)
+        
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -154,48 +158,52 @@ class ZeroButtonViewController: UIViewController {
         
         let view = AlertView()
 
-        view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.backgroundColor = alertColor
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         if status == true {
-            view.name.text = defaultLocalizer.stringForKey(key: "Traffic_exchange_completed")
+            view.name.text = defaultLocalizer.stringForKey(key: "packet_paid")
             view.image_icon.image = UIImage(named: "correct_alert")
+            view.ok.addTarget(self, action: #selector(okTrueDialog), for: .touchUpInside)
+            view.cancel.addTarget(self, action: #selector(okTrueDialog), for: .touchUpInside)
         }
         else {
-            view.name.text = "Что-то пошло не так"
+            view.name.text = defaultLocalizer.stringForKey(key: "error_title")
             view.image_icon.image = UIImage(named: "uncorrect_alert")
+            view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+            view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         }
         
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDialog))
-        view.name.isUserInteractionEnabled = true
-        view.name.addGestureRecognizer(tapGestureRecognizer)
-        
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
-        view.ok.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
         present(alert, animated: true, completion: nil)
-
-        
+    }
+    
+    @objc func okTrueDialog(_ sender: UIButton) {
+        zero_but_open = true
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func cancelDialog() {
+        alert.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func dismissDialog() {
-        print("hello")
+        alert.dismiss(animated: true)
         dismiss(animated: true, completion: nil)
     }
     
     @objc func okClickDialog(_ sender: UIButton) {
         
-        sender.showAnimation {
-            self.alert.dismiss(animated: true, completion: nil)
-        }
+        zero_but_open = true
+        alert.dismiss(animated: true, completion: nil)
         showActivityIndicator(uiView: view)
-        
         print(sender.tag)
         
          let client = APIClient.shared
@@ -214,12 +222,10 @@ class ZeroButtonViewController: UIViewController {
                     
                  },
                  onError: { [self] error in
-                     DispatchQueue.main.async {
-                         requestAnswer(status: false, message: error.localizedDescription)
-                         print(error.localizedDescription)
-                         
+                     DispatchQueue.main.async { [self] in
+                         hideActivityIndicator(uiView: self.view)
+                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                      }
-                     
                  },
                  onCompleted: { [self] in
                      DispatchQueue.main.async {

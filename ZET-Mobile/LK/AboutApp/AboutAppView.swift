@@ -44,7 +44,7 @@ class AboutAppView: UIView {
     
     lazy var title: UILabel = {
         let label = UILabel()
-        label.text = "Попробуйте другие наши приложения"
+        label.text = defaultLocalizer.stringForKey(key: "other_application")
         label.numberOfLines = 0
         label.textColor = .lightGray
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -59,7 +59,7 @@ class AboutAppView: UIView {
     lazy var button: UIButton = {
         let button = UIButton(frame: CGRect(x: 20, y: (Int(UIScreen.main.bounds.size.height) * 594) / 844, width: Int(UIScreen.main.bounds.size.width) - 40, height: 40))
         button.backgroundColor = .clear
-        button.setTitle("Политика конфиденциальности", for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Privacy_Policy"), for: .normal)
         button.setTitleColor(.orange, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.borderColor = UIColor.orange.cgColor

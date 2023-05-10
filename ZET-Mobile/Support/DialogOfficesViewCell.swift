@@ -20,7 +20,6 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "DialogOfficesViewCell")
     backgroundColor = .clear
     
-    
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
     

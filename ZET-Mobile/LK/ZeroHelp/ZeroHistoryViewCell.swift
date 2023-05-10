@@ -24,7 +24,7 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "history_transfer")
     backgroundColor = .clear
     
-    ico_image.image = UIImage(named: "internet_transfer")
+    ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
     
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)

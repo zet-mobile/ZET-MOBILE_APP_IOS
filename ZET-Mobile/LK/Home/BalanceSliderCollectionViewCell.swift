@@ -34,7 +34,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleOne.text = defaultLocalizer.stringForKey(key: "Your_balance")
         titleOne.numberOfLines = 0
         titleOne.textColor = .white
-        titleOne.font = UIFont(name: "", size: 10)
+        titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
         titleOne.frame = CGRect(x: 20, y: 40, width: 300, height: 20)

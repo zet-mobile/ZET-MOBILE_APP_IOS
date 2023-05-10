@@ -20,7 +20,7 @@ class HomeView: UIView {
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 0, width: 200, height: 28)
+        title.frame = CGRect(x: 20, y: 0, width: UIScreen.main.bounds.size.width -  40, height: 28)
         
         return title
     }()
@@ -48,7 +48,7 @@ class HomeView: UIView {
         title.font = UIFont.boldSystemFont(ofSize: 20)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 370, width: 300, height: 28)
+        title.frame = CGRect(x: 20, y: 370, width: UIScreen.main.bounds.size.width - 40, height: 28)
         
         return title
     }()
@@ -57,7 +57,7 @@ class HomeView: UIView {
         let icon_more = UIButton()
         //icon_more.setImage(#imageLiteral(resourceName: "View_all"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 320, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 320, width: UIScreen.main.bounds.size.width - 40, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "View_all")) >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
@@ -70,7 +70,7 @@ class HomeView: UIView {
         let icon_more = UIButton()
         //icon_more.setImage(#imageLiteral(resourceName: "icon_more_services"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 1800, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 1800, width: UIScreen.main.bounds.size.width - 40, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "View_all")) >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)

@@ -85,7 +85,7 @@ class ReplyToZetView: UIView {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
-        textfield.text = "Опишите проблему"
+        textfield.text = defaultLocalizer.stringForKey(key: "problem_detail")
         textfield.font = UIFont.systemFont(ofSize: 16)
         textfield.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         textfield.backgroundColor = .clear
@@ -94,13 +94,13 @@ class ReplyToZetView: UIView {
     
     lazy var titleRed: UILabel = {
         let titleRed = UILabel()
-        titleRed.text = defaultLocalizer.stringForKey(key: "Заполните поле 'Опишите проблему'")
+        titleRed.text = defaultLocalizer.stringForKey(key: "fill_problem")
         titleRed.numberOfLines = 0
         titleRed.textColor = .red
-        titleRed.font = UIFont(name: "", size: 9)
+        titleRed.font = UIFont.systemFont(ofSize: 14)
         titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleRed.textAlignment = .left
-        titleRed.frame = CGRect(x: 20, y: 390, width: 300, height: 20)
+        titleRed.frame = CGRect(x: 20, y: 390, width: UIScreen.main.bounds.size.width - 40, height: 20)
         titleRed.autoresizesSubviews = true
         titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         titleRed.isHidden = true

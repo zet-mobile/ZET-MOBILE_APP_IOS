@@ -34,7 +34,6 @@ class AuthorizationView: UIView {
         textfield.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 360) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.borderStyle = .none
         textfield.backgroundColor = colorLightDarkGray
-        textfield.layer.cornerRadius = 10
         textfield.keyboardType = .numberPad
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = colorLightDarkGray.cgColor
@@ -62,12 +61,12 @@ class AuthorizationView: UIView {
     lazy var title_info: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "receive_SMS")
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        title.font = UIFont.systemFont(ofSize: 15)
+        title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 20, y: (UIScreen.main.bounds.size.height * 410) / 926, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.frame = CGRect(x: 10, y: (UIScreen.main.bounds.size.height * 410) / 926, width: UIScreen.main.bounds.size.width - 20, height: 50)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = false
@@ -158,13 +157,13 @@ class AuthorizationView: UIView {
     
     lazy var timer_label: UILabel = {
         let title = UILabel()
-        title.text = "01"
+        title.text = "01:59"
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
-        title.textAlignment = .center
-        title.frame = CGRect(x: 210, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 20, height: 20)
+        title.textAlignment = .left
+        title.frame = CGRect(x: 210, y: (UIScreen.main.bounds.size.height * 435) / 926, width: 150, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = true
@@ -173,7 +172,7 @@ class AuthorizationView: UIView {
     
     lazy var symbol_label: UILabel = {
         let title = UILabel()
-        title.text = ":"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
@@ -188,7 +187,7 @@ class AuthorizationView: UIView {
     
     lazy var second_label: UILabel = {
         let title = UILabel()
-        title.text = "59"
+        title.text = ""
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 14)
@@ -346,8 +345,8 @@ class AuthorizationView: UIView {
         self.addSubview(send_again)
         self.addSubview(timer_label)
         self.addSubview(time_symbol)
-        self.addSubview(second_label)
-        self.addSubview(symbol_label)
+       // self.addSubview(second_label)
+        //self.addSubview(symbol_label)
         
         view_lang.addSubview(ru_button)
         view_lang.addSubview(eng_but)

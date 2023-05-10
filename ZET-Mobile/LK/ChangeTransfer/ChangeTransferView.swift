@@ -13,8 +13,8 @@ class ChangeTransferView: UIView {
     
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "exchannge_mini")
         image.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
+        image.contentMode = .scaleAspectFit
         return image
     }()
     
@@ -60,7 +60,7 @@ class ChangeTransferView: UIView {
         title.text = defaultLocalizer.stringForKey(key: "Minutes")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.textAlignment = .left
         title.frame = CGRect(x: 50, y: 0, width: 100, height: 45)
         
@@ -98,11 +98,11 @@ class ChangeTransferView: UIView {
     lazy var title2: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "Minutes_within_the_network")
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.textColor = colorBlackWhite
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.textAlignment = .left
-        title.frame = CGRect(x: 50, y: 47, width: 200, height: 45)
+        title.frame = CGRect(x: 50, y: 47, width: 200, height: 55)
         
         return title
     }()
@@ -140,7 +140,7 @@ class ChangeTransferView: UIView {
         title.text = defaultLocalizer.stringForKey(key: "DATA")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.textAlignment = .left
         title.frame = CGRect(x: 50, y: 94, width: 100, height: 45)
         
@@ -180,7 +180,7 @@ class ChangeTransferView: UIView {
         title.text = defaultLocalizer.stringForKey(key: "SMS")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.textAlignment = .left
         title.frame = CGRect(x: 50, y: 141, width: 100, height: 45)
         

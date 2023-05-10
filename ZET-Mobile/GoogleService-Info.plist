@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>327340015495-tbvjhfn126co2515rijo6tgupmk18j4b.apps.googleusercontent.com</string>
+	<string>244897709825-7qe9g6j5gut599kfggj6bhmskul82j6i.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.327340015495-tbvjhfn126co2515rijo6tgupmk18j4b</string>
+	<string>com.googleusercontent.apps.244897709825-7qe9g6j5gut599kfggj6bhmskul82j6i</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC8qCjorhFSLVSUMTBDet-kyrPYtHjxP-o</string>
+	<string>AIzaSyCn9A1WvrS1MHDyZRINrtxIK97YxRi1xiQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>327340015495</string>
+	<string>244897709825</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.zet-mobile.Salom</string>
 	<key>PROJECT_ID</key>
-	<string>appzet-cae94</string>
+	<string>zet-app-e7c7f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>appzet-cae94.appspot.com</string>
+	<string>zet-app-e7c7f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:327340015495:ios:7a9d612442b7a1f6b31d22</string>
-	<key>DATABASE_URL</key>
-	<string>https://appzet-cae94-default-rtdb.firebaseio.com</string>
+	<string>1:244897709825:ios:4e6a4d3b13b0b137f46500</string>
 </dict>
 </plist>

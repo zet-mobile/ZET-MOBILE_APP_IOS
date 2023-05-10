@@ -22,6 +22,7 @@ class DetalizationView: UIView {
         textfield.backgroundColor = colorGrayWhite
         textfield.placeholder = defaultLocalizer.stringForKey(key: "Enter_e-mail")
         textfield.textColor = colorBlackWhite
+        textfield.autocapitalizationType = UITextAutocapitalizationType.none
         return textfield
     }()
     

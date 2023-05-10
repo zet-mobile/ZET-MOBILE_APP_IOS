@@ -22,7 +22,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     lazy var title1: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "zet_call")
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
@@ -61,8 +61,8 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title2: UILabel = {
         let title = UILabel()
-        title.text = defaultLocalizer.stringForKey(key: "another_call")
-        title.numberOfLines = 1
+        title.text = defaultLocalizer.stringForKey(key: "calls within the network")
+        title.numberOfLines = 2
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
@@ -141,7 +141,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title4: UILabel = {
         let title = UILabel()
-        title.text = defaultLocalizer.stringForKey(key: "SMS")
+        title.text = defaultLocalizer.stringForKey(key: "SMS2")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
@@ -188,7 +188,7 @@ class UsageCollectionViewCell: UICollectionViewCell {
     
     lazy var title5: UILabel = {
         let title = UILabel()
-        title.text = "Сомони"
+        title.text = defaultLocalizer.stringForKey(key: "Somoni")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)

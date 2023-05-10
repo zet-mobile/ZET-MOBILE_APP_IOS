@@ -26,18 +26,18 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     contentView.addSubview(titleOne)
     contentView.addSubview(titleTwo)
     
-    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
+    contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 140)
     
-    button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+    button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 35, width: 30, height: 30)
     button.setImage(#imageLiteral(resourceName: "next_arrow"), for: UIControl.State.normal)
     
-    titleOne.frame = CGRect(x: 20, y: 10, width: 240, height: 30)
-    titleOne.numberOfLines = 1
+    titleOne.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 100, height: 50)
+    titleOne.numberOfLines = 2
     titleOne.textColor = colorBlackWhite
-    titleOne.font = UIFont.systemFont(ofSize: 20)
+    titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 20, y: 40, width: 340, height: 30)
+    titleTwo.frame = CGRect(x: 20, y: 50, width: 340, height: 30)
     titleTwo.numberOfLines = 1
     titleTwo.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
     titleTwo.font = UIFont.systemFont(ofSize: 15)

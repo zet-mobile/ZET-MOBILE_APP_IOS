@@ -13,13 +13,8 @@ class TarifView: UIView {
     
     lazy var zetImage: UIImageView = {
         let zetImage = UIImageView()
-        zetImage.image = nil
-        zetImage.image = UIImage(named: "image_user")
+       // zetImage.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Active_Tarif — dark") : UIImage(named: "Active_Tarif"))
         zetImage.frame = CGRect(x: 20, y: 5, width: 48, height: 48)
-        
-        //let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(zetClick))
-        zetImage.isUserInteractionEnabled = true
-        //zetImage.addGestureRecognizer(tapGestureRecognizer)
         
         return zetImage
     }()

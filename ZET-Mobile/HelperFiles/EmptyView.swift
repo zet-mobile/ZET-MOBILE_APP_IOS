@@ -34,7 +34,7 @@ class EmptyView: UIView {
     // MARK: - Helper Functions
     func configureView() {
         
-        infoLabel.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 60)
+        infoLabel.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 80)
         addSubview(infoLabel)
         
         

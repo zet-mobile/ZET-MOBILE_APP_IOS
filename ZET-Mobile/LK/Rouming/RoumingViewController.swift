@@ -60,6 +60,8 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = toolbarColor
+        operatorCharges_Data.removeAll()
+        roamingOperators_data.removeAll()
         sendRequest()
        
     }
@@ -94,7 +96,14 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat(operatorCharges_Data[roamingOperators_choosed_id].price.count * 55))
+        
+        if operatorCharges_Data.count != 0 {
+            scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat(operatorCharges_Data[roamingOperators_choosed_id].price.count * 55))
+        }
+        else {
+            scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        }
+        
         scrollView.isScrollEnabled = false
         view.addSubview(scrollView)
   
@@ -113,11 +122,11 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
         
-        rouming_view.tab1.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
-        rouming_view.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(0), width: UIScreen.main.bounds.size.width / 2, height: 40)
+        rouming_view.tab1.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width) / 2, height: 50)
+        rouming_view.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(0), width: UIScreen.main.bounds.size.width / 2, height: 50)
         
-        rouming_view.tab1Line.frame = CGRect(x: 10, y: 45, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
-        rouming_view.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(45), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
+        rouming_view.tab1Line.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+        rouming_view.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(55), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
         
         let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         rouming_view.tab1.isUserInteractionEnabled = true
@@ -128,7 +137,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         rouming_view.tab2.addGestureRecognizer(tapGestureRecognizer2)
         
         TabCollectionView.backgroundColor = .clear
-        TabCollectionView.frame = CGRect(x: 0, y: 55, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
+        TabCollectionView.frame = CGRect(x: 0, y: 65, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
         TabCollectionView.delegate = self
         TabCollectionView.dataSource = self
         TabCollectionView.alwaysBounceVertical = false
@@ -136,6 +145,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
+      //  getRequest()
     }
     
     @objc func tab1Click() {
@@ -161,25 +171,35 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
-                        print(result.questions.count)
                         for i in 0 ..< result.questions.count {
-                            questions_data.append([String(result.questions[i].id), String(result.questions[i].question), String(result.questions[i].answer), "false"])
+                            questions_data.append([String(result.questions[i].id), String(result.questions[i].question ?? ""), String(result.questions[i].answer ?? ""), "false"])
                         }
                         
                         for i in 0 ..< result.countries.count {
-                            countries_data.append([String(result.countries[i].id), String(result.countries[i].countryName ?? ""), String(result.countries[i].iconUrl!), "Ellipse"])
+                            countries_data.append([String(result.countries[i].id), String(result.countries[i].countryName ?? ""), String(result.countries[i].iconUrl ?? ""), "Roaming_Flag"])
                         }
                         country_choosed = countries_data[0][1]
-                        country_choosed_img = countries_data[0][3]
+                        country_choosed_id = countries_data[0][0]
+                        if countries_data[0][2] != "" {
+                            country_choosed_img = countries_data[0][2]
+                        }
+                        else {
+                            country_choosed_img = countries_data[0][3]
+                        }
+                        
                     }
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                      //  setupView()
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
-                        setupView()
+                        getRequest2()
                     }
                    print("Completed event.")
                     
@@ -189,11 +209,11 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
             }
     }
 
-    func getRequest() {
-        print(operatorCharges_Data.count)
+    func getRequest2() {
         operatorCharges_Data.removeAll()
         roamingOperators_data.removeAll()
-        table.allowsSelection = false
+       // table.allowsSelection = false
+        
         let client = APIClient.shared
             do{
               try client.roamingCountriesGetRequest(parametr: country_choosed_id).subscribe(
@@ -202,7 +222,6 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async { [self] in
                    
                         if result.roamingOperators?.count != 0 {
-                            print(result.roamingOperators!.count )
                             for i in 0 ..< result.roamingOperators!.count {
                                 roamingOperators_data.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
                                 
@@ -211,10 +230,10 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                                 
                                 for j in 0 ..< result.roamingOperators![i].operatorCharges.count {
                                     print(result.roamingOperators![i].operatorCharges.count)
-                                    print("kl,;l;")
-                                    print(String(result.roamingOperators![i].operatorCharges[j].description))
+                                
+                                    print(String(result.roamingOperators![i].operatorCharges[j].description ?? ""))
                                     
-                                    tableData.append(String(result.roamingOperators![i].operatorCharges[j].description))
+                                    tableData.append(String(result.roamingOperators![i].operatorCharges[j].description ?? ""))
                                     tableData1.append(String(result.roamingOperators![i].operatorCharges[j].price))
                                     print("")
                                     print(result.roamingOperators![i].operatorCharges.count)
@@ -224,7 +243,62 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                               //  operatorCharges_data.append(["25", "hello"])
                             }
                             
+                            print("operatorCharges_Data.count")
                             print(operatorCharges_Data.count)
+                            //print(operatorCharges_Data[0].price[0])
+                        }
+                        
+                       
+                    }
+                },
+                onError: { error in
+                   print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
+                },
+                onCompleted: {
+                    DispatchQueue.main.async { [self] in
+                        setupView()
+                        
+                    }
+                   print("Completed event.")
+                    
+                }).disposed(by: disposeBag)
+              }
+              catch{
+            }
+    }
+    
+    func getRequest() {
+        operatorCharges_Data.removeAll()
+        roamingOperators_data.removeAll()
+       // table.allowsSelection = false
+        
+        let client = APIClient.shared
+            do{
+              try client.roamingCountriesGetRequest(parametr: country_choosed_id).subscribe(
+                onNext: { result in
+                  print(result)
+                    DispatchQueue.main.async { [self] in
+                   
+                        if result.roamingOperators?.count != 0 {
+                            for i in 0 ..< result.roamingOperators!.count {
+                                roamingOperators_data.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
+                                
+                                var tableData = [String]()
+                                var tableData1 = [String]()
+                                
+                                for j in 0 ..< result.roamingOperators![i].operatorCharges.count {
+                                    tableData.append(String(result.roamingOperators![i].operatorCharges[j].description ?? ""))
+                                    tableData1.append(String(result.roamingOperators![i].operatorCharges[j].price))
+                                }
+                                
+                                operatorCharges_Data.append(operatorChargesData(description: tableData, price: tableData1))
+                              //  operatorCharges_data.append(["25", "hello"])
+                            }
+                            
                             //print(operatorCharges_Data[0].price[0])
                         }
                         
@@ -234,14 +308,20 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
                         let indexPath = IndexPath(item: 0, section: 0)
                         
+                       // TabCollectionView.reloadItems(at: [indexPath])
+                     //   TabCollectionView.reloadData()
+                        
                         TabCollectionView.reloadData()
-                        //TabCollectionView.endUpdates()
+                        
                     }
                    print("Completed event.")
                     
@@ -253,7 +333,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func requestAnswer(message: String) {
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -271,9 +351,9 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 330)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
-        view.name.text = "Что-то пошло не так"
+        view.name.text = defaultLocalizer.stringForKey(key: "error_title")
         view.image_icon.image = UIImage(named: "uncorrect_alert")
         view.name_content.text = "\(message)"
         view.ok.setTitle("OK", for: .normal)
@@ -312,7 +392,211 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoumingCollectionCell
-        if indexPath.row == 1 {
+          if indexPath.row == 0 {
+            cell.contentView.isHidden = false
+            table.isHidden = true
+            let titleOne = UILabel()
+            var y_poz = 0
+            let price_list_view = UIView()
+            
+            // setup language field
+            cell.country.isSearchEnable = false
+            cell.country.selectedRowColor = .lightGray
+            cell.country.y_pozition = 60 + (topPadding ?? 0) + 55
+            cell.country.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
+            cell.country.controller = "rouming"
+            cell.country.text = country_choosed
+              
+            if countries_data.count != 0 {
+                self.country_choosed_id = countries_data[0][0]
+                if countries_data[0][2] != "" {
+                    self.country_choosed_img = countries_data[1][3]
+                }
+                else {
+                    self.country_choosed_img = countries_data[1][3]
+                }
+            }
+              
+            cell.country.selectedRowColor = .clear
+            cell.country.rowHeight = 44
+            cell.country.didSelect { [self] (selectedText, index, id) in
+                print(countries_data[index][0])
+                self.country_choosed = selectedText
+                self.country_choosed_id = countries_data[index][0]
+                if countries_data[index][2] != "" {
+                    self.country_choosed_img = countries_data[index][3]
+                }
+                else {
+                    self.country_choosed_img = countries_data[index][3]
+                }
+                titleOne.removeFromSuperview()
+                price_list_view.removeFromSuperview()
+                getRequest()
+            }
+            
+            cell.country.optionArray.removeAll()
+            cell.country.optionIds?.removeAll()
+            for i in 0 ..< countries_data.count {
+                cell.country.optionArray.append(countries_data[i][1])
+                cell.country.optionIds?.append(Int(countries_data[i][0])!)
+                cell.country.optionImageArray.append(countries_data[i][3])
+            }
+            
+            cell.country.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
+            cell.country.setView(.left, image: UIImage(named: country_choosed_img)).isUserInteractionEnabled = false
+            cell.operator_type.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
+            
+            // setup operator field
+            cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55
+            cell.operator_type.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
+            cell.operator_type.isSearchEnable = false
+            cell.operator_type.selectedRowColor = .lightGray
+            
+            let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
+            cell.operator_type.leftView = paddingView2
+            cell.operator_type.leftViewMode = .always
+            cell.operator_type.optionArray.removeAll()
+            cell.operator_type.optionIds?.removeAll()
+            
+            if roamingOperators_data.count != 0 {
+                cell.operator_type.text = roamingOperators_data[0][1]
+                
+                for i in 0 ..< roamingOperators_data.count {
+                    cell.operator_type.optionArray.append(roamingOperators_data[i][1])
+                    cell.operator_type.optionIds?.append(Int(roamingOperators_data[i][0])!)
+                }
+                
+                if operatorCharges_Data[0].price.count != 0 {
+                    price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[0].price.count * 55)
+                    y_poz = 0
+                    
+                    for i in 0 ..< operatorCharges_Data[0].price.count {
+                        let title = UILabel()
+                        title.text = operatorCharges_Data[0].description[i]
+                        title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
+                        title.numberOfLines = 0
+                        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
+                        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                        title.font = UIFont.systemFont(ofSize: 15)
+                        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+                        title.textAlignment = .left
+                                        
+                        let title2 = UILabel()
+                        title2.text = operatorCharges_Data[0].price[i]
+                        title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
+                        title2.numberOfLines = 0
+                        title2.textColor = colorBlackWhite
+                        title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                        title2.font = UIFont.systemFont(ofSize: 15)
+                        title2.lineBreakMode = NSLineBreakMode.byWordWrapping
+                        title2.textAlignment = .right
+                                        
+                        let title_line = UILabel()
+                        title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
+                        title_line.backgroundColor = colorLightDarkGray
+                                        
+                        price_list_view.addSubview(title)
+                        price_list_view.addSubview(title2)
+                        price_list_view.addSubview(title_line)
+                        y_poz += 30
+                    }
+                                    
+                    cell.addSubview(price_list_view)
+                                    
+                    titleOne.text = defaultLocalizer.stringForKey(key: "all_prices")
+                    titleOne.numberOfLines = 0
+                    titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+                    titleOne.font = UIFont(name: "", size: 10)
+                    titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
+                    titleOne.textAlignment = .left
+                    titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
+                    titleOne.autoresizesSubviews = true
+                    titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+                                    
+                    cell.addSubview(titleOne)
+                }
+                
+                cell.operator_type.didSelect { [self] (selectedText, index, id) in
+                    
+                    print(countries_data[index][0])
+                    self.roamingOperators_choosed = selectedText
+                    self.roamingOperators_choosed = countries_data[index][0]
+                    self.roamingOperators_choosed_id = cell.operator_type.selectedIndex ?? 0
+                    
+                    let labels = getLabelsInView(view: price_list_view)
+                    for label in labels {
+                       label.removeFromSuperview()
+                    }
+                    price_list_view.removeFromSuperview()
+                    titleOne.removeFromSuperview()
+                    
+                    price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[index].price.count * 55)
+                    y_poz = 0
+                    
+                    for i in 0 ..< operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price.count {
+                                            
+                        let title = UILabel()
+                        title.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].description[i]
+                        title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
+                        title.numberOfLines = 0
+                        title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
+                        title.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                        title.font = UIFont.systemFont(ofSize: 15)
+                        title.lineBreakMode = NSLineBreakMode.byWordWrapping
+                        title.textAlignment = .left
+                                            
+                        let title2 = UILabel()
+                        title2.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price[i]
+                        title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
+                        title2.numberOfLines = 0
+                        title2.textColor = colorBlackWhite
+                        title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                        title2.font = UIFont.systemFont(ofSize: 15)
+                        title2.lineBreakMode = NSLineBreakMode.byWordWrapping
+                        title2.textAlignment = .right
+                                            
+                        let title_line = UILabel()
+                        title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
+                        title_line.backgroundColor = colorLightDarkGray
+                                            
+                        price_list_view.addSubview(title)
+                        price_list_view.addSubview(title2)
+                        price_list_view.addSubview(title_line)
+                        y_poz += 30
+                    }
+                                        
+                    cell.addSubview(price_list_view)
+                                        
+                    titleOne.text = """
+                            Все цены указаны в национальной валюте сомони с учетом акциза 7% и НДС 15%
+                                            
+                            Все звонки тарифицируются поминутно.
+                            """
+                    titleOne.numberOfLines = 0
+                    titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
+                    titleOne.font = UIFont(name: "", size: 10)
+                    titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
+                    titleOne.textAlignment = .left
+                    titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
+                    titleOne.autoresizesSubviews = true
+                    titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+                                        
+                    cell.addSubview(titleOne)
+                }
+            }
+            else {
+                cell.operator_type.text = defaultLocalizer.stringForKey(key: "no_operators")
+                cell.operator_type.optionArray.append(defaultLocalizer.stringForKey(key: "no_operators"))
+                cell.operator_type.optionIds?.append(0)
+                cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55 + cell.operator_type.frame.origin.y + 55
+                cell.operator_type.listHeight = 30
+                
+                cell.operator_type.didSelect { [self] (selectedText, index, id) in
+                    print("kkl;;;")
+                }
+            }
+        }
+        else if indexPath.row == 1 {
             cell.contentView.isHidden = true
             table.register(RoumingTableCell.self, forCellReuseIdentifier: "roming_list_cell")
             table.register(RoumingTopViewCell.self, forCellReuseIdentifier: "roaming_top")
@@ -323,200 +607,9 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             table.estimatedRowHeight = 60
             table.alwaysBounceVertical = false
             table.backgroundColor = contentColor
-            //table.allowsSelection = true
-            
+            table.isHidden = false
             cell.addSubview(table)
            
-        }
-        else {
-            cell.contentView.isHidden = false
-            let titleOne = UILabel()
-            var y_poz = 0
-            let price_list_view = UIView()
-            // setup language field
-            cell.country.isSearchEnable = false
-            cell.country.selectedRowColor = .lightGray
-            cell.country.y_pozition = 60 + (topPadding ?? 0) + 55
-            cell.country.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
-            cell.country.controller = "rouming"
-            cell.country.text = country_choosed
-            
-            let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-            cell.country.leftView = paddingView
-            cell.country.leftViewMode = .always
-            cell.country.selectedRowColor = .clear
-            
-            cell.country.didSelect { [self] (selectedText, index, id) in
-                print(countries_data[index][0])
-                self.country_choosed = selectedText
-                self.country_choosed_id = countries_data[index][0]
-                self.country_choosed_img = countries_data[index][3]
-                titleOne.removeFromSuperview()
-                price_list_view.removeFromSuperview()
-                getRequest()
-            }
-            
-            for i in 0 ..< countries_data.count {
-                cell.country.optionArray.append(countries_data[i][1])
-                cell.country.optionIds?.append(Int(countries_data[i][0])!)
-                cell.country.optionImageArray.append(countries_data[i][3])
-            }
-            cell.country.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
-            cell.country.setView(.left, image: UIImage(named: country_choosed_img)).isUserInteractionEnabled = false
-            cell.operator_type.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
-            
-            // setup operator field
-        
-            if  operatorCharges_Data.count != 0 {
-                price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[0].price.count * 55)
-            }
-            
-            
-            cell.operator_type.text = roamingOperators_choosed
-            cell.operator_type.isSearchEnable = false
-            cell.operator_type.selectedRowColor = .lightGray
-            let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-            cell.operator_type.leftView = paddingView2
-            cell.operator_type.leftViewMode = .always
-            cell.operator_type.didSelect { [self] (selectedText, index, id) in
-                
-                print(countries_data[index][0])
-                self.roamingOperators_choosed = selectedText
-                self.roamingOperators_choosed = countries_data[index][0]
-                self.roamingOperators_choosed_id = cell.operator_type.selectedIndex ?? 0
-                
-                let labels = getLabelsInView(view: price_list_view)
-                for label in labels {
-                   label.removeFromSuperview()
-                }
-                price_list_view.removeFromSuperview()
-                titleOne.removeFromSuperview()
-                
-                price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price.count * 55)
-                y_poz = 0
-                
-                for i in 0 ..< operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price.count {
-                    
-                    let title = UILabel()
-                    title.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].description[i]
-                    title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
-                    title.numberOfLines = 0
-                    title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-                    title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                    title.font = UIFont.systemFont(ofSize: 15)
-                    title.lineBreakMode = NSLineBreakMode.byWordWrapping
-                    title.textAlignment = .left
-                    
-                    let title2 = UILabel()
-                    title2.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price[i]
-                    title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
-                    title2.numberOfLines = 0
-                    title2.textColor = colorBlackWhite
-                    title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                    title2.font = UIFont.systemFont(ofSize: 15)
-                    title2.lineBreakMode = NSLineBreakMode.byWordWrapping
-                    title2.textAlignment = .right
-                    
-                    let title_line = UILabel()
-                    title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
-                    title_line.backgroundColor = colorLightDarkGray
-                    
-                    price_list_view.addSubview(title)
-                    price_list_view.addSubview(title2)
-                    price_list_view.addSubview(title_line)
-                    y_poz += 30
-                }
-                
-                cell.addSubview(price_list_view)
-                
-                titleOne.text = """
-                Все цены указаны в национальной валюте сомони с учетом акциза 7% и НДС 15%
-                    
-                Все звонки тарифицируются поминутно.
-                """
-                titleOne.numberOfLines = 0
-                titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
-                titleOne.font = UIFont(name: "", size: 10)
-                titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-                titleOne.textAlignment = .left
-                titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
-                titleOne.autoresizesSubviews = true
-                titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-                
-                cell.addSubview(titleOne)
-            }
-            
-            cell.operator_type.optionArray.removeAll()
-            cell.operator_type.optionIds?.removeAll()
-            for i in 0 ..< roamingOperators_data.count {
-                cell.operator_type.optionArray.append(roamingOperators_data[i][1])
-                cell.operator_type.optionIds?.append(Int(roamingOperators_data[i][0])!)
-            }
-            
-            if roamingOperators_data.count != 0 {
-                cell.operator_type.text = roamingOperators_data[0][1]
-                cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55
-                cell.operator_type.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
-            }
-            else {
-                cell.operator_type.text = "Операторов нет"
-                cell.operator_type.optionArray.append("Операторов нет")
-                cell.operator_type.optionIds?.append(0)
-                cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55 + cell.operator_type.frame.origin.y + 55
-                cell.operator_type.listHeight = 30
-            }
-            
-            if  operatorCharges_Data.count != 0 {
-                for i in 0 ..< operatorCharges_Data[0].price.count {
-                    
-                    let title = UILabel()
-                    title.text = operatorCharges_Data[0].description[i]
-                    title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
-                    title.numberOfLines = 0
-                    title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-                    title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                    title.font = UIFont.systemFont(ofSize: 15)
-                    title.lineBreakMode = NSLineBreakMode.byWordWrapping
-                    title.textAlignment = .left
-                    
-                    let title2 = UILabel()
-                    title2.text = operatorCharges_Data[0].price[i]
-                    title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
-                    title2.numberOfLines = 0
-                    title2.textColor = colorBlackWhite
-                    title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                    title2.font = UIFont.systemFont(ofSize: 15)
-                    title2.lineBreakMode = NSLineBreakMode.byWordWrapping
-                    title2.textAlignment = .right
-                    
-                    let title_line = UILabel()
-                    title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
-                    title_line.backgroundColor = colorLightDarkGray
-                    
-                    price_list_view.addSubview(title)
-                    price_list_view.addSubview(title2)
-                    price_list_view.addSubview(title_line)
-                    y_poz += 30
-                }
-                cell.addSubview(price_list_view)
-            }
-            
-            titleOne.text = """
-            Все цены указаны в национальной валюте сомони с учетом акциза 7% и НДС 15%
-                
-            Все звонки тарифицируются поминутно.
-            """
-            titleOne.numberOfLines = 0
-            titleOne.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
-            titleOne.font = UIFont(name: "", size: 10)
-            titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-            titleOne.textAlignment = .left
-            titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
-            titleOne.autoresizesSubviews = true
-            titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-            
-            cell.addSubview(titleOne)
-             
         }
         return cell
     }
@@ -524,7 +617,6 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
     }
-    
  
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
@@ -544,18 +636,19 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print(indexPath.row)
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
                 rouming_view.tab1.textColor = .gray
                 rouming_view.tab2.textColor = colorBlackWhite
                 rouming_view.tab1Line.backgroundColor = .clear
                 rouming_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-                
-            } else {
-                rouming_view.tab1.textColor = colorBlackWhite
-                rouming_view.tab2.textColor = .gray
-                rouming_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-                rouming_view.tab2Line.backgroundColor = .clear
+          }
+         else {
+            rouming_view.tab1.textColor = colorBlackWhite
+            rouming_view.tab2.textColor = .gray
+            rouming_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            rouming_view.tab2Line.backgroundColor = .clear
           }
        }
     }
@@ -597,6 +690,10 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             
+            let bgColorView = UIView()
+            bgColorView.backgroundColor = .clear
+            cell.selectedBackgroundView = bgColorView
+            
             return cell
         }
         else {
@@ -606,7 +703,7 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
             
             cell.opisanie.text = questions_data[indexPath.section][2]
             
-            cell.opisanie.frame = CGRect(x: 20, y: 0, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+            cell.opisanie.frame = CGRect(x: 10, y: 10, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
             cell.opisanie.numberOfLines = 0
             cell.opisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
             cell.opisanie.sizeToFit()

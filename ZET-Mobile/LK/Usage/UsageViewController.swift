@@ -19,7 +19,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     var toolbar = TarifToolbarView()
     var usage_view = UsageView()
     
-    let table = UITableView()
+    let table = UITableView(frame: .zero, style: .grouped)
     
     let UsageCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -38,6 +38,8 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     var usages_data = [[String]]()
     var history_data = [[String]]()
     var activePage = 0
+    var table_height = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,6 +66,8 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = toolbarColor
         
+        table_height = history_data.count * 140
+        
         if #available(iOS 11.0, *) {
             scrollView.scrollIndicatorInsets = view.safeAreaInsets
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
@@ -76,11 +80,19 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         scrollView.backgroundColor = .clear
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 805)
+        if table_height == 0  {
+            scrollView.contentSize = CGSize(width: view.frame.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            scrollView.isScrollEnabled = false
+        }
+        else {
+            scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(table_height) + 450)
+            scrollView.isScrollEnabled = true
+        }
         view.addSubview(scrollView)
         
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width), height: table_height + 500))
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Expenses")
         toolbar.icon_back.isHidden = true
         
@@ -116,7 +128,14 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     
     func setupHistoryUsagesTableView() {
         scrollView.addSubview(table)
-        table.frame = CGRect(x: 0, y: 470, width: UIScreen.main.bounds.size.width, height: 700)
+
+        if table_height == 0  {
+            table.frame = CGRect(x: 0, y: 470, width: Int(UIScreen.main.bounds.size.width), height: 200)
+        }
+        else {
+            table.frame = CGRect(x: 0, y: 470, width: Int(UIScreen.main.bounds.size.width), height: Int(table_height))
+        }
+        
         table.register(HistoryUsageViewCell.self, forCellReuseIdentifier: "history_usage")
         table.register(HistoryHeaderCell.self, forHeaderFooterViewReuseIdentifier: "sectionHeader")
         table.delegate = self
@@ -181,6 +200,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func sendRequest() {
+        history_data.removeAll()
         let client = APIClient.shared
             do{
               try client.usageGetRequest().subscribe(
@@ -188,16 +208,30 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
                   print(result)
                     DispatchQueue.main.async {
                         self.usages_data.removeAll()
-                        self.usages_data.append([String(result.lastDay.offnetMin!) , String(result.lastDay.onnetMin!), String(result.lastDay.internetMb!), String(result.lastDay.sms!), String(result.lastDay.tjs!)])
+                        if result.lastDay != nil {
+                            self.usages_data.append([String(result.lastDay!.offnetMin!) , String(result.lastDay!.onnetMin!), String(result.lastDay!.internetMb!), String(result.lastDay!.sms!), String(result.lastDay!.tjs!)])
+                        }
+                        else {
+                            self.usages_data.append(["0", "0", "0", "0", "0"])
+                        }
                         
-                        self.usages_data.append([String(result.lastWeek.offnetMin!), String(result.lastWeek.onnetMin!), String(result.lastWeek.internetMb!), String(result.lastWeek.sms!), String(result.lastWeek.tjs!)])
+                        if result.lastWeek != nil {
+                            self.usages_data.append([String(result.lastWeek!.offnetMin!), String(result.lastWeek!.onnetMin!), String(result.lastWeek!.internetMb!), String(result.lastWeek!.sms!), String(result.lastWeek!.tjs!)])
+                        }
+                        else {
+                            self.usages_data.append(["0", "0", "0", "0", "0"])
+                        }
                         
-                        self.usages_data.append([String(result.lastMonth.offnetMin!), String(result.lastMonth.onnetMin!), String(result.lastMonth.internetMb!), String(result.lastMonth.sms!), String(result.lastMonth.tjs!)])
-                        
+                        if result.lastMonth != nil {
+                            self.usages_data.append([String(result.lastMonth!.offnetMin!), String(result.lastMonth!.onnetMin!), String(result.lastMonth!.internetMb!), String(result.lastMonth!.sms!), String(result.lastMonth!.tjs!)])
+                        }
+                        else {
+                            self.usages_data.append(["0", "0", "0", "0", "0"])
+                        }
                         
                         if result.history != nil {
                             for i in 0 ..< result.history!.count {
-                                self.history_data.append([String(result.history![i].serviceName!), String(result.history![i].balanceChange!), String(result.history![i].transactionDate!)])
+                                self.history_data.append([String(result.history![i].serviceName ?? ""), String(result.history![i].balanceChange ?? ""), String(result.history![i].transactionDate ??  "")])
                             }
                         }
                         else {
@@ -212,6 +246,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
                 },
                 onError: { error in
                    print(error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -352,6 +389,8 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if history_data.count != 0 {
+            print("history_data.count")
+            print(history_data.count)
             return history_data.count
         }
         else {
@@ -363,12 +402,12 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "sectionHeader") as! HistoryHeaderCell
         view.backgroundColor = contentColor
         let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        dateFormatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let date = dateFormatter1.date(from: history_data[section][2])
-        dateFormatter1.dateFormat = "dd MMMM"
-        dateFormatter1.locale = Locale(identifier: "ru_RU")
-        view.title.text = dateFormatter1.string(from: date!)
-        
+        dateFormatter1.dateFormat = "dd-MM-yyyy"
+        if date !=  nil {
+            view.title.text = dateFormatter1.string(from: date!)
+        }
        return view
     }
     
@@ -385,23 +424,25 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history_usage", for: indexPath) as! HistoryUsageViewCell
         
         cell.titleOne.text = history_data[indexPath.section][0]
-        cell.titleThree.text = history_data[indexPath.section][1] + " с"
+        cell.titleThree.text = history_data[indexPath.section][1] + " " + defaultLocalizer.stringForKey(key: "tjs")
         
         if Double(history_data[indexPath.section][1])! > 0 {
             cell.titleThree.textColor = UIColor(red: 0.15, green: 0.68, blue: 0.38, alpha: 1.00)
-            cell.titleTwo.text = "Пополнение"
+            cell.titleTwo.text = defaultLocalizer.stringForKey(key: "Replenishment")
         }
         else {
             cell.titleThree.textColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
-            cell.titleTwo.text = "Списание"
+            cell.titleTwo.text = defaultLocalizer.stringForKey(key: "Charge")
         }
         
         let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "dd.MM.yyyy HH:mm:ss"
+        dateFormatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let date = dateFormatter1.date(from: history_data[indexPath.section][2])
         dateFormatter1.dateFormat = "HH:mm"
         
-        cell.titleFour.text = dateFormatter1.string(from: date!)
+        if date !=  nil {
+            cell.titleFour.text = dateFormatter1.string(from: date!)
+        }
         return cell
     }
     

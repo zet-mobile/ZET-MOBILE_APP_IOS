@@ -56,12 +56,32 @@ struct histories_help_data: Decodable {
     let packet_tax: Double
     let packet_sum: Double
     let packet_amount: Double
-    let credit_id: Double
+    let credit_id: Int
     let remaind_sum_amount: Double
     let remaind_tax_amount: Double
     let remaind_credit_amount: Double
     let is_repayment: Bool
     let packet_name: String
+    let created_at: String
+}
+
+
+struct HelpAtZeroHistoryDataD {
+    let history: [history_help_dataD]?
+}
+
+struct history_help_dataD: Decodable {
+    let date: String
+    let histories: [histories_help_dataD]
+}
+
+struct histories_help_dataD: Decodable {
+    let repayment_sum_amount: Double
+    let repayment_tax_amount: Double
+    let repayment_credit_amount: Double
+    let remaind_sum_amount: Double
+    let remaind_tax_amount: Double
+    let remaind_credit_amount: Double
     let created_at: String
 }
 
@@ -120,6 +140,27 @@ extension HelpAtZeroHistoryData: Decodable {
       
         do {
             history = try container.decode([history_help_data].self, forKey: .history)
+        }
+        catch {
+            history = nil
+        }
+  
+    
+    }
+}
+
+extension HelpAtZeroHistoryDataD: Decodable {
+    
+    private enum HelpAtZeroHistoryDataCodingKeys: String, CodingKey {
+        case history = "history"
+        
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: HelpAtZeroHistoryDataCodingKeys.self)
+      
+        do {
+            history = try container.decode([history_help_dataD].self, forKey: .history)
         }
         catch {
             history = nil

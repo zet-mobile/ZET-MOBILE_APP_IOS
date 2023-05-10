@@ -24,6 +24,7 @@ class DialogOfficesViewController: UIViewController {
         modalPresentationCapturesStatusBarAppearance = true
        
         dialog_office.layer.cornerRadius = 10
+        dialog_office.close.addTarget(self, action: #selector(close_view), for: .touchUpInside)
         view.addSubview(dialog_office)
         
         view.addSubview(table)
@@ -37,12 +38,16 @@ class DialogOfficesViewController: UIViewController {
         table.separatorStyle = .none
         table.isScrollEnabled = false
         table.backgroundColor = contentColor
+        table.allowsSelection =  false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 
+    @objc func close_view() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension DialogOfficesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -65,9 +70,9 @@ class DialogOfficesView: UIView {
     
     lazy var close: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 20, height: 20)
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
         button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
-        button.isUserInteractionEnabled = false
+        button.isUserInteractionEnabled = true
         //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         return button
     }()
@@ -75,7 +80,7 @@ class DialogOfficesView: UIView {
     lazy var title_push: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 5, width: UIScreen.main.bounds.size.width - 40, height: 50)
-        title.text = "Офис ZET Mobile"
+        title.text = defaultLocalizer.stringForKey(key: "Zet_office")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 18)

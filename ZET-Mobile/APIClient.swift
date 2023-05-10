@@ -25,6 +25,10 @@ struct Media {
     }
 }
 
+var long = ""
+var lat = ""
+var accur = ""
+
 //MARK: extension for converting out RecipeModel to jsonObject
 fileprivate extension Encodable {
   var dictionaryValue:[String: Any?]? {
@@ -458,6 +462,17 @@ class APIClient {
         request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
     }
+    
+    //  This is api for get info about available credit packets.
+    func getCreditHistoryRequestID(parametr: String) -> Observable<HelpAtZeroHistoryDataD> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/history/" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
     
     //  post money ask
     func postCreditRequestID(parametr: String) -> Observable<HelpAtZeroPostData> {

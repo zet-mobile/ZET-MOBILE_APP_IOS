@@ -66,13 +66,13 @@ class ChangeView: UIView {
         titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 240, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 220, width: 300, height: 20)
         return titleOne
     }()
     
     lazy var confirm_code: UITextField = {
         let textfield = UITextField()
-        textfield.frame = CGRect(x: 20, y: 270, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        textfield.frame = CGRect(x: 20, y: 260, width: UIScreen.main.bounds.size.width - 40, height: 50)
         textfield.keyboardType = .numberPad
         textfield.layer.cornerRadius = 16
         textfield.textColor = colorBlackWhite

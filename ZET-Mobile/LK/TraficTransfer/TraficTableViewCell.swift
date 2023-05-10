@@ -71,14 +71,14 @@ class TraficTableViewCell: UITableViewCell {
         user_to_number.tag = 1
         user_to_number.keyboardType = .numberPad
         user_to_number.setView(.right, image: UIImage(named: "user_field_icon"))
-        
+    
         titleRed.text = defaultLocalizer.stringForKey(key: "Invalid_recipient_number")
         titleRed.numberOfLines = 0
         titleRed.textColor = .red
         titleRed.font = UIFont(name: "", size: 9)
         titleRed.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleRed.textAlignment = .left
-        titleRed.frame = CGRect(x: 20, y: 110, width: 300, height: 20)
+        titleRed.frame = CGRect(x: 20, y: 110, width: UIScreen.main.bounds.size.width - 40, height: 20)
         titleRed.autoresizesSubviews = true
         titleRed.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         titleRed.isHidden = true
@@ -98,6 +98,7 @@ class TraficTableViewCell: UITableViewCell {
         type_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         type_transfer.layer.borderWidth = 1
         type_transfer.textColor = colorBlackWhite
+        type_transfer.checkMarkEnabled = false
         type_transfer.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
      
         titleThree.text = defaultLocalizer.stringForKey(key: "Number_of_package_units")
@@ -124,7 +125,7 @@ class TraficTableViewCell: UITableViewCell {
         titleRed2.font = UIFont(name: "", size: 9)
         titleRed2.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleRed2.textAlignment = .left
-        titleRed2.frame = CGRect(x: 20, y: 360, width: 300, height: 20)
+        titleRed2.frame = CGRect(x: 20, y: 360, width: UIScreen.main.bounds.size.width - 40, height: 20)
         titleRed2.autoresizesSubviews = true
         titleRed2.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         titleRed2.isHidden = true
@@ -143,15 +144,16 @@ class TraficTableViewCell: UITableViewCell {
         title_info.numberOfLines = 2
         title_info.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         title_info.font = UIFont(name: "", size: 10)
-        title_info.lineBreakMode = NSLineBreakMode.byWordWrapping
         title_info.textAlignment = .left
         title_info.frame = CGRect(x: 20, y: 460, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title_info.autoresizesSubviews = true
         title_info.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    
+        title_info.adjustsFontSizeToFitWidth = false
+        title_info.lineBreakMode = .byTruncatingTail
+        
         //icon_more.setImage(#imageLiteral(resourceName: "View_all"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 20, y: 520, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 520, width: UIScreen.main.bounds.size.width  - 40, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "More_about_the_service"))  >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
@@ -162,7 +164,7 @@ class TraficTableViewCell: UITableViewCell {
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Transfer"), for: .normal)
+        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Transfer2"), for: .normal)
         sendButton.setTitleColor(.white, for: .normal)
         sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         sendButton.layer.cornerRadius = sendButton.frame.height / 2
@@ -174,6 +176,7 @@ class TraficTableViewCell: UITableViewCell {
         slider.trackWidth = 5
         slider.snapStepSize = 1
         slider.thumbImage = UIImage(named: "slider_thumb")
+        slider.value = [0]
         slider.frame = CGRect(x: 20, y: 390, width: UIScreen.main.bounds.size.width - 40, height: 30)
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))

@@ -20,7 +20,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
     let titleThree = UILabel()
     let count_transfer = UITextField()
     let titleRed = UILabel()
-    let count_to_transfer = UITextView()
+    let count_to_transfer = UITextField()
     let slider = MultiSlider()
     let title_commission = UILabel()
     let title_info = UILabel()
@@ -60,15 +60,16 @@ class ChangeTransferTableViewCell: UITableViewCell {
         titleOne.font = UIFont(name: "", size: 10)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 10, y: 20, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 20, width: 300, height: 20)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        user_to_number.frame = CGRect(x: 10, y: 50, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        user_to_number.frame = CGRect(x: 20, y: 50, width: UIScreen.main.bounds.size.width - 40, height: 50)
         user_to_number.layer.cornerRadius = 16
         user_to_number.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         user_to_number.layer.borderWidth = 1
         user_to_number.textColor = colorBlackWhite
+        user_to_number.checkMarkEnabled = false
         user_to_number.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
         
         
@@ -78,15 +79,16 @@ class ChangeTransferTableViewCell: UITableViewCell {
         titleTwo.font = UIFont(name: "", size: 10)
         titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleTwo.textAlignment = .left
-        titleTwo.frame = CGRect(x: 10, y: 150, width: 300, height: 20)
+        titleTwo.frame = CGRect(x: 20, y: 150, width: 300, height: 20)
         titleTwo.autoresizesSubviews = true
         titleTwo.autoresizingMask = [.flexibleHeight, .flexibleWidth]
      
-        type_transfer.frame = CGRect(x: 10, y: 180, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        type_transfer.frame = CGRect(x: 20, y: 180, width: UIScreen.main.bounds.size.width - 40, height: 50)
         type_transfer.layer.cornerRadius = 16
         type_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         type_transfer.layer.borderWidth = 1
         type_transfer.textColor = colorBlackWhite
+        type_transfer.checkMarkEnabled = false
         type_transfer.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
      
         titleThree.text = defaultLocalizer.stringForKey(key: "Number_of_package_units")
@@ -95,11 +97,11 @@ class ChangeTransferTableViewCell: UITableViewCell {
         titleThree.font = UIFont(name: "", size: 10)
         titleThree.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleThree.textAlignment = .left
-        titleThree.frame = CGRect(x: 10, y: 270, width: 300, height: 20)
+        titleThree.frame = CGRect(x: 20, y: 270, width: 300, height: 20)
         titleThree.autoresizesSubviews = true
         titleThree.autoresizingMask = [.flexibleHeight, .flexibleWidth]
  
-        count_transfer.frame = CGRect(x: 10, y: 300, width: (UIScreen.main.bounds.size.width / 2) - 50, height: 50)
+        count_transfer.frame = CGRect(x: 20, y: 300, width: (UIScreen.main.bounds.size.width / 2) - 50, height: 50)
         count_transfer.layer.cornerRadius = 16
         count_transfer.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         count_transfer.layer.borderWidth = 1
@@ -128,10 +130,8 @@ class ChangeTransferTableViewCell: UITableViewCell {
         count_to_transfer.layer.borderWidth = 1
         count_to_transfer.tag = 2
         count_to_transfer.textColor = colorBlackWhite
-        count_to_transfer.font = UIFont.systemFont(ofSize: 17)
-        count_to_transfer.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 0, right: 0)
-        count_to_transfer.isEditable  = false
-        count_transfer.backgroundColor = .clear
+        count_to_transfer.keyboardType = .numberPad
+        count_to_transfer.returnKeyType = .done
        // count_to_transfer.keyboardType = .numberPad
         
         title_commission.text = "Комиссия: "
@@ -139,7 +139,7 @@ class ChangeTransferTableViewCell: UITableViewCell {
         title_commission.font = UIFont(name: "", size: 9)
         title_commission.lineBreakMode = NSLineBreakMode.byWordWrapping
         title_commission.textAlignment = .left
-        title_commission.frame = CGRect(x: 10, y: 430, width: 300, height: 20)
+        title_commission.frame = CGRect(x: 20, y: 430, width: 300, height: 20)
         title_commission.autoresizesSubviews = true
         title_commission.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
@@ -147,26 +147,27 @@ class ChangeTransferTableViewCell: UITableViewCell {
         title_info.numberOfLines = 2
         title_info.textColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1)
         title_info.font = UIFont(name: "", size: 10)
-        title_info.lineBreakMode = NSLineBreakMode.byWordWrapping
         title_info.textAlignment = .left
-        title_info.frame = CGRect(x: 10, y: 460, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title_info.frame = CGRect(x: 20, y: 460, width: UIScreen.main.bounds.size.width - 40, height: 50)
         title_info.autoresizesSubviews = true
         title_info.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    
+        title_info.adjustsFontSizeToFitWidth = false
+        title_info.lineBreakMode = .byTruncatingTail
+        
         //icon_more.setImage(#imageLiteral(resourceName: "View_all"), for: UIControl.State.normal)
         icon_more.backgroundColor = .clear
-        icon_more.frame = CGRect(x: 10, y: 520, width: 200, height: 20)
+        icon_more.frame = CGRect(x: 20, y: 520, width: UIScreen.main.bounds.size.width  - 40, height: 20)
         icon_more.contentHorizontalAlignment = .left
         icon_more.setTitle("\(defaultLocalizer.stringForKey(key: "More_about_the_service"))  >", for: .normal)
         icon_more.setTitleColor(.orange, for: .normal)
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
   
-        sendButton.frame = CGRect(x: 10, y: 560, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45)
+        sendButton.frame = CGRect(x: 20, y: 560, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45)
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         sendButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Transfer"), for: .normal)
+        sendButton.setTitle(defaultLocalizer.stringForKey(key: "Exchange"), for: .normal)
         sendButton.setTitleColor(.white, for: .normal)
         sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         sendButton.layer.cornerRadius = sendButton.frame.height / 2
@@ -178,16 +179,20 @@ class ChangeTransferTableViewCell: UITableViewCell {
         slider.trackWidth = 5
         slider.snapStepSize = 1
         slider.thumbImage = UIImage(named: "slider_thumb")
-        slider.frame = CGRect(x: 10, y: 390, width: UIScreen.main.bounds.size.width - 40, height: 30)
+        slider.minimumValue = 0
+        slider.maximumValue = 0
+        slider.value = [0]
+        slider.frame = CGRect(x: 20, y: 390, width: UIScreen.main.bounds.size.width - 40, height: 30)
         
         
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
         count_transfer.leftView = paddingView
         count_transfer.leftViewMode = .always
+        count_transfer.backgroundColor  = .clear
         
         let paddingView4: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-       // count_to_transfer.leftView = paddingView4
-       // count_to_transfer.leftViewMode = .always
+        count_to_transfer.leftView = paddingView4
+        count_to_transfer.leftViewMode = .always
         
         type_transfer.isSearchEnable = false
         type_transfer.selectedRowColor = .lightGray

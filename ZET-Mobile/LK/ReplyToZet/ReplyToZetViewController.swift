@@ -20,7 +20,11 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     var reply_view = ReplyToZetView()
     var alert = UIAlertController()
     
-    var imagePicker = UIImagePickerController()
+    private lazy var imagePicker: ImagePicker = {
+            let imagePicker = ImagePicker()
+            imagePicker.delegate = self
+            return imagePicker
+        }()
     
     var feedback_data = [[String]]()
     
@@ -36,6 +40,8 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     var y_pozition = 430
     var but_pozition = 460
     var screen_i = 1
+    
+    var i = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +81,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
-        if reply_view.text_message.text == "Опишите проблему" {
+        if reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail"){
             reply_view.text_message.text = ""
         }
         reply_view.text_message.textColor = colorBlackWhite
@@ -103,6 +109,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             
             reply_view.button_send.frame.origin.y -= 30
             y_pozition -= 30
+            i = 0
         }
         
     }
@@ -143,14 +150,15 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     func setupViewData() {
-        
-        reply_view.type_message.text = feedback_data[0][2]
-        reply_view.email.text = feedback_data[0][1]
+        if feedback_data.count != 0 {
+            reply_view.type_message.text = feedback_data[0][2]
+            reply_view.email.text = feedback_data[0][1]
+        }
         
         reply_view.type_message.didSelect { [self] (selectedText, index, id) in
             typeMessageChoosed = selectedText
             emailChoosed = feedback_data[index][1]
-            typeMessageChoosedID = index
+            typeMessageChoosedID = Int(feedback_data[index][0]) ?? 1
             
             reply_view.type_message.text = feedback_data[index][2]
             reply_view.email.text = feedback_data[index][1]
@@ -187,7 +195,10 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    self.requestAnswer(status: false, message: error.localizedDescription)
+                    DispatchQueue.main.async { [self] in
+                        hideActivityIndicator(uiView: self.view)
+                        requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
+                    }
                 },
                 onCompleted: {
                     DispatchQueue.main.async { [self] in
@@ -204,7 +215,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     @objc func sendScreen() {
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -222,34 +233,37 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 300)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 320)
         view.layer.cornerRadius = 20
         
+        view.image_icon.image = UIImage(named: "App Icon")
         view.name.text = defaultLocalizer.stringForKey(key: "Feedback")
-        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Send message"))?"
+        view.name_content.text = "\(defaultLocalizer.stringForKey(key: "Send_message"))"
         view.ok.setTitle(defaultLocalizer.stringForKey(key: "Proceed"), for: .normal)
         
         view.name_content.frame.origin.y -= 20
         view.name_content.font = UIFont.systemFont(ofSize: 19)
         view.ok.frame.origin.y -= 20
         
-        view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+        view.cancel.addTarget(self, action: #selector(dismissDialogCancel), for: .touchUpInside)
         view.ok.addTarget(self, action: #selector(okClickDialog), for: .touchUpInside)
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
         //alert.view.sendSubviewToBack(view)
         
-        if reply_view.text_message.text == "" || reply_view.text_message.text == "Опишите проблему" {
+        print("i", i)
+        if (reply_view.text_message.text == "" || reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i == 0 {
+            print("baby")
             reply_view.text_message.layer.borderColor = UIColor.red.cgColor
             reply_view.button.frame.origin.y = 430
             reply_view.titleRed.isHidden = false
+            
             let buttons = getButtonsInView(view: scrollView)
             for button in buttons {
                 if button.image(for: .normal) == UIImage(named: "correct") || button.image(for: .normal) == UIImage(named: "Trash_light") {
                     button.frame.origin.y += 30
                 }
-                
             }
             
             let labels = getLabelsInView(view: self.scrollView)
@@ -262,6 +276,12 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             
             reply_view.button_send.frame.origin.y += 30
             y_pozition += 30
+            i += 1
+        } else if (reply_view.text_message.text == "" || reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i > 0{
+            print("jjjii")
+            reply_view.text_message.layer.borderColor = UIColor.red.cgColor
+            reply_view.button.frame.origin.y = 430
+            reply_view.titleRed.isHidden = false
         }
         else {
             present(alert, animated: true, completion: nil)
@@ -273,7 +293,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     @objc func requestAnswer(status: Bool, message: String) {
         hideActivityIndicator(uiView: view)
         
-        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+        alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
         // Here you can enter any width that you want
@@ -291,7 +311,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 300)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 320)
         view.layer.cornerRadius = 20
         if status == true {
             view.name.text = defaultLocalizer.stringForKey(key: "Application_accepted")
@@ -341,6 +361,12 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         }, completion: nil)
     }
     
+    @objc func dismissDialogCancel(_ sender: UIButton) {
+        print("hello")
+        alert.dismiss(animated: true, completion: nil)
+        hideActivityIndicator(uiView: view)
+    }
+    
     @objc func okClickDialog(_ sender: UIButton) {
         
         alert.dismiss(animated: true, completion: nil)
@@ -381,11 +407,8 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
                 },
                 onError: { error in
                    print(error.localizedDescription)
-                    print("kkkkkkkkk")
                     DispatchQueue.main.async { [self] in
-                       // requestAnswer(status: false, message: error.localizedDescription)
-                        print(error.localizedDescription)
-                        
+                        hideActivityIndicator(uiView: self.view)
                     }
                 },
                 onCompleted: { [self] in
@@ -398,122 +421,11 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     }
     
     @objc func choosedScreenshot() {
-       /* let alert = UIAlertController(title: "Выбрать фото из: ", message: "", preferredStyle: .alert)
-        
-        let gallery = UIAlertAction(title: "Галереи", style:.default){ [self] (action) in
-            if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary)){
-                self.imagePicker.delegate = self
-                self.imagePicker.allowsEditing = false
-                self.imagePicker.sourceType = .photoLibrary
-                //present(self.imagePicker, animated: true, completion: nil)
-                present(imagePicker, animated: true, completion: nil)
-            }
-        }
-        
-        let camera = UIAlertAction(title: "Снять фото", style:.default){ [self] (action) in
-            if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.camera)){
-                self.imagePicker.delegate = self
-                self.imagePicker.allowsEditing = true
-                self.imagePicker.sourceType = UIImagePickerController.SourceType.camera
-                self.imagePicker.cameraCaptureMode = .photo
-                //present(imagePicker, animated: true, completion: nil)
-                present(imagePicker, animated: true, completion: nil)
-                
-            } else{
-                let alert2 = UIAlertController(title: "Camera Not Found", message: "This device has no Camera", preferredStyle: .alert)
-                let ok = UIAlertAction(title: "OK", style:.default, handler: nil)
-                alert2.addAction(ok)
-                //present(alert2, animated: true, completion: nil)
-                present(alert2, animated: true, completion: nil)
-            }
-        }
-        
-        let cancel = UIAlertAction(title: "Отмена", style:.default){ (action) in
-            alert.dismiss(animated: false, completion: nil)
-        }
-        
-        alert.addAction(gallery)
-        alert.addAction(camera)
-        alert.addAction(cancel)
-        */
         if screenName.count < 5 {
-            //present(alert, animated: true, completion: nil)
-            if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary)){
-                self.imagePicker.delegate = self
-                self.imagePicker.allowsEditing = false
-                self.imagePicker.sourceType = .photoLibrary
-                //present(self.imagePicker, animated: true, completion: nil)
-                present(imagePicker, animated: true, completion: nil)
-            }
-        }
-        else {
-            
+            imagePicker.photoGalleryAsscessRequest()
         }
       }
       
-      func didSendScreen() {
-          //emailAddress = cell.e_mail.text!
-          //sendScreenToServer()
-      }
-      
-
-      func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-          
-          if let imageURL = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
-              let result = PHAsset.fetchAssets(withALAssetURLs: [imageURL], options: nil)
-              let asset = result.lastObject
-         
-              DispatchQueue.main.async { [self] in
-                  UIView.setAnimationsEnabled(false)
-                  y_pozition += 30
-                  let icon1 = UIButton()
-                  icon1.setImage(UIImage(named: "correct"), for: .normal)
-                  icon1.frame = CGRect(x: 20, y: y_pozition, width: 20, height: 20)
-                  icon1.tag = screen_i
-                  
-                  let title = UILabel()
-                  title.numberOfLines = 0
-                  title.textColor = colorBlackWhite
-                  title.font = UIFont.systemFont(ofSize: 16)
-                  title.lineBreakMode = NSLineBreakMode.byWordWrapping
-                  title.textAlignment = .left
-                  title.frame = CGRect(x: 45, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 90, height: 20)
-                  
-                  title.text = asset?.originalFilename ?? "image_\(screen_i)"
-                  
-                  let icon2 = UIButton()
-                  icon2.setImage(UIImage(named: "Trash_light"), for: .normal)
-                  icon2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - 40, y: y_pozition, width: 20, height: 20)
-                  icon2.addTarget(self, action: #selector(deleteImage), for: .touchUpInside)
-                  icon2.tag = screen_i
-                  
-                  scrollView.addSubview(icon1)
-                  scrollView.addSubview(title)
-                  scrollView.addSubview(icon2)
-                  screen_i += 1
-                  reply_view.button_send.frame.origin.y = CGFloat(y_pozition + 40)
-                  
-                  scrollView.contentSize = CGSize(width: view.frame.width, height: reply_view.button_send.frame.origin.y + 50)
-                  scrollView.updateConstraints()
-                  
-                  let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-                  pickedImage!.fixedOrientation()
-            
-                  let data = pickedImage!.jpegData(compressionQuality: 0.9)
-    
-                  screenImg.append(pickedImage!)
-                  screenshotsData.append(data!)
-                  screenName.append(asset?.originalFilename ?? "image_\(screen_i)")
-                }
-              }
-          
-          dismiss(animated: true, completion: nil)
-      }
-      
-      func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-         // dismiss(animated: true, completion: nil)
-          dismiss(animated: true, completion: nil)
-      }
     
     @objc func deleteImage(_ sender: UIButton, _ sender2: UILabel){
         print(sender.tag)
@@ -584,6 +496,65 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             scrollView.updateConstraints()
         }
         
+    }
+}
+
+extension ReplyToZetViewController: ImagePickerDelegate {
+
+    func imagePicker(_ imagePicker: ImagePicker, didSelect image: UIImage, name: String) {
+
+            DispatchQueue.main.async { [self] in
+                UIView.setAnimationsEnabled(false)
+                y_pozition += 30
+                let icon1 = UIButton()
+                icon1.setImage(UIImage(named: "correct"), for: .normal)
+                icon1.frame = CGRect(x: 20, y: y_pozition, width: 20, height: 20)
+                icon1.tag = screen_i
+                
+                let title = UILabel()
+                title.numberOfLines = 0
+                title.textColor = colorBlackWhite
+                title.font = UIFont.systemFont(ofSize: 16)
+                title.lineBreakMode = NSLineBreakMode.byWordWrapping
+                title.textAlignment = .left
+                title.frame = CGRect(x: 45, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) - 90, height: 20)
+                
+                
+                title.text = name
+                
+                let icon2 = UIButton()
+                icon2.setImage(UIImage(named: "Trash_light"), for: .normal)
+                icon2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - 40, y: y_pozition, width: 20, height: 20)
+                icon2.addTarget(self, action: #selector(deleteImage), for: .touchUpInside)
+                icon2.tag = screen_i
+                
+                scrollView.addSubview(icon1)
+                scrollView.addSubview(title)
+                scrollView.addSubview(icon2)
+                screen_i += 1
+                reply_view.button_send.frame.origin.y = CGFloat(y_pozition + 40)
+                
+                scrollView.contentSize = CGSize(width: view.frame.width, height: reply_view.button_send.frame.origin.y + 50)
+                scrollView.updateConstraints()
+                
+                let pickedImage = image
+                
+                let data = image.jpegData(compressionQuality: 0.9)
+  
+                screenImg.append(pickedImage)
+                screenshotsData.append(data!)
+                screenName.append(name)
+               // screenName.append(asset?.originalFilename ?? "image_\(screen_i)")
+            }
+       
+        imagePicker.dismiss()
+    }
+
+    func cancelButtonDidClick(on imageView: ImagePicker) { imagePicker.dismiss() }
+    func imagePicker(_ imagePicker: ImagePicker, grantedAccess: Bool,
+                     to sourceType: UIImagePickerController.SourceType) {
+        guard grantedAccess else { return }
+        imagePicker.present(parent: self, sourceType: sourceType)
     }
 }
 

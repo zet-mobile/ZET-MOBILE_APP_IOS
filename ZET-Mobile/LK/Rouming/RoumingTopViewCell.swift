@@ -31,11 +31,11 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     button.frame = CGRect(x: UIScreen.main.bounds.size.width - 70, y: 15, width: 50, height: 30)
     button.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
     button.isUserInteractionEnabled = false
-    titleOne.frame = CGRect(x: 20, y: 0, width: UIScreen.main.bounds.size.width - 90, height: 60)
+    titleOne.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 90, height: 60)
     titleOne.text = ""
     titleOne.numberOfLines = 0
     titleOne.textColor = colorBlackWhite
-    titleOne.font = UIFont.systemFont(ofSize: 20)
+    titleOne.font = UIFont.systemFont(ofSize: 19)
     titleOne.textAlignment = .left
   
 }

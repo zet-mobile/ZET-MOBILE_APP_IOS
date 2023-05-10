@@ -42,7 +42,7 @@ struct histories_data: Decodable {
     let status: String
     let date: String
     let id: Int
-    let volume: Double
+    let volume: Int
     let price: Double
     let type: Int
     let transferType: Int

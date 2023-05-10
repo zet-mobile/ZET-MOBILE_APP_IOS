@@ -28,7 +28,7 @@ class SearchNumberView: UIView {
         iv.contentMode = .scaleToFill
         iv.backgroundColor = .clear
         iv.autoresizesSubviews = true
-        
+        iv.contentMode = .scaleAspectFit
         iv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return iv
     }()

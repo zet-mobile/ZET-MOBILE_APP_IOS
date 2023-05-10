@@ -21,6 +21,8 @@ pod 'iOSDropDown'
 pod 'SnapKit', '~> 5.0.0'
 pod 'Firebase/Core'
 pod 'Firebase/Messaging'
+pod 'RoundCoachMark'
+
 
   target 'ZET-MobileTests' do
     inherit! :search_paths

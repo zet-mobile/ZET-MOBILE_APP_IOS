@@ -54,7 +54,7 @@ class CircularProgressView: UIView {
     
     let plusText: UIButton = {
         let button = UIButton()
-        button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "plus-circle-w") : #imageLiteral(resourceName: "plus-circle")), for: UIControl.State.normal)
+        button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "plus-circle_b") : #imageLiteral(resourceName: "plus-circle_w")), for: UIControl.State.normal)
         button.backgroundColor = .clear
         button.layer.masksToBounds = true
         button.contentHorizontalAlignment = .center
@@ -99,12 +99,10 @@ class CircularProgressView: UIView {
     
     
     func createCircularPath(color1: UIColor, color2: UIColor) {
-        print(frame.size.width)
-        print(frame.size.height)
         if frame.size.width != frame.size.height, frame.size.width < frame.size.height {
             width = frame.size.width - 5
             height = frame.size.width - 5
-        } else if  frame.size.width != frame.size.height, frame.size.width > frame.size.height {
+        } else if frame.size.width != frame.size.height, frame.size.width > frame.size.height {
             width = frame.size.height - 5
             height = frame.size.height - 5
         } else {
@@ -118,7 +116,7 @@ class CircularProgressView: UIView {
         innerCircleLayer.fillColor = color1.cgColor
         innerCircleLayer.strokeColor = UIColor.clear.cgColor
         innerCircleLayer.lineCap = .round
-        innerCircleLayer.lineWidth = 6.5
+        innerCircleLayer.lineWidth = 5.0
         innerCircleLayer.shadowColor = UIColor.clear.cgColor
         innerCircleLayer.shadowRadius = 2
         innerCircleLayer.shadowOpacity = 0.3
@@ -128,14 +126,14 @@ class CircularProgressView: UIView {
         circleLayer.path = circularPath.cgPath
         circleLayer.fillColor = UIColor.clear.cgColor
         circleLayer.lineCap = .round
-        circleLayer.lineWidth = 6.5
+        circleLayer.lineWidth = 5.0
         circleLayer.strokeColor = color2.cgColor
 
         progressLayer.path = circularPath.cgPath
         progressLayer.fillColor = UIColor.clear.cgColor
         progressLayer.strokeColor = color2.cgColor
         progressLayer.lineCap = .round
-        progressLayer.lineWidth = 6.5
+        progressLayer.lineWidth = 5.0
         progressLayer.strokeEnd = 0
     
         

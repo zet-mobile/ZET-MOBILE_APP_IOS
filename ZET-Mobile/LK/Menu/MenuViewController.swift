@@ -9,8 +9,11 @@ import UIKit
 
 private let reuseIdentifer = "MenuOptionCell"
 var defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
+var count_notif = ""
 
 class MenuViewController: UIViewController {
+    
+    var alert = UIAlertController()
     
     var tableView: UITableView!
     var tableData = [["Notification", "Notification-1", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", "roaming-1", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting menu", "Setting-1", defaultLocalizer.stringForKey(key: "Settings")], ["Message", "Message-1", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", "Info Square-1", defaultLocalizer.stringForKey(key: "About")], ["Logout", "Logout-1", defaultLocalizer.stringForKey(key: "Exit")]]
@@ -77,6 +80,14 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         cell.descriptionLabel.text = tableData[indexPath.row][2]
         cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: tableData[indexPath.row][1])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal) : UIImage(named: tableData[indexPath.row][0])?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         
+        if count_notif != "0" && indexPath.row == 0 {
+            cell.countLabel.text = count_notif
+            cell.countLabel.isHidden = false
+        }
+        else {
+            cell.countLabel.isHidden = true
+        }
+        
         if indexPath.row == 2 {
             cell.ico_image.frame = CGRect(x: 25, y: 20, width: 23, height: 23)
         }
@@ -91,49 +102,98 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         if indexPath.row == 0 {
+            dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(PushViewController(), animated: true)
         }
         else if indexPath.row == 2  {
+            dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(SettingsViewController(), animated: true)
         }
         else if indexPath.row == 1  {
+            dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(RoumingViewController(), animated: true)
         }
         else if indexPath.row == 3 {
+            dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(ReplyToZetViewController(), animated: true)
         }
         else if indexPath.row == 4 {
+            dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(AboutAppViewController(), animated: true)
         }
         else if indexPath.row == 5 {
-            guard let window = UIApplication.shared.keyWindow else {
-                return
-            }
-            guard let rootViewController = window.rootViewController else {
-                return
-            }
-            let vc = UINavigationController(rootViewController: SplashViewController())
-            vc.view.frame = rootViewController.view.frame
-            vc.view.layoutIfNeeded()
-            UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
-                window.rootViewController = vc
-            }, completion: { completed in
-                UserDefaults.standard.set("", forKey: "mobPhone")
-                UserDefaults.standard.set(1, forKey: "language")
-                UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
-                UserDefaults.standard.set("", forKey: "PinCode")
-                UserDefaults.standard.set(true, forKey: "BiometricEnter")
-                UserDefaults.standard.set("", forKey: "token")
-                UserDefaults.standard.set("", forKey: "refresh_token")
-                
-            })
+            
+            alert = UIAlertController(title: "\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+            let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
+            alert.view.removeConstraints(widthConstraints)
+            // Here you can enter any width that you want
+            let newWidth = UIScreen.main.bounds.width * 0.90
+            // Adding constraint for alert base view
+            let widthConstraint = NSLayoutConstraint(item: alert.view,
+                                                         attribute: .width,
+                                                         relatedBy: .equal,
+                                                         toItem: nil,
+                                                         attribute: .notAnAttribute,
+                                                         multiplier: 1,
+                                                         constant: newWidth)
+            alert.view.addConstraint(widthConstraint)
+            
+            let view = AlertView5()
+
+            view.backgroundColor = contentColor
+            view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 200)
+            view.layer.cornerRadius = 20
+            view.cancel.addTarget(self, action: #selector(dismissDialog), for: .touchUpInside)
+            view.ok.addTarget(self, action: #selector(exit), for: .touchUpInside)
+            
+            alert.view.backgroundColor = .clear
+            alert.view.addSubview(view)
+            //alert.view.sendSubviewToBack(view)
+            
+            present(alert, animated: true, completion: nil)
+        
         }
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    @objc func dismissDialog(_ sender: UIButton) {
+        print("hello")
+        sender.showAnimation { [self] in
+            alert.dismiss(animated: true, completion: nil)
+            
+        }
+    }
+    
+    @objc func exit() {
+        guard let window = UIApplication.shared.keyWindow else {
+            return
+        }
+        guard let rootViewController = window.rootViewController else {
+            return
+        }
+        let vc = UINavigationController(rootViewController: SplashViewController())
+        vc.view.frame = rootViewController.view.frame
+        vc.view.layoutIfNeeded()
+        UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
+            window.rootViewController = vc
+        }, completion: { completed in
+            UserDefaults.standard.set("", forKey: "mobPhone")
+            UserDefaults.standard.set("", forKey: "PinCode")
+           // UserDefaults.standard.set(true, forKey: "BiometricEnter")
+            UserDefaults.standard.set("", forKey: "token")
+            UserDefaults.standard.set("", forKey: "refresh_token")
+            
+            UserDefaults.standard.set(1, forKey: "language")
+            UserDefaults.standard.set(LanguageType.ru.rawValue, forKey: "language_string")
+            defaultLocalizer.setSelectedLanguage(lang: .ru)
+            
+        })
     }
 }

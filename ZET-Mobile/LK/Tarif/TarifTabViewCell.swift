@@ -25,9 +25,6 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .default, reuseIdentifier: "tarif_tab_cell")
     backgroundColor = .clear
     
-    ico_image.image = UIImage(named: "services_cell_img")
-    titleOne.text = defaultLocalizer.stringForKey(key: "Traffic_transfer")
-    
     contentView.addSubview(ico_image)
     contentView.addSubview(titleOne)
     contentView.addSubview(titleTwo)
@@ -38,13 +35,13 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     ico_image.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
     
     titleOne.frame = CGRect(x: 80, y: 10, width: 200, height: 50)
-    titleOne.text = "Фаври"
+    titleOne.text = ""
     titleOne.numberOfLines = 1
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.boldSystemFont(ofSize: 16)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 80, y: 35, width: 300, height: 60)
+    titleTwo.frame = CGRect(x: 80, y: 50, width: 300, height: 50)
     titleTwo.text = ""
     titleTwo.numberOfLines = 3
     titleTwo.textColor = darkGrayLight

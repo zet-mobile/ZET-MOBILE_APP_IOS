@@ -11,8 +11,8 @@ class ZeroHelpView: UIView {
 
     lazy var image_banner: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "zero_mini")
         image.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
+        image.contentMode = .scaleAspectFit
         return image
     }()
     
@@ -96,11 +96,11 @@ class ZeroHelpView: UIView {
     lazy var title2: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "Days_within_the_network")
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.textColor = colorBlackWhite
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
-        title.frame = CGRect(x: 60, y: 57, width: 150, height: 45)
+        title.frame = CGRect(x: 60, y: 57, width: 150, height: 55)
         
         return title
     }()

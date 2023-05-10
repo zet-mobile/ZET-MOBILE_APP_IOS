@@ -18,7 +18,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 20, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 20)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne
@@ -31,7 +31,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         textfield.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         textfield.layer.borderWidth = 1
         textfield.textColor = colorBlackWhite
-        //textfield.setView(.right, image: UIImage(named: "drop_icon"))
+        textfield.setView(.right, image: UIImage(named: "drop_icon"))
         return textfield
     }()
     
@@ -43,7 +43,7 @@ class TabRoumingCollectionCell: UICollectionViewCell {
         titleOne.font = UIFont.systemFont(ofSize: 16)
         titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 140, width: 300, height: 20)
+        titleOne.frame = CGRect(x: 20, y: 140, width: UIScreen.main.bounds.size.width - 40, height: 20)
         titleOne.autoresizesSubviews = true
         titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleOne

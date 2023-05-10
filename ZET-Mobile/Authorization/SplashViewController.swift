@@ -8,6 +8,15 @@
 import UIKit
 import CoreTelephony
 
+struct ResultsData: Decodable {
+    let version: String
+}
+
+struct AppStoreData: Decodable {
+    let results: [ResultsData]
+}
+
+
 class SplashViewController: UIViewController {
 
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
@@ -16,33 +25,17 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         
         let imageViewBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        imageViewBackground.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "splash_black.png") : UIImage(named: "splash_img.png"))
+        imageViewBackground.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "splash_black.png") : UIImage(named: "splash_white.png"))
         imageViewBackground.contentMode = UIView.ContentMode.scaleToFill
         self.view.addSubview(imageViewBackground)
         self.view.sendSubviewToBack(imageViewBackground)
         
-        if self.traitCollection.userInterfaceStyle == .dark {
+        /*if self.traitCollection.userInterfaceStyle == .dark {
             UserDefaults.standard.set("dark", forKey: "ThemeAppereance")
         }
         else {
             UserDefaults.standard.set("light", forKey: "ThemeAppereance")
-        }
-        
-        colorLine = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
-
-        colorGrayWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
-
-        contentColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor.white)
-        
-        toolbarColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.19, green: 0.19, blue: 0.20, alpha: 1.00) : UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00))
-        
-        colorBlackWhite = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor.white : UIColor.black)
-
-        colorLightDarkGray = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
-
-        colorLightDarkGray2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.16, green: 0.16, blue: 0.16, alpha: 1.00) : UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00))
-        
-        darkGrayLight = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00) : UIColor.darkGray)
+        }*/
         
         _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(touches), userInfo: nil, repeats: false)
     }
@@ -66,9 +59,7 @@ class SplashViewController: UIViewController {
         
         if UserDefaults.standard.string(forKey: "mobPhone") != nil && UserDefaults.standard.string(forKey: "mobPhone") != "" && UserDefaults.standard.string(forKey: "PinCode") != "" && UserDefaults.standard.string(forKey: "PinCode") != nil
         {
-            
-            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.pushViewController(PinCodeInputController(), animated: false)
+            checkVersion()
         }
         else {
             
@@ -77,6 +68,79 @@ class SplashViewController: UIViewController {
           }
         
       }
+    
+    func restartApp() {
+        
+       self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+       navigationController?.pushViewController(PinCodeInputController(), animated: false)
+       
+    }
+    
+    
+    func checkVersion() {
+          let nsObject: AnyObject? = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as AnyObject?
+          let version = nsObject as! String
+          let nsObject2: AnyObject? = Bundle.main.infoDictionary!["CFBundleVersion"] as AnyObject?
+          let build = nsObject2 as! String
+          let identifier = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String
+    
+          let url = URL(string: "http://itunes.apple.com/tj/lookup?bundleId=com.zet-mobile.Salom")!
+       
+          let session = URLSession(configuration: URLSessionConfiguration.default)
+             
+          let task = session.dataTask(with: url) { (data, response, error) in
+                 
+          if let data = data {
+              do {
+                  let things = try JSONDecoder().decode(AppStoreData.self, from: data)
+                 
+                  DispatchQueue.main.async  {
+                          print(version)
+                      if (version != things.results[0].version) {
+                        print(things.results[0].version)
+                              print("Please Update")
+                          let alert = UIAlertController(title: "Доступно новое обновление ", message: "", preferredStyle: .alert)
+                         
+                          
+                          let cancel = UIAlertAction(title: "Не сейчас", style:.default){ (action) in
+                              self.restartApp()
+                              alert.dismiss(animated: false, completion: nil)
+                          }
+                          
+                          
+                          let update = UIAlertAction(title: "Обновить", style:.default){ (action) in
+                              if let url = URL(string: "https://apps.apple.com/tj/app/zet-mobile/id1503154544") {
+                                  if #available(iOS 10, *) {
+                                      UIApplication.shared.open(url, options: [:],
+                                                                completionHandler: {
+                                                                  (success) in
+                                          self.restartApp()
+                                      })
+                                  } else {
+                                      _ = UIApplication.shared.openURL(url)
+                                  }
+                              }
+                              
+                          }
+                          alert.addAction(cancel)
+                          alert.addAction(update)
+                          self.present(alert, animated: true, completion: nil)
+                          
+                          }
+                          else {
+                              self.restartApp()
+                          }
+                          
+                      }
+                  }  catch let error as NSError {
+                  }
+              } else if let error = error {
+              }
+              if let response = response {
+              }
+          }
+          task.resume()
+    }
     
 }
 

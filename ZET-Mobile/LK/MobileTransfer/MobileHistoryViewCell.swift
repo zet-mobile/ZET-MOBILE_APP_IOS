@@ -34,24 +34,24 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
     
-    ico_image.frame = CGRect(x: 10, y: 20, width: 50, height: 50)
+    ico_image.frame = CGRect(x: 20, y: 20, width: 45, height: 45)
     
-    titleOne.frame = CGRect(x: 80, y: 10, width: 240, height: 30)
+    titleOne.frame = CGRect(x: 80, y: 15, width: 240, height: 30)
     titleOne.text = "+992 "
-    titleOne.numberOfLines = 2
+    titleOne.numberOfLines = 1
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 17)
     titleOne.textAlignment = .left
     
     titleTwo.text = "Выполнено"
-    titleTwo.numberOfLines = 1
+    titleTwo.numberOfLines = 2
     titleTwo.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
     titleTwo.font = UIFont.systemFont(ofSize: 15)
     titleTwo.textAlignment = .left
     
     titleThree.text = "1024"
     titleThree.textColor = colorBlackWhite
-    titleThree.font = UIFont.systemFont(ofSize: 18)
+    titleThree.font = UIFont.boldSystemFont(ofSize: 17)
     titleThree.textAlignment = .right
     
     titleFour.text = "21-10-2021 13:48"

@@ -12,7 +12,7 @@ class RoumingView: UIView {
     lazy var tab1: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "Countries_conditions")
-        title.numberOfLines = 0
+        title.numberOfLines = 2
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 17)
@@ -32,7 +32,7 @@ class RoumingView: UIView {
     lazy var tab2: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "Information")
-        title.numberOfLines = 0
+        title.numberOfLines = 2
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
         title.font = UIFont.systemFont(ofSize: 17)

@@ -90,6 +90,8 @@ class SupportView: UIView {
     
     let white_back = UIView(frame: CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: 896))
     
+    let white_background = UIView(frame: CGRect(x: 0, y: 180, width: UIScreen.main.bounds.size.width, height: 896))
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -123,6 +125,11 @@ class SupportView: UIView {
         white_view_back.addSubview(icon2)
         white_view_back.addSubview(title2)
         white_view_back.addSubview(line)
+        
+        white_background.backgroundColor = .white
+       // self.addSubview(white_background)
+        self.sendSubviewToBack(white_background)
+        
         self.addSubview(white_view_back)
         self.addSubview(white_back)
         self.sendSubviewToBack(white_back)

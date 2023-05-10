@@ -39,7 +39,7 @@ struct unlimConditions_data: Decodable {
 }
 
 struct connectedPackets_data {
-    let packetName: String
+    let packetName: String?
     let iconUrl: String?
     let description: String?
     let price: String
@@ -101,11 +101,17 @@ extension connectedPackets_data: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: connectedPackets_dataCodingKeys.self)
         
-        packetName = try container.decode(String.self, forKey: .packetName)
         price = try container.decode(String.self, forKey: .price)
         unitType = try container.decode(Double.self, forKey: .unitType)
         packetStatus = try container.decode(Double.self, forKey: .packetStatus)
         id = try container.decode(Int.self, forKey: .id)
+        
+        do {
+            packetName = try container.decode(String.self, forKey: .packetName)
+        }
+        catch {
+            packetName = nil
+        }
         
         do {
             iconUrl = try container.decode(String.self, forKey: .iconUrl)

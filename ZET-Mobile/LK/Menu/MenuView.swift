@@ -12,12 +12,12 @@ class MenuView: UIView {
     lazy var title: UILabel = {
         let title = UILabel()
         title.text = defaultLocalizer.stringForKey(key: "social_networks").uppercased()
-        title.numberOfLines = 1
+        title.numberOfLines = 2
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 14)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .center
-        title.frame = CGRect(x: 0, y: 30, width: frame.width, height: 20)
+        title.frame = CGRect(x: 0, y: 20, width: frame.width, height: 40)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         title.isHidden = false
@@ -48,7 +48,7 @@ class MenuView: UIView {
 
     lazy var end_title: UILabel = {
         let title = UILabel()
-        title.text = "© ZET-MOBILE 2022"
+        title.text = "© ZET-MOBILE 2023"
         title.numberOfLines = 1
         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
         title.font = UIFont.systemFont(ofSize: 14)

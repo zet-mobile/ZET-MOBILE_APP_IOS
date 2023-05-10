@@ -12,9 +12,9 @@
 "Fast_services" = "Fast services"    ;
 "Special_offers" = "Special offers"    ;
 "View_all" = "All services"    ;
-"megabyte" = "mb"    ;
-"SMS" = "SMS"    ;
-"minutes" = "min"    ;
+"megabyte" = " mb"    ;
+"SMS" = " sms"    ;
+"minutes" = " min"    ;
 "Services" = "Services"    ;
 "Traffic_transfer" = "Traffic transfer"    ;
 "Traffic_exchange" = "Traffic exchange"    ;
@@ -22,7 +22,7 @@
 "Search_for_number" = "Search for number"    ;
 "Help_at_zero" = "Help at zero"    ;
 "History" = "History"    ;
-"somoni" = "somon";
+"somoni" = "TJS";
 
 "Top_account" = "Top up account"    ;
 "Temporary_payment" = "Temporary payment"    ;
@@ -30,10 +30,10 @@
 "Ask_friend" = "Ask friend"    ;
 
 "Notifications" = "Notifications";
-"More_details" = "More details"    ;
+"More_details" = "More"    ;
 "Connect" = "Connect"    ;
 
-"home" = "home"    ;
+"home" = "Home"    ;
 "Wallet" =  "Wallet"    ;
 "Expenses" = "Expenses"    ;
 "Support" = "Support"    ;
@@ -46,9 +46,13 @@
 "Search_services" = "Search services"    ;
 "Tariff_plan" = "Tariff plan"    ;
 "Your_tariff" = "Your tariff";
-"Re-activate" = "Re-activate"    ;
+"Re-activate" = "Reconnect price plan"    ;
+"Re-activate2" = "Reconnect price plan"    ;
+"Re-activate2_1" = ""    ;
 "Set_plan" = "Set up a plan"    ;
-"Connect_tariff" = "Connect tariff"    ;
+"Connect_tariff" = "Connect price plan"    ;
+"Connect_tariff2" = "Connect to price plan "    ;
+"Connect_tariff2_1" = "";
 "Change_tariff" = "Change tariff"    ;
 
 "Yesterday" = "Yesterday"    ;
@@ -56,7 +60,7 @@
 "Month" = "Month"    ;
 "History_of_expenses" = "History of expenses"    ;
 "Connect_package" = "Connect package"    ;
-"DATA" = "DATA"    ;
+"DATA" = "Internet"    ;
 "Calls" = "Calls"    ;
 "Messages" = "Messages"    ;
 "from" = "from"    ;
@@ -74,6 +78,7 @@
 "Close" = "Close"    ;
 "Conditions" = "Conditions"    ;
 "Transfer" = "Transfer"    ;
+"Transfer2" = "Transfer"    ;
 "Exchange_traffic" = "Exchange traffic"    ;
 "History_of_exchanges" = "History of exchanges"    ;
 "Exchange" = "Exchange"    ;
@@ -82,11 +87,11 @@
 "Purchase_package" = "Purchase package"    ;
 "New_package" = "New package"    ;
 "Query_history" = "Query history"    ;
-"Expenses_for_3_months" = "Expenses for 3 months (Somoni)"    ;
+"Expenses_for_3_months" = "Expenses for 3 months (TJS)"    ;
 "Days_within_the_network" = "Days within the network"    ;
 "New_request" = "New request"    ;
 "History_period" = "History period"    ;
-"Service_cost:" = "Service cost:"    ;
+"Service_cost" = "Service cost"    ;
 "Send" = "Send"    ;
 "Own perious" = "Own perious"    ;
 "Month" = "Month"    ;
@@ -94,22 +99,25 @@
 "Day" = "Day"    ;
 "Enter_e-mail" = "Enter e-mail"    ;
 "Mobile_transfer" = "Mobile transfer"    ;
-"TOTAL:" = "TOTAL:"    ;
+"TOTAL" = "Total";
 "unpaid_package" = "You have an unpaid package. To purchase a new package, make payment for the current package."    ;
-"Pay_current" = "Pay current"    ;
+"Pay_current" = "Pay for the current package"    ;
+"Pay_current2" = "Pay for the current"    ;
 "Cost_current_package:" = "Cost of the current package:"    ;
-"on_the" = "on the"    ;
-"Send_history" = "Send history for"    ;
+"on_the" = "to the"    ;
+"Send_history" = "Send details for"    ;
+"Send_history2" = " ?"    ;
+
 "History_sent" =  "History sent"    ;
 "History_sent_email" = "History sent to email"    ;
-"to_number" = "to number"    ;
+"to_number" = "to number "    ;
 "Transfer_completed!" = "Transfer completed!"    ;
 "Translation_successfully" = "Translation successfully completed"    ;
-"Connect_the_package" = "Connect the package"    ;
-"behind" = "behind"    ;
-"account_replenished!" = "The account is replenished!"    ;
+"Connect_the_package" = "By a package"    ;
+"behind" = "per"    ;
+"account_replenished!" = "Account has been topped up!"    ;
 "Pay" = "Pay"    ;
-"Paid!" = "Paid!"    ;
+"Paid:" = "Paid:"    ;
 "Exchange" = "Exchange"    ;
 "Traffic_exchange_completed!" = "Traffic exchange completed!"    ;
 "Selected_number" = "Selected number"    ;
@@ -169,17 +177,17 @@
 "Enter_PIN" = "Enter PIN code"    ;
 "FORGOT_PASSWORD?" = "Forgot your password?"    ;
 "Get_sms" = "Get sms"    ;
-"receive_SMS" = "You will receive an SMS with the code for authorization"    ;
-"Enter_phone" = "Enter the phone number"    ;
+"receive_SMS" = "You will receive an SMS with an authorization code";
+"Enter_phone" = "Enter phone number"    ;
 "Enter_SMS" = "Enter SMS code"    ;
 "Confirm" = "Confirm"    ;
 "No_internet" = "No available internet packages"    ;
-"No_minutes" = "No available packages for minutes on other networks"    ;
+"No_minutes" = "No available packages for minutes"    ;
 "No_SMS" = "No available SMS packages"    ;
 "Agree_with" = "Agree with"    ;
 "To_accept" = "To accept"    ;
-"agree_conditions" = " the conditions"    ;
-"Active_before:" = "Active before:"    ;
+"agree_conditions" = " conditions"    ;
+"Active_before:" = "Active before: "    ;
 "Exit" = "Exit"    ;
 "Replenishment" = "Replenishment"    ;
 "Charge" = "Charge"    ;
@@ -189,7 +197,9 @@
 "tariff_connected!" = "The tariff is connected!"    ;
 "no_expenses" = "You do not have expenses for the last 5 days"    ;
 "disable_service?" = "Are you sure you want to disable the service?"    ;
-"Disable_service" = "Disable service"    ;
+"Disable_service" = "Disable service";
+"Disable_service2" = "Want to turn off";
+"Disable_service2_1" = "";
 "service_disabled" = "The service is disabled!"    ;
 "service_successfully_disabled!" = "The service is successfully disabled!"    ;
 "Not_paid" = "Not paid"    ;
@@ -199,18 +209,20 @@
 "Successfully_disabled!" = "Successfully disabled!"    ;
 "Failed_disable_service." = "Failed to disable the service. Please, repeat later"    ;
 "Connect_service" = "Connect the service"    ;
+"Connect_service2" =  "Subscribe to service"    ;
+"Connect_service2_1" =  " ?"    ;
 "service_connected" = "The service is connected!"    ;
 "Successfully_connected!" =  " Successfully connected!"    ;
 "Reconnect" = "Reconnect"    ;
-"Reconnect_tariff" = "Reconnect tariff"    ;
-"Tariff_reconnected!" = "Tariff reconnected!"    ;
+"Reconnect_tariff" = "Reconnect price plan"    ;
+"Tariff_reconnected" = "Tariff reconnected!"    ;
 "Invalid_number" = "Invalid recipient number"    ;
 "maximum_limit:" = "Your maximum limit:"    ;
 "minimum_limit:" = "Your minimum limit:"    ;
-"not_used_transfer" = "You have not used the service yet traffic transfer"    ;
-"not_used_exchange" = "You have not used the service yet traffic exchange"    ;
-"not_used_History" = "You have not used the service yet History"    ;
-"not_used_Mobile" = "You have not used the service yet Mobile Transfer"    ;
+"not_used_transfer" = "You have not used the service yet \"Traffic transfer\" ";
+"not_used_exchange" = "You have not used the service yet \"Traffic exchange\" ";
+"not_used_History" = "You have not used the service yet \"History\" ";
+"not_used_Mobile" = "You have not used the service yet \"Mobile Transfer\" ";
 "Ask_for" = "Ask for"    ;
 "Subscriber" = "Subscriber"    ;
 "Friend's number" = "Friend's number"    ;
@@ -237,8 +249,66 @@
 "Public_offer" = "Public offer."    ;
 
 
-"max_summa" = "Максимальная сумма запроса 5 с.";
-"input_summa" = "Введите сумму";
-"input_correct_summa" = "Enter the correct sum";
-"zet_call" = "Звонки по РТ";
-"another_call" = "Звонки внутри сети";
+"max_summa" = "Maximum request amount 5 TJS";
+"input_summa" = "Enter amount";
+"input_correct_summa" = "Enter the correct amount";
+"zet_call" = "National calls";
+
+"error_title" = "Something went wrong";
+"choose_period" = "Choose period";
+"dn" = "day";
+"period" = "Period";
+"no_active_services" = "You do not have connected services";
+"no_available_services" = "You don't have available services";
+"fill_problem" = "Fill in the field \"Describe the problem\" ";
+"no_used_help_at_zero" = "You have not used the service \"Help at zero\" ";
+"no_operators" = "No operators";
+"no_push" = "There are currently no notifications";
+"Cancel" = "Cancel";
+"all_prices" = "All prices are indicated in the national currency somoni, Еxcise tax of 7% and VAT of 15% Included.  All calls are charged per minute.";
+"submit"  = "Confirmation";
+"confirm_exit" = "Are you sure you want to exit the app?";
+"wrong_code_try_count"  = "The code is incorrect. Tries left ";
+"block_code" = "You are blocked. \n Wait, please.";
+"touch_ask" = "Put your finger on the scanner";
+"problem_detail"  = "Describe the problem";
+"Send_message" = "Send a message?";
+"Choosed" = "Choose";
+"packet_paid" = "Package is paid";
+"packet_unpaid" = "Package is not paid";
+"cost_packet" = "Package price:";
+"commission_packet" = "Service fee:";
+"unlim_on" = "Unlimited for:";
+"Enter_phone_zet" = "Enter the Zet-Mobile number";
+"to" =  "to";
+"tjs" = "TJS";
+"TJS" = "TJS";
+"locale_lang" = "en";
+"calls within the network" = "Calls within the network";
+"SMS2" = "SMS";
+"Somoni" = "Somoni";
+"service is temporarily unavailable" = "Service is temporarily unavailable";
+"enter_current_passcode" = "Error, please enter current passcode";
+"Account_topped_up" = "Account has been topped up!";
+"error_trafic_count" = "Error. Enter the traffic amount";
+
+"menu" = "Menu";
+"menu_content" = "Set up your security, choose a convenient language, light or dark theme It’s up to you, install all ZET-MOBILE applications. \n\n\n\n\n\n";
+
+"tarif_set" = "Price Plan";
+"tarif_set_content" = "Follow the possibilities of your price plan, get acquainted with the available price plans. Upgrade your number in a new way.";
+
+"serv_set" = "Additional packages";
+"serv_set_content" = " In this section you will find \"Internet\", \"Minutes\", \"SMS\" packages.";
+
+"serv_fast" = "Fast Services";
+"serv_fast_content" = "\"Help at zero\", \"Mobile transfer\", \"Traffic transfer\", \"Traffic exchange\", \"Details\" - now on the main screen.";
+
+"main_title" = "Home";
+"main_title_content" = "All services, promotions, discounts, the state of the current balance and much more on the main page!";
+
+"usage_title" = "Spending";
+"usage_title_content" = "Order details and control your expenses.";
+
+"help_title" = "Support";
+"help_title_content" = "Map of offices, hotline, links to our instant messengers – now  \"everything at hand\"!";

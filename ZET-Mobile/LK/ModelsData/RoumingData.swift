@@ -12,10 +12,10 @@ struct RoumingData: Decodable {
     let countries: [countries_data]
 }
 
-struct questions_data: Decodable {
+struct questions_data {
     let id: Int
-    let question: String
-    let answer: String
+    let question: String?
+    let answer: String?
 }
 
 struct countries_data {
@@ -24,6 +24,33 @@ struct countries_data {
     let iconUrl: String?
 }
 
+extension questions_data: Decodable {
+    
+    private enum questions_dataCodingKeys: String, CodingKey {
+        case id = "id"
+        case question = "question"
+        case answer = "answer"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: questions_dataCodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        do {
+            question = try container.decode(String.self, forKey: .question)
+        }
+        catch {
+            question = nil
+        }
+       
+        do {
+            answer = try container.decode(String.self, forKey: .answer)
+        }
+        catch {
+            answer = nil
+        }
+    
+    }
+}
 
 extension countries_data: Decodable {
     

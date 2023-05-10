@@ -41,10 +41,10 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         title.text = defaultLocalizer.stringForKey(key: "unpaid_package")
         title.numberOfLines = 2
         title.textColor = .red
-        title.font = UIFont(name: "", size: 10)
+        title.font = UIFont.systemFont(ofSize: 15)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 20, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: 40)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -55,10 +55,10 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         title.text = ""
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
-        title.font = UIFont.boldSystemFont(ofSize: 20)
+        title.font = UIFont.boldSystemFont(ofSize: 17)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 80, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 60, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -72,7 +72,7 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         title.font = UIFont(name: "", size: 9)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 100, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 80, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
@@ -86,48 +86,46 @@ class TabZeroCollectionViewCell: UICollectionViewCell {
         title.font = UIFont(name: "", size: 9)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
-        title.frame = CGRect(x: 20, y: 120, width: 300, height: 20)
+        title.frame = CGRect(x: 20, y: 100, width: 300, height: 20)
         title.autoresizesSubviews = true
         title.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return title
     }()
     
     lazy var sendButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 20, y: 160, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
+        let button = UIButton(frame: CGRect(x: 20, y: 140, width: Int(UIScreen.main.bounds.size.width) - 40, height: 45))
         //ReconnectBut.setImage(#imageLiteral(resourceName: "connect"), for: UIControl.State.normal)
         //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-        button.setTitle(defaultLocalizer.stringForKey(key: "Pay_current"), for: .normal)
+        button.setTitle(defaultLocalizer.stringForKey(key: "Pay_current2"), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         button.layer.cornerRadius = button.frame.height / 2
         return button
     }()
     
-    let white_view_back = UIView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)) - 280, width: UIScreen.main.bounds.size.width, height: 280))
+    let whiteView_back = UIView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)) - 260, width: UIScreen.main.bounds.size.width, height: 260))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        white_view_back.backgroundColor = .white
-        white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
-        white_view_back.layer.shadowOpacity = 1
-        white_view_back.layer.shadowOffset = .zero
-        white_view_back.layer.shadowRadius = 10
-        white_view_back.isHidden = false
+        whiteView_back.backgroundColor = colorGrayWhite
+        whiteView_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+        whiteView_back.layer.shadowOpacity = 1
+        whiteView_back.layer.shadowOffset = .zero
+        whiteView_back.layer.shadowRadius = 10
+        whiteView_back.isHidden = true
         
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        contentView.addSubview(whiteView_back)
         
-        white_view_back.addSubview(title_info)
-        
-        contentView.addSubview(white_view_back)
-        
-        white_view_back.addSubview(type_paket)
-        white_view_back.addSubview(title_commission)
-        white_view_back.addSubview(summa)
-        white_view_back.addSubview(sendButton)
+        whiteView_back.addSubview(title_info)
+        whiteView_back.addSubview(type_paket)
+        whiteView_back.addSubview(title_commission)
+        whiteView_back.addSubview(summa)
+        whiteView_back.addSubview(sendButton)
     
     }
     

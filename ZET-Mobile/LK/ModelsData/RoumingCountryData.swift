@@ -21,9 +21,9 @@ struct roamingOperators_data: Decodable {
     let operatorCharges: [operatorCharges_data]
 }
 
-struct operatorCharges_data: Decodable {
+struct operatorCharges_data {
     let price: Double
-    let description: String
+    let description: String?
 }
 
 extension RoumingCountryData: Decodable {
@@ -58,6 +58,26 @@ extension RoumingCountryData: Decodable {
         catch {
             roamingOperators = nil
         }
+    }
+}
+
+extension operatorCharges_data: Decodable {
+    
+    private enum  operatorCharges_dataCodingKeys: String, CodingKey {
+        case price = "price"
+        case description = "description"
+    }
+        
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy:  operatorCharges_dataCodingKeys.self)
+        price = try container.decode(Double.self, forKey: .price)
+        do {
+            description = try container.decode(String.self, forKey: .description)
+        }
+        catch {
+            description = nil
+        }
+       
     }
 }
 

@@ -13,6 +13,34 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
     
     let scrollView = UIScrollView()
     
+    lazy var image: UIImageView = {
+        let image = UIImageView()
+        image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Frame 150 1") : UIImage(named: "zet 1-2"))
+        image.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 100, y: 70, width: 200, height: 30)
+        return image
+    }()
+    
+    lazy var close: UIButton = {
+        let button = UIButton()
+        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+        button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
+        button.isUserInteractionEnabled = true
+        //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var title_view: UILabel = {
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 110, width: UIScreen.main.bounds.size.width - 40, height: 50)
+        title.text = "Пользовательское соглашение"
+        title.numberOfLines = 1
+        title.textColor = colorBlackWhite
+        title.font = UIFont.boldSystemFont(ofSize: 18)
+        title.textAlignment = .left
+        
+        return title
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,12 +64,17 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
         condition_view.content.sizeToFit()
       
         print(condition_view.content.frame.height)
-        condition_view.content.frame.origin.y = 160
+        condition_view.content.frame.origin.y = 10
         scrollView.contentSize = CGSize(width: view.frame.width, height: condition_view.content.frame.height + 210)
         condition_view.frame.size.height = condition_view.content.frame.height + 210
         
-        scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (bottomPadding ?? 0))
+        scrollView.frame = CGRect(x: 0, y: 160, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (bottomPadding ?? 0))
         view.addSubview(scrollView)
+        
+        view.addSubview(image)
+        view.addSubview(title_view)
+        view.addSubview(close)
+        
         scrollView.addSubview(condition_view)
         
     }
@@ -63,7 +96,7 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.scrollView == scrollView {
-            if scrollView.contentOffset.y > condition_view.image.frame.origin.y {
+            if scrollView.contentOffset.y > condition_view.content.frame.origin.y {
                 print("large")
                 modalPresentationStyle = .pageSheet
                 if #available(iOS 15.0, *) {
@@ -79,38 +112,10 @@ class ConditionViewController: UIViewController, UIScrollViewDelegate {
 
 class ConditionView: UIView {
     
-    lazy var image: UIImageView = {
-        let image = UIImageView()
-        image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Frame 150 1") : UIImage(named: "zet 1-2"))
-        image.frame = CGRect(x: UIScreen.main.bounds.size.width / 2 - 100, y: 70, width: 200, height: 30)
-        return image
-    }()
-    
-    lazy var close: UIButton = {
-        let button = UIButton()
-        button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
-        button.setImage(#imageLiteral(resourceName: "close_icon"), for: UIControl.State.normal)
-        button.isUserInteractionEnabled = true
-        //button.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy var title: UILabel = {
-        let title = UILabel()
-        title.frame = CGRect(x: 20, y: 110, width: UIScreen.main.bounds.size.width - 40, height: 50)
-        title.text = "Пользовательское соглашение"
-        title.numberOfLines = 1
-        title.textColor = colorBlackWhite
-        title.font = UIFont.boldSystemFont(ofSize: 18)
-        title.textAlignment = .left
-        
-        return title
-    }()
-    
     
     lazy var content: UILabel = {
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 160, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+        title.frame = CGRect(x: 20, y: 10, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
         title.textColor = darkGrayLight
         title.font = UIFont.systemFont(ofSize: 16)
         title.textAlignment = .left
@@ -235,9 +240,7 @@ class ConditionView: UIView {
     private func setupView() {
         backgroundColor = colorGrayWhite
      
-        self.addSubview(image)
-        self.addSubview(title)
-        self.addSubview(close)
+        
         self.addSubview(content)
     }
 }
