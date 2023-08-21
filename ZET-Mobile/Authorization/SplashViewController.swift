@@ -24,21 +24,17 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let imageViewBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        let imageViewBackground = UIImageView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
         imageViewBackground.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "splash_black.png") : UIImage(named: "splash_white.png"))
-        imageViewBackground.contentMode = UIView.ContentMode.scaleToFill
-        self.view.addSubview(imageViewBackground)
-        self.view.sendSubviewToBack(imageViewBackground)
+        imageViewBackground.contentMode = .scaleAspectFill
+        view.addSubview(imageViewBackground)
+        view.sendSubviewToBack(imageViewBackground)
         
-        /*if self.traitCollection.userInterfaceStyle == .dark {
-            UserDefaults.standard.set("dark", forKey: "ThemeAppereance")
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
+            self.touches()
         }
-        else {
-            UserDefaults.standard.set("light", forKey: "ThemeAppereance")
-        }*/
-        
-        _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(touches), userInfo: nil, repeats: false)
     }
+
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

@@ -330,7 +330,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             let i = user_phone.index(user_phone.startIndex, offsetBy: cursorPosition2 - 5)
             user_phone.insert(contentsOf: string, at: i)
             //user_phone = user_phone + string
-            print(user_phone)
         }
         
         
@@ -339,7 +338,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         }
         else if tag == 2 {
           //  user_code = user_code + string
-            print(user_code)
         }
         
         return true
@@ -529,7 +527,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
         sender.showAnimation { [self] in
             if auth_view.code_field.text == "" && auth_view.code_field.isHidden == true {
-                print(user_phone)
                 let length = user_phone.count
                 let str = user_phone.prefix(3)
                 let str2 = user_phone.prefix(2)
@@ -585,7 +582,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
     @objc func get_Code_Request() {
         self.showActivityIndicator2(uiView: view)
     
-        print(user_phone)
         let parametr: [String: Any] = ["ctn": "992\(user_phone)", "language": lang_id]
         
         let client = APIClient.shared

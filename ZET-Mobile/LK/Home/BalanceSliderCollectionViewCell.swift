@@ -97,7 +97,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         let titleNumber = UILabel()
         titleNumber.text = ""
         titleNumber.numberOfLines = 0
-        titleNumber.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        titleNumber.textColor = .white
         titleNumber.font = UIFont.systemFont(ofSize: 18)
         titleNumber.lineBreakMode = NSLineBreakMode.byWordWrapping
         titleNumber.textAlignment = .left
@@ -105,6 +105,16 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         titleNumber.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return titleNumber
     }()
+    
+    lazy var prereg: UIButton = {
+        let prereg = UIButton()
+        prereg.setImage(UIImage(named: "uncorrect_alert"), for: .normal)
+        prereg.frame = CGRect(x: titleNumber.text!.count * 10 + 30, y: 152, width: 25, height: 25)
+        prereg.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
+        prereg.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return prereg
+    }()
+    
     
     lazy var spisanie: UILabel = {
         let spisanie = UILabel()
@@ -150,6 +160,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(popolnit)
         contentView.addSubview(titleTarif)
         contentView.addSubview(settings)
+        contentView.addSubview(prereg)
         contentView.addSubview(titleNumber)
         contentView.addSubview(spisanie)
         

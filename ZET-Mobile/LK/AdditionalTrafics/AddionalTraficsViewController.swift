@@ -66,6 +66,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         color2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
         
         sendRequest()
+    
         
     }
     

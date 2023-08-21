@@ -200,6 +200,7 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
         
         //context.localizedCancelTitle = "Ввести пин-код"
         var error: NSError?
+        print("vvvvv")
 
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
             let reason = defaultLocalizer.stringForKey(key: "touch_ask")
@@ -229,12 +230,10 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                        
                     } else {
                         switch authenticationError!._code {
-                            
                         case LAError.systemCancel.rawValue:
                             print("Authentication was cancelled by the system")
                             self.hideTouchID(uiView: self.view)
                             //exit(0)
-                            
                         case LAError.userCancel.rawValue:
                             print("Authentication was cancelled by the user")
                             self.hideTouchID(uiView: self.view)
@@ -282,29 +281,38 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     }
     
     @objc func clickButton(sender: UIButton) {
-        
+        let d = Date()
+        let df = DateFormatter()
+        df.dateFormat = "y-MM-dd H:mm:ss.SSSS"
         sender.showAnimation { [self] in
         }
-        
-        if enterPlace[2].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[3].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[4].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) {
-            
-            enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-            enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
-            enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+        print("433333 : \(df.string(from: d))")
+
+         if enterPlace[2].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) &&
+            enterPlace[3].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) &&
+            enterPlace[4].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
+
+        {
+             //enterPlace[clickTime + 1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+
+             
+           // enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+         //   enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+         //   enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
+             print("43433334 : \(df.string(from: d))")
+
         }
-        
         enterPlace[clickTime].backgroundColor = UIColor.orange
-      
         clickTime = clickTime + 1
-        pas = pas + String(sender.titleLabel!.text!)
-        print(pas)
-        
         pincode_view.titleTryies.isHidden = true
-    
-        
+        pas = pas + String(sender.titleLabel!.text!)
+        print("999999 : \(df.string(from: d))")
         if (clickTime == 5) {
-            
+            print("101010 : \(df.string(from: d))")
+
             if (pas == UserDefaults.standard.string(forKey: "PinCode")) {
+                print("aaaaaa : \(df.string(from: d))")
+
                 clickTime = 1
                 pas = ""
                 print("dd")
@@ -312,69 +320,94 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 enterPlace[2].backgroundColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                 enterPlace[3].backgroundColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                 enterPlace[4].backgroundColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
-                
+                print("bbbbbb : \(df.string(from: d))")
+
                 let buttons = getButtonsInView(view: pincode_view)
                 for button in buttons {
                     button.isUserInteractionEnabled = false
                     button.isEnabled = false
+                    print("ccccccc : \(df.string(from: d))")
+
                 }
+                
+                print("dddddd : \(df.string(from: d))")
+
                 timer.invalidate()
                 setTimerCounting(false)
                 totalTime = 59
                 userDefaults.set(1, forKey: TRY_TIMER_KEY)
-                
+                print("eeeeeee : \(df.string(from: d))")
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
-                    
+                    print("ffffff : \(df.string(from: d))")
+
                     guard let window = UIApplication.shared.keyWindow else {
                        return
                     }
+                    print("ggggggg : \(df.string(from: d))")
 
                     guard let rootViewController = window.rootViewController else {
                        return
                     }
+                    print("hhhhhhhh : \(df.string(from: d))")
+
                     let vc = ContainerViewController()
+                    print("jjjjjjjj : \(df.string(from: d))")
+
                     vc.view.frame = rootViewController.view.frame
+                    print("kkkkkkkkk : \(df.string(from: d))")
+
                     vc.view.layoutIfNeeded()
+                    print("LLLLLLLL : \(df.string(from: d))")
+
                     UIView.transition(with: window, duration: 0.3, options: .transitionFlipFromLeft, animations: {
                            window.rootViewController = vc
                      }, completion: nil)
+                    print("zzzzzzzzzz : \(df.string(from: d))")
+
                 }
                 
             }
             else if (tryCode != 0) {
-                
+                print("xxxxxxxxx : \(df.string(from: d))")
+
                 enterPlace[1].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[2].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[3].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[4].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
-                
+                print("vvvvvvv : \(df.string(from: d))")
+
                 pincode_view.titleTryies.isHidden = false
                 pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "wrong_code_try_count") + String(tryCode)
                 tryCode = tryCode - 1
                 clickTime = 1
                 pas = ""
-                
+                print("nnnnnnnnnnnn : \(df.string(from: d))")
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
                     if enterPlace[2].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[3].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) && enterPlace[4].backgroundColor == UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00) {
-                        
+                        print("mmmmmmmmmm : \(df.string(from: d))")
+
                         enterPlace[1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
                         enterPlace[2].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
                         enterPlace[3].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
                         enterPlace[4].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
                     }
+                    
+                    print(">>>>>>>>> : \(df.string(from: d))")
+
                     pincode_view.titleTryies.isHidden = true
                     pincode_view.titleTryies.text = ""
                 }
-                
-              //  }
        }
             else {
+                print("qqqqqqqq : \(df.string(from: d))")
                 enterPlace[1].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[2].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[3].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 enterPlace[4].backgroundColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
                 pincode_view.titleTryies.isHidden = false
-                
+                print("wwwwwwwwww : \(df.string(from: d))")
                 switch tryTimer {
                 case 1:
                     pincode_view.titleTryies.text = defaultLocalizer.stringForKey(key: "block_code")  +  " " + "01:00"
@@ -393,12 +426,13 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                     totalTime = 59
                     break
                }
-                
+                print("eeeeeeeee : \(df.string(from: d))")
                 let buttons = getButtonsInView(view: pincode_view)
                 for button in buttons {
                     button.isUserInteractionEnabled = false
                     button.isEnabled = false
                 }
+                print("rrrrrrrrrrrr : \(df.string(from: d))")
                 clickTime = 1
                 pas = ""
                 tryCode = 2
@@ -406,6 +440,8 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
                 userDefaults.set(tryTimer, forKey: TRY_TIMER_KEY)
                 timer.invalidate()
                 timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+                print("ttttttttttt : \(df.string(from: d))")
+
             }
         }
     }
@@ -468,13 +504,17 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
     
     @objc func deleteSymbol() {
         if pas.count == 0 {
-          
+          print("delete symbol : ")
         }
         else if pas.count > 1 && pas.count != 0 {
             enterPlace[clickTime - 1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
             clickTime = clickTime - 1
             pas.removeLast()
+              print("delete symbol 3 : ")
+
         } else {
+                  print("delete symbol : 4")
+
             enterPlace[1].backgroundColor = UIColor(red: 0.93, green: 0.93, blue: 0.93, alpha: 1.00)
             clickTime = 1
             pas = ""
@@ -554,6 +594,4 @@ class PinCodeInputController: UIViewController , UIScrollViewDelegate {
            // UserDefaults.standard.set(true, forKey: "BiometricEnter")
         })
     }
-    
-   
 }

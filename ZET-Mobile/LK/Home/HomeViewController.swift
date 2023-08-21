@@ -577,6 +577,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
     }
+
     
     @objc func openMenu() {
         // Define the menu
@@ -707,7 +708,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         refreshControl.endRefreshing()
                     
                     }
-                   print("Completed event.")
+                   print("Completed event. 1111111")
                     
                 }).disposed(by: disposeBag)
               }
@@ -812,7 +813,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         refreshControl.endRefreshing()
                     
                     }
-                   print("Completed event.")
+                   print("Completed event. 2222222")
                     
                 }).disposed(by: disposeBag)
               }
@@ -949,7 +950,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                  onCompleted: { [self] in
                     // sender.hideLoading()
                      
-                    print("Completed event.")
+                    print("Completed event. 333333")
                      
                  }).disposed(by: disposeBag)
                }
@@ -1001,7 +1002,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         }
                         
                     }
-                   print("Completed event.")
+                   print("Completed event. 4444444")
                     
                 }).disposed(by: disposeBag)
               }
@@ -1205,7 +1206,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
                 cell.spisanie.textColor  = .white
             }
            // cell.image.image = UIImage(named: mainBannerUrl)
-            
+            print("main banner : \(mainBannerUrl)")
             if mainBannerUrl != "" {
                 cell.image.af_setImage(withURL: URL(string: mainBannerUrl)!)
             }
@@ -1215,6 +1216,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             
             cell.titleTarif.frame = CGRect(x: 20, y: 105, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
             cell.settings.frame.origin.x = CGFloat(cell.titleTarif.text!.count * 10 + 40)
+            
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
             let third = String(String(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(5))).prefix(2)
@@ -1222,6 +1224,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             print(UserDefaults.standard.string(forKey: "mobPhone"))
            
             cell.titleNumber.text = "(+992) \(first)-\(second)-\(third)-\(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(7))"
+            
+            cell.prereg.frame.origin.x = CGFloat(cell.titleNumber.text!.count * 10 + 15)
+           
             cell.actionDelegate = (self as CellBalanceActionDelegate)
             return cell
         }

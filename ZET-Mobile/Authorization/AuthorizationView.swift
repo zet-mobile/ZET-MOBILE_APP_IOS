@@ -15,8 +15,8 @@ class AuthorizationView: UIView {
         let image = UIImageView()
         image.image = nil
         image.image = UIImage(named: "zet_auth")
+        image.contentMode = .scaleAspectFill
         image.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) - ((UIScreen.main.bounds.size.width * 150) / 428) / 2, y: (UIScreen.main.bounds.size.height * 90) / 926, width: (UIScreen.main.bounds.size.width * 170) / 428, height: (UIScreen.main.bounds.size.height * 130) / 926)
-        
         return image
     }()
     

@@ -18,8 +18,21 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.244897709825-7qe9g6j5gut599kfggj6bhmskul82j6i</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,12 +48,12 @@
 	<string>for calling</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>ZET-MOBILE использует Face ID, чтобы разблокировать приложения </string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>ZET-MOBILE использует геолокацию для отображения ближайших офисов обслуживания</string>
 	<key>NSLocationUsageDescription</key>
 	<string>ZET-MOBILE использует геолокацию для отображения ближайших офисов обслуживания</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>ZET-MOBILE использует геолокацию для отображения ближайших офисов обслуживания</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ZET-MOBILE использует камера, чтобы снять фото профиля </string>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>
@@ -65,13 +78,13 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

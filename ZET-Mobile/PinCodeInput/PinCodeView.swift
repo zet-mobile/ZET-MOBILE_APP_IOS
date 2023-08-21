@@ -233,11 +233,35 @@ class PinCodeView: UIView {
         return button
     }()
     
+//    lazy var delete: UIButton = {
+//        let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 70) / 428, y: (UIScreen.main.bounds.size.height * 580) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
+//        button.backgroundColor = .clear
+//        button.setTitle("", for: .normal)
+//        button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ?
+//            #imageLiteral(resourceName: "delete.left.fill") :
+//            #imageLiteral(resourceName: "delete.left.fill")), for: UIControl.State.normal)
+//        button.setTitleColor(colorBlackWhite, for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+//        button.titleLabel?.textAlignment = .center
+//        button.layer.borderWidth = 1
+//        button.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+//        button.layer.cornerRadius = button.frame.height / 2
+//
+//        return button
+//    }()
+    
+    
     lazy var delete: UIButton = {
         let button = UIButton(frame: CGRect(x: (UIScreen.main.bounds.size.width / 2) + (UIScreen.main.bounds.size.width * 70) / 428, y: (UIScreen.main.bounds.size.height * 580) / 926, width: (UIScreen.main.bounds.size.height * 80) / 926, height: (UIScreen.main.bounds.size.height * 80) / 926))
         button.backgroundColor = .clear
         button.setTitle("", for: .normal)
-        button.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "backspace_w") : #imageLiteral(resourceName: "backspace")), for: UIControl.State.normal)
+        
+        if let image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "delete.left.fill") : #imageLiteral(resourceName: "delete.left.fill")) {
+            let templateImage = image.withRenderingMode(.alwaysTemplate)
+            button.setImage(templateImage, for: .normal)
+            button.tintColor = .black
+        }
+        
         button.setTitleColor(colorBlackWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 30)
         button.titleLabel?.textAlignment = .center
@@ -247,6 +271,8 @@ class PinCodeView: UIView {
         
         return button
     }()
+
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -19,6 +19,7 @@ struct notification_data {
     let shortDescription: String?
     let image: String?
     let icon: String?
+    let url: String?
     let statusId: Int
     let service: service_data?
 }
@@ -63,6 +64,7 @@ extension notification_data: Decodable {
         case shortDescription  = "shortDescription"
         case image = "image"
         case icon = "icon"
+        case url = "url"
         case statusId = "statusId"
         case service = "service"
     }
@@ -106,6 +108,13 @@ extension notification_data: Decodable {
         }
         catch {
             icon = nil
+        }
+        
+        do {
+            url = try container.decode(String.self, forKey: .url)
+        }
+        catch {
+            url = nil
         }
         
         statusId = try container.decode(Int.self, forKey: .statusId)

@@ -14,6 +14,7 @@ import UserNotifications
 import LocalAuthentication
 import CoreLocation
 import SideMenu
+//import IQKeyboardManagerSwift
 
     var window = UIApplication.shared.keyWindow
     var topPadding = window?.safeAreaInsets.top
@@ -69,6 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, CLLoca
                
         application.registerForRemoteNotifications()
                
+        //keyboard
+     //   IQKeyboardManager.shared.enable = true
+        
         window = UIWindow()
         window?.makeKeyAndVisible()
         let navController = UINavigationController(rootViewController: SplashViewController())

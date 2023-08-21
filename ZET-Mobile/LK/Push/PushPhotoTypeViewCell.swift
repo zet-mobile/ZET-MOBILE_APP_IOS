@@ -67,7 +67,7 @@ class PushPhotoTypeViewCell: UITableViewCell {
         icon_more.setImage(#imageLiteral(resourceName: "closed_icon"), for: UIControl.State.normal)
         icon_more.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         
-        icon_show_more.frame = CGRect(x: 70, y: 100, width: 140, height: 45)
+        icon_show_more.frame = CGRect(x: 70, y: 90, width: 140, height: 45)
         icon_show_more.isHidden = true
         icon_show_more.addTarget(self, action: #selector(openMore), for: .touchUpInside)
         icon_show_more.contentHorizontalAlignment = .left
