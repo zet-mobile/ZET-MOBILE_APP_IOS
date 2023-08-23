@@ -6,6 +6,11 @@
   
 */
 
+"PreregYes" = "You have re-registered the number." ;
+"PreregNo" = "You have not re-registered your number." ;
+
+"FeedbackContactNumber" = "Contact number" ;
+
 "GoodDay" =  "Good Day"    ;
 "Your_balance" = "Your balance"    ;
 "Top_up_balance" = "Top up balance"    ;

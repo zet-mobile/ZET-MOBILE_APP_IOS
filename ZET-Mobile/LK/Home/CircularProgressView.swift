@@ -63,6 +63,25 @@ class CircularProgressView: UIView {
         return button
     }()
         
+    
+    
+    let clickActionEffect: UIButton = {
+        let clickActionEffect = UIButton()
+    
+        clickActionEffect.setBackgroundImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "clickEffectDark") : #imageLiteral(resourceName: "clickEffect")), for: UIControl.State.normal)
+       
+   
+        clickActionEffect.backgroundColor = .clear
+        clickActionEffect.layer.masksToBounds = true
+        
+       
+        clickActionEffect.layer.masksToBounds = true
+        clickActionEffect.isUserInteractionEnabled = true
+        
+        return clickActionEffect
+    }()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         clipsToBounds = true
@@ -74,9 +93,28 @@ class CircularProgressView: UIView {
     }
     
     override func layoutSubviews() {
-        super.layoutSubviews()
+       // super.layoutSubviews()
         
         createCircularPath(color1: color1, color2: color2)
+        
+        if frame.size.width != frame.size.height, frame.size.width < frame.size.height {
+            width = frame.size.width - 5
+            height = frame.size.width - 5
+        } else if frame.size.width != frame.size.height, frame.size.width > frame.size.height {
+            width = frame.size.height - 5
+            height = frame.size.height - 5
+        } else {
+            width = frame.size.width - 5
+            height = frame.size.height - 5
+        }
+       
+        clickActionEffect.frame =  CGRect(x: (frame.size.width / 2) - ((width - 10) / 2), y: (frame.size.height / 2) - ((height - 10) / 2), width: width - 10, height: height - 10)
+        
+    
+        clickActionEffect.layer.cornerRadius = (width - 10) / 2
+        
+        addSubview(clickActionEffect)
+        
         text.frame = CGRect(x: (frame.width / 2) - ((width - 25) / 2), y: (frame.height / 2) - ((height / 2) / 2), width: width - 25, height: height / 2)
         
         text2.frame = CGRect(x: (frame.width / 2) - ((width - 25) / 2), y: 0, width: width - 25, height: height)
@@ -95,8 +133,10 @@ class CircularProgressView: UIView {
         plusText.frame = CGRect(x: frame.width * 0.73, y: paddingTop, width: plusLayerHeight, height: plusLayerHeight)
         plusText.layer.cornerRadius = plusLayerHeight / 2
         addSubview(plusText)
+        
+        
 }
-    
+   
     
     func createCircularPath(color1: UIColor, color2: UIColor) {
         if frame.size.width != frame.size.height, frame.size.width < frame.size.height {
@@ -123,12 +163,14 @@ class CircularProgressView: UIView {
         innerCircleLayer.shadowOffset = CGSize(width: 0, height: 1)
         innerCircleLayer.shadowPath = smallerCircularPath.cgPath
         
+        
         circleLayer.path = circularPath.cgPath
         circleLayer.fillColor = UIColor.clear.cgColor
         circleLayer.lineCap = .round
         circleLayer.lineWidth = 5.0
         circleLayer.strokeColor = color2.cgColor
-
+  
+         
         progressLayer.path = circularPath.cgPath
         progressLayer.fillColor = UIColor.clear.cgColor
         progressLayer.strokeColor = color2.cgColor
@@ -143,9 +185,11 @@ class CircularProgressView: UIView {
         gradientLayer.frame = bounds
         gradientLayer.mask = progressLayer
 
+        
         layer.addSublayer(innerCircleLayer)
         layer.addSublayer(circleLayer)
         layer.addSublayer(gradientLayer)
+       
     }
     
     func progressAnimation(duration: TimeInterval? = 0.5, value: CGFloat? = 0) {
@@ -158,6 +202,9 @@ class CircularProgressView: UIView {
         progressLayer.add(circularProgressAnimation, forKey: "progressAnim")
     }
     
+
 }
+
+
 
 

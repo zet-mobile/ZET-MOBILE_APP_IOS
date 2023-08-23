@@ -39,6 +39,7 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     var y_pozition = 240
     
     let table = UITableView()
+    @IBOutlet private weak var tableViewHeight: NSLayoutConstraint!
     
     let TarifBalanceView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -72,6 +73,9 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     var availables_data = [[String]]()
     var unlim_data = [[String]]()
     var options_element = [[String]]()
+    
+    let screenHeight = UIScreen.main.bounds.height
+    let scrollViewContentHeight = 1200 as CGFloat
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -294,40 +298,21 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView  {
-            if scrollView.contentOffset.y > tarifView.tab1.frame.origin.y {
-                tarifView.zetImage.isHidden = true
-                tarifView.welcome.isHidden = true
-                tarifView.user_name.isHidden = true
-                tarifView.titleOne.isHidden = true
-                TarifBalanceView.isHidden = true
-                self.scrollView.contentOffset.y = 0
-                tarifView.tab1.frame.origin.y = 0
-                tarifView.tab2.frame.origin.y = 0
-                tarifView.tab1Line.frame.origin.y = 40
-                tarifView.tab2Line.frame.origin.y = 40
-                TabCollectionView.frame.origin.y = 45
-            }
-            if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
-                print("y_pozition 2")
-                print(y_pozition)
-                tarifView.zetImage.isHidden = false
-                tarifView.welcome.isHidden = false
-                tarifView.user_name.isHidden = false
-                tarifView.titleOne.isHidden = false
-                TarifBalanceView.isHidden = false
-                self.scrollView.contentOffset.y = 104
-                tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
-                tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
-                tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
-                tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
-                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
-               
-            }
+      //  let screenHeight = UIScreen.main.bounds.height
+      //  let scrollViewContentHeight = 1200 as CGFloat
+      //  let yOffset = scrollView.contentOffset.y
+        
+        
+        if y_pozition == 530
+        {
+            self.scrollView.isScrollEnabled = true
+            self.table.isScrollEnabled = true
         }
         
-        if table == scrollView {
-            if scrollView.contentOffset.y > 10 {
+        
+        if scrollView == self.scrollView {
+            if scrollView.contentOffset.y > tarifView.tab1.frame.origin.y {
+                
                 tarifView.zetImage.isHidden = true
                 tarifView.welcome.isHidden = true
                 tarifView.user_name.isHidden = true
@@ -339,8 +324,15 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                 tarifView.tab1Line.frame.origin.y = 40
                 tarifView.tab2Line.frame.origin.y = 40
                 TabCollectionView.frame.origin.y = 45
+                
+                self.scrollView.isScrollEnabled = false
+                self.table.isScrollEnabled = true
+                
+                print("scrollView1")
+                
             }
-            if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
+            if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true
+                {
                 print("y_pozition 2")
                 print(y_pozition)
                 tarifView.zetImage.isHidden = false
@@ -348,15 +340,71 @@ class MyTarifViewController: UIViewController, UIScrollViewDelegate, CellTarifiA
                 tarifView.user_name.isHidden = false
                 tarifView.titleOne.isHidden = false
                 TarifBalanceView.isHidden = false
-                self.scrollView.contentOffset.y = 104
+             //   self.scrollView.contentOffset.y = 104
                 tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
                 tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
                 tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
                 tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
                 TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
+                
+                self.scrollView.isScrollEnabled = true
+                self.table.isScrollEnabled = false
+                
+                print("scrollView2")
                
             }
+
+         
+         }
+        
+        if scrollView == self.table {
+            if scrollView.contentOffset.y > 10 {
+                
+                tarifView.zetImage.isHidden = true
+                tarifView.welcome.isHidden = true
+                tarifView.user_name.isHidden = true
+                tarifView.titleOne.isHidden = true
+                TarifBalanceView.isHidden = true
+                self.scrollView.contentOffset.y = 0
+                tarifView.tab1.frame.origin.y = 0
+                tarifView.tab2.frame.origin.y = 0
+                tarifView.tab1Line.frame.origin.y = 40
+                tarifView.tab2Line.frame.origin.y = 40
+                TabCollectionView.frame.origin.y = 45
+                
+                self.scrollView.isScrollEnabled = false
+                self.table.isScrollEnabled = true
+                print("table1")
+            
+               
+            }
+            if scrollView.contentOffset.y < -10 && tarifView.zetImage.isHidden == true {
+                print("y_pozition 2")
+                print(y_pozition)
+                
+                tarifView.zetImage.isHidden = false
+                tarifView.welcome.isHidden = false
+                tarifView.user_name.isHidden = false
+                tarifView.titleOne.isHidden = false
+                TarifBalanceView.isHidden = false
+              //  self.scrollView.contentOffset.y = 104
+                tarifView.tab1.frame.origin.y = CGFloat(y_pozition)
+                tarifView.tab2.frame.origin.y = CGFloat(y_pozition)
+                tarifView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                tarifView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
+                
+                self.scrollView.isScrollEnabled = true
+                self.table.isScrollEnabled = false
+        
+                
+                print("table2")
+                
+                
+            }
+            
         }
+      
     }
     
 

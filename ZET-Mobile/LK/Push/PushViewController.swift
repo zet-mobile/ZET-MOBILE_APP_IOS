@@ -605,6 +605,7 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
     @objc func openMore(_  sender: UIButton) {
         // detailViewController.more_view.content.text = notif_data[trasfer_type_choosed_id][15]
         detailViewController.more_view.image.isHidden = false
+    
         if notif_data[sender.tag][5] != "" {
             detailViewController.more_view.image.contentMode = .scaleAspectFit
             detailViewController.more_view.image.af_setImage(withURL: URL(string: notif_data[sender.tag][5])!)
@@ -627,20 +628,22 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
         }
         detailViewController.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
 
-        let webButton = UIButton(type: .system)
-        webButton.setTitle(defaultLocalizer.stringForKey(key: "SiteForward"), for: .normal)
-        webButton.addTarget(self, action: #selector(openWeb), for: .touchUpInside)
-        detailViewController.view.addSubview(webButton)
+//        let webButton = UIButton(type: .system)
+//        webButton.setTitle(defaultLocalizer.stringForKey(key: "SiteForward"), for: .normal)
+//        webButton.addTarget(self, action: #selector(openWeb), for: .touchUpInside)
+//        detailViewController.view.addSubview(webButton)
+//
+//        webButton.setTitleColor(.orange, for: .normal)
+//        webButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+//        webButton.frame = CGRect(x: 70, y: 500, width: 200, height: 40)
+//        webButton.translatesAutoresizingMaskIntoConstraints = false
+//        
+//       // webButton.centerXAnchor.constraint(equalTo: detailViewController.view.centerXAnchor).isActive = true
+//            //  webButton.topAnchor.constraint(equalTo: detailViewController.more_view.content.centerYAnchor, constant: 16).isActive = true
+//        webButton.bottomAnchor.constraint(equalTo: detailViewController.more_view.content.centerYAnchor, constant: 54).isActive = true
+//        webButton.centerXAnchor.constraint(equalTo: detailViewController.more_view.content.leftAnchor, constant: 70).isActive = true
+//        
 
-        webButton.setTitleColor(.orange, for: .normal)
-        webButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-      //  webButton.frame = CGRect(x: 70, y: 500, width: 200, height: 40)
-        webButton.translatesAutoresizingMaskIntoConstraints = false
-        
-       // webButton.centerXAnchor.constraint(equalTo: detailViewController.view.centerXAnchor).isActive = true
-            //  webButton.topAnchor.constraint(equalTo: detailViewController.more_view.content.centerYAnchor, constant: 16).isActive = true
-        webButton.bottomAnchor.constraint(equalTo: detailViewController.more_view.content.centerYAnchor, constant: 70).isActive = true
-        webButton.centerXAnchor.constraint(equalTo: detailViewController.more_view.content.leftAnchor, constant: 65).isActive = true
 
         nav = UINavigationController(rootViewController: detailViewController)
         nav.modalPresentationStyle = .pageSheet
@@ -666,7 +669,7 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
         let request = URLRequest(url: url)
         webView.loadRequest(request)
         webViewController.view.addSubview(webView)
-        webViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(closeWeb))
+        webViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: defaultLocalizer.stringForKey(key: "Close"), style: .plain, target: self, action: #selector(closeWeb))
         let webNav = UINavigationController(rootViewController: webViewController)
         webNav.modalPresentationStyle = .fullScreen
         detailViewController.present(webNav, animated: true, completion: nil)

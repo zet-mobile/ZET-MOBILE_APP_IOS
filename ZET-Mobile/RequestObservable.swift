@@ -12,6 +12,7 @@ import RxCocoa
 //MARK: RequestObservable class
 public class RequestObservable {
     var alert = UIAlertController()
+      var tabIndicator = "0"
     
   private lazy var jsonDecoder = JSONDecoder()
   private var urlSession: URLSession
@@ -39,7 +40,10 @@ public class RequestObservable {
     }
       else if statusCode == 401 && ItemModel.self != RefreshData.self {
          refreshGetToken()
-      
+          if tabIndicator == "0"
+           {
+              refreshGetToken()
+           }
           print("new get token")
       }
     else if statusCode == 401 && ItemModel.self == RefreshData.self {

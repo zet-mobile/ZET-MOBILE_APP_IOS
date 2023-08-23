@@ -18,6 +18,10 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     var actionDelegate: CellBalanceActionDelegate?
     
+    var taped = false
+    
+    var white_view_back = UIView()
+    
     let image: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "BalanceBack")
@@ -108,13 +112,27 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     lazy var prereg: UIButton = {
         let prereg = UIButton()
-        prereg.setImage(UIImage(named: "uncorrect_alert"), for: .normal)
+        //prereg.setImage(UIImage(named: "preregFalse"), for: .normal)
         prereg.frame = CGRect(x: titleNumber.text!.count * 10 + 30, y: 152, width: 25, height: 25)
-        prereg.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
+       // prereg.addTarget(self, action: #selector(showPrergInfo), for: UIControl.Event.touchUpInside)
         prereg.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return prereg
     }()
     
+    lazy var preregInfo: UILabel = {
+        let preregInfo = UILabel()
+        preregInfo.isHidden = true
+      //  preregInfo.backgroundColor = colorLightDarkGray
+        preregInfo.text = ""
+        preregInfo.numberOfLines = 0
+        preregInfo.textColor = colorBlackWhite
+        preregInfo.font = UIFont.systemFont(ofSize: 13)
+        preregInfo.lineBreakMode = NSLineBreakMode.byWordWrapping
+        preregInfo.textAlignment = .center
+        //preregInfo.frame = CGRect(x: 20, y: 190, width: CGFloat(preregInfo.text!.count * 10 + 20), height: 45)
+        preregInfo.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return preregInfo
+    }()
     
     lazy var spisanie: UILabel = {
         let spisanie = UILabel()
@@ -130,6 +148,25 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         return spisanie
     }()
     
+    //for prereg info
+    @objc func showPrergInfo(_ sender: UIButton){
+        sender.showAnimation {
+            if(self.taped)
+            {
+                self.preregInfo.isHidden = true
+                self.white_view_back.isHidden = true
+                self.taped = false
+                
+            }
+            else
+            {
+                self.preregInfo.isHidden = false
+                self.white_view_back.isHidden = false
+                self.taped = true
+            }
+        }
+        
+    }
     
     @objc func openTarifView(_ sender: UIButton){
         sender.showAnimation { [self] in
@@ -144,9 +181,11 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         }
         
     }
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -155,6 +194,18 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(image)
         contentView.sendSubviewToBack(image)
         
+        white_view_back = UIView(frame: CGRect(x: 15, y: 185, width: UIScreen.main.bounds.size.width - 60, height: 65))
+        white_view_back.layer.cornerRadius = 15
+        white_view_back.backgroundColor = contentColor
+        white_view_back.layer.shadowRadius = 10
+        white_view_back.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+        white_view_back.layer.shadowOpacity = 1
+        white_view_back.layer.shadowOffset = .zero
+        white_view_back.isHidden = true
+        
+        //white_view_back.layer.borderColor = UIColor.darkGray.cgColor
+        //white_view_back.layer.borderWidth = 0.2
+      
         contentView.addSubview(titleOne)
         contentView.addSubview(balance)
         contentView.addSubview(popolnit)
@@ -163,6 +214,9 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(prereg)
         contentView.addSubview(titleNumber)
         contentView.addSubview(spisanie)
+
+        contentView.addSubview(white_view_back)
+        contentView.addSubview(preregInfo)
         
     }
     

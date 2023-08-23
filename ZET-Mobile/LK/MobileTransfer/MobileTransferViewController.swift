@@ -282,6 +282,7 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                     }
                 },
                 onCompleted: {
+                    client.requestObservable.tabIndicator = "1"
                     DispatchQueue.main.async { [self] in
                        sendHistoryRequest()
                     }
@@ -354,8 +355,10 @@ class MobileTransferViewController: UIViewController, UIScrollViewDelegate {
                         hideActivityIndicator(uiView: self.view)
                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                     }
+                    client.requestObservable.tabIndicator="0"
                 },
                 onCompleted: {
+                    client.requestObservable.tabIndicator="0"
                     DispatchQueue.main.async { [self] in
                         setupView()
                         setupTabCollectionView()

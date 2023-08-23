@@ -9,6 +9,7 @@ import Foundation
 
 struct HomeData {
     
+    let prereg: Bool?
     let currentVersion: String?
     let welcomePhrase: String?
     let subscriberName: String?
@@ -40,7 +41,8 @@ struct microServices_data {
 extension HomeData: Decodable {
     
     private enum HomeDataCodingKeys: String, CodingKey {
-  
+        
+        case prereg = "prereg"
         case currentVersion = "currentVersion"
         case welcomePhrase = "welcomePhrase"
         case subscriberName = "subscriberName"
@@ -59,6 +61,12 @@ extension HomeData: Decodable {
         
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: HomeDataCodingKeys.self)
+        do {
+            prereg = try container.decode(Bool.self, forKey: .prereg)
+        }
+        catch {
+            prereg = nil
+        }
         
         do {
             currentVersion = try container.decode(String.self, forKey: .currentVersion)

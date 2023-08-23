@@ -52,6 +52,15 @@ class Toolbar: UIView {
     }()
     
     
+    lazy var notificationRing: UIButton = {
+        let notificationRing = UIButton()
+        notificationRing.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "Notification-1") : #imageLiteral(resourceName: "Notification")), for: UIControl.State.normal)
+        notificationRing.frame = CGRect(x: 0, y: 21, width: 20, height: 20)
+        notificationRing.isUserInteractionEnabled = true
+        //openmenu.addTarget(self, action: #selector(goback), for: UIControl.Event.touchUpInside)
+        return notificationRing
+    }()
+    
     lazy var icon_push: UIButton = {
         let icon_more = UIButton()
        // icon_more.setImage(#imageLiteral(resourceName: "push_count"), for: UIControl.State.normal)
@@ -60,7 +69,7 @@ class Toolbar: UIView {
         icon_more.titleLabel?.font = UIFont.systemFont(ofSize: 11)
         icon_more.setTitleColor(.black, for: .normal)
         icon_more.titleLabel?.textAlignment = .center
-        icon_more.frame = CGRect(x: 28, y: 13, width: 22, height: 18)
+        icon_more.frame = CGRect(x: -6, y: 13, width: 22, height: 18)
         icon_more.isUserInteractionEnabled = true
         //icon_more.isEnabled = false
        // icon_more.isHidden = true
@@ -78,7 +87,8 @@ class Toolbar: UIView {
     }()
     
     var view_menu = UIView()
-    
+    var view_notification = UIView()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -96,14 +106,23 @@ class Toolbar: UIView {
         view_menu = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 60, y: 0, width: UIScreen.main.bounds.size.width - (UIScreen.main.bounds.size.width - 60), height: frame.height))
         view_menu.backgroundColor = .clear
         
+        view_notification = UIView(frame: CGRect(x: UIScreen.main.bounds.size.width - 75, y: 0, width: UIScreen.main.bounds.size.width - (UIScreen.main.bounds.size.width - 75), height: frame.height))
+        view_notification.backgroundColor = .clear
+        
+        view_notification.addSubview(notificationRing)
         view_menu.addSubview(openmenu)
         view_menu.addSubview(icon_push)
-        self.addSubview(view_menu)
         
+        
+        self.addSubview(view_notification)
+        self.addSubview(view_menu)
+   
         self.addSubview(welcome)
         self.addSubview(user_name)
         self.addSubview(icon_more)
+       
        // self.addSubview(openmenu)
     }
+
 }
 

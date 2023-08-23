@@ -301,7 +301,8 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate, UITex
                   print(result)
                     DispatchQueue.main.async {
                         
-                        self.settings_data.append([String(result.minDaysCount), String(result.maxDaysCount), String(result.pricePerDay), String(result.description),  String(result.quantityLimit), String(result.discountPercent)])
+                        self.settings_data.append([String(result.minDaysCount), String(result.maxDaysCount), String(result.pricePerDay), String(result.description),  String(result.quantityLimit), String(result.discountPercent)
+                                                  ])
                             
                     }
                 },
@@ -311,11 +312,14 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate, UITex
                         hideActivityIndicator(uiView: self.view)
                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                     }
+                    print("DetalErr")
                 },
                 onCompleted: {
+                    client.requestObservable.tabIndicator = "1"
                     DispatchQueue.main.async { [self] in
                        sendHistoryRequest()
                     }
+                   print("DetalCompleted")
                    print("Completed event.")
                     
                 }).disposed(by: disposeBag)
@@ -367,7 +371,7 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate, UITex
                                     tableData8.append(String(result.history[i].histories[j].statusId))
                                 }
                                 if String(result.history[i].date) != "" {
-                                    HistoryData.append(detailData(date_header: String(result.history[i].date), phoneNumber: tableData, status: tableData1, email: tableData2, dateFrom: tableData3, dateTo: tableData4, date: tableData5, id: tableData6, price: tableData7, statusId: tableData8))
+                                    HistoryData.append(detailData(date_header: String(result.history[i].date), phoneNumber: tableData,status: tableData1, email: tableData2, dateFrom: tableData3, dateTo: tableData4, date: tableData5, id: tableData6, price: tableData7, statusId: tableData8))
                                 }
                             }
                             
@@ -382,14 +386,18 @@ class DetalizationViewController: UIViewController , UIScrollViewDelegate, UITex
                         
                     }
                 },
-                onError: { error in
+                onError: {
+                 error in
                    print(error.localizedDescription)
                     DispatchQueue.main.async { [self] in
                         hideActivityIndicator(uiView: self.view)
                         requestAnswer(status: false, message: defaultLocalizer.stringForKey(key: "service is temporarily unavailable"))
                     }
+                    print("DetalErr22")
+                    client.requestObservable.tabIndicator = "0"
                 },
                 onCompleted: {
+                    client.requestObservable.tabIndicator = "0"
                     DispatchQueue.main.async { [self] in
                         setupView()
                         setupTabCollectionView()

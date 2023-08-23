@@ -14,6 +14,7 @@ import AlamofireImage
 import SnapKit
 import RoundCoachMark
 
+
 let cellID = "BalanceSliderCell"
 let cellID2 = "sliderCell"
 let cellID3 = "hotServices"
@@ -23,6 +24,11 @@ var hot_services_data = [[String]]()
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
 
+    var tap = UITapGestureRecognizer()
+    var tappedState = false
+    var preregInfoLabel = UILabel()
+    var preregInfoLayout = UIView()
+    
     private var coachMarker: CoachMarker?
     var marksContainer = UIView()
     var halfModalTransitioningDelegate: HalfModalTransitioningTwoDelegate?
@@ -77,6 +83,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }()
     
     let ServicesTableView = UITableView()
+    //added for prereg
+    var preregStatus = false
     var user_name = ""
     var welcomePhrase = ""
     var balance_credit = ""
@@ -96,6 +104,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     let table_balance = UITableView()
     var tableData = [[String]]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +124,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         print(UserDefaults.standard.string(forKey: "token")!)
         print(UserDefaults.standard.string(forKey: "refresh_token")!)
         print(UserDefaults.standard.string(forKey: "mobPhone"))
+
                 
     }
 
@@ -185,9 +195,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         } else {
             // Fallback on earlier versions
         }
+        
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(table_height) + 800)
+    
         
         view.addSubview(scrollView)
         
@@ -213,6 +225,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         else {
             toolbar.icon_push.isHidden = true
         }
+        
+      
         view.addSubview(toolbar)
         
         if zero_help_view_show == false {
@@ -243,6 +257,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         toolbar.view_menu.isUserInteractionEnabled = true
         toolbar.view_menu.addGestureRecognizer(tapGestureRecognizer)
         
+        toolbar.notificationRing.addTarget(self, action: #selector(openPushNotifications), for: .touchUpInside)
+        toolbar.icon_push.addTarget(self, action: #selector(openPushNotifications), for: .touchUpInside)
+        let tapGestureRecognizerRing = UITapGestureRecognizer(target: self, action: #selector(openPushNotifications))
+        toolbar.view_notification.isUserInteractionEnabled = true
+        toolbar.view_notification.addGestureRecognizer(tapGestureRecognizerRing)
+        
+       
+        
        // toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
         
@@ -250,6 +272,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         scrollView.addSubview(home_view)
     
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+        
 
     }
 
@@ -260,6 +283,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         BalanceSliderView.delegate = self
         BalanceSliderView.dataSource = self
     }
+    
     
     func setupRemaindersSection(){
         
@@ -425,9 +449,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         remainderView.messagesRemainder.plusText.addTarget(self, action: #selector(openAddionalTraficsView), for: .touchUpInside)
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openAddionalTraficsView))
+        remainderView.messagesRemainder.clickActionEffect.addTarget(self, action: #selector(openAddionalTraficsView3), for: .touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openAddionalTraficsView3))
         remainderView.messagesRemainder.isUserInteractionEnabled = true
         remainderView.messagesRemainder.addGestureRecognizer(tapGestureRecognizer)
+        
+        
+        remainderView.minutesRemainder.clickActionEffect.addTarget(self, action: #selector(openAddionalTraficsView2), for: .touchUpInside)
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(openAddionalTraficsView2))
+        remainderView.minutesRemainder.isUserInteractionEnabled = true
+        remainderView.minutesRemainder.addGestureRecognizer(tapGestureRecognizer2)
+      
+        
+        remainderView.internetRemainder.clickActionEffect.addTarget(self, action: #selector(openAddionalTraficsView), for: .touchUpInside)
+    
+       let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(openAddionalTraficsView))
+        remainderView.internetRemainder.isUserInteractionEnabled = true
+        remainderView.internetRemainder.addGestureRecognizer(tapGestureRecognizer3)
         
     }
     
@@ -575,7 +614,30 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 
     @objc func openAddionalTraficsView() {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
+       
+        let viewControllerB = AddionalTraficsViewController()
+        viewControllerB.whichTab = "1"
+        navigationController?.pushViewController(viewControllerB, animated: true)
+        // navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
+    }
+
+    @objc func openAddionalTraficsView2() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+       
+        let viewControllerB = AddionalTraficsViewController()
+        viewControllerB.whichTab = "2"
+        navigationController?.pushViewController(viewControllerB, animated: true)
+        // navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
+    }
+
+    
+    @objc func openAddionalTraficsView3() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+       
+        let viewControllerB = AddionalTraficsViewController()
+        viewControllerB.whichTab = "3"
+        navigationController?.pushViewController(viewControllerB, animated: true)
+        // navigationController?.pushViewController(AddionalTraficsViewController(), animated: true)
     }
 
     
@@ -590,6 +652,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         menu.view.layer.cornerRadius = 20
         present(menu, animated: true, completion: nil)
     }
+    
+    @objc func openPushNotifications() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(PushViewController(), animated: true)
+    }
+    
     
     @objc func openProfileMenu() {
         let next = ProfilesMenuViewController()
@@ -614,6 +682,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
               try client.homeGetRequest().subscribe(
                 onNext: { result in
                     DispatchQueue.main.async {
+                        self.preregStatus = Bool(result.prereg ?? false)
                         self.balance_credit = String(result.subscriberBalance ?? 0)
                         self.tarif_name = String(result.priceplan?.priceplanName ?? "")
                         self.user_name = String(result.subscriberName ?? "")
@@ -708,7 +777,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         refreshControl.endRefreshing()
                     
                     }
-                   print("Completed event. 1111111")
+                   print("Completed event.")
                     
                 }).disposed(by: disposeBag)
               }
@@ -727,6 +796,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
               try client.homeGetRequest().subscribe(
                 onNext: { result in
                     DispatchQueue.main.async {
+                        //added for prereg
+                        self.preregStatus = Bool(result.prereg ?? false)
                         self.balance_credit = String(result.subscriberBalance ?? 0)
                         self.tarif_name = String(result.priceplan?.priceplanName ?? "")
                         self.user_name = String(result.subscriberName ?? "")
@@ -813,13 +884,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         refreshControl.endRefreshing()
                     
                     }
-                   print("Completed event. 2222222")
+                   print("Completed event.")
                     
                 }).disposed(by: disposeBag)
               }
               catch{
             }
     }
+    
     
     @objc func connectService(_ sender: UIButton) {
         
@@ -950,7 +1022,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                  onCompleted: { [self] in
                     // sender.hideLoading()
                      
-                    print("Completed event. 333333")
+                    print("Completed event.")
                      
                  }).disposed(by: disposeBag)
                }
@@ -1002,7 +1074,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                         }
                         
                     }
-                   print("Completed event. 4444444")
+                   print("Completed event.")
                     
                 }).disposed(by: disposeBag)
               }
@@ -1163,6 +1235,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+
 @available(iOS 15.0, *)
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -1195,7 +1268,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == BalanceSliderView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BalanceSliderCollectionViewCell
-           
+            
             cell.balance.text = balance_credit + defaultLocalizer.stringForKey(key: "tjs")
             cell.titleTarif.text = tarif_name
             cell.spisanie.text = next_apply_date
@@ -1205,13 +1278,13 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             else {
                 cell.spisanie.textColor  = .white
             }
-           // cell.image.image = UIImage(named: mainBannerUrl)
-            print("main banner : \(mainBannerUrl)")
+            // cell.image.image = UIImage(named: mainBannerUrl)
+            
             if mainBannerUrl != "" {
                 cell.image.af_setImage(withURL: URL(string: mainBannerUrl)!)
             }
             else {
-               cell.image.image = UIImage(named: "BalanceBack")
+                cell.image.image = UIImage(named: "BalanceBack")
             }
             
             cell.titleTarif.frame = CGRect(x: 20, y: 105, width: CGFloat(cell.titleTarif.text!.count * 10 + 20), height: 20)
@@ -1220,14 +1293,47 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             let first = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(2))
             let second = String(UserDefaults.standard.string(forKey: "mobPhone")!.prefix(5)).dropFirst(2)
             let third = String(String(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(5))).prefix(2)
-
+            
             print(UserDefaults.standard.string(forKey: "mobPhone"))
-           
+            
             cell.titleNumber.text = "(+992) \(first)-\(second)-\(third)-\(UserDefaults.standard.string(forKey: "mobPhone")!.dropFirst(7))"
             
+            //for prereg status
+          
+            preregInfoLabel = cell.preregInfo
+            preregInfoLayout = cell.white_view_back
+            
+            cell.prereg.addTarget(self, action: #selector(showPrergInfo), for: UIControl.Event.touchUpInside)
+            
+            if preregStatus == true
+            {
+                cell.prereg.setImage(UIImage(named: "preregTrue"), for: .normal)
+                cell.preregInfo.text = defaultLocalizer.stringForKey(key: "PreregYes")
+                cell.preregInfo.frame =  CGRect(x: 15, y: 195, width: UIScreen.main.bounds.size.width - 70, height: 16)
+              
+            }
+            else
+            {
+                cell.prereg.setImage(UIImage(named: "preregFalse"), for: .normal)
+                cell.preregInfo.text = defaultLocalizer.stringForKey(key: "PreregNo")
+                cell.preregInfo.frame = CGRect(x: 15, y: 195, width: UIScreen.main.bounds.size.width - 70, height: 16)
+            }
+            
+
+            
             cell.prereg.frame.origin.x = CGFloat(cell.titleNumber.text!.count * 10 + 15)
-           
+          
             cell.actionDelegate = (self as CellBalanceActionDelegate)
+            
+            tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+            
+        //    if(!tappedState)
+         //   {
+                
+           //     scrollView.addGestureRecognizer(tap)
+           // }
+           
+            
             return cell
         }
         else if collectionView == SliderView {
@@ -1368,7 +1474,51 @@ extension HomeViewController: CellBalanceActionDelegate {
              //   present(AlertViewController(), animated: true, completion: nil)
     }
     
+    @objc func showPrergInfo(_ sender: UIButton){
+        sender.showAnimation {
+            if(self.tappedState)
+            {
+                self.preregInfoLabel.isHidden = true
+                self.preregInfoLayout.isHidden = true
+                self.tappedState = false
+                self.scrollView.removeGestureRecognizer(self.tap)
+                
+            }
+            else
+            {
+                self.preregInfoLabel.isHidden = false
+                self.preregInfoLayout.isHidden = false
+                self.tappedState = true
+                self.scrollView.addGestureRecognizer(self.tap)
+            }
+        }
+        
+    }
+
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        
+        if(!self.preregInfoLabel.isHidden)
+        {
+            self.preregInfoLabel.isHidden = true
+            self.preregInfoLayout.isHidden = true
+            
+            self.tappedState = false
+            scrollView.removeGestureRecognizer(tap)
+            
+        }
+       
+        
+    }
+    
+    @objc func dismissOnTapOutside(){
+        self.dismiss(animated: true, completion: nil)
+     }
+
+    
 }
+
+
 
 extension UIBarButtonItem {
 
@@ -1380,3 +1530,4 @@ extension UIBarButtonItem {
     }
 
 }
+

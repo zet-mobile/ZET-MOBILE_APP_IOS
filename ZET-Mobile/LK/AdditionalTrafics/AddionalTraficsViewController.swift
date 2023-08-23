@@ -14,6 +14,7 @@ var color2 = colorBlackWhite
 var emptyView: EmptyView?
 
 class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
+    
 
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
@@ -56,6 +57,8 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     
     var activePage = 0
     
+    var whichTab = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,9 +69,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         color2 = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor.white)
         
         sendRequest()
-    
         
-    }
+       
+   }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -258,6 +261,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                 remainderView.messagesRemainder.text.attributedText = number_label_String
             }
             
+            remainderView.internetRemainder.clickActionEffect.isHidden = true
+            remainderView.messagesRemainder.clickActionEffect.isHidden = true
+            remainderView.minutesRemainder.clickActionEffect.isHidden = true
             
             remainderView.messagesRemainder.plusText.isHidden = true
             remainderView.messagesRemainder.backgroundColor = .clear
@@ -308,7 +314,6 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view.tab3.isUserInteractionEnabled = true
         addional_view.tab3.addGestureRecognizer(tapGestureRecognizer3)
         
-        
         addional_view.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width - 20) / 3), height: 2)
         addional_view.tab2Line.frame = CGRect(x: addional_view.tab1.frame.width + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 2)
         addional_view.tab3Line.frame = CGRect(x: CGFloat(Int(addional_view.tab1.frame.width) * 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 3, height: 2)
@@ -319,6 +324,24 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         TabCollectionServiceView.delegate = self
         TabCollectionServiceView.dataSource = self
         TabCollectionServiceView.alwaysBounceVertical = false
+        
+     //clickAction
+        if(whichTab == "1")
+        {
+            tab1Click()
+            whichTab = ""
+        }
+        else if (whichTab == "2")
+        {
+            tab2Click()
+            whichTab = ""
+        }
+        else if (whichTab == "3")
+        {
+            tab3Click()
+            whichTab = ""
+        }
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -507,6 +530,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
               }
               catch{
             }
+        
     }
     
     @objc func connectPackets(_ sender: UIButton) {
@@ -833,6 +857,7 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
             table3.separatorColor = .lightGray
             table3.allowsSelection = false
             cell.addSubview(table3)
+          
         }
         
         return cell
@@ -1195,5 +1220,6 @@ extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDeleg
         return cell
         
     }
+    
     
 }
