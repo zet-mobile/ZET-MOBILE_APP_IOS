@@ -9,6 +9,29 @@
 "PreregYes" = "Рақами Шумо аз нав ба қайд гирифта шудааст." ;
 "PreregNo" = "Шумо рақами худро аз нав ба қайд нагирифтаед." ;
 
+"Charkhi Ikbol"  = "Чархи Иқбол";
+
+"MyTickets" = "Чиптаҳои ман (ID)" ;
+"BuyTickets" = "Харидани чипта (ID)";
+"DrawTerms" = "Шартҳои бозии лотериявӣ";
+"Participate" = "Иштирок кардан!" ;
+
+"OneTicketPrice" = "Нархи як чипта: ";
+
+"Present" = "Ҳамчун тӯҳфа: ";
+
+"ButtonBuyTickets" = "Хариди ID";
+
+"WantToBuy" = "";
+"WANT_TO_BUY2" = " мехаред ?";
+
+"SuccessBuy" = "ID рақамҳо бомуваффақият харида шуд";
+"MY_TICKETS" = "Чиптаҳои ман (ID)";
+"WITHOUT_DRAW" = "Шумо ҳанӯз иштирокчии бозии “Чархи Икбол” нестед";
+"DRAW_TERMS" = "Шартҳои бозии лотериявӣ";
+
+
+
 "FeedbackContactNumber" = "Рақам барои тамос" ;
 "GoodDay" = "Рӯз ба хайр";
 "Your_balance" = "Тавозуни Шумо";

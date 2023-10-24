@@ -38,3 +38,18 @@ var colorGrayandDark = (UserDefaults.standard.string(forKey: "ThemeAppereance") 
 
 // #404040 in dark and #F5F5F5 in light
 
+    // another toolbar
+var toolbarColorGradient: UIColor = {
+    let gradientLayer = CAGradientLayer()
+    gradientLayer.colors = [UIColor(red: 1, green: 0.949, blue: 0.89, alpha: 1).cgColor,
+                            UIColor(red: 0.942, green: 0.84, blue: 0.72, alpha: 1).cgColor]
+    gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+    gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+    gradientLayer.frame = UIScreen.main.bounds
+    
+    let gradientImage = UIGraphicsImageRenderer(bounds: gradientLayer.bounds).image { context in
+        gradientLayer.render(in: context.cgContext)
+    }
+    
+    return UIColor(patternImage: gradientImage)
+}()

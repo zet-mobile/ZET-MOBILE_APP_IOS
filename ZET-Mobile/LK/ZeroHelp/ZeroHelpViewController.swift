@@ -1243,7 +1243,7 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
         
         present(alert, animated: true, completion: nil)
     }
-    
+         
     
     func setupHistoryView() {
         

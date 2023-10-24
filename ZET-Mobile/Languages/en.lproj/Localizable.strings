@@ -9,8 +9,34 @@
 "PreregYes" = "You have re-registered the number." ;
 "PreregNo" = "You have not re-registered your number." ;
 
-"FeedbackContactNumber" = "Contact number" ;
 
+"MyTickets" = "My tickets" ;
+"BuyTickets" = "Buy tickets";
+"DrawTerms" = "Terms of the draw";
+
+"Participate" = "Participate !";
+
+"OneTicketPrice" = "Price of the ticket: ";
+
+"Present" = "As a present: ";
+
+"ButtonBuyTickets" = "Buy ID";
+
+"WantToBuy" = "Want to buy ";
+"WANT_TO_BUY2" = " ?";
+
+"SuccessBuy" = "ID numbers successfully acquired";
+"MY_TICKETS" = "My tickets";
+"WITHOUT_DRAW" = "You are not yet a participant in the drawing “Charkhi Ikbol”";
+
+
+"DRAW_TERMS" = "Terms of the draw";
+
+
+
+
+"FeedbackContactNumber" = "Contact number" ;
+"Charkhi Ikbol"  = "Charkhi Ikbol";
 "GoodDay" =  "Good Day"    ;
 "Your_balance" = "Your balance"    ;
 "Top_up_balance" = "Top up balance"    ;

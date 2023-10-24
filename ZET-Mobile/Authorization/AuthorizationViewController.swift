@@ -552,7 +552,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
                 else if str == "910" || str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" ||
-                str == "33" || str == "440" || str == "444" || str == "030" || str == "040" || str == "080" || str == "81" || str == "912" || str == "913" || str == "914" || str == "916"
+                str2 == "33" || str == "440" || str == "444" || str == "030" || str == "040" || str == "080" || str2 == "81" || str == "912" ||
+                            str2 == "913" || str == "914" || str == "916"
                 {
                      
                   get_Code_Request()

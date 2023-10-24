@@ -40,10 +40,10 @@ public class RequestObservable {
     }
       else if statusCode == 401 && ItemModel.self != RefreshData.self {
          refreshGetToken()
-          if tabIndicator == "0"
-           {
-              refreshGetToken()
-           }
+//          if tabIndicator == "0"
+//           {
+//              refreshGetToken()
+//           }
           print("new get token")
       }
     else if statusCode == 401 && ItemModel.self == RefreshData.self {

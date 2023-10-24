@@ -166,6 +166,16 @@
 		B8CD5A8E27D6721E007D189F /* UsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CD5A8D27D6721E007D189F /* UsageData.swift */; };
 		B8DD080B28EFA016008EF83F /* ReplyGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8DD080A28EFA015008EF83F /* ReplyGallery.swift */; };
 		E5312EEAE85F1C75BD17F53E /* Pods_ZET_Mobile_ZET_MobileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E114B37D589EA2D44588A5D /* Pods_ZET_Mobile_ZET_MobileUITests.framework */; };
+		F2051CC22A9F6FB400B26304 /* CharhiIqbolMainDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2051CC12A9F6FB400B26304 /* CharhiIqbolMainDate.swift */; };
+		F20788172AA6577C0068BC50 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788162AA6577C0068BC50 /* FAQViewController.swift */; };
+		F20788192AA74B560068BC50 /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788182AA74B560068BC50 /* FAQView.swift */; };
+		F207881C2AA7B9580068BC50 /* MyTicketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F207881B2AA7B9580068BC50 /* MyTicketView.swift */; };
+		F207881E2AA7BB8A0068BC50 /* MyTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F207881D2AA7BB8A0068BC50 /* MyTicketViewController.swift */; };
+		F20788202AA894EB0068BC50 /* MyTicketsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F207881F2AA894EB0068BC50 /* MyTicketsViewCell.swift */; };
+		F20788232AA8DBB20068BC50 /* BuyTicketsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788222AA8DBB20068BC50 /* BuyTicketsView.swift */; };
+		F20788252AA8E9340068BC50 /* BuyTicketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788242AA8E9340068BC50 /* BuyTicketsViewController.swift */; };
+		F20788272AB1BF5A0068BC50 /* MyTicketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788262AB1BF5A0068BC50 /* MyTicketsData.swift */; };
+		F20788292AB7A3130068BC50 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788282AB7A3130068BC50 /* PopupViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -367,6 +377,16 @@
 		B8FDC45F2815AA33003620D4 /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BD7353AFFD29CB667BFC193B /* Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile-ZET-MobileUITests/Pods-ZET-Mobile-ZET-MobileUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DC63A82C91D2FD4051CC9F79 /* Pods-ZET-Mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZET-Mobile.release.xcconfig"; path = "Target Support Files/Pods-ZET-Mobile/Pods-ZET-Mobile.release.xcconfig"; sourceTree = "<group>"; };
+		F2051CC12A9F6FB400B26304 /* CharhiIqbolMainDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharhiIqbolMainDate.swift; sourceTree = "<group>"; };
+		F20788162AA6577C0068BC50 /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
+		F20788182AA74B560068BC50 /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
+		F207881B2AA7B9580068BC50 /* MyTicketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketView.swift; sourceTree = "<group>"; };
+		F207881D2AA7BB8A0068BC50 /* MyTicketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketViewController.swift; sourceTree = "<group>"; };
+		F207881F2AA894EB0068BC50 /* MyTicketsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketsViewCell.swift; sourceTree = "<group>"; };
+		F20788222AA8DBB20068BC50 /* BuyTicketsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTicketsView.swift; sourceTree = "<group>"; };
+		F20788242AA8E9340068BC50 /* BuyTicketsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTicketsViewController.swift; sourceTree = "<group>"; };
+		F20788262AB1BF5A0068BC50 /* MyTicketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketsData.swift; sourceTree = "<group>"; };
+		F20788282AB7A3130068BC50 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,11 +447,10 @@
 		B804945E294044950094782E /* Charhi Iqbol */ = {
 			isa = PBXGroup;
 			children = (
-				B804945F294044F90094782E /* CompetitionViewController.swift */,
-				B80494672940A81E0094782E /* ListTableViewCell.swift */,
-				B80494612940451E0094782E /* CompetitionView.swift */,
-				B804946529404D6B0094782E /* CollectionPrizeViewCell.swift */,
-				B804946329404C6E0094782E /* ParticipateViewController.swift */,
+				F20788212AA8DB840068BC50 /* Buy Tickets */,
+				F207881A2AA7B9120068BC50 /* My Tickets */,
+				F21EFFEE2AA60B230093147C /* FAQ */,
+				F21EFFED2AA608AE0093147C /* Main Page */,
 			);
 			path = "Charhi Iqbol";
 			sourceTree = "<group>";
@@ -695,6 +714,8 @@
 				B88D323328301C6F00D574F6 /* FeedbackData.swift */,
 				B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */,
 				B8A38BFF2853C0C60091F028 /* NotificationsData.swift */,
+				F2051CC12A9F6FB400B26304 /* CharhiIqbolMainDate.swift */,
+				F20788262AB1BF5A0068BC50 /* MyTicketsData.swift */,
 			);
 			path = ModelsData;
 			sourceTree = "<group>";
@@ -713,6 +734,7 @@
 				B86428E427329A0D000C159E /* SliderCollectionViewCell.swift */,
 				B86428F52732B6B6000C159E /* HotServicesCollectionView.swift */,
 				B86428FA2732B6D9000C159E /* HotServicesCollectionViewCell.swift */,
+				F20788282AB7A3130068BC50 /* PopupViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -872,6 +894,46 @@
 				B88D3236283310B800D574F6 /* AskFriendView.swift */,
 			);
 			path = AskFriend;
+			sourceTree = "<group>";
+		};
+		F207881A2AA7B9120068BC50 /* My Tickets */ = {
+			isa = PBXGroup;
+			children = (
+				F207881B2AA7B9580068BC50 /* MyTicketView.swift */,
+				F207881D2AA7BB8A0068BC50 /* MyTicketViewController.swift */,
+				F207881F2AA894EB0068BC50 /* MyTicketsViewCell.swift */,
+			);
+			path = "My Tickets";
+			sourceTree = "<group>";
+		};
+		F20788212AA8DB840068BC50 /* Buy Tickets */ = {
+			isa = PBXGroup;
+			children = (
+				F20788222AA8DBB20068BC50 /* BuyTicketsView.swift */,
+				F20788242AA8E9340068BC50 /* BuyTicketsViewController.swift */,
+			);
+			path = "Buy Tickets";
+			sourceTree = "<group>";
+		};
+		F21EFFED2AA608AE0093147C /* Main Page */ = {
+			isa = PBXGroup;
+			children = (
+				B804945F294044F90094782E /* CompetitionViewController.swift */,
+				B80494672940A81E0094782E /* ListTableViewCell.swift */,
+				B80494612940451E0094782E /* CompetitionView.swift */,
+				B804946529404D6B0094782E /* CollectionPrizeViewCell.swift */,
+				B804946329404C6E0094782E /* ParticipateViewController.swift */,
+			);
+			path = "Main Page";
+			sourceTree = "<group>";
+		};
+		F21EFFEE2AA60B230093147C /* FAQ */ = {
+			isa = PBXGroup;
+			children = (
+				F20788162AA6577C0068BC50 /* FAQViewController.swift */,
+				F20788182AA74B560068BC50 /* FAQView.swift */,
+			);
+			path = FAQ;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1164,6 +1226,7 @@
 				B86428C827326AAE000C159E /* RemainderStackView.swift in Sources */,
 				B86428C327325067000C159E /* BalanceSliderCollectionViewCell.swift in Sources */,
 				B864296C273A5026000C159E /* PushTableViewCell.swift in Sources */,
+				F207881C2AA7B9580068BC50 /* MyTicketView.swift in Sources */,
 				B853D75D2754CD3B00FBE1F1 /* MobileTransferView.swift in Sources */,
 				B86429AF273C3B31000C159E /* UsageCollectionViewCell.swift in Sources */,
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
@@ -1186,13 +1249,17 @@
 				B853D71C274B5D2700FBE1F1 /* TraficTransferView.swift in Sources */,
 				B8237802281CA16E00298AD0 /* MobileTableViewCell.swift in Sources */,
 				B85297A227C6AD9100B68F36 /* MenuViewController.swift in Sources */,
+				F20788172AA6577C0068BC50 /* FAQViewController.swift in Sources */,
 				B804946629404D6B0094782E /* CollectionPrizeViewCell.swift in Sources */,
+				F20788272AB1BF5A0068BC50 /* MyTicketsData.swift in Sources */,
 				B85297AA27C6ADD100B68F36 /* MenuViewCell.swift in Sources */,
 				B86428B0273165D4000C159E /* HomeView.swift in Sources */,
 				B864293E27384773000C159E /* ChangeTarifViewController.swift in Sources */,
 				B853D7D22757949900FBE1F1 /* TapDetalizationCollectionCell.swift in Sources */,
 				B853D7B4275628D300FBE1F1 /* DetalizationView.swift in Sources */,
+				F2051CC22A9F6FB400B26304 /* CharhiIqbolMainDate.swift in Sources */,
 				B82B7D5927B4449000570AC0 /* HalfModal.swift in Sources */,
+				F207881E2AA7BB8A0068BC50 /* MyTicketViewController.swift in Sources */,
 				B809297E2789600D00CF5824 /* AboutAppViewController.swift in Sources */,
 				B853D7582754CD2400FBE1F1 /* ChangeTransferView.swift in Sources */,
 				B80929F8279283E200CF5824 /* ChangeView.swift in Sources */,
@@ -1204,13 +1271,18 @@
 				B88D3232282E6F2400D574F6 /* ContactsTableViewCell.swift in Sources */,
 				B86428F62732B6B6000C159E /* HotServicesCollectionView.swift in Sources */,
 				B88D3237283310B900D574F6 /* AskFriendView.swift in Sources */,
+				F20788252AA8E9340068BC50 /* BuyTicketsViewController.swift in Sources */,
+				F20788292AB7A3130068BC50 /* PopupViewController.swift in Sources */,
 				B8287608280A30E50025B878 /* MoreDetailViewController.swift in Sources */,
 				B858A2BB27DB278300D190CE /* HistoryHeaderCell.swift in Sources */,
 				B86429B4273CFCB8000C159E /* HistoryUsageViewCell.swift in Sources */,
+				F20788202AA894EB0068BC50 /* MyTicketsViewCell.swift in Sources */,
 				B87F472B27311A1100BAEDFA /* AppDelegate.swift in Sources */,
 				B858A2C027DB7CBA00D190CE /* PricePlansData.swift in Sources */,
 				B85297E927C7548700B68F36 /* MenuView.swift in Sources */,
+				F20788232AA8DBB20068BC50 /* BuyTicketsView.swift in Sources */,
 				B86428A827313B90000C159E /* ContainerViewController.swift in Sources */,
+				F20788192AA74B560068BC50 /* FAQView.swift in Sources */,
 				B853D79C275506D000FBE1F1 /* ZeroHistoryViewCell.swift in Sources */,
 				B8358EFB27FF3C93001A6696 /* ExchangeData.swift in Sources */,
 				B8358EF327EA40A8001A6696 /* TransferData.swift in Sources */,
@@ -1497,7 +1569,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zet-mobile.Salom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1526,7 +1598,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4;
+				MARKETING_VERSION = 3.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zet-mobile.Salom";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

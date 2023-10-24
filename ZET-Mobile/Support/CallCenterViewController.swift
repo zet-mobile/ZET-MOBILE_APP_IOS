@@ -135,16 +135,7 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         let tapGestureRecognizer5 = UITapGestureRecognizer(target: self, action: #selector(numberClick))
         support_view.number.isUserInteractionEnabled = true
         support_view.number.addGestureRecognizer(tapGestureRecognizer5)
-        
-       // mapView.backgroundColor = .clear
-       // support_view.white_background.backgroundColor = UIColor(red: 0.98, green: 0.97, blue: 0.95, alpha: 1.00)
-        /* if let url = URL(string: "tel://800"), UIApplication.shared.canOpenURL(url) {
-         if #available(iOS 10, *) {
-             UIApplication.shared.open(url)
-         } else {
-             UIApplication.shared.openURL(url)
-         }
-     }*/
+
         SupportCollectionView.backgroundColor = .clear
         SupportCollectionView.frame = CGRect(x: 0, y: 80, width: Int(UIScreen.main.bounds.size.width), height: 50)
         SupportCollectionView.delegate = self
@@ -206,6 +197,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
               //  mapView.frame.origin.y = 215 + 60 + (topPadding ?? 0)
                 table.frame.origin.y = 230
                 table.frame.size.height = UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 290 + (topPadding ?? 0) + (bottomPadding ?? 0))
+                print("11111111111111111")
+
             }
         }
     }
@@ -216,7 +209,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
         if (long !=  "" && lat != "") {
             print("illll")
             mapView.mapWindow.map.move(with: YMKCameraPosition.init(target: YMKPoint(latitude: Double(lat)!, longitude: Double(long)!), zoom: 13, azimuth: 0, tilt: 0),animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),cameraCallback: nil)
-            
+            print("2222222222222222222222")
+
             let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: Double(lat)!, longitude: Double(long)!))
             myPlace.setIconWith(UIImage(named: "Ellipse")!)
             
@@ -226,15 +220,20 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
                 with: YMKCameraPosition.init(target: YMKPoint(latitude: 38.53575, longitude: 68.77905), zoom: 12, azimuth: 0, tilt: 0),
                 animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
                 cameraCallback: nil)
+            print("33333333333333333333333")
+
         }
        // let myPlace = mapView.mapWindow.map.mapObjects.addPlacemark(with: YMKPoint(latitude: 38.85818, longitude: 71.24798))
        // myPlace.setIconWith(UIImage(named: "myLL.png")!)
         
         let mapObjects = self.mapView.mapWindow.map.mapObjects
         mapObjects.clear()
+        print("4444444444444444")
+
         if (officesdata.count != 0) {
             var placeMark = mapObjects.addPlacemark(with: YMKPoint(latitude: Double(officesdata[0][4])!, longitude: Double(officesdata[0][5])!))
-          
+            print("555555555555")
+
             placeMark.userData = officesdata[0][0] + "&" + officesdata[0][1]
             placeMark.setIconWith(UIImage(named: "Location.png")!)
             placeMark.addTapListener(with: self)
@@ -242,11 +241,17 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
             for i in 1 ..< officesdata.count - 1 {
                 placeMark = mapObjects.addPlacemark(with: YMKPoint(latitude: Double(officesdata[i][4])!, longitude: Double(officesdata[i][5])!))
                 if ((officesdata[i][6]) == "2") {
+                    print("666666666666666")
+
                     placeMark.setIconWith(UIImage(named: "Location.png")!)
                 }
                 else {
+                    print("77777777777777")
+
                     placeMark.setIconWith(UIImage(named: "ecc.png")!)
                 }
+                print("88888888888888")
+
                 placeMark.addTapListener(with: self)
                 placeMark.userData = officesdata[i][0] + "&" + officesdata[i][1]
         }
@@ -254,6 +259,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
    }
     
     @objc func mapClick() {
+        print("99999999999999999999")
+
         support_view.icon1.image = UIImage(named: "Pin_alt_light")
         support_view.title1.textColor = colorBlackWhite
         support_view.icon2.image = UIImage(named: "list_map")
@@ -269,6 +276,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func listClick() {
+        print("00000000000000")
+
         support_view.icon1.image = UIImage(named: "Pin_alt_light_gray")
         support_view.title1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         support_view.icon2.image = UIImage(named: "list_map_orange")
@@ -290,6 +299,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func onObjectAdded(with view: YMKUserLocationView) {
+        print("aaaaaaaaaaaaaaaaa")
+
         view.arrow.setIconWith(UIImage(named:"UserArrow")!)
         
         let pinPlacemark = view.pin.useCompositeIcon()
@@ -330,7 +341,8 @@ class CallCenterViewController: UIViewController, UIScrollViewDelegate {
 extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-       
+        print("wwwwwwwwwwwwwwwww")
+
         return CGSize(width: collectionView.frame.width * 0.15, height: collectionView.frame.height)
     }
     
@@ -341,11 +353,16 @@ extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SupportCollectionCell", for: indexPath) as! SupportCollectionViewCell
-        
+        print("rrrrrrrrrrrrrrrrr")
+
         if supportdata[indexPath.row + 1][3] != "" {
+            print("eeeeeeeeeeeeeeeeeeeeeeee")
+
             cell.button.af_setImage(for: .normal, url: URL(string: supportdata[indexPath.row + 1][3])!, placeholderImage: nil, filter: nil, progress: nil, progressQueue: DispatchQueue.main.self, completion: nil)
         }
         else {
+            print("rrrrrrrrrrrrrrrr")
+
             if supportdata[indexPath.row + 1][1] == "Facebook" {
                 cell.button.setImage(UIImage(named: "facebook"), for: .normal)
             }
@@ -361,11 +378,14 @@ extension CallCenterViewController: UICollectionViewDelegateFlowLayout, UICollec
             else if supportdata[indexPath.row + 1][1] == "OK" {
                 cell.button.setImage(UIImage(named: "telegrams"), for: .normal)
             }
+            print("tttttttttttttttt")
+
         }
         
         cell.button.tag = indexPath.row
         cell.button.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
-        
+        print("yyyyyyyyyyy")
+
         return cell
     }
 
@@ -391,27 +411,41 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        print("uuuuuuuuuuuuuuuuu")
+
         if tableView == table {
+            print("iiiiiiiiiiiiiiiii")
+
             let cell = tableView.dequeueReusableCell(withIdentifier: "support_list_cell", for: indexPath) as! SupportListCell
                 
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
                 
             if indexPath.row == officesdata.count - 1 {
+                print("oooooooooooo")
+
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             
             }
+            print("aaaaaaaaaaaaaaaaa")
+
             
             cell.titleOne.text = officesdata[indexPath.row][1]
             cell.titleTwo.text = officesdata[indexPath.row][0]
             
             if officesdata[indexPath.row][1].count > 25 {
                 cell.titleTwo.frame.origin.y = 60
+                print("sssssssssssssss")
+
             }
+            
             else {
+                print("dddddddddddddddd")
+
                 cell.titleTwo.frame.origin.y = 50
             }
             
+            print("fffffffffffffffffff")
+
             let bgColorView = UIView()
             bgColorView.backgroundColor = .clear
             cell.selectedBackgroundView = bgColorView
@@ -419,6 +453,8 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         }
         else {
+            print("ggggggggggggggggggggg")
+
             let cell = tableView.dequeueReusableCell(withIdentifier: "DialogOfficesViewCell", for: indexPath) as! DialogOfficesViewCell
             
             cell.ico_image.image = UIImage(named: tableData[indexPath.row][0])
@@ -430,7 +466,8 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        print("hhhhhhhhhhhhhhh")
+
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: YMKPoint(latitude: Double(officesdata[indexPath.row][4])!, longitude: Double(officesdata[indexPath.row][5])!), zoom: 13, azimuth: 0, tilt: 0),
             animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 0),
@@ -443,7 +480,8 @@ extension CallCenterViewController: UITableViewDataSource, UITableViewDelegate {
         table.isHidden = true
         mapView.isHidden = false
         support_view.white_back.isHidden = true
-        
+        print("jjjjjjjjjjjjjjj")
+
         SupportCollectionView.isHidden = false
         support_view.title_info.isHidden = false
         support_view.number.isHidden = false
@@ -462,7 +500,8 @@ extension CallCenterViewController: YMKMapObjectTapListener {
         var office_choosed_array = office_choosed!.components(separatedBy: "&")
         choosed_office_name = office_choosed_array[1]
         choosed_office_time = office_choosed_array[0]
-       
+        print("kkkkkkkkkkkkkkkkkkkk")
+
         tableData.removeAll()
         tableData.append(["Home_light", choosed_office_name])
         tableData.append(["Time_light", choosed_office_time])

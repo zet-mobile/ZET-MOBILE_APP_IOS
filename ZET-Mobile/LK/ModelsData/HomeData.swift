@@ -10,10 +10,12 @@ import Foundation
 struct HomeData {
     
     let prereg: Bool?
+    let showPopup: Bool?
     let currentVersion: String?
     let welcomePhrase: String?
     let subscriberName: String?
     let mainBannerUrl: String?
+    let popupBannerUrl: String?
     let subscriberBalance: Double?
     let subscriberCredit: Double?
     let notificationsCount: Int?
@@ -43,10 +45,12 @@ extension HomeData: Decodable {
     private enum HomeDataCodingKeys: String, CodingKey {
         
         case prereg = "prereg"
+        case showPopup = "showPopup"
         case currentVersion = "currentVersion"
         case welcomePhrase = "welcomePhrase"
         case subscriberName = "subscriberName"
         case mainBannerUrl = "mainBannerUrl"
+        case popupBannerUrl = "popupBannerUrl"
         case subscriberBalance = "subscriberBalance"
         case subscriberCredit = "subscriberCredit"
         case notificationsCount = "notificationsCount"
@@ -66,6 +70,20 @@ extension HomeData: Decodable {
         }
         catch {
             prereg = nil
+        }
+        
+        do {
+            popupBannerUrl = try container.decode(String.self, forKey: .popupBannerUrl)
+        }
+        catch {
+            popupBannerUrl = nil
+        }
+        
+        do {
+            showPopup = try container.decode(Bool.self, forKey: .showPopup)
+        }
+        catch {
+            showPopup = nil
         }
         
         do {

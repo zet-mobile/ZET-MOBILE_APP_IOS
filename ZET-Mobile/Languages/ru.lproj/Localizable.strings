@@ -11,6 +11,27 @@
 
 "FeedbackContactNumber" = "Контактный номер" ;
 
+"Charkhi Ikbol"  = "Чархи икбол";
+
+"MyTickets" = "Мои билеты" ;
+"BuyTickets" = "Купить билеты";
+"DrawTerms" = "Условия розыгрыша";
+
+"Participate" = "Участвовать!" ;
+"MY_TICKETS" = "Мои билеты";
+"WITHOUT_DRAW" = "Вы еще не являетесь участником розыгрыша “Чархи Икбол” ";
+
+"DRAW_TERMS" = "Условия розыгрыша";
+
+
+"OneTicketPrice" = "Цена одного билета: ";
+"Total" = "Итого: ";
+"Present" = "В подарок: ";
+"ButtonBuyTickets" = "Купить ID";
+
+"WantToBuy" = "Приобрести ";
+"WANT_TO_BUY2" = " ?";
+"SuccessBuy" = "ID-номера успешно приобретены";
 
 "GoodDay" = "Добрый день";
 "Your_balance" = "Ваш баланс";

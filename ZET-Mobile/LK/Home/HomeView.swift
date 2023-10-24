@@ -21,7 +21,6 @@ class HomeView: UIView {
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 0, width: UIScreen.main.bounds.size.width -  40, height: 28)
-        
         return title
     }()
 

@@ -24,13 +24,17 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     contentView.addSubview(titleOne)
     
     contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 100)
-    
-    button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+    //button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+    button.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([button.topAnchor.constraint(equalTo: contentView.topAnchor),
+                                button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                                button.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                                button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)])
     button.setImage(#imageLiteral(resourceName: "Stroke_next"), for: UIControl.State.normal)
+    button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 300, bottom: 0, right: 0)
     button.isUserInteractionEnabled = false
-    
     titleOne.frame = CGRect(x: 20, y: 0, width: 240, height: 70)
-    titleOne.text = "jjjjj"
+    titleOne.text = ""
     titleOne.numberOfLines = 1
     titleOne.textColor = colorBlackWhite
     titleOne.font = UIFont.systemFont(ofSize: 18, weight: .regular)

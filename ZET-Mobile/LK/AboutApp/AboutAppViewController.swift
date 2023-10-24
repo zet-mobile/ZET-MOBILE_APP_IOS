@@ -31,7 +31,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
     var table_data = [[String]]()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    
         showActivityIndicator(uiView: self.view)
         storeProductViewController.delegate = self
         view.backgroundColor = toolbarColor
@@ -105,7 +105,7 @@ class AboutAppViewController: UIViewController , UIScrollViewDelegate, SKStorePr
         table.delegate = self
         table.dataSource = self
         table.rowHeight = 80
-        table.estimatedRowHeight = 80
+        table.estimatedRowHeight = 100
         table.alwaysBounceVertical = false
         table.backgroundColor = contentColor
         scrollView.addSubview(table)
@@ -237,16 +237,17 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "about_cell", for: indexPath) as! AboutViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        
         cell.titleOne.text = table_data[indexPath.row][1]
         cell.titleTwo.text = table_data[indexPath.row][2]
+        print("table date :  \(table_data)")
+        // if table_data[indexPath.row][4] != "" {
         
-        if table_data[indexPath.row][4] != "" {
+        
             cell.icon.af_setImage(withURL: URL(string: table_data[indexPath.row][4])!)
-        }
-        else {
-           cell.icon.image = UIImage(named: "BalanceBack")
-        }
+        //}
+        //else {
+          // cell.icon.image = UIImage(named: "BalanceBack")
+        //}
         
         let bgColorView = UIView()
         bgColorView.backgroundColor = .clear
@@ -255,6 +256,11 @@ extension AboutAppViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
         
        
+    }
+    
+    
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 250
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

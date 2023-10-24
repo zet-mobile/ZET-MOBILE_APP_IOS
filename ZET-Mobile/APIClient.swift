@@ -233,6 +233,7 @@ class APIClient {
     
     // Get information about our support
     func supportGetRequest() throws -> Observable<SupportData> {
+        print("22222222222222222222222222222222222222222222222222222222222222222222")
         var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/support")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -452,6 +453,40 @@ class APIClient {
         request.httpMethod = "GET"
      return requestObservable.callAPI(request: request)
     }
+    // -------- charhi iqbol
+    func charhiIqbolMain() -> Observable<MainData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    
+    func buyDrawTickets(parametr: Int) -> Observable<PostData> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/pay?count=" + "\(parametr)")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("ios", forHTTPHeaderField: "deviceOS")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    func getMyTickets() -> Observable<[MyTicketsData]> {
+        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/list")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("ios", forHTTPHeaderField: "deviceOS")
+        request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+     return requestObservable.callAPI(request: request)
+    }
+    
+    
+    
+    //------------
     
     //  This is api for get info about available credit packets.
     func getCreditHistoryRequest() -> Observable<HelpAtZeroHistoryData> {

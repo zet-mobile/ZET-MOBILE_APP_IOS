@@ -12,7 +12,7 @@ import Alamofire
 import AlamofireImage
 
 class PushViewController: UIViewController, UIGestureRecognizerDelegate {
-
+ 
     let disposeBag = DisposeBag()
     let detailViewController = MoreDetailViewController()
     var nav = UINavigationController()
@@ -667,6 +667,7 @@ extension PushViewController: UITableViewDataSource, UITableViewDelegate {
         let webView = UIWebView(frame: webViewController.view.bounds)
         let url = URL(string: "https://www.zet-mobile.com")!
         let request = URLRequest(url: url)
+        webView.loadRequest(request)
         webView.loadRequest(request)
         webViewController.view.addSubview(webView)
         webViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: defaultLocalizer.stringForKey(key: "Close"), style: .plain, target: self, action: #selector(closeWeb))

@@ -30,10 +30,11 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     
     contentView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 130)
     
-    icon.frame = CGRect(x: 20, y: 10, width: 50, height: 50)
-    icon.image = UIImage(named: "about_app")
+    icon.frame = CGRect(x: 20, y: contentView.frame.midY, width: 50, height: 50)
+  //  icon.image = UIImage(named: "about_app")
+    icon.contentMode = .scaleAspectFit
     
-    button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: 20, width: 30, height: 30)
+    button.frame = CGRect(x: UIScreen.main.bounds.size.width - 50, y: contentView.frame.midY, width: 30, height: 30)
     button.setImage(#imageLiteral(resourceName: "next_arrow"), for: UIControl.State.normal)
     button.isUserInteractionEnabled = false
     
@@ -44,9 +45,9 @@ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     titleOne.font = UIFont.systemFont(ofSize: 18, weight: .regular)
     titleOne.textAlignment = .left
     
-    titleTwo.frame = CGRect(x: 80, y: 30, width: UIScreen.main.bounds.size.width - 130, height: 50)
+    titleTwo.frame = CGRect(x: 80, y: titleOne.frame.minY, width: UIScreen.main.bounds.size.width - 130, height: 200)
     titleTwo.text = ""
-    titleTwo.numberOfLines = 2
+    titleTwo.numberOfLines = 0
     titleTwo.textColor = .lightGray
     titleTwo.font = UIFont.systemFont(ofSize: 16)
     titleTwo.textAlignment = .left

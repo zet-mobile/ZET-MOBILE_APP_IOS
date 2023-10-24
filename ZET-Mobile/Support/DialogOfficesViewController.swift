@@ -103,7 +103,6 @@ class DialogOfficesView: UIView {
     
     private func setupView() {
         backgroundColor = contentColor
-    
         self.addSubview(title_push)
         self.addSubview(close)
 

@@ -50,9 +50,10 @@ class MoreDetailViewController: UIViewController, UIScrollViewDelegate {
         more_view.close_banner.frame.origin.y = more_view.content.frame.height + more_view.image.frame.size.height + 140
       
         scrollView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (topPadding ?? 0) + (bottomPadding ?? 0))
-        view.addSubview(scrollView)
-        scrollView.addSubview(more_view)
+       
 
+        scrollView.addSubview(more_view)
+        view.addSubview(scrollView)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -119,7 +120,7 @@ class MoreDetailView: UIView {
     lazy var title: UILabel = {
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 70, width: UIScreen.main.bounds.size.width - 40, height: 50)
-        title.text = defaultLocalizer.stringForKey(key: "Conditions")
+       // title.text = defaultLocalizer.stringForKey(key: "Conditions")
         title.numberOfLines = 1
         title.textColor = colorBlackWhite
         title.font = UIFont.boldSystemFont(ofSize: 20)
@@ -169,9 +170,10 @@ class MoreDetailView: UIView {
         self.addSubview(image)
         self.addSubview(title)
         self.addSubview(close)
-        self.addSubview(content)
         self.addSubview(title_top)
         self.addSubview(close_banner)
+        self.addSubview(content)
+
     }
 }
 

@@ -22,99 +22,93 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     
     var white_view_back = UIView()
     
-    let image: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "BalanceBack")
-        iv.contentMode = .scaleToFill
-        iv.backgroundColor = .clear
-        iv.autoresizesSubviews = true
-        
-        iv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return iv
+    let backgroundImage: UIImageView = {
+        let backgroundImage = UIImageView()
+        backgroundImage.image = UIImage(named: "BalanceBack")
+        backgroundImage.contentMode = .scaleToFill
+        backgroundImage.backgroundColor = .clear
+        backgroundImage.autoresizesSubviews = true
+        backgroundImage.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return backgroundImage
     }()
     
-    lazy var titleOne: UILabel = {
-        let titleOne = UILabel()
-        titleOne.text = defaultLocalizer.stringForKey(key: "Your_balance")
-        titleOne.numberOfLines = 0
-        titleOne.textColor = .white
-        titleOne.font = UIFont.systemFont(ofSize: 16)
-        titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-        titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 40, width: 300, height: 20)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return titleOne
+    lazy var yourBalanceTitle: UILabel = {
+        let yourBalanceTitle = UILabel()
+        yourBalanceTitle.text = defaultLocalizer.stringForKey(key: "Your_balance")
+        yourBalanceTitle.numberOfLines = 0
+        yourBalanceTitle.textColor = .white
+        yourBalanceTitle.font = UIFont.systemFont(ofSize: 16)
+        yourBalanceTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
+        yourBalanceTitle.textAlignment = .left
+        yourBalanceTitle.frame = CGRect(x: contentView.bounds.minX + 23.72 , y: contentView.bounds.minY + 20 , width: 300, height: 20)
+        yourBalanceTitle.autoresizesSubviews = true
+        yourBalanceTitle.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return yourBalanceTitle
     }()
     
-    lazy var balance: UILabel = {
-        let user_name = UILabel()
-        user_name.text = ""
-        user_name.numberOfLines = 0
-        user_name.textColor = .white
-        user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: 25)
-        user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
-        user_name.textAlignment = .left
-        user_name.frame = CGRect(x: 20, y: 65, width: 200, height: 28)
-        user_name.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return user_name
+    lazy var balanceValue: UILabel = {
+        let balanceValue = UILabel()
+        balanceValue.text = ""
+        balanceValue.numberOfLines = 0
+        balanceValue.textColor = .white
+        balanceValue.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        balanceValue.font = UIFont.boldSystemFont(ofSize: 25)
+        balanceValue.lineBreakMode = NSLineBreakMode.byWordWrapping
+        balanceValue.textAlignment = .left
+        balanceValue.frame = CGRect(x: yourBalanceTitle.bounds.minX, y: yourBalanceTitle.bounds.maxY + 4 , width: 200, height: 28)
+        balanceValue.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return balanceValue
     }()
     
-    lazy var popolnit: UIButton = {
-        let popolnit = UIButton()
-        //popolnit.setImage(#imageLiteral(resourceName: "Popolnit"), for: UIControl.State.normal)
-        popolnit.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0, alpha: 1)
-        popolnit.setTitle("+ \(defaultLocalizer.stringForKey(key: "Top_up_balance"))", for: .normal)
-        popolnit.setTitleColor(.black, for: .normal)
-        popolnit.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        popolnit.frame = CGRect(x: UIScreen.main.bounds.size.width - 200, y: 40, width: 140, height: 35)
-        popolnit.layer.cornerRadius = popolnit.frame.height / 2
-        popolnit.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
-        
-        return popolnit
+    lazy var topUpBalance: UIButton = {
+        let topUpBalance = UIButton()
+        topUpBalance.backgroundColor = UIColor(red: 1, green: 0.871, blue: 0, alpha: 1)
+        topUpBalance.setTitle("+ \(defaultLocalizer.stringForKey(key: "Top_up_balance"))", for: .normal)
+        topUpBalance.setTitleColor(.black, for: .normal)
+        topUpBalance.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+        topUpBalance.frame = CGRect(x: contentView.bounds.minX + 213, y: contentView.bounds.minY + 20, width: 140, height: 35)
+        topUpBalance.layer.cornerRadius = topUpBalance.frame.height / 2
+        topUpBalance.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
+        return topUpBalance
     }()
     
-    lazy var titleTarif: UILabel = {
-        let titleTarif = UILabel()
-        titleTarif.text = ""
-        titleTarif.numberOfLines = 0
-        titleTarif.textColor = .white
-        titleTarif.font = UIFont.boldSystemFont(ofSize: 18)
-        titleTarif.lineBreakMode = NSLineBreakMode.byWordWrapping
-        titleTarif.textAlignment = .left
-        //titleTarif.frame = CGRect(x: 20, y: 60, width: 200, height: 20)
-        titleTarif.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return titleTarif
+    lazy var tariffTitle: UILabel = {
+        let tariffTitle = UILabel()
+        tariffTitle.text = ""
+        tariffTitle.numberOfLines = 0
+        tariffTitle.textColor = .white
+        tariffTitle.font = UIFont.boldSystemFont(ofSize: 18)
+        tariffTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
+        tariffTitle.textAlignment = .left
+        tariffTitle.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return tariffTitle
     }()
     
-    lazy var settings: UIButton = {
-        let settings = UIButton()
-        settings.setImage(UIImage(named: "Setting"), for: .normal)
-        settings.frame = CGRect(x: titleTarif.text!.count * 10 + 30, y: 100, width: 30, height: 30)
-        settings.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
-        settings.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return settings
+    lazy var settingsButton: UIButton = {
+        let settingsButton = UIButton()
+        settingsButton.setImage(UIImage(named: "Setting"), for: .normal)
+        settingsButton.frame = CGRect(x: tariffTitle.text!.count * 10 + 30, y: 100, width: 30, height: 30)
+        settingsButton.addTarget(self, action: #selector(openTarifView), for: UIControl.Event.touchUpInside)
+        settingsButton.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return settingsButton
     }()
     
-    lazy var titleNumber: UILabel = {
-        let titleNumber = UILabel()
-        titleNumber.text = ""
-        titleNumber.numberOfLines = 0
-        titleNumber.textColor = .white
-        titleNumber.font = UIFont.systemFont(ofSize: 18)
-        titleNumber.lineBreakMode = NSLineBreakMode.byWordWrapping
-        titleNumber.textAlignment = .left
-        titleNumber.frame = CGRect(x: 20, y: 155, width: 200, height: 20)
-        titleNumber.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return titleNumber
+    lazy var numberTitle: UILabel = {
+        let numberTitle = UILabel()
+        numberTitle.text = ""
+        numberTitle.numberOfLines = 0
+        numberTitle.textColor = .white
+        numberTitle.font = UIFont.systemFont(ofSize: 18)
+        numberTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
+        numberTitle.textAlignment = .left
+        numberTitle.frame = CGRect(x: 20, y: 155, width: 200, height: 20)
+        numberTitle.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return numberTitle
     }()
     
     lazy var prereg: UIButton = {
         let prereg = UIButton()
-        //prereg.setImage(UIImage(named: "preregFalse"), for: .normal)
-        prereg.frame = CGRect(x: titleNumber.text!.count * 10 + 30, y: 152, width: 25, height: 25)
-       // prereg.addTarget(self, action: #selector(showPrergInfo), for: UIControl.Event.touchUpInside)
+        prereg.frame = CGRect(x: numberTitle.text!.count * 10 + 30, y: 152, width: 25, height: 25)
         prereg.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return prereg
     }()
@@ -122,34 +116,31 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     lazy var preregInfo: UILabel = {
         let preregInfo = UILabel()
         preregInfo.isHidden = true
-      //  preregInfo.backgroundColor = colorLightDarkGray
         preregInfo.text = ""
         preregInfo.numberOfLines = 0
         preregInfo.textColor = colorBlackWhite
         preregInfo.font = UIFont.systemFont(ofSize: 13)
         preregInfo.lineBreakMode = NSLineBreakMode.byWordWrapping
         preregInfo.textAlignment = .center
-        //preregInfo.frame = CGRect(x: 20, y: 190, width: CGFloat(preregInfo.text!.count * 10 + 20), height: 45)
         preregInfo.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return preregInfo
     }()
     
-    lazy var spisanie: UILabel = {
-        let spisanie = UILabel()
-        spisanie.text = ""
-        spisanie.numberOfLines = 0
-        spisanie.textColor = .white
-        spisanie.font = UIFont.systemFont(ofSize: 18)
-        spisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
-        spisanie.textAlignment = .left
-        spisanie.frame = CGRect(x: 20, y: 130, width: 300, height: 20)
-        spisanie.autoresizesSubviews = true
-        spisanie.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return spisanie
+    lazy var paymentDate: UILabel = {
+        let paymentDate = UILabel()
+        paymentDate.text = ""
+        paymentDate.numberOfLines = 0
+        paymentDate.textColor = .white
+        paymentDate.font = UIFont.systemFont(ofSize: 18)
+        paymentDate.lineBreakMode = NSLineBreakMode.byWordWrapping
+        paymentDate.textAlignment = .left
+        paymentDate.frame = CGRect(x: 20, y: 130, width: 300, height: 20)
+        paymentDate.autoresizesSubviews = true
+        paymentDate.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return paymentDate
     }()
     
-    //for prereg info
-    @objc func showPrergInfo(_ sender: UIButton){
+    @objc func showPreregInfo(_ sender: UIButton){
         sender.showAnimation {
             if(self.taped)
             {
@@ -189,10 +180,10 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        
-        image.frame = CGRect(x: 0, y: 0, width: contentView.frame.size.width, height: 210)
-        contentView.addSubview(image)
-        contentView.sendSubviewToBack(image)
+
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: contentView.frame.size.width, height: 210)
+        contentView.addSubview(backgroundImage)
+        contentView.sendSubviewToBack(backgroundImage)
         
         white_view_back = UIView(frame: CGRect(x: 15, y: 185, width: UIScreen.main.bounds.size.width - 60, height: 65))
         white_view_back.layer.cornerRadius = 15
@@ -202,19 +193,16 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         white_view_back.layer.shadowOpacity = 1
         white_view_back.layer.shadowOffset = .zero
         white_view_back.isHidden = true
-        
-        //white_view_back.layer.borderColor = UIColor.darkGray.cgColor
-        //white_view_back.layer.borderWidth = 0.2
-      
-        contentView.addSubview(titleOne)
-        contentView.addSubview(balance)
-        contentView.addSubview(popolnit)
-        contentView.addSubview(titleTarif)
-        contentView.addSubview(settings)
-        contentView.addSubview(prereg)
-        contentView.addSubview(titleNumber)
-        contentView.addSubview(spisanie)
 
+        yourBalanceTitle.addSubview(balanceValue)
+        contentView.addSubview(yourBalanceTitle)
+        //contentView.addSubview(balanceValue)
+        contentView.addSubview(topUpBalance)
+        contentView.addSubview(tariffTitle)
+        contentView.addSubview(settingsButton)
+        contentView.addSubview(prereg)
+        contentView.addSubview(numberTitle)
+        contentView.addSubview(paymentDate)
         contentView.addSubview(white_view_back)
         contentView.addSubview(preregInfo)
         
