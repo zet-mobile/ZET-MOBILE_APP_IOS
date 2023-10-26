@@ -56,8 +56,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     let table = UITableView()
     var table2 = UITableView(frame: .zero, style: .grouped)
     
-    var x_pozition = 20
-    var y_pozition = 300
+   // var x_pozition = 20
+   // var y_pozition = 300
     
     let TabCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -89,7 +89,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     
     var HistoryData2 = [zeroHelpHistoryData(date_header: String(), repayment_sum_amount: [String](), repayment_tax_amount: [String](), repayment_credit_amount: [String](), remaind_sum_amount: [String](), remaind_tax_amount: [String](), remaind_credit_amount: [String](), created_at: [String]())]
     
-    var y_poz = 180
+   // var y_poz = 180
     var historyIdRow = 0
     var historyIdSection = 0
     
@@ -142,8 +142,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 950)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        //toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+       // zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(zeroView)
@@ -162,24 +162,18 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
             }
         }
         
-        zeroView.balance.text = balance
-        zeroView.rez1.text = arpu
-        zeroView.rez2.text = lifetime
-        
-        zeroView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez1.text!.count * 15) - 50, y: 0, width: (zeroView.rez1.text!.count * 15), height: 55)
-        zeroView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.rez2.text!.count * 15) - 50, y: 57, width: (zeroView.rez2.text!.count * 15), height: 45)
-        
-        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+   
     }
 
     func setupTabCollectionView() {
+        
+        
+        
+        
+        
         y_pozition = y_pozition + 55
         
-        zeroView.tab1.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
-        zeroView.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 40)
-        
-        zeroView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
-        zeroView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
+    
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
         zeroView.tab1.isUserInteractionEnabled = true
@@ -189,7 +183,33 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         zeroView.tab2.isUserInteractionEnabled = true
         zeroView.tab2.addGestureRecognizer(tapGestureRecognizer2)
         
+        zeroView.more_view.isUserInteractionEnabled = false
+        zeroView.more_view.title_top.frame.size.height = 50
+        zeroView.more_view.title_top.numberOfLines = 2
+        zeroView.more_view.content.text = presentDescription
+        zeroView.more_view.content.textColor = darkGrayLight
+        zeroView.more_view.content.translatesAutoresizingMaskIntoConstraints = false
+        zeroView.more_view.title.isHidden  = true
+        zeroView.more_view.title_top.text = defaultLocalizer.stringForKey(key: "DRAW_TERMS")
+
+        NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: scrollView.more_view.title_top.bottomAnchor, constant: -5),
+                                     zeroView.more_view.content.leadingAnchor.constraint(equalTo: scrollView.more_view.leadingAnchor, constant: 20),
+                                     zeroView.more_view.content.trailingAnchor.constraint(equalTo: scrollView.more_view.trailingAnchor, constant: -20),
+                                     zeroView.more_view.content.bottomAnchor.constraint(equalTo: scrollView.more_view.close_banner.topAnchor )])
+        
+        
+        
         scrollView.addSubview(TabCollectionView)
+        
+        
+        scrollView.view.backgroundColor = colorGrayWhite
+        scrollView.scrollView.addSubview(zeroView.more_view.close_banner)
+        scrollView.scrollView.addSubview(zeroView.more_view.close)
+        scrollView.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+        scrollView.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+
+        
+        
         TabCollectionView.backgroundColor = contentColor
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
         TabCollectionView.delegate = self
@@ -207,12 +227,16 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                     zeroView.image_banner.isHidden = true
                     zeroView.white_view_back.isHidden = true
                     self.scrollView.contentOffset.y = 0
-                    zeroView.tab1.frame.origin.y = 0
-                    zeroView.tab2.frame.origin.y = 0
-                    zeroView.tab1Line.frame.origin.y = 40
-                    zeroView.tab2Line.frame.origin.y = 40
-                    TabCollectionView.frame.origin.y = 45
-                    TabCollectionView.reloadData()
+                    
+                    
+                    
+                    NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: detailViewController.more_view.title_top.bottomAnchor, constant: -5),
+                                                 zeroView.more_view.content.leadingAnchor.constraint(equalTo: zeroView.more_view.leadingAnchor, constant: 20),
+                                                 zeroView.more_view.content.trailingAnchor.constraint(equalTo: zeroView.more_view.trailingAnchor, constant: -20),
+                                                 zeroView.more_view.content.bottomAnchor.constraint(equalTo: detailViewController.more_view.close_banner.topAnchor )])
+                    
+                    
+                   
                 }
                 
             }
@@ -223,9 +247,13 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 zeroView.white_view_back.isHidden = false
                 zeroView.tab1.frame.origin.y = CGFloat(y_pozition)
                 zeroView.tab2.frame.origin.y = CGFloat(y_pozition)
-                zeroView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
-                zeroView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
-                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
+                
+                NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: zeroView.tab2.more_view.title_top.bottomAnchor, constant: -5),
+                                             zeroView.more_view.content.leadingAnchor.constraint(equalTo: zeroView.tab2.leadingAnchor, constant: 20),
+                                             zeroView.more_view.content.trailingAnchor.constraint(equalTo: zeroView.tab2.trailingAnchor, constant: -20),
+                                             zeroView.more_view.content.bottomAnchor.constraint(equalTo: zeroView.tab2.topAnchor )])
+                
+                
                
             }
         }
@@ -239,9 +267,6 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 self.scrollView.contentOffset.y = 0
                 zeroView.tab1.frame.origin.y = 0
                 zeroView.tab2.frame.origin.y = 0
-                zeroView.tab1Line.frame.origin.y = 40
-                zeroView.tab2Line.frame.origin.y = 40
-                TabCollectionView.frame.origin.y = 45
             }
             if scrollView.contentOffset.y < -10 && zeroView.white_view_back.isHidden == true {
                 zeroView.titleOne.isHidden = false
@@ -250,9 +275,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 zeroView.white_view_back.isHidden = false
                 zeroView.tab1.frame.origin.y = CGFloat(y_pozition)
                 zeroView.tab2.frame.origin.y = CGFloat(y_pozition)
-                zeroView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
-                zeroView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
-                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
+                
             }
         }
     }
@@ -385,7 +408,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                         else {
                             
                             DispatchQueue.main.async {
-                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_used_help_at_zero"))
+                         //       emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_used_help_at_zero"))
                             self.table2.separatorStyle = .none
                             self.table2.backgroundView = emptyView
                             }
@@ -438,8 +461,18 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         
         let view = AlertView2()
         view.backgroundColor = alertColor
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
-        view.layer.cornerRadius = 20
+      //  view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
+        
+        
+        let view = NSLayoutConstraint(item: alert.view,
+                                                     attribute: .width,
+                                                     relatedBy: .equal,
+                                                     toItem: nil,
+                                                     attribute: .notAnAttribute,
+                                                     multiplier: 1,
+                                                     constant: newWidth)
+        alert.view.addConstraint(widthConstraint)
+       // view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
         
@@ -461,11 +494,11 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         view.value_title.numberOfLines = 2
         view.value_title.frame.size.height = view.value_title.frame.size.height + 30
         
-        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
-        let range2_1 = (cost2).range(of: cost2 as String)
-        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
-        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
-        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+//        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
+//        let range2_1 = (cost2).range(of: cost2 as String)
+//        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+//        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
+//        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
         let title_cost2 = " " + remainders_data[0][0] + " " + defaultLocalizer.stringForKey(key: "tjs") as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
@@ -483,7 +516,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         costString2.append(titleString2)
         
         view.number_title.attributedText = costString2
-        view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
+       // view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
         
         let cost3: NSString = "\(defaultLocalizer.stringForKey(key: "Service_cost")): " as NSString
         let range3 = (cost3).range(of: cost3 as String)
