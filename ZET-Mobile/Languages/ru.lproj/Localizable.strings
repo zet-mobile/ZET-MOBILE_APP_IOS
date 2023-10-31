@@ -116,13 +116,13 @@
 "Exchange_traffic" =    "Обменять трафик";
 "History_of_exchanges" =    "История обменов";
 "Exchange" =    "Обменять на";
-"Balance_and_packages" =    "Баланс и пакеты";
+"BALANCE_AND_PACKAGES" =    "Баланс и пакеты";
 "Translation_Amount" =    "Сумма";
 "Purchase_package" =    "Приобрести пакет";
-"New_package" =    "Новый пакет";
-"Query_history" =    "История запросов";
-"Expenses_for_3_months" =    "Расходы за 3 месяца (сомони)";
-"Days_within_the_network" =    "Дней внутри сети";
+"NEW_PACKAGE" =    "Новый пакет";
+"QUERY_HISTORY" =    "История запросов";
+"EXPENSES_FOR_3_MONTHS" =    "Расходы за 3 месяца (сомони)";
+"DAYS_IN_NETWORK" =    "Дней внутри сети";
 "New_request" =    "Новый запрос";
 
 "History_period" =    "Период детализации";

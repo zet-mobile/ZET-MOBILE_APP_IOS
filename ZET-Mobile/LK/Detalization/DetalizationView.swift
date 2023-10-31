@@ -48,7 +48,7 @@ class DetalizationView: UIView {
     
     lazy var tab2: UILabel = {
         let title = UILabel()
-        title.text =  defaultLocalizer.stringForKey(key: "Query_history")
+        title.text =  defaultLocalizer.stringForKey(key: "QUERY_HISTORY")
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)

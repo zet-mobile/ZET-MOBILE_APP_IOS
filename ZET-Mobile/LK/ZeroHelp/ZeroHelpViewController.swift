@@ -56,8 +56,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     let table = UITableView()
     var table2 = UITableView(frame: .zero, style: .grouped)
     
-   // var x_pozition = 20
-   // var y_pozition = 300
+    var x_pozition = 20
+    var y_pozition = 300
     
     let TabCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -89,7 +89,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     
     var HistoryData2 = [zeroHelpHistoryData(date_header: String(), repayment_sum_amount: [String](), repayment_tax_amount: [String](), repayment_credit_amount: [String](), remaind_sum_amount: [String](), remaind_tax_amount: [String](), remaind_credit_amount: [String](), created_at: [String]())]
     
-   // var y_poz = 180
+    var y_poz = 180
     var historyIdRow = 0
     var historyIdSection = 0
     
@@ -142,8 +142,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 950)
         view.addSubview(scrollView)
         
-        //toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-       // zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
         self.view.addSubview(toolbar)
         scrollView.addSubview(zeroView)
@@ -158,58 +158,35 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         
         for i in 0 ..< hot_services_data.count {
             if hot_services_data[i][0] == "5" {
-                zeroView.image_banner.af_setImage(withURL: URL(string: hot_services_data[i][3])!)
+                zeroView.bannerImage.af_setImage(withURL: URL(string: hot_services_data[i][3])!)
             }
         }
         
-   
+        zeroView.balanceValue.text = balance
+        zeroView.expensesValue.text = arpu
+        zeroView.daysInNetworkValue.text = lifetime
+        
+        zeroView.expensesValue.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.expensesValue.text!.count * 15) - 50, y: 0, width: (zeroView.expensesValue.text!.count * 15), height: 55)
+        zeroView.daysInNetworkValue.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (zeroView.daysInNetworkValue.text!.count * 15) - 50, y: 57, width: (zeroView.daysInNetworkValue.text!.count * 15), height: 45)
+        
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTabCollectionView() {
-        
-        
-        
-        
-        
         y_pozition = y_pozition + 55
-        
-    
-        
+        zeroView.newPackageTitle.frame = CGRect(x: 0, y: y_pozition, width: Int(UIScreen.main.bounds.size.width) / 2, height: 40)
+        zeroView.queryHistoryTitle.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(y_pozition), width: UIScreen.main.bounds.size.width / 2, height: 40)
+        zeroView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+        zeroView.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
-        zeroView.tab1.isUserInteractionEnabled = true
-        zeroView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        zeroView.newPackageTitle.isUserInteractionEnabled = true
+        zeroView.newPackageTitle.addGestureRecognizer(tapGestureRecognizer)
         
         let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
-        zeroView.tab2.isUserInteractionEnabled = true
-        zeroView.tab2.addGestureRecognizer(tapGestureRecognizer2)
-        
-        zeroView.more_view.isUserInteractionEnabled = false
-        zeroView.more_view.title_top.frame.size.height = 50
-        zeroView.more_view.title_top.numberOfLines = 2
-        zeroView.more_view.content.text = presentDescription
-        zeroView.more_view.content.textColor = darkGrayLight
-        zeroView.more_view.content.translatesAutoresizingMaskIntoConstraints = false
-        zeroView.more_view.title.isHidden  = true
-        zeroView.more_view.title_top.text = defaultLocalizer.stringForKey(key: "DRAW_TERMS")
-
-        NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: scrollView.more_view.title_top.bottomAnchor, constant: -5),
-                                     zeroView.more_view.content.leadingAnchor.constraint(equalTo: scrollView.more_view.leadingAnchor, constant: 20),
-                                     zeroView.more_view.content.trailingAnchor.constraint(equalTo: scrollView.more_view.trailingAnchor, constant: -20),
-                                     zeroView.more_view.content.bottomAnchor.constraint(equalTo: scrollView.more_view.close_banner.topAnchor )])
-        
-        
+        zeroView.queryHistoryTitle.isUserInteractionEnabled = true
+        zeroView.queryHistoryTitle.addGestureRecognizer(tapGestureRecognizer2)
         
         scrollView.addSubview(TabCollectionView)
-        
-        
-        scrollView.view.backgroundColor = colorGrayWhite
-        scrollView.scrollView.addSubview(zeroView.more_view.close_banner)
-        scrollView.scrollView.addSubview(zeroView.more_view.close)
-        scrollView.more_view.close_banner.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-        scrollView.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-
-        
-        
         TabCollectionView.backgroundColor = contentColor
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
         TabCollectionView.delegate = self
@@ -219,78 +196,75 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.scrollView == scrollView  {
-            if scrollView.contentOffset.y > zeroView.tab1.frame.origin.y {
+            if scrollView.contentOffset.y > zeroView.newPackageTitle.frame.origin.y {
                 
                 DispatchQueue.main.async { [self] in
-                    zeroView.titleOne.isHidden = true
-                    zeroView.balance.isHidden = true
-                    zeroView.image_banner.isHidden = true
-                    zeroView.white_view_back.isHidden = true
+                    zeroView.balanceAndPackagesTitle.isHidden = true
+                    zeroView.balanceValue.isHidden = true
+                    zeroView.bannerImage.isHidden = true
+                    zeroView.statusList.isHidden = true
                     self.scrollView.contentOffset.y = 0
-                    
-                    
-                    
-                    NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: detailViewController.more_view.title_top.bottomAnchor, constant: -5),
-                                                 zeroView.more_view.content.leadingAnchor.constraint(equalTo: zeroView.more_view.leadingAnchor, constant: 20),
-                                                 zeroView.more_view.content.trailingAnchor.constraint(equalTo: zeroView.more_view.trailingAnchor, constant: -20),
-                                                 zeroView.more_view.content.bottomAnchor.constraint(equalTo: detailViewController.more_view.close_banner.topAnchor )])
-                    
-                    
-                   
+                    zeroView.newPackageTitle.frame.origin.y = 0
+                    zeroView.queryHistoryTitle.frame.origin.y = 0
+                    zeroView.tab1Line.frame.origin.y = 40
+                    zeroView.tab2Line.frame.origin.y = 40
+                    TabCollectionView.frame.origin.y = 45
+                    TabCollectionView.reloadData()
                 }
                 
             }
-            if scrollView.contentOffset.y < -10 && zeroView.white_view_back.isHidden == true {
-                zeroView.titleOne.isHidden = false
-                zeroView.balance.isHidden = false
-                zeroView.image_banner.isHidden = false
-                zeroView.white_view_back.isHidden = false
-                zeroView.tab1.frame.origin.y = CGFloat(y_pozition)
-                zeroView.tab2.frame.origin.y = CGFloat(y_pozition)
-                
-                NSLayoutConstraint.activate([zeroView.more_view.content.topAnchor.constraint(equalTo: zeroView.tab2.more_view.title_top.bottomAnchor, constant: -5),
-                                             zeroView.more_view.content.leadingAnchor.constraint(equalTo: zeroView.tab2.leadingAnchor, constant: 20),
-                                             zeroView.more_view.content.trailingAnchor.constraint(equalTo: zeroView.tab2.trailingAnchor, constant: -20),
-                                             zeroView.more_view.content.bottomAnchor.constraint(equalTo: zeroView.tab2.topAnchor )])
-                
-                
+            if scrollView.contentOffset.y < -10 && zeroView.statusList.isHidden == true {
+                zeroView.balanceAndPackagesTitle.isHidden = false
+                zeroView.balanceValue.isHidden = false
+                zeroView.bannerImage.isHidden = false
+                zeroView.statusList.isHidden = false
+                zeroView.newPackageTitle.frame.origin.y = CGFloat(y_pozition)
+                zeroView.queryHistoryTitle.frame.origin.y = CGFloat(y_pozition)
+                zeroView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                zeroView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
                
             }
         }
         
        if table2 == scrollView || table == scrollView  {
             if scrollView.contentOffset.y > 1 {
-                zeroView.titleOne.isHidden = true
-                zeroView.balance.isHidden = true
-                zeroView.image_banner.isHidden = true
-                zeroView.white_view_back.isHidden = true
+                zeroView.balanceAndPackagesTitle.isHidden = true
+                zeroView.balanceValue.isHidden = true
+                zeroView.bannerImage.isHidden = true
+                zeroView.statusList.isHidden = true
                 self.scrollView.contentOffset.y = 0
-                zeroView.tab1.frame.origin.y = 0
-                zeroView.tab2.frame.origin.y = 0
+                zeroView.newPackageTitle.frame.origin.y = 0
+                zeroView.queryHistoryTitle.frame.origin.y = 0
+                zeroView.tab1Line.frame.origin.y = 40
+                zeroView.tab2Line.frame.origin.y = 40
+                TabCollectionView.frame.origin.y = 45
             }
-            if scrollView.contentOffset.y < -10 && zeroView.white_view_back.isHidden == true {
-                zeroView.titleOne.isHidden = false
-                zeroView.balance.isHidden = false
-                zeroView.image_banner.isHidden = false
-                zeroView.white_view_back.isHidden = false
-                zeroView.tab1.frame.origin.y = CGFloat(y_pozition)
-                zeroView.tab2.frame.origin.y = CGFloat(y_pozition)
-                
+            if scrollView.contentOffset.y < -10 && zeroView.statusList.isHidden == true {
+                zeroView.balanceAndPackagesTitle.isHidden = false
+                zeroView.balanceValue.isHidden = false
+                zeroView.bannerImage.isHidden = false
+                zeroView.statusList.isHidden = false
+                zeroView.newPackageTitle.frame.origin.y = CGFloat(y_pozition)
+                zeroView.queryHistoryTitle.frame.origin.y = CGFloat(y_pozition)
+                zeroView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                zeroView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
             }
         }
     }
     
     @objc func tab1Click() {
-        zeroView.tab1.textColor = colorBlackWhite
-        zeroView.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        zeroView.newPackageTitle.textColor = colorBlackWhite
+        zeroView.queryHistoryTitle.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
         zeroView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         zeroView.tab2Line.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
     
     @objc func tab2Click() {
-        zeroView.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        zeroView.tab2.textColor = colorBlackWhite
+        zeroView.newPackageTitle.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        zeroView.queryHistoryTitle.textColor = colorBlackWhite
         zeroView.tab1Line.backgroundColor = .clear
         zeroView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
@@ -368,11 +342,9 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
-                        
                         if result.history?.count != nil {
                             print(result.history!.count)
                             for i in 0 ..< result.history!.count {
-                                
                                 var tableData1 = [String]()
                                 var tableData2 = [String]()
                                 var tableData3 = [String]()
@@ -383,9 +355,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                                 var tableData8 = [String]()
                                 var tableData9 = [String]()
                                 var tableData10 = [String]()
-                               
                                 for j in 0 ..< result.history![i].histories.count {
-                                    
                                     tableData1.append(String(result.history![i].histories[j].packet_tax))
                                     tableData2.append(String(result.history![i].histories[j].packet_sum))
                                     tableData3.append(String(result.history![i].histories[j].packet_amount))
@@ -396,19 +366,15 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                                     tableData8.append(String(result.history![i].histories[j].is_repayment))
                                     tableData9.append(String(result.history![i].histories[j].packet_name))
                                     tableData10.append(String(result.history![i].histories[j].created_at))
-                                    
                                 }
                                 if String(result.history![i].date) != "" {
                                     HistoryData.append(zeroHelpData(date_header: String(result.history![i].date), packet_tax: tableData1, packet_sum: tableData2, packet_amount: tableData3, credit_id: tableData4, remaind_sum_amount: tableData5, remaind_tax_amount: tableData6, remaind_credit_amount: tableData7, is_repayment: tableData8, packet_name: tableData9, created_at: tableData10))
                                 }
-                               
                             }
-                            
                         }
                         else {
-                            
                             DispatchQueue.main.async {
-                         //       emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_used_help_at_zero"))
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_used_help_at_zero"))
                             self.table2.separatorStyle = .none
                             self.table2.backgroundView = emptyView
                             }
@@ -440,10 +406,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func translateTrafic(_ sender: UIButton) {
-        
         let indexPath = IndexPath(row: 0, section: 0)
-       // let cell = table.cellForRow(at: indexPath) as! MobileTableViewCell
-        
         alert = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
         let widthConstraints = alert.view.constraints.filter({ return $0.firstAttribute == .width })
         alert.view.removeConstraints(widthConstraints)
@@ -461,18 +424,8 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         
         let view = AlertView2()
         view.backgroundColor = alertColor
-      //  view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
-        
-        
-        let view = NSLayoutConstraint(item: alert.view,
-                                                     attribute: .width,
-                                                     relatedBy: .equal,
-                                                     toItem: nil,
-                                                     attribute: .notAnAttribute,
-                                                     multiplier: 1,
-                                                     constant: newWidth)
-        alert.view.addConstraint(widthConstraint)
-       // view.layer.cornerRadius = 20
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 80, height: 380)
+        view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "Help_at_zero")
         view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "first.png") : UIImage(named: "first_l.png"))
         
@@ -494,11 +447,11 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         view.value_title.numberOfLines = 2
         view.value_title.frame.size.height = view.value_title.frame.size.height + 30
         
-//        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
-//        let range2_1 = (cost2).range(of: cost2 as String)
-//        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
-//        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
-//        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
+        let range2_1 = (cost2).range(of: cost2 as String)
+        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
+        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
         
         let title_cost2 = " " + remainders_data[0][0] + " " + defaultLocalizer.stringForKey(key: "tjs") as NSString
         let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
@@ -516,7 +469,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         costString2.append(titleString2)
         
         view.number_title.attributedText = costString2
-       // view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
+        view.number_title.frame.origin.y = view.number_title.frame.origin.y + 20
         
         let cost3: NSString = "\(defaultLocalizer.stringForKey(key: "Service_cost")): " as NSString
         let range3 = (cost3).range(of: cost3 as String)
@@ -790,14 +743,14 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                zeroView.tab1.textColor = colorBlackWhite
-                zeroView.tab2.textColor = .gray
+                zeroView.newPackageTitle.textColor = colorBlackWhite
+                zeroView.queryHistoryTitle.textColor = .gray
                 zeroView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
                 zeroView.tab2Line.backgroundColor = .clear
                 
             } else {
-                zeroView.tab1.textColor = .gray
-                zeroView.tab2.textColor = colorBlackWhite
+                zeroView.newPackageTitle.textColor = .gray
+                zeroView.queryHistoryTitle.textColor = colorBlackWhite
                 zeroView.tab1Line.backgroundColor = .clear
                 zeroView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
@@ -808,14 +761,14 @@ extension ZeroHelpViewController: UICollectionViewDelegateFlowLayout, UICollecti
         print(indexPath.row)
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                zeroView.tab1.textColor = .gray
-                zeroView.tab2.textColor = colorBlackWhite
+                zeroView.newPackageTitle.textColor = .gray
+                zeroView.queryHistoryTitle.textColor = colorBlackWhite
                 zeroView.tab1Line.backgroundColor = .clear
                 zeroView.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
          else {
-             zeroView.tab1.textColor = colorBlackWhite
-             zeroView.tab2.textColor = .gray
+             zeroView.newPackageTitle.textColor = colorBlackWhite
+             zeroView.queryHistoryTitle.textColor = .gray
              zeroView.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
              zeroView.tab2Line.backgroundColor = .clear
           }
@@ -1058,14 +1011,7 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
                 titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2_2)
                 titleString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_2)
                 
-                costString2.append(titleString2)
-                next.zero_button_view.summa.attributedText = costString2
-                //next.modalPresentationCapturesStatusBarAppearance = true
-                packet_tax = packets_data[indexPath.row][0]
-                packet_sum = packets_data[indexPath.row][1]
-                packet_amount = packets_data[indexPath.row][2]
-                packet_name = packets_data[indexPath.row][3]
-                packet_id = packets_data[indexPath.row][4]
+             
                 
                 next.transitioningDelegate = self.halfModalTransitioningDelegate
                 //present(next, animated: true, completion: nil)
@@ -1134,24 +1080,7 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
         view.value_title.numberOfLines = 2
         view.value_title.frame.size.height = view.value_title.frame.size.height + 30
         
-        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
-        let range2_1 = (cost2).range(of: cost2 as String)
-        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
-        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
-        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
-        
-        let title_cost2 = " " + packet_sum + " " + defaultLocalizer.stringForKey(key: "tjs")  as NSString
-        let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
-        let range2_2 = (title_cost2).range(of: title_cost2 as String)
-        titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
-        titleString2.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2_2)
-        
-        let title_cost2_1 = "?" as NSString
-        let titleString2_1 = NSMutableAttributedString.init(string: title_cost2_1 as String)
-        let range2_3 = (title_cost2_1).range(of: title_cost2_1 as String)
-        titleString2_1.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_3)
-        titleString2_1.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_3)
-        
+     
         titleString2.append(titleString2_1)
         costString2.append(titleString2)
         
@@ -1278,82 +1207,7 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
     }
          
     
-    func setupHistoryView() {
-        
-        if HistoryData2.count != nil {
-            for i in 0 ..< HistoryData2.count {
-                print("HistoryData.count")
-                print(HistoryData2.count)
-                for j in 0 ..< HistoryData2[i].repayment_sum_amount.count {
-                    print(HistoryData2[i].remaind_sum_amount[j])
-                }
-                
-            }
-        }
-        
-        historyDetailController.more_view.title_top.text = HistoryData[historyIdSection].packet_name[historyIdRow]
-        
-        historyDetailController.more_view.title.text = HistoryData[historyIdSection].packet_sum[historyIdRow] + " " + defaultLocalizer.stringForKey(key: "tjs")
-        
-        historyDetailController.more_view.cost_title.text = HistoryData[historyIdSection].packet_amount[historyIdRow]
-        historyDetailController.more_view.commission_title.text = HistoryData[historyIdSection].packet_tax[historyIdRow]
-        historyDetailController.more_view.summa_title.text = HistoryData[historyIdSection].packet_sum[historyIdRow]
-        
-        if HistoryData[historyIdSection].is_repayment[historyIdRow] == "false" {
-        }
-        else {
-            historyDetailController.more_view.status_label.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
-            historyDetailController.more_view.status_label.text = defaultLocalizer.stringForKey(key: "Paid:")
-        }
-        
-        let dateFormatter1 = DateFormatter()
-        dateFormatter1.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-        let date = dateFormatter1.date(from: String(HistoryData[historyIdSection].created_at[historyIdRow]))
-        dateFormatter1.dateFormat = "yyyy-MM-dd"
-        
-        historyDetailController.more_view.date_label.text = dateFormatter1.string(from: date!)
-        
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-        let date2 = dateFormatter2.date(from: String(HistoryData[historyIdSection].created_at[historyIdRow]))
-        dateFormatter2.dateFormat = "HH:mm"
-        
-        historyDetailController.more_view.time_label.text = dateFormatter2.string(from: date2!)
-        
-        historyDetailController.more_view.cost_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.cost_title.text!.count * 15) - 30, y: 210, width: ( historyDetailController.more_view.cost_title.text!.count * 15), height: 30)
-        
-        historyDetailController.more_view.commission_label.frame = CGRect(x: 20, y: 240, width: Int(UIScreen.main.bounds.size.width) - (HistoryData[historyIdSection].packet_tax[historyIdRow].count * 15), height: 50)
-        
-        historyDetailController.more_view.commission_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.commission_title.text!.count * 15) - 30, y: 240, width: (historyDetailController.more_view.commission_title.text!.count * 15), height: 50)
-        
-        historyDetailController.more_view.summa_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.summa_title.text!.count * 15) - 30, y: 290, width: ( historyDetailController.more_view.summa_title.text!.count * 15), height: 30)
-        
-        historyDetailController.more_view.time_label.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.time_label.text!.count * 15) - 30, y: 330, width: ( historyDetailController.more_view.time_label.text!.count * 15), height: 30)
-        
-        historyDetailController.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
-    
-        nav = UINavigationController(rootViewController: historyDetailController)
-        nav.modalPresentationStyle = .pageSheet
-        nav.view.backgroundColor = contentColor
-        nav.isNavigationBarHidden = true
-        historyDetailController.view.backgroundColor = colorGrayWhite
-        if #available(iOS 15.0, *) {
-            if let sheet = nav.sheetPresentationController {
-                sheet.detents = [.medium()]
-                sheet.selectedDetentIdentifier = .medium
-                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-            // 4
-        DispatchQueue.main.async {
-            self.present(self.nav, animated: true, completion: nil)
-        }
-        
-      
-    }
+   
     
     func sendHistoryRequest2() {
         var historyID = HistoryData[historyIdSection].credit_id[historyIdRow]
@@ -1426,4 +1280,78 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
               catch{
             }
     }
+}
+
+
+
+
+override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    self.backgroundColor = Theme.current.groupedTableCellColor
+    let view = UIView()
+    view.backgroundColor = Theme.current.groupedSelectedCellBackground
+    self.selectedBackgroundView = view
+    self.contentView.addSubview(self.nameLabel)
+    self.contentView.addSubview(self.switCh)
+    self.contentView.addSubview(self.infoLabel)
+    NSLayoutConstraint.activate([
+        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
+        self.nameLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+        self.switCh.leftAnchor.constraint(greaterThanOrEqualTo: self.nameLabel.rightAnchor, constant: 8),
+        self.switCh.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+        self.switCh.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
+        self.infoLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
+        self.infoLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 10),
+        self.infoLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
+        self.infoLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10)
+        ])
+    self.switCh.addTarget(self, action: #selector(changed), for: .valueChanged)
+}
+
+
+
+override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    self.backgroundColor = Theme.current.groupedTableCellColor
+    let view = UIView()
+    view.backgroundColor = Theme.current.groupedSelectedCellBackground
+    self.selectedBackgroundView = view
+
+    self.contentView.addSubview(nameLabel)
+    self.contentView.addSubview(switCh)
+    NSLayoutConstraint.activate([
+        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
+        self.nameLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+        self.switCh.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+        self.switCh.leftAnchor.constraint(greaterThanOrEqualTo: self.nameLabel.rightAnchor, constant: 8),
+        self.switCh.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
+        ])
+    switCh.addTarget(self, action: #selector(changed), for: .valueChanged)
+}
+
+
+
+override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    self.backgroundColor = Theme.current.groupedTableCellColor
+    let view = UIView(backgroundColor: Theme.current.groupedSelectedCellBackground)
+    self.selectedBackgroundView = view
+    self.contentView.addSubview(self.nameLabel)
+    self.contentView.addSubview(self.button)
+    self.contentView.addSubview(self.infoLabel)
+    NSLayoutConstraint.activate([
+        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
+        self.nameLabel.topAnchor.constraint(greaterThanOrEqualTo: self.contentView.topAnchor, constant: 10),
+        self.nameLabel.rightAnchor.constraint(equalTo: self.infoLabel.rightAnchor, constant: 0),
+        self.nameLabel.bottomAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0),
+        self.infoLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
+        self.infoLabel.topAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0),
+        self.infoLabel.rightAnchor.constraint(equalTo: self.button.leftAnchor, constant: -18),
+        self.infoLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.contentView.bottomAnchor, constant: -10),
+        self.button.heightAnchor.constraint(equalToConstant: 34),
+        self.button.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+        self.button.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.35),
+        self.button.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
+    ])
+    //self.button.addTarget(self, action: #selector(changed), for: .touchUpInside)
 }
