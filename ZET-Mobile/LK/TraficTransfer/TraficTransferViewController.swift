@@ -176,31 +176,58 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
             traficView.rez3.text = balances_data[0][2]
             traficView.rez4.text = balances_data[0][3]
         }
-        
-        traficView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ((traficView.rez1.text!.count) * 15) - 50, y: 0, width: ((traficView.rez1.text!.count) * 15), height: 45)
-        traficView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez2.text!.count * 15) - 50, y: 47, width: (traficView.rez2.text!.count * 15), height: 45)
-        traficView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez3.text!.count * 15) - 50, y: 94, width: (traficView.rez3.text!.count * 15), height: 45)
-        traficView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (traficView.rez4.text!.count * 15) - 50, y: 141, width: (traficView.rez4.text!.count * 15), height: 45)
-        
-        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+       
     }
 
     func setupTabCollectionView() {
-        y_pozition = y_pozition + 55
+       
+        NSLayoutConstraint.activate([
+            self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            root.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor),
+            root.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            root.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor),
+            root.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+            root.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
+            rootHeight,
         
-        traficView.tab1.frame = CGRect(x: 10, y: y_pozition, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 40)
-        traficView.tab2.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 40)
-        
-        traficView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 2)
-        traficView.tab2Line.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 2)
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
-        traficView.tab1.isUserInteractionEnabled = true
-        traficView.tab1.addGestureRecognizer(tapGestureRecognizer)
-        
-        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
-        traficView.tab2.isUserInteractionEnabled = true
-        traficView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+            self.platformImage.leftAnchor.constraint(greaterThanOrEqualTo: root.leftAnchor, constant: 16),
+            self.platformImage.topAnchor.constraint(equalTo: root.topAnchor, constant: 30),
+            self.platformImage.rightAnchor.constraint(lessThanOrEqualTo: root.rightAnchor, constant: -16),
+            self.platformImage.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            
+            self.receiverLable.leftAnchor.constraint(greaterThanOrEqualTo: root.leftAnchor, constant: 16),
+            self.receiverLable.topAnchor.constraint(equalTo: self.platformImage.bottomAnchor, constant: 20),
+            self.receiverLable.rightAnchor.constraint(lessThanOrEqualTo: root.rightAnchor, constant: -16),
+            self.receiverLable.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+    
+            self.hintLabel.leftAnchor.constraint(greaterThanOrEqualTo: root.leftAnchor, constant: 16),
+            self.hintLabel.topAnchor.constraint(equalTo: self.receiverLable.bottomAnchor, constant: 20),
+            self.hintLabel.rightAnchor.constraint(lessThanOrEqualTo: root.rightAnchor, constant: -16),
+            self.hintLabel.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            
+            self.codeField.leftAnchor.constraint(greaterThanOrEqualTo: root.leftAnchor, constant: 16),
+            self.codeField.topAnchor.constraint(equalTo: self.hintLabel.bottomAnchor, constant: 20),
+            self.codeField.rightAnchor.constraint(lessThanOrEqualTo: root.rightAnchor, constant: -16),
+            self.codeField.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            
+            bottomSep.topAnchor.constraint(equalTo: self.codeField.bottomAnchor),
+            bottomSep.widthAnchor.constraint(equalToConstant: 200),
+            bottomSep.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale),
+            bottomSep.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            
+            self.hintLabelBottom.leftAnchor.constraint(greaterThanOrEqualTo: root.leftAnchor, constant: 16),
+            self.hintLabelBottom.topAnchor.constraint(equalTo: bottomSep.bottomAnchor, constant: 20),
+            self.hintLabelBottom.rightAnchor.constraint(lessThanOrEqualTo: root.rightAnchor, constant: -16),
+            self.hintLabelBottom.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            
+            self.button.topAnchor.constraint(lessThanOrEqualTo: self.hintLabelBottom.bottomAnchor, constant: 20),
+            self.button.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            self.button.bottomAnchor.constraint(lessThanOrEqualTo: root.bottomAnchor, constant: -20),
+        ])
         
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = contentColor
@@ -414,6 +441,44 @@ class TraficTransferViewController: UIViewController, UIScrollViewDelegate {
          else if trasfer_type_choosed_id == 1 {
              view.image_icon.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "internet_transfer_w") : UIImage(named: "internet_transfer"))
          }
+        
+        NSLayoutConstraint.activate([
+            self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            root.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor),
+            root.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            root.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor),
+            root.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+            root.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
+            rootHeight,
+            
+            self.iconView.widthAnchor.constraint(equalTo: root.widthAnchor, multiplier: 0.2),
+            self.iconView.heightAnchor.constraint(equalTo: self.iconView.widthAnchor, multiplier: 1.0),
+            self.iconView.topAnchor.constraint(equalTo: root.topAnchor, constant: 30),
+            self.iconView.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+            self.sectionTitle.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.sectionTitle.topAnchor.constraint(equalTo: self.iconView.bottomAnchor, constant: 30),
+            self.sectionTitle.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+            self.sectionItem1.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.sectionItem1.topAnchor.constraint(equalTo: self.sectionTitle.bottomAnchor, constant: 10),
+            self.sectionItem1.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+            self.sectionItem2.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.sectionItem2.topAnchor.constraint(equalTo: self.sectionItem1.bottomAnchor, constant: 8),
+            self.sectionItem2.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+//            self.sectionItem3.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+//            self.sectionItem3.topAnchor.constraint(equalTo: self.sectionItem2.bottomAnchor, constant: 8),
+//            self.sectionItem3.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+            self.sectionItem4.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.sectionItem4.topAnchor.constraint(equalTo: self.sectionItem2.bottomAnchor, constant: 8),
+            self.sectionItem4.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+            self.sectionTitle2.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.sectionTitle2.topAnchor.constraint(equalTo: self.sectionItem4.bottomAnchor, constant: 16),
+            self.sectionTitle2.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
+            self.section2Item1.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
+            self.section2Item1.topAnchor.constraint(equalTo: self.sectionTitle2.bottomAnchor, constant: 10),
+            self.section2Item1.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
         
         let cost: NSString = defaultLocalizer.stringForKey(key: "Transfer") as NSString
         let range = (cost).range(of: cost as String)

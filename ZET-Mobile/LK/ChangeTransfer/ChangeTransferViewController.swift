@@ -173,11 +173,31 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
             changeView.rez4.text = balances_data[0][3]
         }
         
-
+        changeView.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez1.text!.count * 15) - 50, y: 0, width: (changeView.rez1.text!.count * 15), height: 45)
+        changeView.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez2.text!.count * 15) - 50, y: 47, width: (changeView.rez2.text!.count * 15), height: 45)
+        changeView.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez3.text!.count * 15) - 50, y: 94, width: (changeView.rez3.text!.count * 15), height: 45)
+        changeView.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (changeView.rez4.text!.count * 15) - 50, y: 141, width: (changeView.rez4.text!.count * 15), height: 45)
+        
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
 
     func setupTabCollectionView() {
-       
+        y_pozition = y_pozition + 55
+        
+        changeView.tab1.frame = CGRect(x: 10, y: y_pozition, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 40)
+        changeView.tab2.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 40)
+        
+        changeView.tab1Line.frame = CGRect(x: 10, y: y_pozition + 40, width: Int(UIScreen.main.bounds.size.width - 20) / 2, height: 2)
+        changeView.tab2Line.frame = CGRect(x: ((UIScreen.main.bounds.size.width - 20) / 2) + 10, y: CGFloat(y_pozition + 40), width: (UIScreen.main.bounds.size.width - 20) / 2, height: 2)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        changeView.tab1.isUserInteractionEnabled = true
+        changeView.tab1.addGestureRecognizer(tapGestureRecognizer)
+        
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        changeView.tab2.isUserInteractionEnabled = true
+        changeView.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        
         scrollView.addSubview(TabCollectionView)
         TabCollectionView.backgroundColor = contentColor
         TabCollectionView.frame = CGRect(x: 0, y: y_pozition + 45, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 150))
@@ -196,8 +216,8 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 self.scrollView.contentOffset.y = 0
                 changeView.tab1.frame.origin.y = 0
                 changeView.tab2.frame.origin.y = 0
-               // changeView.tab1Line.frame.origin.y = 40
-              //  changeView.tab2Line.frame.origin.y = 40
+                changeView.tab1Line.frame.origin.y = 40
+                changeView.tab2Line.frame.origin.y = 40
                 TabCollectionView.frame.origin.y = 45
             }
             if scrollView.contentOffset.y < -10 && changeView.white_view_back.isHidden == true {
@@ -207,8 +227,8 @@ class ChangeTransferViewController: UIViewController, UIScrollViewDelegate, UITe
                 changeView.white_view_back.isHidden = false
                 changeView.tab1.frame.origin.y = CGFloat(y_pozition)
                 changeView.tab2.frame.origin.y = CGFloat(y_pozition)
-               // changeView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
-                //changeView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
+                changeView.tab1Line.frame.origin.y = CGFloat(y_pozition + 40)
+                changeView.tab2Line.frame.origin.y = CGFloat(y_pozition + 40)
                 TabCollectionView.frame.origin.y = CGFloat(y_pozition + 45)
                
             }
@@ -745,8 +765,8 @@ extension ChangeTransferViewController: UICollectionViewDelegateFlowLayout, UICo
             table.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - 150)
             table.delegate = self
             table.dataSource = self
-        //    table.rowHeight = 750
-           // table.estimatedRowHeight = 750
+            table.rowHeight = 750
+            table.estimatedRowHeight = 750
             table.alwaysBounceVertical = false
             table.separatorStyle = .none
             table.showsVerticalScrollIndicator = false
@@ -1015,11 +1035,11 @@ extension ChangeTransferViewController: UITableViewDataSource, UITableViewDelega
             
             cell.titleFour.text = dateFormatter1.string(from: date!)
             
-         //   cell.titleOne.frame = CGRect(x: 80, y: 10, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 130, height: 50)
+            cell.titleOne.frame = CGRect(x: 80, y: 10, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 130, height: 50)
             
-        //    cell.titleTwo.frame = CGRect(x: 80, y: 60, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 60)
+            cell.titleTwo.frame = CGRect(x: 80, y: 60, width: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 120, height: 60)
             
-          //  cell.titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleThree.text!.count * 15) - 30, y: 10, width: (cell.titleThree.text!.count * 15), height: 50)
+            cell.titleThree.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleThree.text!.count * 15) - 30, y: 10, width: (cell.titleThree.text!.count * 15), height: 50)
             
             cell.titleFour.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.titleFour.text!.count * 10) - 30, y: 60, width: (cell.titleFour.text!.count * 10), height: 60)
             

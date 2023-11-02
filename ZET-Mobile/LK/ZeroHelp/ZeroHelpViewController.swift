@@ -130,7 +130,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     func setupView() {
         view.backgroundColor = toolbarColor
        
-        
+    
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -139,13 +139,16 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
-        scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 950)
-        view.addSubview(scrollView)
+        scrollView.
+       // scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 950)
+        
         
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
-        self.view.addSubview(toolbar)
+        //zeroView = ZeroHelpView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        
+        view.addSubview(toolbar)
+        view.addSubview(scrollView)
         scrollView.addSubview(zeroView)
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
@@ -161,6 +164,17 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
                 zeroView.bannerImage.af_setImage(withURL: URL(string: hot_services_data[i][3])!)
             }
         }
+        
+        zeroView.bannerImage.translatesAutoresizingMaskIntoConstraints = false
+        zeroView.translatesAutoresizingMaskIntoConstraints = false
+        //scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            zeroView.bannerImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            //zeroView.bannerImage.heightAnchor.constraint(equalToConstant: 160),
+                                     zeroView.bannerImage.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                                    zeroView.bannerImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                                  //  scrollView.topAnchor.constraint(equalTo:toolbar.bottomAnchor)
+                                    ])
         
         zeroView.balanceValue.text = balance
         zeroView.expensesValue.text = arpu
@@ -197,8 +211,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.scrollView == scrollView  {
             if scrollView.contentOffset.y > zeroView.newPackageTitle.frame.origin.y {
-                
-                DispatchQueue.main.async { [self] in
+                    DispatchQueue.main.async { [self] in
                     zeroView.balanceAndPackagesTitle.isHidden = true
                     zeroView.balanceValue.isHidden = true
                     zeroView.bannerImage.isHidden = true
@@ -1011,7 +1024,14 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
                 titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange, range: range2_2)
                 titleString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_2)
                 
-             
+                costString2.append(titleString2)
+                next.zero_button_view.summa.attributedText = costString2
+                //next.modalPresentationCapturesStatusBarAppearance = true
+                packet_tax = packets_data[indexPath.row][0]
+                packet_sum = packets_data[indexPath.row][1]
+                packet_amount = packets_data[indexPath.row][2]
+                packet_name = packets_data[indexPath.row][3]
+                packet_id = packets_data[indexPath.row][4]
                 
                 next.transitioningDelegate = self.halfModalTransitioningDelegate
                 //present(next, animated: true, completion: nil)
@@ -1080,7 +1100,24 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
         view.value_title.numberOfLines = 2
         view.value_title.frame.size.height = view.value_title.frame.size.height + 30
         
-     
+        let cost2: NSString = defaultLocalizer.stringForKey(key: "behind") as NSString
+        let range2_1 = (cost2).range(of: cost2 as String)
+        let costString2 = NSMutableAttributedString.init(string: cost2 as String)
+        costString2.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_1)
+        costString2.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_1)
+        
+        let title_cost2 = " " + packet_sum + " " + defaultLocalizer.stringForKey(key: "tjs")  as NSString
+        let titleString2 = NSMutableAttributedString.init(string: title_cost2 as String)
+        let range2_2 = (title_cost2).range(of: title_cost2 as String)
+        titleString2.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range2_2)
+        titleString2.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range2_2)
+        
+        let title_cost2_1 = "?" as NSString
+        let titleString2_1 = NSMutableAttributedString.init(string: title_cost2_1 as String)
+        let range2_3 = (title_cost2_1).range(of: title_cost2_1 as String)
+        titleString2_1.addAttribute(NSAttributedString.Key.foregroundColor, value: colorBlackWhite , range: range2_3)
+        titleString2_1.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)], range: range2_3)
+        
         titleString2.append(titleString2_1)
         costString2.append(titleString2)
         
@@ -1207,7 +1244,82 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
     }
          
     
-   
+    func setupHistoryView() {
+        
+        if HistoryData2.count != nil {
+            for i in 0 ..< HistoryData2.count {
+                print("HistoryData.count")
+                print(HistoryData2.count)
+                for j in 0 ..< HistoryData2[i].repayment_sum_amount.count {
+                    print(HistoryData2[i].remaind_sum_amount[j])
+                }
+                
+            }
+        }
+        
+        historyDetailController.more_view.title_top.text = HistoryData[historyIdSection].packet_name[historyIdRow]
+        
+        historyDetailController.more_view.title.text = HistoryData[historyIdSection].packet_sum[historyIdRow] + " " + defaultLocalizer.stringForKey(key: "tjs")
+        
+        historyDetailController.more_view.cost_title.text = HistoryData[historyIdSection].packet_amount[historyIdRow]
+        historyDetailController.more_view.commission_title.text = HistoryData[historyIdSection].packet_tax[historyIdRow]
+        historyDetailController.more_view.summa_title.text = HistoryData[historyIdSection].packet_sum[historyIdRow]
+        
+        if HistoryData[historyIdSection].is_repayment[historyIdRow] == "false" {
+        }
+        else {
+            historyDetailController.more_view.status_label.textColor = UIColor(red: 0.153, green: 0.682, blue: 0.376, alpha: 1)
+            historyDetailController.more_view.status_label.text = defaultLocalizer.stringForKey(key: "Paid:")
+        }
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        let date = dateFormatter1.date(from: String(HistoryData[historyIdSection].created_at[historyIdRow]))
+        dateFormatter1.dateFormat = "yyyy-MM-dd"
+        
+        historyDetailController.more_view.date_label.text = dateFormatter1.string(from: date!)
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        let date2 = dateFormatter2.date(from: String(HistoryData[historyIdSection].created_at[historyIdRow]))
+        dateFormatter2.dateFormat = "HH:mm"
+        
+        historyDetailController.more_view.time_label.text = dateFormatter2.string(from: date2!)
+        
+        historyDetailController.more_view.cost_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.cost_title.text!.count * 15) - 30, y: 210, width: ( historyDetailController.more_view.cost_title.text!.count * 15), height: 30)
+        
+        historyDetailController.more_view.commission_label.frame = CGRect(x: 20, y: 240, width: Int(UIScreen.main.bounds.size.width) - (HistoryData[historyIdSection].packet_tax[historyIdRow].count * 15), height: 50)
+        
+        historyDetailController.more_view.commission_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.commission_title.text!.count * 15) - 30, y: 240, width: (historyDetailController.more_view.commission_title.text!.count * 15), height: 50)
+        
+        historyDetailController.more_view.summa_title.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.summa_title.text!.count * 15) - 30, y: 290, width: ( historyDetailController.more_view.summa_title.text!.count * 15), height: 30)
+        
+        historyDetailController.more_view.time_label.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - ( historyDetailController.more_view.time_label.text!.count * 15) - 30, y: 330, width: ( historyDetailController.more_view.time_label.text!.count * 15), height: 30)
+        
+        historyDetailController.more_view.close.addTarget(self, action: #selector(dismiss_view), for: .touchUpInside)
+    
+        nav = UINavigationController(rootViewController: historyDetailController)
+        nav.modalPresentationStyle = .pageSheet
+        nav.view.backgroundColor = contentColor
+        nav.isNavigationBarHidden = true
+        historyDetailController.view.backgroundColor = colorGrayWhite
+        if #available(iOS 15.0, *) {
+            if let sheet = nav.sheetPresentationController {
+                sheet.detents = [.medium()]
+                sheet.selectedDetentIdentifier = .medium
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+            // 4
+        DispatchQueue.main.async {
+            self.present(self.nav, animated: true, completion: nil)
+        }
+        
+      
+    }
     
     func sendHistoryRequest2() {
         var historyID = HistoryData[historyIdSection].credit_id[historyIdRow]
@@ -1280,78 +1392,4 @@ extension ZeroHelpViewController: UITableViewDataSource, UITableViewDelegate {
               catch{
             }
     }
-}
-
-
-
-
-override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.backgroundColor = Theme.current.groupedTableCellColor
-    let view = UIView()
-    view.backgroundColor = Theme.current.groupedSelectedCellBackground
-    self.selectedBackgroundView = view
-    self.contentView.addSubview(self.nameLabel)
-    self.contentView.addSubview(self.switCh)
-    self.contentView.addSubview(self.infoLabel)
-    NSLayoutConstraint.activate([
-        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
-        self.nameLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-        self.switCh.leftAnchor.constraint(greaterThanOrEqualTo: self.nameLabel.rightAnchor, constant: 8),
-        self.switCh.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
-        self.switCh.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
-        self.infoLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
-        self.infoLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 10),
-        self.infoLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
-        self.infoLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10)
-        ])
-    self.switCh.addTarget(self, action: #selector(changed), for: .valueChanged)
-}
-
-
-
-override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.backgroundColor = Theme.current.groupedTableCellColor
-    let view = UIView()
-    view.backgroundColor = Theme.current.groupedSelectedCellBackground
-    self.selectedBackgroundView = view
-
-    self.contentView.addSubview(nameLabel)
-    self.contentView.addSubview(switCh)
-    NSLayoutConstraint.activate([
-        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
-        self.nameLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-        self.switCh.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-        self.switCh.leftAnchor.constraint(greaterThanOrEqualTo: self.nameLabel.rightAnchor, constant: 8),
-        self.switCh.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
-        ])
-    switCh.addTarget(self, action: #selector(changed), for: .valueChanged)
-}
-
-
-
-override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
-    self.backgroundColor = Theme.current.groupedTableCellColor
-    let view = UIView(backgroundColor: Theme.current.groupedSelectedCellBackground)
-    self.selectedBackgroundView = view
-    self.contentView.addSubview(self.nameLabel)
-    self.contentView.addSubview(self.button)
-    self.contentView.addSubview(self.infoLabel)
-    NSLayoutConstraint.activate([
-        self.nameLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
-        self.nameLabel.topAnchor.constraint(greaterThanOrEqualTo: self.contentView.topAnchor, constant: 10),
-        self.nameLabel.rightAnchor.constraint(equalTo: self.infoLabel.rightAnchor, constant: 0),
-        self.nameLabel.bottomAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0),
-        self.infoLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 18),
-        self.infoLabel.topAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0),
-        self.infoLabel.rightAnchor.constraint(equalTo: self.button.leftAnchor, constant: -18),
-        self.infoLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.contentView.bottomAnchor, constant: -10),
-        self.button.heightAnchor.constraint(equalToConstant: 34),
-        self.button.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-        self.button.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.35),
-        self.button.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -18),
-    ])
-    //self.button.addTarget(self, action: #selector(changed), for: .touchUpInside)
 }

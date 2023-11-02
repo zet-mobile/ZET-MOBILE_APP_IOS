@@ -11,8 +11,14 @@ class ZeroHelpView: UIView {
 
     lazy var bannerImage: UIImageView = {
         let bannerImage = UIImageView()
-        bannerImage.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
-        bannerImage.contentMode = .scaleAspectFit
+      // bannerImage.image = UIImage(named: "zero_mini")
+        bannerImage.contentMode = .scaleAspectFill
+            // bannerImage.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 160)
+       // bannerImage.contentMode = .scaleAspectFit
+        
+        //bannerImage.contentMode = .scaleToFill
+       // bannerImage.contentMode = .
+        
         return bannerImage
     }()
     
