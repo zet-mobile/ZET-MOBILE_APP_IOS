@@ -139,7 +139,7 @@ class ZeroHelpViewController: UIViewController, UIScrollViewDelegate {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = .clear
-        scrollView.
+      //  scrollView.
        // scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + 950)
         
         

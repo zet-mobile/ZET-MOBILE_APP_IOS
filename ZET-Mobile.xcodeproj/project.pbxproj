@@ -176,6 +176,7 @@
 		F20788252AA8E9340068BC50 /* BuyTicketsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788242AA8E9340068BC50 /* BuyTicketsViewController.swift */; };
 		F20788272AB1BF5A0068BC50 /* MyTicketsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788262AB1BF5A0068BC50 /* MyTicketsData.swift */; };
 		F20788292AB7A3130068BC50 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20788282AB7A3130068BC50 /* PopupViewController.swift */; };
+		F21AA2CF2B07335300E5046D /* RouminNewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21AA2CE2B07335300E5046D /* RouminNewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -387,6 +388,7 @@
 		F20788242AA8E9340068BC50 /* BuyTicketsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyTicketsViewController.swift; sourceTree = "<group>"; };
 		F20788262AB1BF5A0068BC50 /* MyTicketsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTicketsData.swift; sourceTree = "<group>"; };
 		F20788282AB7A3130068BC50 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
+		F21AA2CE2B07335300E5046D /* RouminNewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouminNewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +498,7 @@
 				B80929C0278B612500CF5824 /* TabRoumingCollectionCell.swift */,
 				B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */,
 				B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */,
+				F21AA2CE2B07335300E5046D /* RouminNewCell.swift */,
 			);
 			path = Rouming;
 			sourceTree = "<group>";
@@ -1231,6 +1234,7 @@
 				B86429AF273C3B31000C159E /* UsageCollectionViewCell.swift in Sources */,
 				B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */,
 				B8358F0127FF572C001A6696 /* AskFriendData.swift in Sources */,
+				F21AA2CF2B07335300E5046D /* RouminNewCell.swift in Sources */,
 				B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */,
 				B88D322D282CDC6E00D574F6 /* DetalizationViewCell.swift in Sources */,
 				B864297B273B8584000C159E /* HalfModalPresentationController.swift in Sources */,

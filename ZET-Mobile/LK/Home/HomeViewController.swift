@@ -78,7 +78,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(HotServicesCollectionViewCell.self, forCellWithReuseIdentifier: cellID3)
         cv.showsHorizontalScrollIndicator = false
-
         return cv
     }()
 
@@ -86,7 +85,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     //added for prereg
     var preregStatus = false
     var showPopup = false
-    var user_name = ""
+    var userName = ""
     var welcomePhrase = ""
     var balance_credit = ""
     var tarif_name = ""
@@ -171,9 +170,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 
     @objc func openCompetition(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
-
         sender.showAnimation { [self] in
-
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             navigationController?.pushViewController(CompetitionViewController(), animated: true)
         }
@@ -220,15 +217,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         home_view = HomeView(frame: CGRect(x: 0, y: 360, width: Int(UIScreen.main.bounds.size.width), height: table_height + 500))
 
         toolbar = Toolbar(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        if user_name.count > 30 {
-            toolbar.user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 14) / 390)
+        if userName.count > 30 {
+            toolbar.userName.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 14) / 390)
         } else {
-            toolbar.user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 18) / 390)
+            toolbar.userName.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 18) / 390)
         }
-        toolbar.user_name.text = user_name
-
+        toolbar.userName.text = userName
         toolbar.welcome.text = welcomePhrase
-
         if count_notif != "0" {
             toolbar.icon_push.setTitle(count_notif, for: .normal)
             toolbar.icon_push.isHidden = false
@@ -682,7 +677,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                                     self.showPopup = Bool(result.showPopup ?? false)
                                     self.balance_credit = String(result.subscriberBalance ?? 0)
                                     self.tarif_name = String(result.priceplan?.priceplanName ?? "")
-                                    self.user_name = String(result.subscriberName ?? "")
+                                    self.userName = String(result.subscriberName ?? "")
                                     self.welcomePhrase = String(result.welcomePhrase ?? "")
                                     self.mainBannerUrl = String(result.mainBannerUrl ?? "")
                                     self.popupBanner = String(result.popupBannerUrl ?? "")
@@ -797,7 +792,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                                     self.preregStatus = Bool(result.prereg ?? false)
                                     self.balance_credit = String(result.subscriberBalance ?? 0)
                                     self.tarif_name = String(result.priceplan?.priceplanName ?? "")
-                                    self.user_name = String(result.subscriberName ?? "")
+                                    self.userName = String(result.subscriberName ?? "")
                                     self.welcomePhrase = String(result.welcomePhrase ?? "")
                                     self.mainBannerUrl = String(result.mainBannerUrl ?? "")
                                     count_notif = String(result.notificationsCount ?? 0)

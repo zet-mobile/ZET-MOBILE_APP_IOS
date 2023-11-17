@@ -40,11 +40,14 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         yourBalanceTitle.font = UIFont.systemFont(ofSize: 16)
         yourBalanceTitle.lineBreakMode = NSLineBreakMode.byWordWrapping
         yourBalanceTitle.textAlignment = .left
-        yourBalanceTitle.frame = CGRect(x: contentView.bounds.minX + 23.72 , y: contentView.bounds.minY + 20 , width: 300, height: 20)
+       // yourBalanceTitle.frame = CGRect(x: contentView.bounds.minX + 23.72 , y: contentView.bounds.minY + 20 , width: 300, height: 20)
         yourBalanceTitle.autoresizesSubviews = true
         yourBalanceTitle.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return yourBalanceTitle
     }()
+    
+    
+    
     
     lazy var balanceValue: UILabel = {
         let balanceValue = UILabel()
@@ -55,7 +58,7 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         balanceValue.font = UIFont.boldSystemFont(ofSize: 25)
         balanceValue.lineBreakMode = NSLineBreakMode.byWordWrapping
         balanceValue.textAlignment = .left
-        balanceValue.frame = CGRect(x: yourBalanceTitle.bounds.minX, y: yourBalanceTitle.bounds.maxY + 4 , width: 200, height: 28)
+       // balanceValue.frame = CGRect(x: yourBalanceTitle.bounds.minX, y: yourBalanceTitle.bounds.maxY + 4 , width: 200, height: 28)
         balanceValue.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return balanceValue
     }()
@@ -66,8 +69,8 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         topUpBalance.setTitle("+ \(defaultLocalizer.stringForKey(key: "Top_up_balance"))", for: .normal)
         topUpBalance.setTitleColor(.black, for: .normal)
         topUpBalance.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        topUpBalance.frame = CGRect(x: contentView.bounds.minX + 213, y: contentView.bounds.minY + 20, width: 140, height: 35)
-        topUpBalance.layer.cornerRadius = topUpBalance.frame.height / 2
+        //topUpBalance.frame = CGRect(x: contentView.bounds.minX + 213, y: contentView.bounds.minY + 20, width: 140, height: 35)
+        topUpBalance.layer.cornerRadius = 15
         topUpBalance.addTarget(self, action: #selector(addBalanceOption), for: UIControl.Event.touchUpInside)
         return topUpBalance
     }()
@@ -177,6 +180,13 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        yourBalanceTitle.translatesAutoresizingMaskIntoConstraints = false
+        balanceValue.translatesAutoresizingMaskIntoConstraints = false
+        topUpBalance.translatesAutoresizingMaskIntoConstraints = false
+        tariffTitle.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+
+     
         contentView.backgroundColor = .clear
         contentView.autoresizesSubviews = true
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -194,9 +204,11 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         white_view_back.layer.shadowOffset = .zero
         white_view_back.isHidden = true
 
+
+        
         yourBalanceTitle.addSubview(balanceValue)
         contentView.addSubview(yourBalanceTitle)
-        //contentView.addSubview(balanceValue)
+      //  contentView.addSubview(balanceValue)
         contentView.addSubview(topUpBalance)
         contentView.addSubview(tariffTitle)
         contentView.addSubview(settingsButton)
@@ -205,6 +217,26 @@ class BalanceSliderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(paymentDate)
         contentView.addSubview(white_view_back)
         contentView.addSubview(preregInfo)
+        NSLayoutConstraint.activate([yourBalanceTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+                                     yourBalanceTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 23.72),
+                                     
+                                     balanceValue.topAnchor.constraint(equalTo: yourBalanceTitle.bottomAnchor, constant: 4),
+                                     balanceValue.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 23.72),
+                                     
+                                     topUpBalance.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+                                     topUpBalance.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                                     topUpBalance.heightAnchor.constraint(equalToConstant: 30),
+                                     topUpBalance.widthAnchor.constraint(equalToConstant: 106),
+                                     
+                                     tariffTitle.topAnchor.constraint(equalTo: yourBalanceTitle.bottomAnchor, constant: 55),
+                                     tariffTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 23.72),
+                                     
+                                     settingsButton.topAnchor.constraint(equalTo: yourBalanceTitle.bottomAnchor, constant: 55),
+                                     settingsButton.leadingAnchor.constraint(equalTo: tariffTitle.trailingAnchor, constant: 6) 
+
+                                     
+])
+        
         
     }
     

@@ -306,14 +306,14 @@ extension FAQViewController: UITableViewDataSource, UITableViewDelegate {
                 
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            cell.opisanie.text = questions_data[indexPath.section][2]
-            cell.opisanie.textColor = darkGrayLight
-            cell.opisanie.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
-            cell.opisanie.numberOfLines = 0
-            cell.opisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
-            cell.opisanie.sizeToFit()
-            print(cell.opisanie.frame.height)
-            row_height[indexPath.section] = cell.opisanie.frame.height
+            cell.descript.text = questions_data[indexPath.section][2]
+            cell.descript.textColor = darkGrayLight
+            cell.descript.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+            cell.descript.numberOfLines = 0
+            cell.descript.lineBreakMode = NSLineBreakMode.byWordWrapping
+            cell.descript.sizeToFit()
+            print(cell.descript.frame.height)
+            row_height[indexPath.section] = cell.descript.frame.height
             
             let bgColorView = UIView()
             bgColorView.backgroundColor = .clear

@@ -25,17 +25,17 @@ class Toolbar: UIView {
         return welcome
     }()
     
-    lazy var user_name: UILabel = {
-        let user_name = UILabel()
-        user_name.text = ""
-        user_name.numberOfLines = 2
-        user_name.textColor = colorBlackWhite
-        user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 18) / 390)
-        user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
-        user_name.textAlignment = .left
-        user_name.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 60, height: 35)
-        return user_name
+    lazy var userName: UILabel = {
+        let userName = UILabel()
+        userName.text = ""
+        userName.numberOfLines = 2
+        userName.textColor = colorBlackWhite
+        userName.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        userName.font = UIFont.boldSystemFont(ofSize: (UIScreen.main.bounds.size.width * 18) / 390)
+        userName.lineBreakMode = NSLineBreakMode.byWordWrapping
+        userName.textAlignment = .left
+        userName.frame = CGRect(x: 20, y: 25, width: UIScreen.main.bounds.size.width - 60, height: 35)
+        return userName
     }()
     
     
@@ -118,7 +118,7 @@ class Toolbar: UIView {
         self.addSubview(view_menu)
    
         self.addSubview(welcome)
-        self.addSubview(user_name)
+        self.addSubview(userName)
         self.addSubview(icon_more)
        
        // self.addSubview(openmenu)

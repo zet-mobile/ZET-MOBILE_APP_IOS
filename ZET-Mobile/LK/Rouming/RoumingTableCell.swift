@@ -9,7 +9,7 @@ import UIKit
 
 class RoumingTableCell: UITableViewCell {
 
-    let opisanie = UILabel()
+    let descript = UILabel()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,15 +24,15 @@ class RoumingTableCell: UITableViewCell {
         
         selectionStyle = .none
 
-        contentView.addSubview(opisanie)
+        contentView.addSubview(descript)
         
-        opisanie.textColor = darkGrayLight
-        opisanie.font = UIFont(name: "", size: 10)
-        opisanie.textAlignment = .left
-        opisanie.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
-        opisanie.numberOfLines = 0
-        opisanie.lineBreakMode = NSLineBreakMode.byWordWrapping
-        opisanie.sizeToFit()
+        descript.textColor = darkGrayLight
+        descript.font = UIFont(name: "", size: 10)
+        descript.textAlignment = .left
+        descript.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+        descript.numberOfLines = 0
+        descript.lineBreakMode = NSLineBreakMode.byWordWrapping
+        descript.sizeToFit()
       
     }
 
