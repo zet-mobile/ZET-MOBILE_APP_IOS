@@ -193,11 +193,11 @@
 "your_message" =    "Сизнинг xабарингиз"    ;
 "Upload_Screenshot" =    "Скриншотни ёкланг"    ;
 "Feedback" =    "Қайта алоқа"    ;
-"Roaming" =    "Роуминг"    ;
-"Information" =    "Маълумот"    ;
-"Countries_conditions" =    "Мамлакатлар ва шартлар"    ;
-"Choose_country" =    "Мамлакатни танланг"    ;
-"Guest_operator" =    "Мехмон Оператор"    ;
+"ROAMING" =    "Роуминг"    ;
+"INFORMATION" =    "Маълумот"    ;
+"COUNTRIES_CONDITIONS" =    "Мамлакатлар ва шартлар"    ;
+"CHOOSE_COUNTRY" =    "Мамлакатни танланг"    ;
+"GUEST_OPERATOR" =    "Мехмон Оператор"    ;
 "Unlimited" =    "Чексиз"    ;
 "Choose_language" =    "Тилни танланг"    ;
 "Tajik" =    "Точик тили"    ;

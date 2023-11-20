@@ -190,11 +190,11 @@
 "your_message" =  "Паёми Шумо"    ;
 "Upload_Screenshot" = "Скриншотро бор кунед"    ;
 "Feedback" = "Алоқаи баръакс"    ;
-"Roaming" = "Роуминг"    ;
-"Information" = "Маълумот"    ;
-"Countries_conditions" = "Кишварҳо ва шароитҳо"    ;
-"Choose_country" = "Кишварро интихоб кунед"    ;
-"Guest_operator" = "Оператори меҳмон"    ;
+"ROAMING" = "Роуминг"    ;
+"INFORMATION" = "Маълумот"    ;
+"COUNTRIES_CONDITIONS" = "Кишварҳо ва шароитҳо"    ;
+"CHOOSE_COUNTRY" = "Кишварро интихоб кунед"    ;
+"GUEST_OPERATOR" = "Оператори меҳмон"    ;
 "Unlimited" = "Бемаҳдуд"    ;
 "Choose_language" = "Забонро интихоб кунед"    ;
 "Tajik" = "Тоҷикӣ"    ;

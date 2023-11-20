@@ -194,11 +194,11 @@
 "your_message" = "your message"    ;
 "Upload_Screenshot" = "Upload Screenshot"    ;
 "Feedback" = "Feedback"    ;
-"Roaming" = "Roaming"    ;
-"Information" = "Information"    ;
-"Countries_conditions" = "Countries and conditions"    ;
-"Choose_country" = "Choose the country"    ;
-"Guest_operator" = "Guest operator"    ;
+"ROAMING" = "Roaming"    ;
+"INFORMATION" = "Information"    ;
+"COUNTRIES_CONDITIONS" = "Countries and conditions"    ;
+"CHOOSE_COUNTRY" = "Choose the country"    ;
+"GUEST_OPERATOR" = "Guest operator"    ;
 "Unlimited" = "Unlimited"    ;
 "Choose_language" = "Choose language"    ;
 "Tajik" = "Tajik"    ;

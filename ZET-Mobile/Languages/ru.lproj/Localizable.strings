@@ -203,11 +203,11 @@
 "your_message" =    "Ваше сообщение";
 "Upload_Screenshot" =    "Загрузить скриншот";
 "Feedback" =    "Обратная связь";
-"Roaming" =    "Роуминг";
-"Information" =    "Информация";
-"Countries_conditions" =    "Страны и условия";
-"Choose_country" =    "Выберите страну";
-"Guest_operator" =    "Гостевой оператор";
+"ROAMING" =    "Роуминг";
+"INFORMATION" =    "Информация";
+"COUNTRIES_CONDITIONS" =    "Страны и условия";
+"CHOOSE_COUNTRY" =    "Выберите страну";
+"GUEST_OPERATOR" =    "Гостевой оператор";
 "Unlimited" =    "Безлимит";
 "Choose_language" =    "Выберите язык";
 "Tajik" =    "Таджикский";

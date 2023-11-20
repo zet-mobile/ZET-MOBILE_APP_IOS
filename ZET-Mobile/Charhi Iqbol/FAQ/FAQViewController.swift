@@ -43,7 +43,7 @@ class FAQViewController: UIViewController, UIScrollViewDelegate {
     var countries_data = [[String]]()
     var roamingOperators_data = [[String]]()
     var operatorCharges_data = [[String]]()
-    var operatorCharges_Data = [operatorChargesData(description: [String](), price: [String]())]
+    var operatorCharges_Data = [operatorChargeData(description: [String](), price: [String]())]
     
     var row_height = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
@@ -289,7 +289,7 @@ extension FAQViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.row == 0 {
             let cell = table.dequeueReusableCell(withIdentifier: "roaming_top", for: indexPath) as! RoumingTopViewCell
             
-            cell.titleOne.text = questions_data[indexPath.section][1]
+            cell.cellTitle.text = questions_data[indexPath.section][1]
             
             if questions_data[indexPath.section][3] == "true" {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
@@ -335,14 +335,14 @@ extension FAQViewController: UITableViewDataSource, UITableViewDelegate {
             print("b")
             cell.backgroundColor = colorLightDarkGray
             questions_data[indexPath.section][3] = "true"
-            cell.button.setImage(#imageLiteral(resourceName: "drop_icon2"), for: UIControl.State.normal)
+            cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon2"), for: UIControl.State.normal)
                 
         }
         else {
             print("c")
             cell.backgroundColor = .clear
             questions_data[indexPath.section][3] = "false"
-            cell.button.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
+            cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
         }
     
         UIView.setAnimationsEnabled(false)

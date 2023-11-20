@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import iOSDropDown
 
-struct operatorChargesData {
+struct operatorChargeData {
     let description: [String]
     let price: [String]
 }
@@ -24,7 +24,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
-    var rouming_view = RoumingView()
+    var roumingView = RoumingView()
     let table = UITableView()
     
     let TabCollectionView: UICollectionView = {
@@ -42,26 +42,25 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     }()
     
     var y_pozition = 250
-    var questions_data = [[String]]()
-    var countries_data = [[String]]()
-    var roamingOperators_data = [[String]]()
-    var operatorCharges_data = [[String]]()
-    var operatorCharges_Data = [operatorChargesData(description: [String](), price: [String]())]
+    var questionsData = [[String]]()
+    var countriesData = [[String]]()
+    var roamingOperatorsData = [[String]]()
+    var operatorChargesData = [operatorChargeData(description: [String](), price: [String]())]
     
     var row_height = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
-    var country_choosed = ""
-    var country_choosed_id = "0"
-    var country_choosed_img = ""
-    var roamingOperators_choosed = ""
-    var roamingOperators_choosed_id = 0
+    var countryChoosed = ""
+    var countryChoosedId = "0"
+    var countryChoosedImg = ""
+    var roamingOperatorsChoosed = ""
+    var roamingOperatorsChoosedId = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = toolbarColor
-        operatorCharges_Data.removeAll()
-        roamingOperators_data.removeAll()
+        operatorChargesData.removeAll()
+        roamingOperatorsData.removeAll()
         sendRequest()
        
     }
@@ -97,76 +96,87 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
         
-        if operatorCharges_Data.count != 0 {
-            scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat(operatorCharges_Data[roamingOperators_choosed_id].price.count * 55))
+        
+        print("operatorChargesData   :    \(operatorChargesData)")
+        
+        if operatorChargesData.isEmpty {
+            scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat(operatorChargesData[roamingOperatorsChoosedId].price.count * 55))
         }
         else {
-          //  scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+            scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
         }
         
-        scrollView.isScrollEnabled = false
+        scrollView.isScrollEnabled = true
+        view.addSubview(scrollView)
         view.addSubview(scrollView)
   
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        rouming_view = RoumingView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0))))
+        
+        //roumingView = RoumingView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0))))
         
         
         self.view.addSubview(toolbar)
-        scrollView.addSubview(rouming_view)
+    //    scrollView.addSubview(roumingView)
+        view.addSubview(roumingView)
+
+        roumingView.translatesAutoresizingMaskIntoConstraints = false
+        
+       
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
-        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Roaming")
+        toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "ROAMING")
         toolbar.backgroundColor = contentColor
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
         
-        
-        
-        
-        
-        
-        
-       // rouming_view.tab1.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width) / 2, height: 50)
-      //  rouming_view.tab2.frame = CGRect(x: UIScreen.main.bounds.size.width / 2, y: CGFloat(0), width: UIScreen.main.bounds.size.width / 2, height: 50)
-        
-      //  rouming_view.tab1Line.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
-       // rouming_view.tab2Line.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(55), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
+        roumingView.countriesConditionsTab.translatesAutoresizingMaskIntoConstraints = false
+        roumingView.informationTab.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            roumingView.topAnchor.constraint(equalTo: toolbar.bottomAnchor),
+            roumingView.countriesConditionsTab.heightAnchor.constraint(equalToConstant: 50),
+            roumingView.countriesConditionsTab.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            roumingView.informationTab.heightAnchor.constraint(equalToConstant: 50),
+            roumingView.informationTab.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
+        ])
+       
+        roumingView.countriesTabLine.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+        roumingView.informationTabLine.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(55), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
         
         let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
-        rouming_view.tab1.isUserInteractionEnabled = true
-        rouming_view.tab1.addGestureRecognizer(tapGestureRecognizer1)
+        roumingView.countriesConditionsTab.isUserInteractionEnabled = true
+        roumingView.countriesConditionsTab.addGestureRecognizer(tapGestureRecognizer1)
         
         let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
-        rouming_view.tab2.isUserInteractionEnabled = true
-        rouming_view.tab2.addGestureRecognizer(tapGestureRecognizer2)
+        roumingView.informationTab.isUserInteractionEnabled = true
+        roumingView.informationTab.addGestureRecognizer(tapGestureRecognizer2)
         
         TabCollectionView.backgroundColor = .clear
-       // TabCollectionView.frame = CGRect(x: 0, y: 65, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
+        TabCollectionView.frame = CGRect(x: 0, y: 65, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
         TabCollectionView.delegate = self
         TabCollectionView.dataSource = self
         TabCollectionView.alwaysBounceVertical = false
         scrollView.addSubview(TabCollectionView)
         
-      //  scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
       //  getRequest()
     }
     
     @objc func tab1Click() {
-        rouming_view.tab1.textColor = colorBlackWhite
-        rouming_view.tab2.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        rouming_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-        rouming_view.tab2Line.backgroundColor = .clear
+        roumingView.countriesConditionsTab.textColor = colorBlackWhite
+        roumingView.informationTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+        roumingView.informationTabLine.backgroundColor = .clear
         TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
     
     @objc func tab2Click() {
-        rouming_view.tab1.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        rouming_view.tab2.textColor = colorBlackWhite
-        rouming_view.tab1Line.backgroundColor = .clear
-        rouming_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+        roumingView.countriesConditionsTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        roumingView.informationTab.textColor = colorBlackWhite
+        roumingView.countriesTabLine.backgroundColor = .clear
+        roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
         TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
@@ -178,19 +188,19 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                   print(result)
                     DispatchQueue.main.async { [self] in
                         for i in 0 ..< result.questions.count {
-                            questions_data.append([String(result.questions[i].id), String(result.questions[i].question ?? ""), String(result.questions[i].answer ?? ""), "false"])
+                            questionsData.append([String(result.questions[i].id), String(result.questions[i].question ?? ""), String(result.questions[i].answer ?? ""), "false"])
                         }
                         
                         for i in 0 ..< result.countries.count {
-                            countries_data.append([String(result.countries[i].id), String(result.countries[i].countryName ?? ""), String(result.countries[i].iconUrl ?? ""), "Roaming_Flag"])
+                            countriesData.append([String(result.countries[i].id), String(result.countries[i].countryName ?? ""), String(result.countries[i].iconUrl ?? ""), "Roaming_Flag"])
                         }
-                        country_choosed = countries_data[0][1]
-                        country_choosed_id = countries_data[0][0]
-                        if countries_data[0][2] != "" {
-                            country_choosed_img = countries_data[0][2]
+                        countryChoosed = countriesData[0][1]
+                        countryChoosedId = countriesData[0][0]
+                        if countriesData[0][2] != "" {
+                            countryChoosedImg = countriesData[0][2]
                         }
                         else {
-                            country_choosed_img = countries_data[0][3]
+                            countryChoosedImg = countriesData[0][3]
                         }
                         
                     }
@@ -217,20 +227,20 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func getRequest2() {
-        operatorCharges_Data.removeAll()
-        roamingOperators_data.removeAll()
+        operatorChargesData.removeAll()
+        roamingOperatorsData.removeAll()
        // table.allowsSelection = false
         
         let client = APIClient.shared
             do{
-              try client.roamingCountriesGetRequest(parametr: country_choosed_id).subscribe(
+              try client.roamingCountriesGetRequest(parametr: countryChoosedId).subscribe(
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
                    
                         if result.roamingOperators?.count != 0 {
                             for i in 0 ..< result.roamingOperators!.count {
-                                roamingOperators_data.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
+                                roamingOperatorsData.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
                                 
                                 var tableData = [String]()
                                 var tableData1 = [String]()
@@ -246,13 +256,11 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                                     print(result.roamingOperators![i].operatorCharges.count)
                                 }
                                 
-                                operatorCharges_Data.append(operatorChargesData(description: tableData, price: tableData1))
-                              //  operatorCharges_data.append(["25", "hello"])
+                                operatorChargesData.append(operatorChargeData(description: tableData, price: tableData1))
                             }
                             
                             print("operatorCharges_Data.count")
-                            print(operatorCharges_Data.count)
-                            //print(operatorCharges_Data[0].price[0])
+                            print(operatorChargesData.count)
                         }
                         
                        
@@ -282,20 +290,20 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func getRequest() {
-        operatorCharges_Data.removeAll()
-        roamingOperators_data.removeAll()
+        operatorChargesData.removeAll()
+        roamingOperatorsData.removeAll()
        // table.allowsSelection = false
         
         let client = APIClient.shared
             do{
-              try client.roamingCountriesGetRequest(parametr: country_choosed_id).subscribe(
+              try client.roamingCountriesGetRequest(parametr: countryChoosedId).subscribe(
                 onNext: { result in
                   print(result)
                     DispatchQueue.main.async { [self] in
                    
                         if result.roamingOperators?.count != 0 {
                             for i in 0 ..< result.roamingOperators!.count {
-                                roamingOperators_data.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
+                                roamingOperatorsData.append([String(result.roamingOperators![i].operatorId), String(result.roamingOperators![i].operatorName), String(result.roamingOperators![i].iconUrl)])
                                 
                                 var tableData = [String]()
                                 var tableData1 = [String]()
@@ -305,11 +313,8 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                                     tableData1.append(String(result.roamingOperators![i].operatorCharges[j].price))
                                 }
                                 
-                                operatorCharges_Data.append(operatorChargesData(description: tableData, price: tableData1))
-                              //  operatorCharges_data.append(["25", "hello"])
+                                operatorChargesData.append(operatorChargeData(description: tableData, price: tableData1))
                             }
-                            
-                            //print(operatorCharges_Data[0].price[0])
                         }
                         
                         
@@ -361,7 +366,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         let view = AlertView()
 
         view.backgroundColor = contentColor
-        //view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
+        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width - 40, height: 350)
         view.layer.cornerRadius = 20
         view.name.text = defaultLocalizer.stringForKey(key: "error_title")
         view.image_icon.image = UIImage(named: "uncorrect_alert")
@@ -408,82 +413,35 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             let titleOne = UILabel()
             var y_poz = 0
             let price_list_view = UIView()
-            
             // setup language field
             cell.country.isSearchEnable = false
             cell.country.selectedRowColor = .lightGray
             cell.country.y_pozition = 60 + (topPadding ?? 0) + 55
             cell.country.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
             cell.country.controller = "rouming"
-            cell.country.text = country_choosed
+            cell.country.text = countryChoosed
               
-            if countries_data.count != 0 {
-                self.country_choosed_id = countries_data[0][0]
-                if countries_data[0][2] != "" {
-                    self.country_choosed_img = countries_data[1][3]
+            if countriesData.count != 0 {
+                self.countryChoosedId = countriesData[0][0]
+                if countriesData[0][2] != "" {
+                    self.countryChoosedImg = countriesData[1][3]
                 }
                 else {
-                    self.country_choosed_img = countries_data[1][3]
+                    self.countryChoosedImg = countriesData[1][3]
                 }
             }
-              
-              NSLayoutConstraint.activate([
-                  self.label.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 16),
-                  self.label.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-                  self.label.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
-                  self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-                  self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-                  self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-                  self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-                  root.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor),
-                  root.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
-                  root.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor),
-                  root.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
-                  root.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
-                  rootHeight,
-                  
-                  self.iconView.widthAnchor.constraint(equalTo: root.widthAnchor, multiplier: 0.2),
-                  self.iconView.heightAnchor.constraint(equalTo: self.iconView.widthAnchor, multiplier: 1.0),
-                  self.iconView.topAnchor.constraint(equalTo: root.topAnchor, constant: 30),
-                  self.iconView.centerXAnchor.constraint(equalTo: root.centerXAnchor),
-                  self.sectionTitle.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.sectionTitle.topAnchor.constraint(equalTo: self.iconView.bottomAnchor, constant: 30),
-                  self.sectionTitle.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-                  self.sectionItem1.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.sectionItem1.topAnchor.constraint(equalTo: self.sectionTitle.bottomAnchor, constant: 10),
-                  self.sectionItem1.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-                  self.sectionItem2.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.sectionItem2.topAnchor.constraint(equalTo: self.sectionItem1.bottomAnchor, constant: 8),
-                  self.sectionItem2.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-      //            self.sectionItem3.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-      //            self.sectionItem3.topAnchor.constraint(equalTo: self.sectionItem2.bottomAnchor, constant: 8),
-      //            self.sectionItem3.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-                  self.sectionItem4.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.sectionItem4.topAnchor.constraint(equalTo: self.sectionItem2.bottomAnchor, constant: 8),
-                  self.sectionItem4.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-                  self.sectionTitle2.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.sectionTitle2.topAnchor.constraint(equalTo: self.sectionItem4.bottomAnchor, constant: 16),
-                  self.sectionTitle2.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-                  self.section2Item1.leftAnchor.constraint(equalTo: root.leftAnchor, constant: 20),
-                  self.section2Item1.topAnchor.constraint(equalTo: self.sectionTitle2.bottomAnchor, constant: 10),
-                  self.section2Item1.rightAnchor.constraint(equalTo: root.rightAnchor, constant: -20),
-              ])
-              
-              
-              
-              
               
             cell.country.selectedRowColor = .clear
             cell.country.rowHeight = 44
             cell.country.didSelect { [self] (selectedText, index, id) in
-                print(countries_data[index][0])
-                self.country_choosed = selectedText
-                self.country_choosed_id = countries_data[index][0]
-                if countries_data[index][2] != "" {
-                    self.country_choosed_img = countries_data[index][3]
+                print(countriesData[index][0])
+                self.countryChoosed = selectedText
+                self.countryChoosedId = countriesData[index][0]
+                if countriesData[index][2] != "" {
+                    self.countryChoosedImg = countriesData[index][3]
                 }
                 else {
-                    self.country_choosed_img = countries_data[index][3]
+                    self.countryChoosedImg = countriesData[index][3]
                 }
                 titleOne.removeFromSuperview()
                 price_list_view.removeFromSuperview()
@@ -492,44 +450,44 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             
             cell.country.optionArray.removeAll()
             cell.country.optionIds?.removeAll()
-            for i in 0 ..< countries_data.count {
-                cell.country.optionArray.append(countries_data[i][1])
-                cell.country.optionIds?.append(Int(countries_data[i][0])!)
-                cell.country.optionImageArray.append(countries_data[i][3])
+            for i in 0 ..< countriesData.count {
+                cell.country.optionArray.append(countriesData[i][1])
+                cell.country.optionIds?.append(Int(countriesData[i][0])!)
+                cell.country.optionImageArray.append(countriesData[i][3])
             }
             
             cell.country.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
-            cell.country.setView(.left, image: UIImage(named: country_choosed_img)).isUserInteractionEnabled = false
-            cell.operator_type.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
+            cell.country.setView(.left, image: UIImage(named: countryChoosedImg)).isUserInteractionEnabled = false
+            cell.operatorType.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
             
             // setup operator field
-          //  cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55
-          //  cell.operator_type.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
-            cell.operator_type.isSearchEnable = false
-            cell.operator_type.selectedRowColor = .lightGray
+            cell.operatorType.y_pozition = 60 + (topPadding ?? 0) + 55
+            cell.operatorType.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
+            cell.operatorType.isSearchEnable = false
+            cell.operatorType.selectedRowColor = .lightGray
             
             let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-            cell.operator_type.leftView = paddingView2
-            cell.operator_type.leftViewMode = .always
-            cell.operator_type.optionArray.removeAll()
-            cell.operator_type.optionIds?.removeAll()
+            cell.operatorType.leftView = paddingView2
+            cell.operatorType.leftViewMode = .always
+            cell.operatorType.optionArray.removeAll()
+            cell.operatorType.optionIds?.removeAll()
             
-            if roamingOperators_data.count != 0 {
-                cell.operator_type.text = roamingOperators_data[0][1]
+            if roamingOperatorsData.count != 0 {
+                cell.operatorType.text = roamingOperatorsData[0][1]
                 
-                for i in 0 ..< roamingOperators_data.count {
-                    cell.operator_type.optionArray.append(roamingOperators_data[i][1])
-                    cell.operator_type.optionIds?.append(Int(roamingOperators_data[i][0])!)
+                for i in 0 ..< roamingOperatorsData.count {
+                    cell.operatorType.optionArray.append(roamingOperatorsData[i][1])
+                    cell.operatorType.optionIds?.append(Int(roamingOperatorsData[i][0])!)
                 }
                 
-                if operatorCharges_Data[0].price.count != 0 {
-                 //   price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[0].price.count * 55)
+                if operatorChargesData[0].price.count != 0 {
+                    price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorChargesData[0].price.count * 55)
                     y_poz = 0
                     
-                    for i in 0 ..< operatorCharges_Data[0].price.count {
+                    for i in 0 ..< operatorChargesData[0].price.count {
                         let title = UILabel()
-                        title.text = operatorCharges_Data[0].description[i]
-                     //   title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
+                        title.text = operatorChargesData[0].description[i]
+                        title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
                         title.numberOfLines = 0
                         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
                         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -538,8 +496,8 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                         title.textAlignment = .left
                                         
                         let title2 = UILabel()
-                        title2.text = operatorCharges_Data[0].price[i]
-                       // title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
+                        title2.text = operatorChargesData[0].price[i]
+                        title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
                         title2.numberOfLines = 0
                         title2.textColor = colorBlackWhite
                         title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -548,7 +506,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                         title2.textAlignment = .right
                                         
                         let title_line = UILabel()
-                        //title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
+                        title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
                         title_line.backgroundColor = colorLightDarkGray
                                         
                         price_list_view.addSubview(title)
@@ -565,19 +523,19 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                     titleOne.font = UIFont(name: "", size: 10)
                     titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
                     titleOne.textAlignment = .left
-                    //titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
+                    titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
                     titleOne.autoresizesSubviews = true
                     titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
                                     
                     cell.addSubview(titleOne)
                 }
                 
-                cell.operator_type.didSelect { [self] (selectedText, index, id) in
+                cell.operatorType.didSelect { [self] (selectedText, index, id) in
                     
-                    print(countries_data[index][0])
-                    self.roamingOperators_choosed = selectedText
-                    self.roamingOperators_choosed = countries_data[index][0]
-                    self.roamingOperators_choosed_id = cell.operator_type.selectedIndex ?? 0
+                    print(countriesData[index][0])
+                    self.roamingOperatorsChoosed = selectedText
+                    self.roamingOperatorsChoosed = countriesData[index][0]
+                    self.roamingOperatorsChoosedId = cell.operatorType.selectedIndex ?? 0
                     
                     let labels = getLabelsInView(view: price_list_view)
                     for label in labels {
@@ -586,14 +544,14 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                     price_list_view.removeFromSuperview()
                     titleOne.removeFromSuperview()
                     
-                   // price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorCharges_Data[index].price.count * 55)
+                    price_list_view.frame = CGRect(x: 0, y: 250, width: Int(view.frame.width), height: operatorChargesData[index].price.count * 55)
                     y_poz = 0
                     
-                    for i in 0 ..< operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price.count {
+                    for i in 0 ..< operatorChargesData[Int(cell.operatorType.selectedIndex ?? 0)].price.count {
                                             
                         let title = UILabel()
-                        title.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].description[i]
-                       // title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
+                        title.text = operatorChargesData[Int(cell.operatorType.selectedIndex ?? 0)].description[i]
+                        title.frame = CGRect(x: 20, y: y_poz, width: title.text!.count * 10, height: 25)
                         title.numberOfLines = 0
                         title.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
                         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -602,8 +560,8 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                         title.textAlignment = .left
                                             
                         let title2 = UILabel()
-                        title2.text = operatorCharges_Data[Int(cell.operator_type.selectedIndex ?? 0)].price[i]
-                       // title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
+                        title2.text = operatorChargesData[Int(cell.operatorType.selectedIndex ?? 0)].price[i]
+                        title2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10 + 15), y: y_poz, width: title2.text!.count * 10, height: 25)
                         title2.numberOfLines = 0
                         title2.textColor = colorBlackWhite
                         title2.font = UIFont.preferredFont(forTextStyle: .subheadline)
@@ -612,7 +570,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                         title2.textAlignment = .right
                                             
                         let title_line = UILabel()
-                        //title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
+                        title_line.frame = CGRect(x: (title.text!.count * 10), y: y_poz + 12, width: Int(UIScreen.main.bounds.size.width) - (title2.text!.count * 10) - ((title.text!.count * 10)), height: 1)
                         title_line.backgroundColor = colorLightDarkGray
                                             
                         price_list_view.addSubview(title)
@@ -633,7 +591,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                     titleOne.font = UIFont(name: "", size: 10)
                     titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
                     titleOne.textAlignment = .left
-                        //  titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
+                    titleOne.frame = CGRect(x: 20, y: y_pozition + y_poz, width: Int(UIScreen.main.bounds.size.width) - 40, height: 100)
                     titleOne.autoresizesSubviews = true
                     titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
                                         
@@ -641,13 +599,13 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 }
             }
             else {
-                cell.operator_type.text = defaultLocalizer.stringForKey(key: "no_operators")
-                cell.operator_type.optionArray.append(defaultLocalizer.stringForKey(key: "no_operators"))
-                cell.operator_type.optionIds?.append(0)
-               // cell.operator_type.y_pozition = 60 + (topPadding ?? 0) + 55 + cell.operator_type.frame.origin.y + 55
-                cell.operator_type.listHeight = 30
+                cell.operatorType.text = defaultLocalizer.stringForKey(key: "no_operators")
+                cell.operatorType.optionArray.append(defaultLocalizer.stringForKey(key: "no_operators"))
+                cell.operatorType.optionIds?.append(0)
+                cell.operatorType.y_pozition = 60 + (topPadding ?? 0) + 55 + cell.operatorType.frame.origin.y + 55
+                cell.operatorType.listHeight = 30
                 
-                cell.operator_type.didSelect { [self] (selectedText, index, id) in
+                cell.operatorType.didSelect { [self] (selectedText, index, id) in
                     print("kkl;;;")
                 }
             }
@@ -656,7 +614,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             cell.contentView.isHidden = true
             table.register(RoumingTableCell.self, forCellReuseIdentifier: "roming_list_cell")
             table.register(RoumingTopViewCell.self, forCellReuseIdentifier: "roaming_top")
-           // table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 120 + (topPadding ?? 0) + (bottomPadding ?? 0)))
             table.delegate = self
             table.dataSource = self
             table.rowHeight = 60
@@ -677,16 +635,16 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                rouming_view.tab1.textColor = colorBlackWhite
-                rouming_view.tab2.textColor = .gray
-                rouming_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-                rouming_view.tab2Line.backgroundColor = .clear
+                roumingView.countriesConditionsTab.textColor = colorBlackWhite
+                roumingView.informationTab.textColor = .gray
+                roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roumingView.informationTabLine.backgroundColor = .clear
                 
             } else {
-                rouming_view.tab1.textColor = .gray
-                rouming_view.tab2.textColor = colorBlackWhite
-                rouming_view.tab1Line.backgroundColor = .clear
-                rouming_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roumingView.countriesConditionsTab.textColor = .gray
+                roumingView.informationTab.textColor = colorBlackWhite
+                roumingView.countriesTabLine.backgroundColor = .clear
+                roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
     }
@@ -695,16 +653,16 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
         print(indexPath.row)
         if collectionView == TabCollectionView {
             if indexPath.row == 0 {
-                rouming_view.tab1.textColor = .gray
-                rouming_view.tab2.textColor = colorBlackWhite
-                rouming_view.tab1Line.backgroundColor = .clear
-                rouming_view.tab2Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roumingView.countriesConditionsTab.textColor = .gray
+                roumingView.informationTab.textColor = colorBlackWhite
+                roumingView.countriesTabLine.backgroundColor = .clear
+                roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
          else {
-            rouming_view.tab1.textColor = colorBlackWhite
-            rouming_view.tab2.textColor = .gray
-            rouming_view.tab1Line.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-            rouming_view.tab2Line.backgroundColor = .clear
+            roumingView.countriesConditionsTab.textColor = colorBlackWhite
+            roumingView.informationTab.textColor = .gray
+            roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+            roumingView.informationTabLine.backgroundColor = .clear
           }
        }
     }
@@ -714,12 +672,12 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
 extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return questions_data.count
+        return questionsData.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if questions_data[section][3] == "true" {
+        if questionsData[section][3] == "true" {
             return 2
         }
         else {
@@ -729,7 +687,7 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return 60
+            return 78
         }
         else {
             return row_height[indexPath.section] + 10
@@ -740,9 +698,9 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.row == 0 {
             let cell = table.dequeueReusableCell(withIdentifier: "roaming_top", for: indexPath) as! RoumingTopViewCell
             
-            cell.titleOne.text = questions_data[indexPath.section][1]
+            cell.cellTitle.text = questionsData[indexPath.section][1]
             
-            if questions_data[indexPath.section][3] == "true" {
+            if questionsData[indexPath.section][3] == "true" {
                 cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             
@@ -757,9 +715,9 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
                 
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
-            cell.descript.text = questions_data[indexPath.section][2]
+            cell.descript.text = questionsData[indexPath.section][2]
             
-          //  cell.descript.frame = CGRect(x: 10, y: 10, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
+            cell.descript.frame = CGRect(x: 10, y: 10, width: UIScreen.main.bounds.size.width - 40, height: CGFloat.greatestFiniteMagnitude)
             cell.descript.numberOfLines = 0
             cell.descript.lineBreakMode = NSLineBreakMode.byWordWrapping
             cell.descript.sizeToFit()
@@ -769,7 +727,6 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
             let bgColorView = UIView()
             bgColorView.backgroundColor = .clear
             cell.selectedBackgroundView = bgColorView
-            
             return cell
         }
         
@@ -782,18 +739,18 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
         print("a")
         table.deselectRow(at: indexPath, animated: true)
        // print(cell.opisanie.frame.height)
-        if questions_data[indexPath.section][3] == "false" {
+        if questionsData[indexPath.section][3] == "false" {
             print("b")
             cell.backgroundColor = colorLightDarkGray
-            questions_data[indexPath.section][3] = "true"
-            cell.button.setImage(#imageLiteral(resourceName: "drop_icon2"), for: UIControl.State.normal)
+            questionsData[indexPath.section][3] = "true"
+            cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon2"), for: UIControl.State.normal)
                 
         }
         else {
             print("c")
             cell.backgroundColor = .clear
-            questions_data[indexPath.section][3] = "false"
-            cell.button.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
+            questionsData[indexPath.section][3] = "false"
+            cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
         }
     
         UIView.setAnimationsEnabled(false)
