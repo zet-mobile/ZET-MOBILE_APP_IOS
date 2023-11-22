@@ -22,13 +22,13 @@
 		B8092999278B5DFA00CF5824 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8092998278B5DFA00CF5824 /* SettingsViewController.swift */; };
 		B809299E278B5E1A00CF5824 /* PinCodeInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B809299D278B5E1A00CF5824 /* PinCodeInputController.swift */; };
 		B80929A3278B5E3800CF5824 /* ReplyToZetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929A2278B5E3800CF5824 /* ReplyToZetViewController.swift */; };
-		B80929A8278B5E4D00CF5824 /* RoumingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929A7278B5E4D00CF5824 /* RoumingViewController.swift */; };
+		B80929A8278B5E4D00CF5824 /* RoamingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929A7278B5E4D00CF5824 /* RoamingViewController.swift */; };
 		B80929AD278B5FA000CF5824 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929AC278B5FA000CF5824 /* SettingsView.swift */; };
 		B80929B2278B5FB600CF5824 /* PinCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929B1278B5FB600CF5824 /* PinCodeView.swift */; };
 		B80929B7278B5FCE00CF5824 /* ReplyToZetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929B6278B5FCE00CF5824 /* ReplyToZetView.swift */; };
-		B80929BC278B5FE200CF5824 /* RoumingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929BB278B5FE200CF5824 /* RoumingView.swift */; };
-		B80929C1278B612500CF5824 /* TabRoumingCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929C0278B612500CF5824 /* TabRoumingCollectionCell.swift */; };
-		B80929D3278D4A9500CF5824 /* RoumingTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */; };
+		B80929BC278B5FE200CF5824 /* RoamingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929BB278B5FE200CF5824 /* RoamingView.swift */; };
+		B80929C1278B612500CF5824 /* TabRoamingCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929C0278B612500CF5824 /* TabRoamingCollectionCell.swift */; };
+		B80929D3278D4A9500CF5824 /* RoamingTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929D2278D4A9500CF5824 /* RoamingTableCell.swift */; };
 		B80929F0279283C300CF5824 /* ChangeCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929EF279283C300CF5824 /* ChangeCodeController.swift */; };
 		B80929F8279283E200CF5824 /* ChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80929F7279283E200CF5824 /* ChangeView.swift */; };
 		B821D8F128D921CA00B75494 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B821D8F028D921C900B75494 /* GoogleService-Info.plist */; };
@@ -157,7 +157,7 @@
 		B88D3237283310B900D574F6 /* AskFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D3236283310B800D574F6 /* AskFriendView.swift */; };
 		B88D32392833117C00D574F6 /* AskFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88D32382833117C00D574F6 /* AskFriendViewController.swift */; };
 		B8A38BF92845B6650091F028 /* HelpAtZeroData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */; };
-		B8A38BFB2848DA940091F028 /* RoumingTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */; };
+		B8A38BFB2848DA940091F028 /* RoamingTopViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFA2848DA940091F028 /* RoamingTopViewCell.swift */; };
 		B8A38BFD2849F16B0091F028 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFC2849F16B0091F028 /* EmptyView.swift */; };
 		B8A38C002853C0C70091F028 /* NotificationsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A38BFF2853C0C60091F028 /* NotificationsData.swift */; };
 		B8C815E22808EBDC00FD8B81 /* TraficTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C815E12808EBDC00FD8B81 /* TraficTableViewCell.swift */; };
@@ -216,13 +216,13 @@
 		B8092998278B5DFA00CF5824 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B809299D278B5E1A00CF5824 /* PinCodeInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCodeInputController.swift; sourceTree = "<group>"; };
 		B80929A2278B5E3800CF5824 /* ReplyToZetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyToZetViewController.swift; sourceTree = "<group>"; };
-		B80929A7278B5E4D00CF5824 /* RoumingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingViewController.swift; sourceTree = "<group>"; };
+		B80929A7278B5E4D00CF5824 /* RoamingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoamingViewController.swift; sourceTree = "<group>"; };
 		B80929AC278B5FA000CF5824 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B80929B1278B5FB600CF5824 /* PinCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCodeView.swift; sourceTree = "<group>"; };
 		B80929B6278B5FCE00CF5824 /* ReplyToZetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyToZetView.swift; sourceTree = "<group>"; };
-		B80929BB278B5FE200CF5824 /* RoumingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingView.swift; sourceTree = "<group>"; };
-		B80929C0278B612500CF5824 /* TabRoumingCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRoumingCollectionCell.swift; sourceTree = "<group>"; };
-		B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTableCell.swift; sourceTree = "<group>"; };
+		B80929BB278B5FE200CF5824 /* RoamingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoamingView.swift; sourceTree = "<group>"; };
+		B80929C0278B612500CF5824 /* TabRoamingCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRoamingCollectionCell.swift; sourceTree = "<group>"; };
+		B80929D2278D4A9500CF5824 /* RoamingTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoamingTableCell.swift; sourceTree = "<group>"; };
 		B80929EF279283C300CF5824 /* ChangeCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCodeController.swift; sourceTree = "<group>"; };
 		B80929F7279283E200CF5824 /* ChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeView.swift; sourceTree = "<group>"; };
 		B821D8F028D921C900B75494 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -364,7 +364,7 @@
 		B88D3236283310B800D574F6 /* AskFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskFriendView.swift; sourceTree = "<group>"; };
 		B88D32382833117C00D574F6 /* AskFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskFriendViewController.swift; sourceTree = "<group>"; };
 		B8A38BF82845B6650091F028 /* HelpAtZeroData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpAtZeroData.swift; sourceTree = "<group>"; };
-		B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoumingTopViewCell.swift; sourceTree = "<group>"; };
+		B8A38BFA2848DA940091F028 /* RoamingTopViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoamingTopViewCell.swift; sourceTree = "<group>"; };
 		B8A38BFC2849F16B0091F028 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		B8A38BFF2853C0C60091F028 /* NotificationsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsData.swift; sourceTree = "<group>"; };
 		B8A38C032862FD6B0091F028 /* ZET-Mobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ZET-Mobile.entitlements"; sourceTree = "<group>"; };
@@ -491,11 +491,11 @@
 		B8092992278B5C7200CF5824 /* Rouming */ = {
 			isa = PBXGroup;
 			children = (
-				B80929A7278B5E4D00CF5824 /* RoumingViewController.swift */,
-				B80929BB278B5FE200CF5824 /* RoumingView.swift */,
-				B80929C0278B612500CF5824 /* TabRoumingCollectionCell.swift */,
-				B80929D2278D4A9500CF5824 /* RoumingTableCell.swift */,
-				B8A38BFA2848DA940091F028 /* RoumingTopViewCell.swift */,
+				B80929A7278B5E4D00CF5824 /* RoamingViewController.swift */,
+				B80929BB278B5FE200CF5824 /* RoamingView.swift */,
+				B80929C0278B612500CF5824 /* TabRoamingCollectionCell.swift */,
+				B80929D2278D4A9500CF5824 /* RoamingTableCell.swift */,
+				B8A38BFA2848DA940091F028 /* RoamingTopViewCell.swift */,
 			);
 			path = Rouming;
 			sourceTree = "<group>";
@@ -1267,7 +1267,7 @@
 				B86429092733B7E3000C159E /* ServicesTableViewCell.swift in Sources */,
 				B864295927393132000C159E /* ServicesConnectTableViewCell.swift in Sources */,
 				B8092988278962D100CF5824 /* AboutViewCell.swift in Sources */,
-				B80929BC278B5FE200CF5824 /* RoumingView.swift in Sources */,
+				B80929BC278B5FE200CF5824 /* RoamingView.swift in Sources */,
 				B88D3232282E6F2400D574F6 /* ContactsTableViewCell.swift in Sources */,
 				B86428F62732B6B6000C159E /* HotServicesCollectionView.swift in Sources */,
 				B88D3237283310B900D574F6 /* AskFriendView.swift in Sources */,
@@ -1330,14 +1330,14 @@
 				B8049460294044F90094782E /* CompetitionViewController.swift in Sources */,
 				B864289927313B39000C159E /* UsageViewController.swift in Sources */,
 				B86428BE27325047000C159E /* BalanceSliderCollectionView.swift in Sources */,
-				B80929D3278D4A9500CF5824 /* RoumingTableCell.swift in Sources */,
+				B80929D3278D4A9500CF5824 /* RoamingTableCell.swift in Sources */,
 				B82B7D8927C39D0500570AC0 /* AuthData.swift in Sources */,
 				B8CD5A8E27D6721E007D189F /* UsageData.swift in Sources */,
 				B80494622940451F0094782E /* CompetitionView.swift in Sources */,
 				B80929B7278B5FCE00CF5824 /* ReplyToZetView.swift in Sources */,
 				B82B7D7F27C2B02500570AC0 /* AuthorizationViewController.swift in Sources */,
 				B864289427313B29000C159E /* WalletViewController.swift in Sources */,
-				B8A38BFB2848DA940091F028 /* RoumingTopViewCell.swift in Sources */,
+				B8A38BFB2848DA940091F028 /* RoamingTopViewCell.swift in Sources */,
 				B80494682940A81E0094782E /* ListTableViewCell.swift in Sources */,
 				B8358EF927FE11B8001A6696 /* DialogOfficesViewCell.swift in Sources */,
 				B864294C27390622000C159E /* ServicesView.swift in Sources */,
@@ -1345,7 +1345,7 @@
 				B86429122734EEE1000C159E /* MyTarifViewController.swift in Sources */,
 				B88D3230282E6ED100D574F6 /* ContactsViewController.swift in Sources */,
 				B86428FB2732B6D9000C159E /* HotServicesCollectionViewCell.swift in Sources */,
-				B80929C1278B612500CF5824 /* TabRoumingCollectionCell.swift in Sources */,
+				B80929C1278B612500CF5824 /* TabRoamingCollectionCell.swift in Sources */,
 				B864292927351E78000C159E /* TabCollectionViewCell.swift in Sources */,
 				B864291A2734EF04000C159E /* TarifToolbarView.swift in Sources */,
 				B864294427390590000C159E /* ServicesViewController.swift in Sources */,
@@ -1358,7 +1358,7 @@
 				B86429BA273E3D6D000C159E /* AddionalTraficsViewController.swift in Sources */,
 				B864292427350A9E000C159E /* TarifBalanceCollectionViewCell.swift in Sources */,
 				B80929B2278B5FB600CF5824 /* PinCodeView.swift in Sources */,
-				B80929A8278B5E4D00CF5824 /* RoumingViewController.swift in Sources */,
+				B80929A8278B5E4D00CF5824 /* RoamingViewController.swift in Sources */,
 				B8358EF527FDAA54001A6696 /* SupportCollectionViewCell.swift in Sources */,
 				B853D7EC2758D92700FBE1F1 /* CalendarViewController.swift in Sources */,
 				B8358EF727FE0A36001A6696 /* DialogOfficesViewController.swift in Sources */,

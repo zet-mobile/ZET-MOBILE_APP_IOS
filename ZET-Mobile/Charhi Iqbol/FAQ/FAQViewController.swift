@@ -32,7 +32,7 @@ class FAQViewController: UIViewController, UIScrollViewDelegate {
         layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(TabRoumingCollectionCell.self, forCellWithReuseIdentifier: "tabs_rouming")
+        cv.register(TabRoamingCollectionCell.self, forCellWithReuseIdentifier: "tabs_rouming")
         cv.showsHorizontalScrollIndicator = false
         cv.isPagingEnabled = true
         return cv
@@ -236,7 +236,7 @@ extension FAQViewController: UICollectionViewDelegateFlowLayout, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoumingCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoamingCollectionCell
         scrollView.showsVerticalScrollIndicator = false
             cell.contentView.isHidden = true
             table.register(RoumingTableCell.self, forCellReuseIdentifier: "roming_list_cell")

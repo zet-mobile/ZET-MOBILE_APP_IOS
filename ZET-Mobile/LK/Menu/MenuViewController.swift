@@ -116,7 +116,7 @@ extension MenuViewController: UITableViewDelegate, UITableViewDataSource {
         else if indexPath.row == 1  {
             dismiss(animated: false)
             self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            navigationController?.pushViewController(RoumingViewController(), animated: true)
+            navigationController?.pushViewController(RoamingViewController(), animated: true)
         }
         else if indexPath.row == 3 {
             dismiss(animated: false)

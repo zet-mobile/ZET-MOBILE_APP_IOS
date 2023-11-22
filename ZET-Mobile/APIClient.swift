@@ -46,7 +46,7 @@ class APIClient {
   lazy var requestObservable = RequestObservable(config: .default)
     
     func authPost(jsonBody: [String: Any]) -> Observable<AuthData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/from/outside")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/auth/from/outside")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
@@ -57,7 +57,7 @@ class APIClient {
     }
 
     func checkSmsCode(jsonBody: [String: Any]) -> Observable<CheckCodeData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/login")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/auth/login")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let jsonData = try? JSONSerialization.data(withJSONObject: jsonBody)
@@ -67,7 +67,7 @@ class APIClient {
     }
     
     func refreshToken() -> Observable<RefreshData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/get/refresh")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/auth/get/refresh")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "refresh_token")!, forHTTPHeaderField: "Authorization")
@@ -76,7 +76,7 @@ class APIClient {
     }
     
     func logout() -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/auth/logout")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/auth/logout")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -86,7 +86,7 @@ class APIClient {
     
     //  Get information about main page.
     func homeGetRequest() throws -> Observable<HomeData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/main")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/main")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -96,7 +96,7 @@ class APIClient {
     
     // Get information about subscriber consumptions and last 5 charges from main balance.
     func usageGetRequest() throws -> Observable<UsageData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/consumptions/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/consumptions/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -106,7 +106,7 @@ class APIClient {
     
     // Get information about packets
     func packetsGetRequest() throws -> Observable<PacketsData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/packets/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -116,7 +116,7 @@ class APIClient {
     
     // Connect packet
     func packetConnect(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/connect")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/packets/connect")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -128,7 +128,7 @@ class APIClient {
     
     // Disable packet
     func disableConnect(parametr: String) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/packets/\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/packets/\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -138,7 +138,7 @@ class APIClient {
     
     // Get information about subscriber priceplana nd available priceplans.
     func pricePlansGetRequest() throws -> Observable<PricePlansData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/priceplans")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/priceplans")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -148,7 +148,7 @@ class APIClient {
     
     // Get information about subscriber priceplana nd available priceplans.
     func pricePlanIDGetRequest(parametr: String) throws -> Observable<PricePlansIDData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/priceplans/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/priceplans/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -158,7 +158,7 @@ class APIClient {
     
     // Change subscriber priceplan
     func changePricepPlan(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/priceplans/change")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/priceplans/change")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -170,7 +170,7 @@ class APIClient {
     
     // Connect any service to subscriber.
     func connectService(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/services/connect")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/services/connect")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -182,7 +182,7 @@ class APIClient {
     
     // Disable any service to subscriber.
     func disableService(parametr: String) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/services/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/services/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -192,7 +192,7 @@ class APIClient {
     
     // Get information about services.
     func servicesGetRequest() throws -> Observable<ServicesData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/services")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/services")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -202,7 +202,7 @@ class APIClient {
     
     // Get information about application.
     func aboutGetRequest() throws -> Observable<AboutAppData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/about")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/about")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("IOS", forHTTPHeaderField: "Device")
@@ -213,7 +213,7 @@ class APIClient {
     
     // Get information about roaming.
     func roumingGetRequest() throws -> Observable<RoumingData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/roaming")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/roaming")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -223,7 +223,7 @@ class APIClient {
     
     // Get information about roaming country operators and charges.
     func roamingCountriesGetRequest(parametr: String) throws -> Observable<RoumingCountryData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/roaming/countries/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/roaming/countries/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -233,8 +233,7 @@ class APIClient {
     
     // Get information about our support
     func supportGetRequest() throws -> Observable<SupportData> {
-        print("22222222222222222222222222222222222222222222222222222222222222222222")
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/support")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/support")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -244,7 +243,7 @@ class APIClient {
     
     // Get settings information
     func settingsGetRequest() throws -> Observable<SettingsData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/settings")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/settings")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -254,7 +253,7 @@ class APIClient {
     
     // Change settings information
     func settingsPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/settings/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/settings/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -266,7 +265,7 @@ class APIClient {
     
     // get history of traffic transfer transactions.
     func transferHistoryRequest() -> Observable<TransferDataHistory> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/history")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/transfer/history")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -276,7 +275,7 @@ class APIClient {
     
     //  get settings of traffic transfer system.
     func getTransferRequest() -> Observable<TransferData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/transfer/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -286,7 +285,7 @@ class APIClient {
     
     //for detail information history.
     func transferHistoryIdRequest(parametr: String) -> Observable<histories_data> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/history/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/transfer/history/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -296,7 +295,7 @@ class APIClient {
     
     // for translate traffic.
     func transferPostRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/transfer/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/transfer/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -308,7 +307,7 @@ class APIClient {
     
     // get history of traffic exchange transactions.
     func exchangeHistoryRequest() -> Observable<ExchangeDataHistory> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/history")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/exchange/history")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -318,7 +317,7 @@ class APIClient {
     
     //  get settings of exchange transfer system.
     func getExchangeRequest() -> Observable<ExchangeData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/exchange/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -328,7 +327,7 @@ class APIClient {
     
     //for detail information history.
     func exchangeHistoryIdRequest(parametr: String) -> Observable<histories_exchange_data> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange/history/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/exchange/history/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -338,7 +337,7 @@ class APIClient {
     
     // for translate exchange.
     func exchangePutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/exchange")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/exchange")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -350,7 +349,7 @@ class APIClient {
     
     // for get history of money transfer transactions.
     func moneyHistoryRequest() -> Observable<MoneyTransferDataHistory> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/transfer/history")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -360,7 +359,7 @@ class APIClient {
     
     //  get settings of exchange transfer system.
     func getMoneyRequest() -> Observable<MoneyTransferData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/transfer/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -370,7 +369,7 @@ class APIClient {
     
     //for detail information history.
     func moneyHistoryIdRequest(parametr: String) -> Observable<histories_money_data> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer/history/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/transfer/history/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -380,7 +379,7 @@ class APIClient {
     
     // for translate exchange.
     func moneyPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/transfer")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/transfer")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -392,7 +391,7 @@ class APIClient {
     
     //  get history of detailing order transactions.
     func detailingHistoryRequest() -> Observable<DetailingHistory> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing/history")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/detailing/history")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -402,7 +401,7 @@ class APIClient {
     
     //  get settings of exchange transfer system.
     func getDetailingyRequest() -> Observable<Detailing> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/detailing/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -412,7 +411,7 @@ class APIClient {
     
     // for translate detailing.
     func detailingPutRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/detailing")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/detailing")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -424,7 +423,7 @@ class APIClient {
     
     //  get ask money
     func getAskMoneyRequest() -> Observable<AskMoneyData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/ask/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -434,7 +433,7 @@ class APIClient {
     
     //  post money ask
     func postMoneyAskRequest(jsonBody: [String: Any]) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/money/ask/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/money/ask/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -446,7 +445,7 @@ class APIClient {
     
     //  This is api for get info about available credit packets.
     func getCreditRequest() -> Observable<HelpAtZeroData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/credit/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -455,7 +454,7 @@ class APIClient {
     }
     // -------- charhi iqbol
     func charhiIqbolMain() -> Observable<MainData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/draw/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -465,7 +464,7 @@ class APIClient {
     
     
     func buyDrawTickets(parametr: Int) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/pay?count=" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/draw/pay?count=" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("ios", forHTTPHeaderField: "deviceOS")
@@ -475,7 +474,7 @@ class APIClient {
     }
     
     func getMyTickets() -> Observable<[MyTicketsData]> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/draw/list")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/draw/list")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("ios", forHTTPHeaderField: "deviceOS")
@@ -490,7 +489,7 @@ class APIClient {
     
     //  This is api for get info about available credit packets.
     func getCreditHistoryRequest() -> Observable<HelpAtZeroHistoryData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/history/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/credit/history/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -500,7 +499,7 @@ class APIClient {
     
     //  This is api for get info about available credit packets.
     func getCreditHistoryRequestID(parametr: String) -> Observable<HelpAtZeroHistoryDataD> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/history/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/credit/history/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -511,7 +510,7 @@ class APIClient {
     
     //  post money ask
     func postCreditRequestID(parametr: String) -> Observable<HelpAtZeroPostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/credit/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -521,7 +520,7 @@ class APIClient {
     
     //  post money ask
     func postCreditRequest() -> Observable<HelpAtZeroPostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/credit/refusal/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/credit/refusal/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -531,7 +530,7 @@ class APIClient {
     
     //  This is api for get info about notifications
     func getNotificationRequest() -> Observable<NotificationData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/notifications/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -541,7 +540,7 @@ class APIClient {
     
     //  This is api for post notification
     func postNotificationRequest(parametr: String) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/notifications/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -551,7 +550,7 @@ class APIClient {
     
     //  This is api for delete notification
     func deleteNotificationRequest(parametr: String) -> Observable<PostData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/notifications/" + "\(parametr)")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/notifications/" + "\(parametr)")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -561,7 +560,7 @@ class APIClient {
     
     //  get feedbackData
     func getFeedBackRequest() -> Observable<FeedbackData> {
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/feedback/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/feedback/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")
@@ -572,7 +571,7 @@ class APIClient {
     //  post feedbackData
     func postFeedBackRequest(jsonBody: [String: Any], mediaImage: [Media]) -> Observable<PostData> {
         
-        var request = URLRequest(url: URL(string: "http://app.zet-mobile.com:1481/v1/feedback/")!)
+        var request = URLRequest(url: URL(string: "https://app.zet-mobile.com/v1/feedback/")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(UserDefaults.standard.string(forKey: "token")!, forHTTPHeaderField: "Authorization")

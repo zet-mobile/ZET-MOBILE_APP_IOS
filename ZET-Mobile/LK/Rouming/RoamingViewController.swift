@@ -15,7 +15,7 @@ struct operatorChargeData {
     let price: [String]
 }
 
-class RoumingViewController: UIViewController, UIScrollViewDelegate {
+class RoamingViewController: UIViewController, UIScrollViewDelegate {
     
     let disposeBag = DisposeBag()
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
@@ -24,10 +24,10 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     let scrollView = UIScrollView()
     
     var toolbar = TarifToolbarView()
-    var roumingView = RoumingView()
+    var roamingView = RoamingView()
     let table = UITableView()
     
-    let TabCollectionView: UICollectionView = {
+    let tabCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
@@ -35,7 +35,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(TabRoumingCollectionCell.self, forCellWithReuseIdentifier: "tabs_rouming")
+        cv.register(TabRoamingCollectionCell.self, forCellWithReuseIdentifier: "tabs_rouming")
         cv.showsHorizontalScrollIndicator = false
         cv.isPagingEnabled = true
         return cv
@@ -90,14 +90,10 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
-            // Fallback on earlier versions
         }
         scrollView.showsVerticalScrollIndicator = false
         scrollView.delegate = self
         scrollView.backgroundColor = contentColor
-        
-        
-        print("operatorChargesData   :    \(operatorChargesData)")
         
         if operatorChargesData.isEmpty {
             scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + CGFloat(operatorChargesData[roamingOperatorsChoosedId].price.count * 55))
@@ -108,21 +104,12 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         
         scrollView.isScrollEnabled = true
         view.addSubview(scrollView)
-        view.addSubview(scrollView)
   
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
-        
-        //roumingView = RoumingView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0))))
-        
+        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60)) // Move to autolayout
         
         self.view.addSubview(toolbar)
-    //    scrollView.addSubview(roumingView)
-        view.addSubview(roumingView)
+        view.addSubview(roamingView)
 
-        roumingView.translatesAutoresizingMaskIntoConstraints = false
-        
-       
-        
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "ROAMING")
         toolbar.backgroundColor = contentColor
@@ -130,54 +117,60 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(goBack))
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(tapGestureRecognizer)
-        
-        roumingView.countriesConditionsTab.translatesAutoresizingMaskIntoConstraints = false
-        roumingView.informationTab.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            roumingView.topAnchor.constraint(equalTo: toolbar.bottomAnchor),
-            roumingView.countriesConditionsTab.heightAnchor.constraint(equalToConstant: 50),
-            roumingView.countriesConditionsTab.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            roumingView.informationTab.heightAnchor.constraint(equalToConstant: 50),
-            roumingView.informationTab.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
-        ])
        
-        roumingView.countriesTabLine.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
-        roumingView.informationTabLine.frame = CGRect(x: (UIScreen.main.bounds.size.width / 2) + 10, y: CGFloat(55), width: (UIScreen.main.bounds.size.width / 2) - 20, height: 2)
+        roamingView.countriesTabLine.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
+      
+      
+               
+        tabCollectionView.backgroundColor = .clear
+        tabCollectionView.delegate = self
+        tabCollectionView.dataSource = self
+        tabCollectionView.alwaysBounceVertical = false
         
-        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
-        roumingView.countriesConditionsTab.isUserInteractionEnabled = true
-        roumingView.countriesConditionsTab.addGestureRecognizer(tapGestureRecognizer1)
+        view.addSubview(tabCollectionView)
         
-        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
-        roumingView.informationTab.isUserInteractionEnabled = true
-        roumingView.informationTab.addGestureRecognizer(tapGestureRecognizer2)
+        roamingView.informationTab.translatesAutoresizingMaskIntoConstraints = false
+        roamingView.informationTabLine.translatesAutoresizingMaskIntoConstraints = false
+        roamingView.countriesConditionsTab.translatesAutoresizingMaskIntoConstraints = false
+        roamingView.translatesAutoresizingMaskIntoConstraints = false
+        tabCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        TabCollectionView.backgroundColor = .clear
-        TabCollectionView.frame = CGRect(x: 0, y: 65, width: Int(UIScreen.main.bounds.size.width), height: Int(UIScreen.main.bounds.size.height - 104))
-        TabCollectionView.delegate = self
-        TabCollectionView.dataSource = self
-        TabCollectionView.alwaysBounceVertical = false
-        scrollView.addSubview(TabCollectionView)
+        NSLayoutConstraint.activate([
+            roamingView.topAnchor.constraint(equalTo: toolbar.bottomAnchor),
+            roamingView.countriesConditionsTab.heightAnchor.constraint(equalToConstant: 50),
+            roamingView.countriesConditionsTab.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            roamingView.informationTab.heightAnchor.constraint(equalToConstant: 50),
+            roamingView.informationTab.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
+            
+            roamingView.informationTabLine.topAnchor.constraint(equalTo: roamingView.informationTab.bottomAnchor, constant: 4),
+            roamingView.informationTabLine.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
+            roamingView.informationTabLine.heightAnchor.constraint(equalToConstant: 2),
+            roamingView.informationTabLine.widthAnchor.constraint(equalToConstant: 104.5),
+            
+            tabCollectionView.topAnchor.constraint(equalTo: roamingView.informationTabLine.bottomAnchor),
+            tabCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            tabCollectionView.heightAnchor.constraint(equalToConstant: 900),
+        ])
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
-      //  getRequest()
     }
     
     @objc func tab1Click() {
-        roumingView.countriesConditionsTab.textColor = colorBlackWhite
-        roumingView.informationTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-        roumingView.informationTabLine.backgroundColor = .clear
-        TabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
+        roamingView.countriesConditionsTab.textColor = colorBlackWhite
+        roamingView.informationTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        roamingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+        roamingView.informationTabLine.backgroundColor = .clear
+        tabCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: UICollectionView.ScrollPosition.right, animated: true)
     }
     
     @objc func tab2Click() {
-        roumingView.countriesConditionsTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
-        roumingView.informationTab.textColor = colorBlackWhite
-        roumingView.countriesTabLine.backgroundColor = .clear
-        roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-        TabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
+        roamingView.countriesConditionsTab.textColor = UIColor(red: 0.74, green: 0.74, blue: 0.74, alpha: 1.00)
+        roamingView.informationTab.textColor = colorBlackWhite
+        roamingView.countriesTabLine.backgroundColor = .clear
+        roamingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+        tabCollectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: UICollectionView.ScrollPosition.left, animated: true)
     }
     
     func sendRequest() {
@@ -335,7 +328,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
                        // TabCollectionView.reloadItems(at: [indexPath])
                      //   TabCollectionView.reloadData()
                         
-                        TabCollectionView.reloadData()
+                        tabCollectionView.reloadData()
                         
                     }
                    print("Completed event.")
@@ -381,8 +374,6 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
         
         alert.view.backgroundColor = .clear
         alert.view.addSubview(view)
-        //alert.view.sendSubviewToBack(view)
-        
         present(alert, animated: true, completion: nil)
 
     }
@@ -392,7 +383,7 @@ class RoumingViewController: UIViewController, UIScrollViewDelegate {
     }
 }
 
-extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
+extension RoamingViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -406,14 +397,13 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoumingCollectionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs_rouming", for: indexPath) as! TabRoamingCollectionCell
           if indexPath.row == 0 {
             cell.contentView.isHidden = false
             table.isHidden = true
             let titleOne = UILabel()
             var y_poz = 0
             let price_list_view = UIView()
-            // setup language field
             cell.country.isSearchEnable = false
             cell.country.selectedRowColor = .lightGray
             cell.country.y_pozition = 60 + (topPadding ?? 0) + 55
@@ -460,7 +450,6 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
             cell.country.setView(.left, image: UIImage(named: countryChoosedImg)).isUserInteractionEnabled = false
             cell.operatorType.setView(.right, image: UIImage(named: "drop_icon")).isUserInteractionEnabled = false
             
-            // setup operator field
             cell.operatorType.y_pozition = 60 + (topPadding ?? 0) + 55
             cell.operatorType.listHeight = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 120
             cell.operatorType.isSearchEnable = false
@@ -604,9 +593,7 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                 cell.operatorType.optionIds?.append(0)
                 cell.operatorType.y_pozition = 60 + (topPadding ?? 0) + 55 + cell.operatorType.frame.origin.y + 55
                 cell.operatorType.listHeight = 30
-                
                 cell.operatorType.didSelect { [self] (selectedText, index, id) in
-                    print("kkl;;;")
                 }
             }
         }
@@ -633,43 +620,43 @@ extension RoumingViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
  
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == TabCollectionView {
+        if collectionView == tabCollectionView {
             if indexPath.row == 0 {
-                roumingView.countriesConditionsTab.textColor = colorBlackWhite
-                roumingView.informationTab.textColor = .gray
-                roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-                roumingView.informationTabLine.backgroundColor = .clear
+                roamingView.countriesConditionsTab.textColor = colorBlackWhite
+                roamingView.informationTab.textColor = .gray
+                roamingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roamingView.informationTabLine.backgroundColor = .clear
                 
             } else {
-                roumingView.countriesConditionsTab.textColor = .gray
-                roumingView.informationTab.textColor = colorBlackWhite
-                roumingView.countriesTabLine.backgroundColor = .clear
-                roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roamingView.countriesConditionsTab.textColor = .gray
+                roamingView.informationTab.textColor = colorBlackWhite
+                roamingView.countriesTabLine.backgroundColor = .clear
+                roamingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         print(indexPath.row)
-        if collectionView == TabCollectionView {
+        if collectionView == tabCollectionView {
             if indexPath.row == 0 {
-                roumingView.countriesConditionsTab.textColor = .gray
-                roumingView.informationTab.textColor = colorBlackWhite
-                roumingView.countriesTabLine.backgroundColor = .clear
-                roumingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+                roamingView.countriesConditionsTab.textColor = .gray
+                roamingView.informationTab.textColor = colorBlackWhite
+                roamingView.countriesTabLine.backgroundColor = .clear
+                roamingView.informationTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
           }
          else {
-            roumingView.countriesConditionsTab.textColor = colorBlackWhite
-            roumingView.informationTab.textColor = .gray
-            roumingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
-            roumingView.informationTabLine.backgroundColor = .clear
+             roamingView.countriesConditionsTab.textColor = colorBlackWhite
+             roamingView.informationTab.textColor = .gray
+             roamingView.countriesTabLine.backgroundColor = UIColor(red: 1.00, green: 0.66, blue: 0.00, alpha: 1.00)
+             roamingView.informationTabLine.backgroundColor = .clear
           }
        }
     }
 }
 
 
-extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
+extension RoamingViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return questionsData.count
@@ -736,23 +723,18 @@ extension RoumingViewController: UITableViewDataSource, UITableViewDelegate {
         
         let cell = table.dequeueReusableCell(withIdentifier: "roaming_top", for: indexPath) as! RoumingTopViewCell
         
-        print("a")
         table.deselectRow(at: indexPath, animated: true)
-       // print(cell.opisanie.frame.height)
         if questionsData[indexPath.section][3] == "false" {
-            print("b")
             cell.backgroundColor = colorLightDarkGray
             questionsData[indexPath.section][3] = "true"
             cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon2"), for: UIControl.State.normal)
                 
         }
         else {
-            print("c")
             cell.backgroundColor = .clear
             questionsData[indexPath.section][3] = "false"
             cell.cellButton.setImage(#imageLiteral(resourceName: "drop_icon"), for: UIControl.State.normal)
         }
-    
         UIView.setAnimationsEnabled(false)
         self.table.beginUpdates()
         self.table.reloadSections([indexPath.section], with: .none)
