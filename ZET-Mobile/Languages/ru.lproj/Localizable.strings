@@ -56,7 +56,7 @@
 "Payment_via" =    "Оплата “Корти Милли”";
 "Ask_friend" =    "Попросить у друга";
 
-"Notifications" =    "Уведомления";
+"NOTIFICATIONS" =    "Уведомления";
 "More_details" =    "Подробнее";
 "Connect" =    "Подключить";
 
@@ -182,17 +182,17 @@
 "Map" =    "Карта";
 "List" =    "Список";
 "Zet_office" =    "Офис ZET Mobile";
-"Language" =    "Язык приложения";
-"Appearance" =    "Внешний вид";
-"App_theme" =    "Тема приложения";
-"Push_notifications" =    "Push-уведомления";
-"Promotions" =    "Акции, предложения";
+"LANGUAGE" =    "Язык";
+"APPEARANCE" =    "Внешний вид";
+"APP_THEME" =    "Тема приложения";
+"PUSH_NOTIFICATIONS" =    "Push-уведомления";
+"PROMOTIONS" =    "Акции, предложения";
 "E-mail_newsletter" =    "E-mail рассылка";
-"SMS_notifications" =    "SMS уведомления";
-"Security" =    "Безопасность";
-"Change_PIN" =    "Изменить пин-код";
+"SMS_NOTIFICATIONS" =    "SMS уведомления";
+"SECURITY" =    "Безопасность";
+"CHANGE_PIN" =    "Изменить пин-код";
 "Set_password" =    "Установить код-пароль";
-"Biometric_Login" =    "Вход по биометрии";
+"BIOMETRIC_LOGIN" =    "Вход по биометрии";
 "Log_In" =    "Вход по паролю";
 "Settings" =    "Настройки";
 "current_PIN" =    "Введите текущий пин-код";

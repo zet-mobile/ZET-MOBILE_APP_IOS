@@ -60,7 +60,7 @@
 "Payment_via " = "Payment via 'Korti Milli'"    ;
 "Ask_friend" = "Ask friend"    ;
 
-"Notifications" = "Notifications";
+"NOTIFICATIONS" = "Notifications";
 "More_details" = "More"    ;
 "Connect" = "Connect"    ;
 
@@ -173,17 +173,17 @@
 "Map" = "Map"    ;
 "List" = "List"    ;
 "Zet_office" = "Zet Mobile office"    ;
-"Language" = "App language"    ;
-"Appearance" = "Appearance"    ;
-"App_theme" = "App theme"    ;
-"Push_notifications" = "Push notifications"    ;
-"Promotions" = "Promotions, offers"    ;
+"LANGUAGE" = "App language"    ;
+"APPEARANCE" = "Appearance"    ;
+"APP_THEME" = "App theme"    ;
+"PUSH_NOTIFICATIONS" = "Push notifications"    ;
+"PROMOTIONS" = "Promotions, offers"    ;
 "E-mail_newsletter" = "E-mail newsletter"    ;
-"SMS_notifications" = "SMS notifications"    ;
-"Security" = "Security"    ;
-"Change_PIN" = "Change password"    ;
+"SMS_NOTIFICATIONS" = "SMS notifications"    ;
+"SECURITY" = "Security"    ;
+"CHANGE_PIN" = "Change password"    ;
 "Set_password" = "Set password"    ;
-"Biometric_Login" = "Biometric Login"    ;
+"BIOMETRIC_LOGIN" = "Biometric Login"    ;
 "Log_In" = "Log In via password"    ;
 "Settings" = "Settings"    ;
 "current_PIN" = "Enter the current PIN code"    ;

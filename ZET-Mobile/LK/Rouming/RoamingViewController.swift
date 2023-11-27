@@ -71,7 +71,6 @@ class RoamingViewController: UIViewController, UIScrollViewDelegate {
             scrollView.scrollIndicatorInsets = view.safeAreaInsets
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: view.safeAreaInsets.bottom, right: 0)
         } else {
-            // Fallback on earlier versions
             scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
         }
     }
@@ -120,7 +119,13 @@ class RoamingViewController: UIViewController, UIScrollViewDelegate {
        
         roamingView.countriesTabLine.frame = CGRect(x: 10, y: 55, width: (Int(UIScreen.main.bounds.size.width) / 2) - 20, height: 2)
       
-      
+        let tapGestureRecognizer1 = UITapGestureRecognizer(target: self, action: #selector(tab1Click))
+        roamingView.countriesConditionsTab.isUserInteractionEnabled = true
+        roamingView.countriesConditionsTab.addGestureRecognizer(tapGestureRecognizer1)
+               
+        let tapGestureRecognizer2 = UITapGestureRecognizer(target: self, action: #selector(tab2Click))
+        roamingView.informationTab.isUserInteractionEnabled = true
+        roamingView.informationTab.addGestureRecognizer(tapGestureRecognizer2)
                
         tabCollectionView.backgroundColor = .clear
         tabCollectionView.delegate = self
@@ -152,6 +157,8 @@ class RoamingViewController: UIViewController, UIScrollViewDelegate {
             tabCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
             tabCollectionView.heightAnchor.constraint(equalToConstant: 900),
         ])
+        
+      
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
@@ -569,7 +576,7 @@ extension RoamingViewController: UICollectionViewDelegateFlowLayout, UICollectio
                     }
                                         
                     cell.addSubview(price_list_view)
-                                        
+
                     titleOne.text = """
                             Все цены указаны в национальной валюте сомони с учетом акциза 7% и НДС 15%
                                             
@@ -740,5 +747,4 @@ extension RoamingViewController: UITableViewDataSource, UITableViewDelegate {
         self.table.reloadSections([indexPath.section], with: .none)
         self.table.endUpdates()
     }
-    
 }

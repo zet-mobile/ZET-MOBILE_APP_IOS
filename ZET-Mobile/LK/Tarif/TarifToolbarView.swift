@@ -18,7 +18,6 @@ class TarifToolbarView: UIView {
         number_user_name.font = UIFont.boldSystemFont(ofSize: 18)
         number_user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
         number_user_name.textAlignment = .center
-        number_user_name.frame = CGRect(x: 32, y: 10, width: UIScreen.main.bounds.size.width - 32 - 20, height: 28)
         
         return number_user_name
     }()
@@ -27,9 +26,6 @@ class TarifToolbarView: UIView {
     lazy var icon_back: UIButton = {
         let icon_back = UIButton()
         icon_back.setImage((UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? #imageLiteral(resourceName: "back_w") : #imageLiteral(resourceName: "back_icon")), for: UIControl.State.normal)
-        
-        icon_back.frame = CGRect(x: 20, y: 15, width: 11, height: 20)
-        //icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         return icon_back
     }()
     
@@ -48,6 +44,21 @@ class TarifToolbarView: UIView {
         backgroundColor = toolbarColor
         self.addSubview(number_user_name)
         self.addSubview(icon_back)
+        
+        icon_back.translatesAutoresizingMaskIntoConstraints = false
+        number_user_name.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            icon_back.topAnchor.constraint(equalTo: topAnchor, constant: 27),
+            icon_back.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            icon_back.heightAnchor.constraint(equalToConstant: 20),
+            icon_back.widthAnchor.constraint(equalToConstant: 11),
+            
+            number_user_name.centerYAnchor.constraint(equalTo: icon_back.centerYAnchor),
+            number_user_name.centerXAnchor.constraint(equalTo: centerXAnchor)
+            
+        ])
+
     }
 
     

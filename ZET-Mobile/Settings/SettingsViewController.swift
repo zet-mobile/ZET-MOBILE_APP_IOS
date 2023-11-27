@@ -27,13 +27,13 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     var alert = UIAlertController()
     var toolbar = TarifToolbarView()
-    var settings_view = SettingsView()
+    var settingsView = SettingsView()
     
-    var lang_data = [[String]]()
-    var appearance_data = [[String]]()
+    var langData = [[String]]()
+    var appearanceData = [[String]]()
     
-    var lang_choosed = ""
-    var theme_choosed = ""
+    var langChoosed = ""
+    var themeChoosed = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,9 +77,26 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         scrollView.contentSize = CGSize(width: view.frame.width, height: 650)
         view.addSubview(scrollView)
         
-        toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+       // toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         
-        settings_view = SettingsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+      
+        
+        settingsView = SettingsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
+        
+       
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(changeCodeTap))
+        settingsView.changePinTitle.isUserInteractionEnabled = true
+        settingsView.changePinTitle.addGestureRecognizer(tap)
+        
+        let tapButton = UITapGestureRecognizer(target: self, action: #selector(changeCodeTap))
+        settingsView.changePinButton.isUserInteractionEnabled = true
+        settingsView.changePinButton.addGestureRecognizer(tapButton)
+        
+        self.view.addSubview(toolbar)
+        scrollView.addSubview(settingsView)
+        
         
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         
@@ -87,56 +104,55 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         toolbar.isUserInteractionEnabled = true
         toolbar.addGestureRecognizer(back)
         
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(changeCodeTap))
-        settings_view.code_change_t.isUserInteractionEnabled = true
-        settings_view.code_change_t.addGestureRecognizer(tap)
-        
-        self.view.addSubview(toolbar)
-        scrollView.addSubview(settings_view)
-        
         toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Settings")
         toolbar.backgroundColor = contentColor
         
-        // setup language field
-        settings_view.lang.text = lang_choosed
-        settings_view.lang.isSearchEnable = false
-        settings_view.lang.selectedRowColor = .lightGray
-        settings_view.lang.textColor = colorBlackWhite
-        //settings_view.lang.rowBackgroundColor = contentColor
-        settings_view.lang.textDropDelegate = self
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            toolbar.topAnchor.constraint(equalTo: view.topAnchor),
+            toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toolbar.heightAnchor.constraint(equalToConstant: 48)
+        ])
+        
+        settingsView.chooseLang.text = langChoosed
+        settingsView.chooseLang.isSearchEnable = false
+        settingsView.chooseLang.selectedRowColor = .lightGray
+        settingsView.chooseLang.textColor = colorBlackWhite
+        settingsView.chooseLang.textDropDelegate = self
       
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-        settings_view.lang.leftView = paddingView
-        settings_view.lang.leftViewMode = .always
-        settings_view.lang.didSelect { [self] (selectedText, index, id) in
-            self.lang_choosed = selectedText
-            langId_choosed = Int(lang_data[index][0])!
+        settingsView.chooseLang.leftView = paddingView
+        settingsView.chooseLang.leftViewMode = .always
+        settingsView.chooseLang.didSelect { [self] (selectedText, index, id) in
+            self.langChoosed = selectedText
+            langId_choosed = Int(langData[index][0])!
             putRequest(type: "lang")
         }
         
-        for i in 0 ..< lang_data.count {
-            settings_view.lang.optionArray.append(lang_data[i][2])
-            settings_view.lang.optionIds?.append(Int(lang_data[i][0])!)
+        for i in 0 ..< langData.count {
+            settingsView.chooseLang.optionArray.append(langData[i][2])
+            settingsView.chooseLang.optionIds?.append(Int(langData[i][0])!)
             
         }
         
         // setup theme field
-        settings_view.app_theme.text = theme_choosed
-        settings_view.app_theme.isSearchEnable = false
-        settings_view.app_theme.selectedRowColor = .lightGray
-        settings_view.app_theme.textColor = colorBlackWhite
+        settingsView.chooseTheme.text = themeChoosed
+        settingsView.chooseTheme.isSearchEnable = false
+        settingsView.chooseTheme.selectedRowColor = .lightGray
+        settingsView.chooseTheme.textColor = colorBlackWhite
         
         let paddingView2: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 20))
-        settings_view.app_theme.leftView = paddingView2
-        settings_view.app_theme.leftViewMode = .always
+        settingsView.chooseTheme.leftView = paddingView2
+        settingsView.chooseTheme.leftViewMode = .always
         
-        settings_view.app_theme.didSelect { [self] (selectedText, index, id) in
-            self.theme_choosed = selectedText
-            print(Int(appearance_data[index][0])!)
-            themeID_choosed = Int(appearance_data[index][0])!
-            if Int(appearance_data[index][0])! == 1 {
+        settingsView.chooseTheme.didSelect { [self] (selectedText, index, id) in
+            self.themeChoosed = selectedText
+            print(Int(appearanceData[index][0])!)
+            themeID_choosed = Int(appearanceData[index][0])!
+            if Int(appearanceData[index][0])! == 1 {
                 UserDefaults.standard.set("light", forKey: "ThemeAppereance")
             }
             else {
@@ -167,21 +183,21 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         }
         
         
-        for i in 0 ..< appearance_data.count {
-            settings_view.app_theme.optionArray.append(appearance_data[i][1])
-            settings_view.app_theme.optionIds?.append(Int(appearance_data[i][0])!)
+        for i in 0 ..< appearanceData.count {
+            settingsView.chooseTheme.optionArray.append(appearanceData[i][1])
+            settingsView.chooseTheme.optionIds?.append(Int(appearanceData[i][0])!)
         }
         
         
-        settings_view.switch_push.isOn = pushNotification
-        settings_view.switch_sales.isOn = promotionNotification
-        settings_view.switch_sms.isOn = smsNotification
-        settings_view.switch_enter.isOn = UserDefaults.standard.bool(forKey: "BiometricEnter")
+        settingsView.pushSwitch.isOn = pushNotification
+        settingsView.promotionsSwitch.isOn = promotionNotification
+        settingsView.smsSwitch.isOn = smsNotification
+        settingsView.bioSwitch.isOn = UserDefaults.standard.bool(forKey: "BiometricEnter")
         
-        settings_view.switch_push.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
-        settings_view.switch_sales.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
-        settings_view.switch_sms.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
-        settings_view.switch_enter.addTarget(self, action: #selector(switchEnterChange), for: .touchUpInside)
+        settingsView.pushSwitch.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
+        settingsView.promotionsSwitch.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
+        settingsView.smsSwitch.addTarget(self, action: #selector(switchChange), for: .touchUpInside)
+        settingsView.bioSwitch.addTarget(self, action: #selector(switchEnterChange), for: .touchUpInside)
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
     }
@@ -195,17 +211,14 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
     
     @objc func switchChange(_ sender: Any) {
         
-        pushNotification = settings_view.switch_push.isOn
-        promotionNotification = settings_view.switch_sales.isOn
-        smsNotification = settings_view.switch_sms.isOn
+        pushNotification = settingsView.pushSwitch.isOn
+        promotionNotification = settingsView.promotionsSwitch.isOn
+        smsNotification = settingsView.smsSwitch.isOn
         putRequest(type: "switch")
     }
     
     @objc func switchEnterChange(_ sender: Any) {
-        //let context = LAContext()
-
-        //context.touchIDAuthenticationAllowableReuseDuration
-        UserDefaults.standard.set(settings_view.switch_enter.isOn, forKey: "BiometricEnter")
+        UserDefaults.standard.set(settingsView.bioSwitch.isOn, forKey: "BiometricEnter")
      
     }
     
@@ -219,18 +232,18 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
                     DispatchQueue.main.async { [self] in
                         if result.appearance.count != 0 {
                             for i in 0 ..< result.appearance.count {
-                                appearance_data.append([String(result.appearance[i].themeId), String(result.appearance[i].themeDescription)])
+                                appearanceData.append([String(result.appearance[i].themeId), String(result.appearance[i].themeDescription)])
                                 if result.appearance[i].selected == true {
-                                    theme_choosed = String(result.appearance[i].themeDescription)
+                                    themeChoosed = String(result.appearance[i].themeDescription)
                                 }
                             }
                         }
                         
                         if result.languages.count != 0 {
                             for i in 0 ..< result.languages.count {
-                                lang_data.append([String(result.languages[i].id), String(result.languages[i].selected), String(result.languages[i].description)])
+                                langData.append([String(result.languages[i].id), String(result.languages[i].selected), String(result.languages[i].description)])
                                 if result.languages[i].selected == true {
-                                    lang_choosed = String(result.languages[i].description)
+                                    langChoosed = String(result.languages[i].description)
                                 }
                             }
                         }

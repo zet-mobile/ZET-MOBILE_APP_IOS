@@ -56,7 +56,7 @@
 "Payment_via " = "Пардохти 'Корти Миллӣ'"    ;
 "Ask_friend" = "Аз дӯстатон пурсед"    ;
 
-"Notifications" = "Хабарнома";
+"NOTIFICATIONS" = "Хабарнома";
 "More_details" = "Бештар"    ;
 "Connect" = "Пайваст кардан"    ;
 
@@ -169,17 +169,17 @@
 "Map" = "Харита"    ;
 "List" = "Рӯйхат"    ;
 "Zet_office" = "Идораи ZET Mobile"    ;
-"Language" = "Забон"    ;
-"Appearance" = "Намуди зоҳирӣ"    ;
-"App_theme" = "Мавзуи барнома"    ;
-"Push_notifications" = "Огоҳиои Push"    ;
-"Promotions" = "Аксияҳо, пешниҳодҳо"    ;
+"LANGUAGE" = "Забон"    ;
+"APPEARANCE" = "Намуди зоҳирӣ"    ;
+"APP_THEME" = "Мавзуи барнома"    ;
+"PUSH_NOTIFICATIONS" = "Огоҳиои Push"    ;
+"PROMOTIONS" = "Аксияҳо, пешниҳодҳо"    ;
 "E-mail_newsletter" = "E-mail паёмакҳо"    ;
-"SMS_notifications" = "Огоҳиҳои SMS"    ;
-"Security" = "Бехатарӣ"    ;
-"Change_PIN" = "Пин-кодро иваз кардан"    ;
+"SMS_NOTIFICATIONS" = "Огоҳиҳои SMS"    ;
+"SECURITY" = "Бехатарӣ"    ;
+"CHANGE_PIN" = "Пин-кодро иваз кардан"    ;
 "Set_password" = "Код-паролро таъин кардан"    ;
-"Biometric_Login" = "Воридшавии биометрӣ"    ;
+"BIOMETRIC_LOGIN" = "Воридшавии биометрӣ"    ;
 "Log_In" = "Воридшавӣ бо парол"    ;
 "Settings" = "Танзимот"    ;
 "current_PIN" = "Пин-коди ҷории худро ворид кунед"    ;

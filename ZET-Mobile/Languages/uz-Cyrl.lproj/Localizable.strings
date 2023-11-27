@@ -58,7 +58,7 @@
 "Payment_via " =    "Корти миллини толови"     ;
 "Ask_friend" =    "Дустингиздан суранг"    ;
 
-"Notifications" =    "Хабарнома";
+"NOTIFICATIONS" =    "Хабарнома";
 "More_details" =    "Купроқ маълумот"    ;
 "Connect" =    "Уланиш"    ;
 
@@ -172,17 +172,17 @@
 "Map" =    "Xаритаси"    ;
 "List" =    "Руйхат"    ;
 "Zet_office" =    "Зет Мобил офис"    ;
-"Language" =    "Тил"    ;
-"Appearance" =    "Ташқи куриниш"    ;
-"App_theme" =    "Мавзу аризаси"    ;
-"Push_notifications" =    "Пуш-билдиришномалар"    ;
-"Promotions" =    "Акциялар, юмлалар"    ;
+"LANGUAGE" =    "Тил"    ;
+"APPEARANCE" =    "Ташқи куриниш"    ;
+"APP_THEME" =    "Мавзу аризаси"    ;
+"PUSH_NOTIFICATIONS" =    "Пуш-билдиришномалар"    ;
+"PROMOTIONS" =    "Акциялар, юмлалар"    ;
 "E-mail_newsletter" =    "Електрон почта xабарномаси"   ;
-"SMS_notifications" =    "СМС-xабарлар"    ;
-"Security" =    "Xавфсизлик"    ;
-"Change_PIN" =    "Чинни узгартириш"    ;
+"SMS_NOTIFICATIONS" =    "СМС-xабарлар"    ;
+"SECURITY" =    "Xавфсизлик"    ;
+"CHANGE_PIN" =    "Чинни узгартириш"    ;
 "Set_password" =    "Паролни ӯрнатинг"    ;
-"Biometric_Login" =    "Биометрия кириш"    ;
+"BIOMETRIC_LOGIN" =    "Биометрия кириш"    ;
 "Log_In" =    "Паролга кириш"    ;
 "Settings" =    "Созламалар"    ;
 "current_PIN" =    "чорий  ПИН кодини киритинг"    ;
