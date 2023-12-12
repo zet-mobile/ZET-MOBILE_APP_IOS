@@ -76,14 +76,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         auth_view.send_again.addGestureRecognizer(tapSendAgain)
     
         auth_view.code_field.placeholder = defaultLocalizer.stringForKey(key: "Enter_SMS")
-        
-       /* if user_phone != "" {
-            auth_view.numberField.text! = "+992 " + user_phone
-            auth_view.numberField.textColor = colorBlackWhite
-            auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
-        }
-        */
-        
         if auth_view.code_field.isHidden == false {
             auth_view.numberField.text = "992" + user_phone
             auth_view.numberField.textColor = colorBlackWhite
@@ -323,7 +315,7 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        if tag == 1 && string != "" && auth_view.numberField.text!.count == 14 {
+        if tag == 1 && string != "" && auth_view.numberField.text!.count == 14 {3
             return false
         }
         else if tag == 1 && string != "" {
@@ -529,11 +521,8 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
         
         sender.showAnimation { [self] in
             if auth_view.code_field.text == "" && auth_view.code_field.isHidden == true {
-                print(user_phone)
                 let length = user_phone.count
-                let str = user_phone.prefix(3)
-                let str2 = user_phone.prefix(2)
-                
+
                 if user_phone == "" || length < 9 {
                     auth_view.title_number_info.isHidden = false
                     auth_view.numberField.layer.borderColor = UIColor.red.cgColor
@@ -551,19 +540,11 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                         auth_view.get_sms.frame.origin.y = ((UIScreen.main.bounds.size.height * 530) / 926) + 20
                     }
                 }
-                else if str == "910" || str == "911" || str == "915" || str == "917" || str == "919" || str2 == "80" || str2 == "40" ||
-                str2 == "33" || str == "440" || str == "444" || str == "030" || str == "040" || str == "080" || str2 == "81" || str == "912" ||
-                            str2 == "913" || str == "914" || str == "916"
-                {
-                     
-                  get_Code_Request()
-                }
-                else {
-                    self.requestAnswer(message: defaultLocalizer.stringForKey(key: "Enter_phone_zet"))
-                  //self.view.makeToast("Введите номер Zet - Mobile", duration: 3.0, position: .bottom, style: style); return
-                }
+                get_Code_Request()
             }
             else {
+                
+
                 if auth_view.code_field.text == "" || auth_view.code_field.text!.count < 6 {
                     auth_view.title_code_info.isHidden = false
                     auth_view.code_field.layer.borderColor = UIColor.red.cgColor
@@ -579,7 +560,6 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 else {
                     checkCode()
                 }
-               //
             }
           }
         
@@ -596,33 +576,39 @@ class AuthorizationViewController: UIViewController, UITextFieldDelegate {
                 try client.authPost(jsonBody: parametr).subscribe (
                 onNext: { result in
                     self.hashString = result.hashString ?? ""
-                    
                     DispatchQueue.main.async { [self] in
-                        auth_view.numberField.text = "992" + user_phone
-                        auth_view.numberField.textColor = colorBlackWhite
-                        auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
                         
-                        auth_view.title_info.isHidden = true
-                        auth_view.check_condition.isHidden = true
-                        auth_view.title_condition.isHidden = true
                         
-                        auth_view.title_code_info.isHidden = true
-                        auth_view.send_again.isHidden = true
-                        
-                        auth_view.code_field.isHidden = false
-                        auth_view.time_symbol.isHidden = false
-                        auth_view.timer_label.isHidden = false
-                        auth_view.second_label.isHidden = false
-                        auth_view.symbol_label.isHidden = false
-                        auth_view.get_sms.setTitle(defaultLocalizer.stringForKey(key: "Confirm"), for: .normal)
-                        auth_view.numberField.isEnabled = false
-                        auth_view.lang_set.isHidden = true
-                        auth_view.view_lang.isHidden = true
-                        
-                        totalTime = 118
-                        timer.invalidate()
-                        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
-                    }
+                        if result.success == false {
+                            self.requestAnswer(message: result.message!)
+                        }else{
+                            
+                            auth_view.numberField.text = "992" + user_phone
+                            auth_view.numberField.textColor = colorBlackWhite
+                            auth_view.numberField.font = UIFont.systemFont(ofSize: 15)
+                            
+                            auth_view.title_info.isHidden = true
+                            auth_view.check_condition.isHidden = true
+                            auth_view.title_condition.isHidden = true
+                            
+                            auth_view.title_code_info.isHidden = true
+                            auth_view.send_again.isHidden = true
+                            
+                            auth_view.code_field.isHidden = false
+                            auth_view.time_symbol.isHidden = false
+                            auth_view.timer_label.isHidden = false
+                            auth_view.second_label.isHidden = false
+                            auth_view.symbol_label.isHidden = false
+                            auth_view.get_sms.setTitle(defaultLocalizer.stringForKey(key: "Confirm"), for: .normal)
+                            auth_view.numberField.isEnabled = false
+                            auth_view.lang_set.isHidden = true
+                            auth_view.view_lang.isHidden = true
+                            
+                            totalTime = 118
+                            timer.invalidate()
+                            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+                        }
+                        }
                     
                 },
                 onError: { error in

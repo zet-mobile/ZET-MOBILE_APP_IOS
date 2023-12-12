@@ -16,7 +16,7 @@ class UsageView: UIView {
         title.numberOfLines = 0
         title.textColor = colorBlackWhite
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: 20, y: 10, width: title.text!.count * 12, height: 50)
@@ -36,7 +36,7 @@ class UsageView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: Int(tab1.frame.size.width) + 10, y: 10, width: title.text!.count * 12, height: 50)
@@ -57,7 +57,7 @@ class UsageView: UIView {
         title.numberOfLines = 0
         title.textColor = .gray
         title.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        title.font = UIFont.systemFont(ofSize: 19)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.lineBreakMode = NSLineBreakMode.byWordWrapping
         title.textAlignment = .left
         title.frame = CGRect(x: Int((tab1.frame.size.width + 10) + (tab2.frame.size.width + 10)), y: 10, width: title.text!.count * 12, height: 50)
@@ -74,7 +74,7 @@ class UsageView: UIView {
 
     lazy var get_Detaization: UIButton = {
         let button = UIButton()
-        button.frame = CGRect(x: 20, y: 350, width: UIScreen.main.bounds.size.width - 40, height: 45)
+        button.frame = CGRect(x: 20, y: 360, width: UIScreen.main.bounds.size.width - 40, height: 45)
         button.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
         button.setTitle(defaultLocalizer.stringForKey(key: "History") + " ", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -133,6 +133,7 @@ class UsageView: UIView {
         get_Detaization.setImage(icon, for: .normal)
         get_Detaization.imageView?.contentMode = .scaleAspectFit
         get_Detaization.semanticContentAttribute = .forceRightToLeft
+        
         
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)

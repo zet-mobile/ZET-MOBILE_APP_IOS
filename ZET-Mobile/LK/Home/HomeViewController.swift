@@ -121,12 +121,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(update))
         swipeDown.direction = .down
         self.view.addGestureRecognizer(swipeDown)
-
-        print(UserDefaults.standard.string(forKey: "token")!)
-        print(UserDefaults.standard.string(forKey: "refresh_token")!)
-        print(UserDefaults.standard.string(forKey: "mobPhone"))
-
-
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -212,7 +206,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 
         view.addSubview(scrollView)
 
-        scrollView.backgroundColor = toolbarColor
+        scrollView.backgroundColor = contentColor
 
         home_view = HomeView(frame: CGRect(x: 0, y: 360, width: Int(UIScreen.main.bounds.size.width), height: table_height + 500))
 
@@ -268,15 +262,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         toolbar.view_notification.addGestureRecognizer(tapGestureRecognizerRing)
 
 
-        // toolbar.icon_more.addTarget(self, action: #selector(openProfileMenu), for: .touchUpInside)
         home_view.icon_more_services.addTarget(self, action: #selector(openServices), for: .touchUpInside)
 
 
         scrollView.addSubview(home_view)
 
-        scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+       // scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
 
-
+       
+        
     }
 
     func setupBalanceSliderSection() {
@@ -292,7 +286,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 
         scrollView.addSubview(remainderView)
         remainderView.frame = CGRect(x: 0, y: 230, width: UIScreen.main.bounds.size.width, height: 145)
-
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([scrollView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width),
+                                   //  scrollView.heightAnchor.constraint(equalToConstant: view.bounds.size.height),
+                                     scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                                     scrollView.topAnchor.constraint(equalTo: toolbar.bottomAnchor),
+                                    ])
+        
         var textColor = UIColor.black
         var textColor2 = UIColor.lightGray
         var number_data = ""
@@ -1124,15 +1124,17 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             cell.selectedBackgroundView = bgColorView
 
             return cell
-        } else {
+        }
+        else
+        {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
             cell.separatorInset = UIEdgeInsets.init(top: 10.0, left: 20.0, bottom: 2.0, right: 20.0)
 
             if indexPath.row == services_data.count - 1 {
                 //       cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
-            cell.titleOne.text = services_data[indexPath.row][1]
-            cell.titleTwo.text = services_data[indexPath.row][6]
+            cell.serviceTitle.text = services_data[indexPath.row][1]
+            cell.serviceDesc.text = services_data[indexPath.row][6]
 
             /* if services_data[indexPath.row][6] == "" {
                 cell.titleThree.frame.origin.y = 50
@@ -1140,20 +1142,20 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.sale_title.frame.origin.y = 70
             }*/
 
-            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
-            cell.titleTwo.numberOfLines = 0
-            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
-            cell.titleTwo.sizeToFit()
+        //    cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
+        //    cell.titleTwo.numberOfLines = 0
+        //    cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
+        //    cell.titleTwo.sizeToFit()
 
-            cell.titleTwo.frame.origin.y = 60
+       //     cell.titleTwo.frame.origin.y = 60
 
-            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
+        //    cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
 
-            cell.titleThree.frame.origin.y = cell.titleTwo.frame.size.height + 60
-            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            cell.frame.size.height = cell.titleTwo.frame.height + 120
-            ServicesTableView.rowHeight = cell.titleTwo.frame.height + 140
+       //     cell.titleThree.frame.origin.y = cell.titleTwo.frame.size.height + 60
+        //    cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
+       //     cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
+       //     cell.frame.size.height = cell.titleTwo.frame.height + 120
+      //      ServicesTableView.rowHeight = cell.titleTwo.frame.height + 140
 
             let cost: NSString = "\(services_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
@@ -1174,14 +1176,14 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
 
             costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            cell.servicePrice.attributedText = costString
+           // cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
 
             if services_data[indexPath.row][5] != "" {
-                cell.sale_title.text = "-" + services_data[indexPath.row][5] + "%"
-                cell.sale_title.isHidden = false
+                cell.discount.text = "-" + services_data[indexPath.row][5] + "%"
+                cell.discount.isHidden = false
             } else {
-                cell.sale_title.isHidden = true
+                cell.discount.isHidden = true
             }
 
             let bgColorView = UIView()

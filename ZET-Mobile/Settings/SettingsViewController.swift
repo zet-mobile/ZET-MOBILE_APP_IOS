@@ -77,10 +77,8 @@ class SettingsViewController: UIViewController, UIScrollViewDelegate, UITextDrop
         scrollView.contentSize = CGSize(width: view.frame.width, height: 650)
         view.addSubview(scrollView)
         
-       // toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
         
       
-        
         settingsView = SettingsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
         
        

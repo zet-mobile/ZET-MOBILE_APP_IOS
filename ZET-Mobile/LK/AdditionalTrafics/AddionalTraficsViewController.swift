@@ -28,9 +28,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     var x_pozition = 20
     var y_pozition = 150
     
-    let table = UITableView()
-    let table2 = UITableView()
-    let table3 = UITableView()
+    let tableMB = UITableView()
+    let tableMin = UITableView()
+    let tableSms = UITableView()
     
     let TabCollectionServiceView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -115,7 +115,26 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
         addional_view = AddionalTraficsView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Connect_package")
-        addional_view.balance.text = balance_credit + " " + defaultLocalizer.stringForKey(key: "tjs")
+        addional_view.balanceValue.text = balance_credit + " " + defaultLocalizer.stringForKey(key: "tjs")
+        
+      
+        //added autolayout
+        
+        addional_view.balanceValue.translatesAutoresizingMaskIntoConstraints = false
+        addional_view.balanceLabel.translatesAutoresizingMaskIntoConstraints = false
+      
+        //balanceLabel
+        addional_view.balanceLabel.leadingAnchor.constraint(equalTo: addional_view.leadingAnchor, constant: 20).isActive = true
+        addional_view.balanceLabel.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        addional_view.balanceLabel.topAnchor.constraint(equalTo: addional_view.topAnchor, constant: 160).isActive = true
+
+        //balanceValue
+        addional_view.balanceValue.trailingAnchor.constraint(equalTo: addional_view.trailingAnchor, constant: -20).isActive = true
+        addional_view.balanceValue.centerYAnchor.constraint(equalTo:  addional_view.balanceLabel.centerYAnchor).isActive = true
+        addional_view.balanceValue.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        addional_view.balanceValue.topAnchor.constraint(equalTo: addional_view.topAnchor, constant: 160).isActive = true
+
+        
         self.view.addSubview(toolbar)
         scrollView.addSubview(addional_view)
         
@@ -345,7 +364,7 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView || table == scrollView || table2 == scrollView || table3 == scrollView {
+        if self.scrollView == scrollView || tableMB == scrollView || tableMin == scrollView || tableSms == scrollView {
             if scrollView.contentOffset.y > addional_view.tab1.frame.origin.y {
                 remainderView.isHidden = true
                 //servicesView.searchField.isHidden = true
@@ -461,9 +480,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_internet"))
-                            self.table.separatorStyle = .none
-                            self.table.backgroundView = emptyView
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.tableMB.frame.width, height: self.tableMB.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_internet"))
+                            self.tableMB.separatorStyle = .none
+                            self.tableMB.backgroundView = emptyView
                             }
                         }
                         
@@ -481,9 +500,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table2.frame.width, height: self.table2.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_minutes"))
-                            self.table2.separatorStyle = .none
-                            self.table2.backgroundView = emptyView
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.tableMin.frame.width, height: self.tableMin.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_minutes"))
+                            self.tableMin.separatorStyle = .none
+                            self.tableMin.backgroundView = emptyView
                             }
                         }
                         
@@ -500,9 +519,9 @@ class AddionalTraficsViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table3.frame.width, height: self.table3.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_SMS"))
-                            self.table3.separatorStyle = .none
-                            self.table3.backgroundView = emptyView
+                            emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.tableSms.frame.width, height: self.tableSms.frame.height), text: self.defaultLocalizer.stringForKey(key: "No_SMS"))
+                            self.tableSms.separatorStyle = .none
+                            self.tableSms.backgroundView = emptyView
                             }
                         }
                     }
@@ -817,46 +836,46 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionServiceViewCell
         if indexPath.row == 0 {
-            table.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
-            table.delegate = self
-            table.dataSource = self
-            table.rowHeight = 140
-            table.estimatedRowHeight = 140
-            table.alwaysBounceVertical = false
-            table.showsVerticalScrollIndicator = false
-            table.backgroundColor = contentColor
-            table.separatorColor = .lightGray
-            table.allowsSelection = false
-            cell.addSubview(table)
+            tableMB.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
+            tableMB.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            tableMB.delegate = self
+            tableMB.dataSource = self
+            tableMB.rowHeight = UITableView.automaticDimension
+            tableMB.estimatedRowHeight = 140 // Примерное значение высоты ячейки
+            tableMB.alwaysBounceVertical = false
+            tableMB.showsVerticalScrollIndicator = false
+            tableMB.backgroundColor = contentColor
+            tableMB.separatorColor = .lightGray
+            tableMB.allowsSelection = false
+            cell.addSubview(tableMB)
         }
         else if indexPath.row == 1 {
-            table2.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
-            table2.delegate = self
-            table2.dataSource = self
-            table2.rowHeight = 140
-            table2.estimatedRowHeight = 140
-            table2.alwaysBounceVertical = false
-            table2.showsVerticalScrollIndicator = false
-            table2.backgroundColor = contentColor
-            table2.separatorColor = .lightGray
-            table2.allowsSelection = false
-            cell.addSubview(table2)
+            tableMin.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
+            tableMin.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            tableMin.delegate = self
+            tableMin.dataSource = self
+            tableMin.rowHeight = UITableView.automaticDimension
+            tableMin.estimatedRowHeight = 140 // Примерное значение высоты ячейки
+            tableMin.alwaysBounceVertical = false
+            tableMin.showsVerticalScrollIndicator = false
+            tableMin.backgroundColor = contentColor
+            tableMin.separatorColor = .lightGray
+            tableMin.allowsSelection = false
+            cell.addSubview(tableMin)
         }
         else if indexPath.row == 2 {
-            table3.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-            table3.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
-            table3.delegate = self
-            table3.dataSource = self
-            table3.rowHeight = 140
-            table3.estimatedRowHeight = 140
-            table3.alwaysBounceVertical = false
-            table3.showsVerticalScrollIndicator = false
-            table3.backgroundColor = contentColor
-            table3.separatorColor = .lightGray
-            table3.allowsSelection = false
-            cell.addSubview(table3)
+            tableSms.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
+            tableSms.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+            tableSms.delegate = self
+            tableSms.dataSource = self
+            tableSms.rowHeight = UITableView.automaticDimension
+            tableSms.estimatedRowHeight = 140 // Примерное значение высоты ячейки
+            tableSms.alwaysBounceVertical = false
+            tableSms.showsVerticalScrollIndicator = false
+            tableSms.backgroundColor = contentColor
+            tableSms.separatorColor = .lightGray
+            tableSms.allowsSelection = false
+            cell.addSubview(tableSms)
           
         }
         
@@ -932,285 +951,62 @@ extension AddionalTraficsViewController: UICollectionViewDelegateFlowLayout, UIC
     }
 }
 
-extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == table {
-            return internet_data.count
-        } else if tableView == table2 {
-            return minuti_data.count
-        } else {
-            return sms_data.count
-        }
+// кол-во строк в таблиецах
 
-    }
+    extension AddionalTraficsViewController: UITableViewDataSource, UITableViewDelegate {
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            if tableView == tableMB {
+                return internet_data.count
+            } else if tableView == tableMin {
+                return minuti_data.count
+            } else {
+                return sms_data.count
+            }
+
+        }
     
+        // проставляем данные,используя одну кастомную ячейку, в разбивке по таблицам в табах
+        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
         cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        if tableView == table {
+       
+        if tableView == tableMB {
             if indexPath.row == internet_data.count - 1 {
               //  cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
-            
-            if internet_data[indexPath.row][7] == "connected" {
-                let dateFormatter1 = DateFormatter()
-                dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                let date = dateFormatter1.date(from: internet_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd-MM-yyyy"
-                var next_apply_date  =  ""
-                if internet_data[indexPath.row][4] != "" {
-                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
-                    cell.titleTwo.text = internet_data[indexPath.row][5] + "\n" + next_apply_date
-                }
-                else {
-                    cell.titleTwo.text = internet_data[indexPath.row][5]
-                }
-                cell.getButton.backgroundColor = .clear
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
-                cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
-                cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
-                cell.getButton.layer.borderWidth = 1
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
-            
-            }
-            else {
-                cell.titleTwo.text = internet_data[indexPath.row][5]
-                cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
-                cell.getButton.setTitleColor(.white, for: .normal)
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
-            }
-            cell.titleOne.text = internet_data[indexPath.row][1]
-            
-            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
-            cell.titleTwo.numberOfLines = 0
-            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
-            cell.titleTwo.sizeToFit()
-          
-            cell.titleTwo.frame.origin.y = 60
-            
-            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
-            
-            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
-            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            cell.frame.size.height = cell.titleTwo.frame.height + 120
-            table.rowHeight = cell.titleTwo.frame.height + 120
-            
-            let cost: NSString = "\(internet_data[indexPath.row][2])" as NSString
-            let range = (cost).range(of: cost as String)
-            let costString = NSMutableAttributedString.init(string: cost as String)
-            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-            
-            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + internet_data[indexPath.row][6].uppercased()
-            if internet_data[indexPath.row][6] == "" || internet_data[indexPath.row][6] == "0.0" {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS")
-            }
-            else {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS") +  "/" + internet_data[indexPath.row][6].uppercased()
-            }
-            
-            let title_cost = period as NSString
-            let titleString = NSMutableAttributedString.init(string: title_cost as String)
-            let range2 = (title_cost).range(of: title_cost as String)
-            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13)], range: range2)
-            
-            costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            
-            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
-            
-            if internet_data[indexPath.row][9] != "" {
-                cell.sale_title.text = "-" + internet_data[indexPath.row][9] + "%"
-                cell.sale_title.isHidden = false
-            }
-            else {
-                cell.sale_title.isHidden = true
-            }
-            
             cell.getButton.tag = indexPath.row
             cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
+            
+            // все операции проходят в configureCell
+            cell.configureCell(with: internet_data[indexPath.row])
+
         }
-        else if tableView == table2 {
+        else if tableView == tableMin {
             
             if indexPath.row == minuti_data.count - 1 {
-               // cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
-            }
-            
-            if minuti_data[indexPath.row][7] == "connected"  {
-                let dateFormatter1 = DateFormatter()
-                dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                let date = dateFormatter1.date(from: minuti_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd-MM-yyyy"
-                
-                var next_apply_date  =  ""
-                if minuti_data[indexPath.row][4] != "" {
-                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
-                    cell.titleTwo.text = minuti_data[indexPath.row][5] + "\n" + next_apply_date
-                }
-                else {
-                    cell.titleTwo.text = minuti_data[indexPath.row][5]
-                }
-                
-                cell.getButton.backgroundColor = .clear
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
-                cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
-                cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
-                cell.getButton.layer.borderWidth = 1
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
-            }
-            else {
-                cell.titleTwo.text = minuti_data[indexPath.row][5]
-                cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
-                cell.getButton.setTitleColor(.white, for: .normal)
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
-            }
-            
-            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
-            cell.titleTwo.numberOfLines = 0
-            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
-            cell.titleTwo.sizeToFit()
-          
-            cell.titleTwo.frame.origin.y = 60
-            
-            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
-            
-            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
-            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            cell.frame.size.height = cell.titleTwo.frame.height + 120
-            table2.rowHeight = cell.titleTwo.frame.height + 120
-            
-            cell.titleOne.text = minuti_data[indexPath.row][1]
-            let cost: NSString = "\(minuti_data[indexPath.row][2])" as NSString
-            let range = (cost).range(of: cost as String)
-            let costString = NSMutableAttributedString.init(string: cost as String)
-            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-            
-            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + minuti_data[indexPath.row][6].uppercased()
-            if minuti_data[indexPath.row][6] == "" || minuti_data[indexPath.row][6] == "0.0" {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS")
-            }
-            else {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + minuti_data[indexPath.row][6].uppercased()
-            }
-            
-            let title_cost = period as NSString
-            let titleString = NSMutableAttributedString.init(string: title_cost as String)
-            let range2 = (title_cost).range(of: title_cost as String)
-            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13)], range: range2)
-            
-            costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            
-            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
-            
-            if minuti_data[indexPath.row][9] != "" {
-                cell.sale_title.text = "-" + minuti_data[indexPath.row][9] + "%"
-                cell.sale_title.isHidden = false
-            }
-            else {
-                cell.sale_title.isHidden = true
+                // cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
             
             cell.getButton.tag = indexPath.row
             cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
+            
+            // все операции проходят в configureCell
+            cell.configureCell(with: minuti_data[indexPath.row])
         }
         else {
             if indexPath.row == sms_data.count - 1 {
                // cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
-            
-            if sms_data[indexPath.row][7] == "connected" {
-                let dateFormatter1 = DateFormatter()
-                dateFormatter1.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                let date = dateFormatter1.date(from: sms_data[indexPath.row][4])
-                dateFormatter1.dateFormat = "dd-MM-yyyy"
-                
-                var next_apply_date  =  ""
-                if sms_data[indexPath.row][4] != "" {
-                    next_apply_date = self.defaultLocalizer.stringForKey(key: "Active_before:") + "\(dateFormatter1.string(from: date!))"
-                    cell.titleTwo.text = sms_data[indexPath.row][5] + "\n" + next_apply_date
-                }
-                else {
-                    cell.titleTwo.text = sms_data[indexPath.row][5]
-                }
-                
-                cell.getButton.backgroundColor = .clear
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Disable"), for: .normal)
-                cell.getButton.setTitleColor(UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00), for: .normal)
-                cell.getButton.layer.borderColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00).cgColor
-                cell.getButton.layer.borderWidth = 1
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Active_dark") : UIImage(named: "Service_Active"))
-            }
-            else {
-                cell.titleTwo.text = sms_data[indexPath.row][5]
-                cell.getButton.backgroundColor = UIColor(red: 1.00, green: 0.50, blue: 0.05, alpha: 1.00)
-                cell.getButton.setTitle(defaultLocalizer.stringForKey(key: "Connect"), for: .normal)
-                cell.getButton.setTitleColor(.white, for: .normal)
-                cell.ico_image.image = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIImage(named: "Service_Default_dark") : UIImage(named: "Service_Default"))
-            }
-            
-            cell.titleOne.text = sms_data[indexPath.row][1]
-            
-            cell.titleTwo.frame.size.height = CGFloat.greatestFiniteMagnitude
-            cell.titleTwo.numberOfLines = 0
-            cell.titleTwo.lineBreakMode = NSLineBreakMode.byWordWrapping
-            cell.titleTwo.sizeToFit()
-          
-            cell.titleTwo.frame.origin.y = 60
-
-            cell.contentView.frame.size = CGSize(width: view.frame.width, height: cell.titleTwo.frame.height + 70)
-            
-            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
-            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            cell.frame.size.height = cell.titleTwo.frame.height + 120
-            table3.rowHeight = cell.titleTwo.frame.height + 120
-            
-            let cost: NSString = "\(sms_data[indexPath.row][2])" as NSString
-            let range = (cost).range(of: cost as String)
-            let costString = NSMutableAttributedString.init(string: cost as String)
-            costString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.orange , range: range)
-            costString.addAttributes([NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)], range: range)
-            
-            var  period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + sms_data[indexPath.row][6].uppercased()
-            if sms_data[indexPath.row][6] == "" || sms_data[indexPath.row][6] == "0.0" {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS")
-            }
-            else {
-                period = " " + defaultLocalizer.stringForKey(key: "TJS") + "/" + sms_data[indexPath.row][6].uppercased()
-            }
-            
-            let title_cost = period as NSString
-            let titleString = NSMutableAttributedString.init(string: title_cost as String)
-            let range2 = (title_cost).range(of: title_cost as String)
-            titleString.addAttribute(NSAttributedString.Key.foregroundColor, value: darkGrayLight , range: range2)
-            titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 13)], range: range2)
-            
-            costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            
-            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
-            
-            if sms_data[indexPath.row][9] != "" {
-                cell.sale_title.text = "-" + sms_data[indexPath.row][9] + "%"
-                cell.sale_title.isHidden = false
-            }
-            else {
-                cell.sale_title.isHidden = true
-            }
-            
+         
             cell.getButton.tag = indexPath.row
             cell.getButton.animateWhenPressed(disposeBag: disposeBag)
             cell.getButton.addTarget(self, action: #selector(connectPackets(_:)), for: .touchUpInside)
+            
+            // все операции проходят в configureCell
+            cell.configureCell(with: sms_data[indexPath.row])
         }
         
         let bgColorView = UIView()

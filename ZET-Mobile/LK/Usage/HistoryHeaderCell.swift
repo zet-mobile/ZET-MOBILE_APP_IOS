@@ -9,6 +9,7 @@ import UIKit
 
 class HistoryHeaderCell: UITableViewHeaderFooterView {
     
+    
     let title = UILabel()
 
     override init(reuseIdentifier: String?) {
@@ -29,8 +30,9 @@ class HistoryHeaderCell: UITableViewHeaderFooterView {
         contentView.addSubview(title)
 
         NSLayoutConstraint.activate([
-        
+           
             title.heightAnchor.constraint(equalToConstant: 30),
+            title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             title.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor,
                    constant: 8),
             title.trailingAnchor.constraint(equalTo:

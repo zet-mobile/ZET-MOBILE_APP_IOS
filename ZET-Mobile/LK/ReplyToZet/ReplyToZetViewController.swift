@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import Photos
 
-class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     let disposeBag = DisposeBag()
@@ -37,11 +37,11 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     var screenKeys = [String]()
     var screenName = [String]()
     
-    var y_pozition = 430
-    var but_pozition = 460
+    var y_pozition = 530//430
     var screen_i = 1
     
     var i = 0
+    var entered_number = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,12 +49,25 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         showActivityIndicator(uiView: self.view)
         view.backgroundColor = contentColor
         
-        reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 896))
-        reply_view.text_message.delegate = self
+        //Looks for single or multiple taps.
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ReplyToZetViewController().hideKeyboard))
+
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
         
+        reply_view = ReplyToZetView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        reply_view.textOfMessage.delegate = self
+        reply_view.contactNumberField.delegate = self
         sendRequest()
         
+      
     }
+    
+   
+    @objc func hideKeyboard() {
+            view.endEditing(true)
+        }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -75,21 +88,52 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func touchesView() {
-        reply_view.text_message.resignFirstResponder()
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        reply_view.contactNumberField.resignFirstResponder()
+        return true
     }
     
+    
+    @objc func touchesView() {
+        reply_view.textOfMessage.resignFirstResponder()
+    }
+    
+    @objc func touchesContactNumber() {
+        reply_view.contactNumberField.resignFirstResponder()
+    }
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let tag = textField.tag
+        print("tag")
+        print(tag)
+      
+        
+        if tag == 1 && string != "" && reply_view.contactNumberField.text!.count == 9 {
+            return false
+        }
+        else if tag == 1 {
+            entered_number = entered_number + string
+            print(entered_number)
+        }
+        
+        return true
+    }
+  
     func textViewDidBeginEditing(_ textView: UITextView) {
         
-        if reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail"){
-            reply_view.text_message.text = ""
+        if reply_view.textOfMessage.text == defaultLocalizer.stringForKey(key: "problem_detail"){
+            reply_view.textOfMessage.text = ""
         }
-        reply_view.text_message.textColor = colorBlackWhite
+        reply_view.textOfMessage.textColor = colorBlackWhite
         
-        if reply_view.button.frame.origin.y == 430 {
-            reply_view.text_message.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-            reply_view.button.frame.origin.y = 400
-            reply_view.titleRed.isHidden = true
+        if reply_view.buttonAddScreen.frame.origin.y == 530 //430
+        {
+            reply_view.textOfMessage.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
+            reply_view.buttonAddScreen.frame.origin.y = 500//400
+            reply_view.errorInfo.isHidden = true
             
             let buttons = getButtonsInView(view: scrollView)
             for button in buttons {
@@ -102,7 +146,8 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             let labels = getLabelsInView(view: self.scrollView)
             for label in labels {
                 
-                if label.frame.origin.y >= 400 && label.text != defaultLocalizer.stringForKey(key: "Send") {
+                if label.frame.origin.y >= 500//400
+                    && label.text != defaultLocalizer.stringForKey(key: "Send") {
                     label.frame.origin.y -= 30
                 }
             }
@@ -139,11 +184,29 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         reply_view.isUserInteractionEnabled = true
         reply_view.addGestureRecognizer(tapGestureRecognizer2)
         
+        let tapGestureRecognizer3 = UITapGestureRecognizer(target: self, action: #selector(touchesContactNumber))
+        reply_view.isUserInteractionEnabled = true
+        reply_view.addGestureRecognizer(tapGestureRecognizer3)
+        
         self.view.addSubview(toolbar)
         scrollView.addSubview(reply_view)
         
+       // Создание UIView для заднего фона
+           let backgroundView = UIView()
+           backgroundView.backgroundColor = UIColor.green
+           backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        reply_view.addSubview(backgroundView)
+       
+       // Добавление констрейнтов для backgroundView
+          NSLayoutConstraint.activate([
+               backgroundView.leadingAnchor.constraint(equalTo: reply_view.leadingAnchor, constant: 20), // Отступ слева
+               backgroundView.trailingAnchor.constraint(equalTo: reply_view.trailingAnchor, constant: -20), // Отступ справа
+               backgroundView.topAnchor.constraint(equalTo: reply_view.buttonAddScreen.bottomAnchor, constant: 30), // Отступ сверху
+           ])
+        
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Feedback")
         toolbar.backgroundColor = contentColor
+        
         
         scrollView.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         
@@ -151,28 +214,28 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
     
     func setupViewData() {
         if feedback_data.count != 0 {
-            reply_view.type_message.text = feedback_data[0][2]
+            reply_view.messageTopic.text = feedback_data[0][2]
             reply_view.email.text = feedback_data[0][1]
         }
         
-        reply_view.type_message.didSelect { [self] (selectedText, index, id) in
+        reply_view.messageTopic.didSelect { [self] (selectedText, index, id) in
             typeMessageChoosed = selectedText
             emailChoosed = feedback_data[index][1]
             typeMessageChoosedID = Int(feedback_data[index][0]) ?? 1
             
-            reply_view.type_message.text = feedback_data[index][2]
+            reply_view.messageTopic.text = feedback_data[index][2]
             reply_view.email.text = feedback_data[index][1]
             
             
         }
         
         for i in 0 ..< feedback_data.count {
-            reply_view.type_message.optionArray.append(feedback_data[i][2])
-            reply_view.type_message.optionIds?.append(i)
+            reply_view.messageTopic.optionArray.append(feedback_data[i][2])
+            reply_view.messageTopic.optionIds?.append(i)
             
         }
         
-        reply_view.button.addTarget(self, action: #selector(choosedScreenshot), for: .touchUpInside)
+        reply_view.buttonAddScreen.addTarget(self, action: #selector(choosedScreenshot), for: .touchUpInside)
         reply_view.button_send.addTarget(self, action: #selector(sendScreen), for: .touchUpInside)
     }
 
@@ -253,11 +316,11 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         //alert.view.sendSubviewToBack(view)
         
         print("i", i)
-        if (reply_view.text_message.text == "" || reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i == 0 {
+        if (reply_view.textOfMessage.text == "" || reply_view.textOfMessage.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i == 0 {
             print("baby")
-            reply_view.text_message.layer.borderColor = UIColor.red.cgColor
-            reply_view.button.frame.origin.y = 430
-            reply_view.titleRed.isHidden = false
+            reply_view.textOfMessage.layer.borderColor = UIColor.red.cgColor
+            reply_view.buttonAddScreen.frame.origin.y = 530 //430
+            reply_view.errorInfo.isHidden = false
             
             let buttons = getButtonsInView(view: scrollView)
             for button in buttons {
@@ -269,7 +332,8 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             let labels = getLabelsInView(view: self.scrollView)
             for label in labels {
                 
-                if label.frame.origin.y >= 430 && label.text != defaultLocalizer.stringForKey(key: "Send") {
+                if label.frame.origin.y >= 530 //430
+                    && label.text != defaultLocalizer.stringForKey(key: "Send") {
                     label.frame.origin.y += 30
                 }
             }
@@ -277,11 +341,11 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
             reply_view.button_send.frame.origin.y += 30
             y_pozition += 30
             i += 1
-        } else if (reply_view.text_message.text == "" || reply_view.text_message.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i > 0{
+        } else if (reply_view.textOfMessage.text == "" || reply_view.textOfMessage.text == defaultLocalizer.stringForKey(key: "problem_detail")) && i > 0{
             print("jjjii")
-            reply_view.text_message.layer.borderColor = UIColor.red.cgColor
-            reply_view.button.frame.origin.y = 430
-            reply_view.titleRed.isHidden = false
+            reply_view.textOfMessage.layer.borderColor = UIColor.red.cgColor
+            reply_view.buttonAddScreen.frame.origin.y = 530 //430
+            reply_view.errorInfo.isHidden = false
         }
         else {
             present(alert, animated: true, completion: nil)
@@ -373,7 +437,7 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
       
         showActivityIndicator(uiView: view)
         
-        let parametrs: [String: Any] = ["feedBackId": typeMessageChoosedID, "feedBackMessage":  String(reply_view.text_message.text!)]
+        let parametrs: [String: Any] = ["feedBackId": typeMessageChoosedID, "feedBackMessage":  String(reply_view.textOfMessage.text!), "feedBackPhoneNumber": String(reply_view.contactNumberField.text!)]
         
         print(typeMessageChoosedID)
        // print(screenImg[0])
@@ -446,20 +510,19 @@ class ReplyToZetViewController: UIViewController , UIScrollViewDelegate,  UIImag
         let labels = getLabelsInView(view: self.scrollView)
         for label in labels {
             
-            if label.frame.origin.y >= 430 && label.text != defaultLocalizer.stringForKey(key: "Send") {
+            if label.frame.origin.y >= 530 //430
+                && label.text != defaultLocalizer.stringForKey(key: "Send") {
                 label.removeFromSuperview()
             }
         }
         
-        if reply_view.text_message.layer.borderColor == UIColor.red.cgColor {
-            reply_view.button_send.frame.origin.y = 490
-            y_pozition = 460
-            but_pozition = 490
+        if reply_view.textOfMessage.layer.borderColor == UIColor.red.cgColor {
+            reply_view.button_send.frame.origin.y = 590 //490
+            y_pozition = 560 //460
         }
         else {
-            reply_view.button_send.frame.origin.y = 460
-            y_pozition = 430
-            but_pozition = 460
+            reply_view.button_send.frame.origin.y = 560 //460
+            y_pozition = 530//430
         }
         
         screen_i = 1
@@ -506,9 +569,15 @@ extension ReplyToZetViewController: ImagePickerDelegate {
             DispatchQueue.main.async { [self] in
                 UIView.setAnimationsEnabled(false)
                 y_pozition += 30
+                
                 let icon1 = UIButton()
                 icon1.setImage(UIImage(named: "correct"), for: .normal)
                 icon1.frame = CGRect(x: 20, y: y_pozition, width: 20, height: 20)
+              //  icon1.translatesAutoresizingMaskIntoConstraints = false
+             //   icon1.leadingAnchor.constraint(equalTo: reply_view.backgroundView.leadingAnchor, constant: 25).isActive = true
+             //   icon1.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+             //   icon1.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+             
                 icon1.tag = screen_i
                 
                 let title = UILabel()
@@ -634,4 +703,6 @@ extension PHAsset {
 
         return fileName
     }
+    
+    
 }

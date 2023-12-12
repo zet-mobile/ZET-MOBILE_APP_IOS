@@ -14,7 +14,7 @@ import UserNotifications
 import LocalAuthentication
 import CoreLocation
 import SideMenu
-//import IQKeyboardManagerSwift
+import IQKeyboardManagerSwift
 
     var window = UIApplication.shared.keyWindow
     var topPadding = window?.safeAreaInsets.top

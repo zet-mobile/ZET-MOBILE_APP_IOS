@@ -54,7 +54,6 @@ class ContactsViewController: UIViewController {
     }
  
     @objc func goBack() {
-        print("jjjj")
         navigationController?.popViewController(animated: true)
     }
     

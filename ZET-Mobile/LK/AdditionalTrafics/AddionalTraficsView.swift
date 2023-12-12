@@ -11,32 +11,32 @@ class AddionalTraficsView: UIView {
     
     let defaultLocalizer = AMPLocalizeUtils.defaultLocalizer
     
-    lazy var titleOne: UILabel = {
-        let titleOne = UILabel()
-        titleOne.text = defaultLocalizer.stringForKey(key: "Your_balance")
-        titleOne.numberOfLines = 0
-        titleOne.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
-        titleOne.font = UIFont(name: "", size: 10)
-        titleOne.lineBreakMode = NSLineBreakMode.byWordWrapping
-        titleOne.textAlignment = .left
-        titleOne.frame = CGRect(x: 20, y: 160, width: 300, height: 28)
-        titleOne.autoresizesSubviews = true
-        titleOne.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return titleOne
+    lazy var balanceLabel: UILabel = {
+        let balanceLabel = UILabel()
+        balanceLabel.text = defaultLocalizer.stringForKey(key: "Your_balance")
+        balanceLabel.numberOfLines = 0
+        balanceLabel.textColor = UIColor(red: 0.51, green: 0.51, blue: 0.51, alpha: 1.00)
+        balanceLabel.font = UIFont(name: "", size: 10)
+        balanceLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        balanceLabel.textAlignment = .left
+    //    balanceLabel.frame = CGRect(x: 20, y: 160, width: 300, height: 28)
+        balanceLabel.autoresizesSubviews = true
+        balanceLabel.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return balanceLabel
     }()
     
-    lazy var balance: UILabel = {
-        let user_name = UILabel()
-        user_name.text = ""
-        user_name.numberOfLines = 0
-        user_name.textColor = colorBlackWhite
-        user_name.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        user_name.font = UIFont.boldSystemFont(ofSize: 24)
-        user_name.lineBreakMode = NSLineBreakMode.byWordWrapping
-        user_name.textAlignment = .right
-        user_name.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 160, width: 200, height: 28)
-        user_name.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        return user_name
+    lazy var balanceValue: UILabel = {
+        let balanceValue = UILabel()
+        balanceValue.text = ""
+        balanceValue.numberOfLines = 0
+        balanceValue.textColor = colorBlackWhite
+        balanceValue.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        balanceValue.font = UIFont.boldSystemFont(ofSize: 24)
+        balanceValue.lineBreakMode = NSLineBreakMode.byWordWrapping
+        balanceValue.textAlignment = .right
+     //   balanceValue.frame = CGRect(x: UIScreen.main.bounds.size.width - 220, y: 160, width: 200, height: 28)
+        balanceValue.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        return balanceValue
     }()
     
     lazy var tab1: UILabel = {
@@ -136,8 +136,8 @@ class AddionalTraficsView: UIView {
         self.addSubview(white_view_back)
         self.sendSubviewToBack(white_view_back)
         
-        self.addSubview(titleOne)
-        self.addSubview(balance)
+        self.addSubview(balanceLabel)
+        self.addSubview(balanceValue)
         self.addSubview(tab1)
         self.addSubview(tab2)
         self.addSubview(tab1Line)

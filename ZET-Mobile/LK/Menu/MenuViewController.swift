@@ -16,7 +16,7 @@ class MenuViewController: UIViewController {
     var alert = UIAlertController()
     
     var tableView: UITableView!
-    var tableData = [["Notification", "Notification-1", defaultLocalizer.stringForKey(key: "Notifications")], ["roaming", "roaming-1", defaultLocalizer.stringForKey(key: "Roaming")], ["Setting menu", "Setting-1", defaultLocalizer.stringForKey(key: "Settings")], ["Message", "Message-1", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", "Info Square-1", defaultLocalizer.stringForKey(key: "About")], ["Logout", "Logout-1", defaultLocalizer.stringForKey(key: "Exit")]]
+    var tableData = [["Notification", "Notification-1", defaultLocalizer.stringForKey(key: "NOTIFICATIONS")], ["roaming", "roaming-1", defaultLocalizer.stringForKey(key: "ROAMING")], ["Setting menu", "Setting-1", defaultLocalizer.stringForKey(key: "Settings")], ["Message", "Message-1", defaultLocalizer.stringForKey(key: "Feedback")], ["Info Square", "Info Square-1", defaultLocalizer.stringForKey(key: "About")], ["Logout", "Logout-1", defaultLocalizer.stringForKey(key: "Exit")]]
     var color = [UIColor.red, UIColor.green, UIColor.gray, UIColor.white, UIColor.yellow, UIColor.purple]
     
     var menuView = MenuView()
@@ -45,9 +45,7 @@ class MenuViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(MenuViewCell.self, forCellReuseIdentifier: reuseIdentifer)
         tableView.rowHeight = 50
-        //(UIScreen.main.bounds.size.height * 50) / 926
         tableView.estimatedRowHeight = 50
-        //(UIScreen.main.bounds.size.height * 50) / 926
         tableView.separatorStyle = .none
         tableView.frame = CGRect(x: 0, y: 20, width: UIScreen.main.bounds.size.width - 110, height: UIScreen.main.bounds.size.height - (UIScreen.main.bounds.size.height * 200) / 926)
         tableView.backgroundColor = contentColor

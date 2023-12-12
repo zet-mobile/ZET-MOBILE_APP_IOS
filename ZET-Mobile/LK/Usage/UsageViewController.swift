@@ -91,7 +91,9 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         view.addSubview(scrollView)
         
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: topPadding ?? 0, width: UIScreen.main.bounds.size.width, height: 60))
+        
         usage_view = UsageView(frame: CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.size.width), height: table_height + 500))
+
         
         toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Expenses")
         toolbar.icon_back.isHidden = true
@@ -119,16 +121,17 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
     func setupUsages() {
         
         UsageCollectionView.backgroundColor = .clear
-        UsageCollectionView.layer.cornerRadius = 10
-        UsageCollectionView.frame = CGRect(x: 0, y: 70, width: UIScreen.main.bounds.size.width, height: 240)
+        UsageCollectionView.layer.cornerRadius = 16
+        UsageCollectionView.frame = CGRect(x: 0, y: 70, width: UIScreen.main.bounds.size.width, height: 280)
         UsageCollectionView.delegate = self
         UsageCollectionView.dataSource = self
         scrollView.addSubview(UsageCollectionView)
+    
     }
     
     func setupHistoryUsagesTableView() {
         scrollView.addSubview(table)
-
+        
         if table_height == 0  {
             table.frame = CGRect(x: 0, y: 470, width: Int(UIScreen.main.bounds.size.width), height: 200)
         }
@@ -147,6 +150,7 @@ class UsageViewController: UIViewController, UIScrollViewDelegate {
         table.separatorStyle = .none
         table.isScrollEnabled = false
         table.showsVerticalScrollIndicator = false
+        table.allowsSelection = false
         table.backgroundColor = contentColor
         table.tableHeaderView?.backgroundColor = contentColor
       }
@@ -279,17 +283,17 @@ extension UsageViewController: UICollectionViewDelegateFlowLayout, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "usages", for: indexPath) as! UsageCollectionViewCell
         if usages_data.count != 0 {
-            cell.rez1.text = String(Int(Double(usages_data[indexPath.row][0])!))
-            cell.rez2.text = String(Int(Double(usages_data[indexPath.row][1])!))
-            cell.rez3.text = String(Int(Double(usages_data[indexPath.row][2])!))
-            cell.rez4.text = String(Int(Double(usages_data[indexPath.row][3])!))
-            cell.rez5.text = usages_data[indexPath.row][4]
+            cell.usageMinOut.text = String(Int(Double(usages_data[indexPath.row][0])!))
+            cell.usageMinIn.text = String(Int(Double(usages_data[indexPath.row][1])!))
+            cell.usageMb.text = String(Int(Double(usages_data[indexPath.row][2])!))
+            cell.usageSms.text = String(Int(Double(usages_data[indexPath.row][3])!))
+            cell.usageMoney.text = usages_data[indexPath.row][4]
             
-            cell.rez1.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez1.text!.count * 15) - 55, y: 0, width: cell.rez1.text!.count * 15, height: 45)
-            cell.rez2.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez2.text!.count * 15) - 55, y: 47, width: cell.rez2.text!.count * 15, height: 45)
-            cell.rez3.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez3.text!.count * 15) - 55, y: 94, width: cell.rez3.text!.count * 15, height: 45)
-            cell.rez4.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez4.text!.count * 15) - 55, y: 141, width: cell.rez4.text!.count * 15, height: 45)
-            cell.rez5.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.rez5.text!.count * 15) - 55, y: 188, width: cell.rez5.text!.count * 15, height: 45)
+       //     cell.usageMinOut.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.usageMinOut.text!.count * 15) - 55, y: 0, width: cell.usageMinOut.text!.count * 15, height: 45)
+        //    cell.usageMinIn.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.usageMinIn.text!.count * 15) - 55, y: 47, width: cell.usageMinIn.text!.count * 15, height: 45)
+       //     cell.usageMb.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.usageMb.text!.count * 15) - 55, y: 94, width: cell.usageMb.text!.count * 15, height: 45)
+       //     cell.usageSms.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.usageSms.text!.count * 15) - 55, y: 141, width: cell.usageSms.text!.count * 15, height: 45)
+       //     cell.usageMoney.frame = CGRect(x: Int(UIScreen.main.bounds.size.width) - (cell.usageMoney.text!.count * 15) - 55, y: 188, width: cell.usageMoney.text!.count * 15, height: 45)
         }
         
         return cell
@@ -406,6 +410,7 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
         let date = dateFormatter1.date(from: history_data[section][2])
         dateFormatter1.dateFormat = "dd-MM-yyyy"
         if date !=  nil {
+            // не переименовала так как исопользуется в других классах (например мобильный трансфер  детализация) а это делал Саша
             view.title.text = dateFormatter1.string(from: date!)
         }
        return view
@@ -423,16 +428,16 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "history_usage", for: indexPath) as! HistoryUsageViewCell
         
-        cell.titleOne.text = history_data[indexPath.section][0]
-        cell.titleThree.text = history_data[indexPath.section][1] + " " + defaultLocalizer.stringForKey(key: "tjs")
+        cell.serviceTitle.text = history_data[indexPath.section][0] 
+        cell.servicePrice.text = history_data[indexPath.section][1] + " " + defaultLocalizer.stringForKey(key: "tjs")
         
         if Double(history_data[indexPath.section][1])! > 0 {
-            cell.titleThree.textColor = UIColor(red: 0.15, green: 0.68, blue: 0.38, alpha: 1.00)
-            cell.titleTwo.text = defaultLocalizer.stringForKey(key: "Replenishment")
+            cell.servicePrice.textColor = UIColor(red: 0.15, green: 0.68, blue: 0.38, alpha: 1.00)
+            cell.descriptionOfCharge.text = defaultLocalizer.stringForKey(key: "Replenishment")
         }
         else {
-            cell.titleThree.textColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
-            cell.titleTwo.text = defaultLocalizer.stringForKey(key: "Charge")
+            cell.servicePrice.textColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00)
+            cell.descriptionOfCharge.text = defaultLocalizer.stringForKey(key: "Charge")
         }
         
         let dateFormatter1 = DateFormatter()
@@ -441,7 +446,7 @@ extension UsageViewController: UITableViewDelegate, UITableViewDataSource {
         dateFormatter1.dateFormat = "HH:mm"
         
         if date !=  nil {
-            cell.titleFour.text = dateFormatter1.string(from: date!)
+            cell.timeOfCharge.text = dateFormatter1.string(from: date!)
         }
         return cell
     }

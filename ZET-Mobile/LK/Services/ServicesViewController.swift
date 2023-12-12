@@ -25,8 +25,8 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     var x_pozition = 20
     var y_pozition = 100
     
-    let table = UITableView()
-    let table2 = UITableView()
+    let tableConnected = UITableView()
+    let tableAvailable = UITableView()
     
     let SliderView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -171,7 +171,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.scrollView == scrollView || table == scrollView || table2 == scrollView {
+        if self.scrollView == scrollView || tableConnected == scrollView || tableAvailable == scrollView {
             if scrollView.contentOffset.y > servicesView.tab1.frame.origin.y {
                 SliderView.isHidden = true
                 self.scrollView.contentOffset.y = 0
@@ -233,9 +233,9 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_active_services"))
-                            self.table.separatorStyle = .none
-                            self.table.backgroundView = emptyView
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.tableConnected.frame.width, height: self.tableConnected.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_active_services"))
+                            self.tableConnected.separatorStyle = .none
+                            self.tableConnected.backgroundView = emptyView
                             }
                         }
                         
@@ -255,9 +255,9 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
                         }
                         else {
                             DispatchQueue.main.async {
-                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.table.frame.width, height: self.table.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_available_services"))
-                            self.table.separatorStyle = .none
-                            self.table.backgroundView = emptyView
+                                emptyView = EmptyView(frame: CGRect(x: 0, y: 30, width: self.tableAvailable.frame.width, height: self.tableAvailable.frame.height), text: self.defaultLocalizer.stringForKey(key: "no_available_services"))
+                            self.tableAvailable.separatorStyle = .none
+                            self.tableAvailable.backgroundView = emptyView
                             }
                         }
                     }
@@ -503,7 +503,7 @@ class ServicesViewController: UIViewController, UIScrollViewDelegate {
 
 extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,   sizeForItemAt indexPath: IndexPath) -> CGSize {
        if collectionView == SliderView {
             return CGSize(width: UIScreen.main.bounds.size.width - 40, height: collectionView.frame.height * 0.75)
         }
@@ -521,7 +521,7 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
         }
 
     }
-    
+   
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == SliderView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID2, for: indexPath) as! SliderCollectionViewCell
@@ -537,32 +537,33 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabs", for: indexPath) as! TabCollectionServiceViewCell
             if indexPath.row == 0 {
-                table.register(ServicesConnectTableViewCell.self, forCellReuseIdentifier: "serv_connect")
-                table.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
-                table.delegate = self
-                table.dataSource = self
-                table.rowHeight = UITableView.automaticDimension
-                table.estimatedRowHeight = 160
-                table.alwaysBounceVertical = false
-                table.backgroundColor = contentColor
-                table.separatorColor = .lightGray
-                table.allowsSelection = false
-                table.showsVerticalScrollIndicator = false
-                cell.addSubview(table)
+                tableConnected.register(ServicesConnectTableViewCell.self, forCellReuseIdentifier: "serv_connect")
+                tableConnected.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+                tableConnected.delegate = self
+                tableConnected.dataSource = self
+                tableConnected.rowHeight = UITableView.automaticDimension
+                tableConnected.estimatedRowHeight = 140 // Примерное значение высоты ячейки
+                tableConnected.alwaysBounceVertical = false
+                tableConnected.backgroundColor = contentColor
+                tableConnected.separatorColor = .lightGray
+                tableConnected.allowsSelection = false
+                tableConnected.showsVerticalScrollIndicator = false
+                cell.addSubview(tableConnected)
             }
             else {
-                table2.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
-                table2.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
-                table2.delegate = self
-                table2.dataSource = self
-                table2.backgroundColor = contentColor
-                table2.separatorColor = .lightGray
-                table2.alwaysBounceVertical = false
-                table2.showsVerticalScrollIndicator = false
-                table2.allowsSelection = false
-                table2.estimatedRowHeight = 140
-                table2.rowHeight = UITableView.automaticDimension
-                cell.addSubview(table2)
+                tableAvailable.register(ServicesTableViewCell.self, forCellReuseIdentifier: cellID4)
+                tableAvailable.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.size.width - 20, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 110 + (topPadding ?? 0) + (bottomPadding ?? 0)))
+                tableAvailable.delegate = self
+                tableAvailable.dataSource = self
+                tableAvailable.backgroundColor = contentColor
+                tableAvailable.separatorColor = .lightGray
+                tableAvailable.alwaysBounceVertical = false
+                tableAvailable.allowsSelection = false
+                tableAvailable.showsVerticalScrollIndicator = false
+                tableAvailable.rowHeight = UITableView.automaticDimension
+                tableAvailable.estimatedRowHeight = 140 // Примерное значение высоты ячейки
+                tableAvailable.rowHeight = UITableView.automaticDimension
+                cell.addSubview(tableAvailable)
             }
             return cell
         }
@@ -610,30 +611,11 @@ extension ServicesViewController: UICollectionViewDelegateFlowLayout, UICollecti
         
     }
 }
-
+//for tables
 extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == table {
-            if connected_data[indexPath.row][4] == "" {
-                 return 170
-             }
-             else {
-                 return CGFloat(((connected_data[indexPath.row][4].count / 35) * 20) + 170)
-             }
-        }
-        else {
-            if availables_data[indexPath.row][6] == "" {
-                 return 120
-             }
-             else {
-                 return CGFloat(((availables_data[indexPath.row][6].count / 35) * 20) + 120)
-             }
-       }
-    }
-    
+    //amount of rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == table {
+        if tableView == tableConnected {
             return connected_data.count
         }
         else {
@@ -641,28 +623,25 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    //table of connected services
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == table {
+        
+        //table of connected services
+        
+        if tableView == tableConnected {
             let cell = tableView.dequeueReusableCell(withIdentifier: "serv_connect", for: indexPath) as! ServicesConnectTableViewCell
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
             
             if indexPath.row == connected_data.count - 1 {
               //  cell.separatorInset = UIEdgeInsets.init(top: -10, left: UIScreen.main.bounds.size.width, bottom: -10, right: 0)
             }
-            cell.titleOne.text = connected_data[indexPath.row][1]
-            cell.titleTwo.text = connected_data[indexPath.row][4]
-            cell.spisanie.text = defaultLocalizer.stringForKey(key: "Charge").uppercased() + " " + connected_data[indexPath.row][5]
             
-            if connected_data[indexPath.row][4] == "" {
-                cell.titleTwo.frame.size.height = 0
-            }
-            else {
-                cell.titleTwo.frame.size.height = CGFloat(((connected_data[indexPath.row][4].count / 35) * 20))
-            }
-            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
-            cell.spisanie.frame.origin.y = cell.titleTwo.frame.size.height + 100
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            cell.ic_image.frame.origin.y = cell.titleTwo.frame.size.height + 100
+            //setting values to cells
+            
+            cell.serviceTitle.text = connected_data[indexPath.row][1]
+            cell.serviceDesc.text = connected_data[indexPath.row][4]
+            cell.serviceCharge.text = defaultLocalizer.stringForKey(key: "Charge").uppercased() + " " + connected_data[indexPath.row][5]
             
             let cost: NSString = "\(connected_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
@@ -685,14 +664,7 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
             
             costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
-            bgColorView.layer.borderColor = UIColor.orange.cgColor
-            bgColorView.layer.borderWidth = 1
-            bgColorView.layer.cornerRadius = 10
-            cell.selectedBackgroundView = bgColorView
+            cell.servPrice.attributedText = costString
             
             cell.getButton.tag = indexPath.row
             cell.getButton.animateWhenPressed(disposeBag: disposeBag)
@@ -700,7 +672,10 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             
             return cell
         }
-        else {
+        else
+        {
+            //table of available services
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: cellID4, for: indexPath) as! ServicesTableViewCell
             
             cell.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -710,19 +685,9 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
             print(availables_data[indexPath.row][6])
-            cell.titleOne.text = availables_data[indexPath.row][1]
-            cell.titleTwo.text = availables_data[indexPath.row][6]
-            if availables_data[indexPath.row][6] == "" {
-                cell.titleTwo.frame.size.height = 0
-            }
-            else {
-                cell.titleTwo.frame.size.height = CGFloat(((availables_data[indexPath.row][6].count / 35) * 20))
-            }
-            
-            cell.titleThree.frame.origin.y =  cell.titleTwo.frame.size.height + 60
-            cell.sale_title.frame.origin.y = cell.titleTwo.frame.size.height + 80
-            cell.getButton.frame.origin.y = cell.titleTwo.frame.size.height + 70
-            
+            cell.serviceTitle.text = availables_data[indexPath.row][1]
+            cell.serviceDesc.text = availables_data[indexPath.row][6]
+       
             let cost: NSString = "\(availables_data[indexPath.row][2])" as NSString
             let range = (cost).range(of: cost as String)
             let costString = NSMutableAttributedString.init(string: cost as String)
@@ -744,22 +709,15 @@ extension ServicesViewController: UITableViewDataSource, UITableViewDelegate {
             titleString.addAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)], range: range2)
             
             costString.append(titleString)
-            cell.titleThree.attributedText = costString
-            cell.sale_title.frame.origin.x = CGFloat((cell.titleThree.text!.count * 7) + 80) ?? 150
+            cell.servicePrice.attributedText = costString
+            
             if availables_data[indexPath.row][5] != "" {
-                cell.sale_title.text = "-" + availables_data[indexPath.row][5] + "%"
-                cell.sale_title.isHidden = false
+                cell.discount.text = "-" + availables_data[indexPath.row][5] + "%"
+                cell.discount.isHidden = false
             }
             else {
-                cell.sale_title.isHidden = true
+                cell.discount.isHidden = true
             }
-            
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = (UserDefaults.standard.string(forKey: "ThemeAppereance") == "dark" ? UIColor(red: 0.25, green: 0.25, blue: 0.25, alpha: 1.00) : UIColor(red: 1.00, green: 0.98, blue: 0.94, alpha: 1.00))
-            bgColorView.layer.borderColor = UIColor.orange.cgColor
-            bgColorView.layer.borderWidth = 1
-            bgColorView.layer.cornerRadius = 10
-            cell.selectedBackgroundView = bgColorView
             
             cell.getButton.tag = indexPath.row
             cell.getButton.animateWhenPressed(disposeBag: disposeBag)

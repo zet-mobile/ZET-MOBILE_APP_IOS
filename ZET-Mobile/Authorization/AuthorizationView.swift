@@ -38,8 +38,6 @@ class AuthorizationView: UIView {
         textfield.layer.cornerRadius = 16
         textfield.layer.borderColor = colorLightDarkGray.cgColor
         textfield.layer.borderWidth = 1
-        /*textfield.placeholder = "Введите номер телефона"
-        textfield.font = UIFont.systemFont(ofSize: 15)*/
         return textfield
     }()
     

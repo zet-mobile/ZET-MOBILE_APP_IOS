@@ -165,7 +165,7 @@ class HomeView: UIView {
     private func setupView() {
         backgroundColor = .clear
         
-        let gray_view_back = UIView(frame: CGRect(x: 0, y: -360, width: UIScreen.main.bounds.size.width, height: 80))
+        let gray_view_back = UIView(frame: CGRect(x: 0, y: -760, width: UIScreen.main.bounds.size.width, height: 500))
         gray_view_back.backgroundColor = toolbarColor
         
         white_view_back = UIView(frame: CGRect(x: 0, y: -280, width: UIScreen.main.bounds.size.width, height: 440))
@@ -194,7 +194,6 @@ class HomeView: UIView {
         
         self.addSubview(titleOne)
         self.addSubview(titleTwo)
-        //self.addSubview(icon_more)
         self.addSubview(titleThree)
         self.addSubview(icon_more_services)
         self.addSubview(zero_help_view)

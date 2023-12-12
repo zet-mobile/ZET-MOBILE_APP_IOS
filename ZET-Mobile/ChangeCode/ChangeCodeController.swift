@@ -22,13 +22,9 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+     
         setupView()
         
-       // NotificationCenter.default.addObserver(self, selector: #selector(ChangeCodeController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-            // call the 'keyboardWillHide' function when the view controlelr receive notification that keyboard is going to be hidden
-       // NotificationCenter.default.addObserver(self, selector: #selector(ChangeCodeController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -51,8 +47,6 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
     @objc func keyboardWillShow(notification: NSNotification) {
 
       guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-
-        // if keyboard size is not available for some reason, dont do anything
         return
       }
 
@@ -96,11 +90,12 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
 
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+        //because boarder changes color , set is prog-lly
         change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
         change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
-        change_code_view.title2.text = ""
+        change_code_view.errorInfo.text = ""
+        //gray backgroundView is out of NSLayout
         change_code_view.gray_back.frame.size.height = 60
         
         let tag = textField.tag
@@ -151,15 +146,29 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
         
         view.backgroundColor = contentColor
   
+        view.backgroundColor = contentColor
+  
         toolbar = TarifToolbarView(frame: CGRect(x: 0, y: (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: 60))
-
         toolbar.backgroundColor = contentColor
-        
-        
         change_code_view = ChangeView(frame: CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+       
+        // Создание UIView для заднего фона
+        //    let backgroundView = UIView()
+        //    backgroundView.backgroundColor = UIColor.green
+        //    backgroundView.layer.cornerRadius = 20 // Задаем радиус закругления углов
+        //     backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        //  change_code_view.addSubview(backgroundView)
+        //
+        // Добавление констрейнтов для backgroundView
+        //   NSLayoutConstraint.activate([
+        //        backgroundView.leadingAnchor.constraint(equalTo: change_code_view.leadingAnchor, constant: 20), // Отступ слева
+        //        backgroundView.trailingAnchor.constraint(equalTo: change_code_view.trailingAnchor, constant: -20), // Отступ справа
+        //       backgroundView.topAnchor.constraint(equalTo: change_code_view.confirm_code.bottomAnchor, constant: 30), // Отступ сверху
+        //       backgroundView.heightAnchor.constraint(equalToConstant: 110) // Отступ снизу
+        //    ])
+    
         
         change_code_view.button.addTarget(self, action: #selector(setPassword), for: .touchUpInside)
-        
         change_code_view.new_code.delegate = self
         change_code_view.old_code.delegate = self
         change_code_view.confirm_code.delegate = self
@@ -171,23 +180,28 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
         view.addSubview(change_code_view)
         
         print(UserDefaults.standard.string(forKey: "PinCode"))
+        
+        //this part for showing up afer autorisation
         if UserDefaults.standard.string(forKey: "PinCode") == "" || UserDefaults.standard.string(forKey: "PinCode") == nil {
+           
             toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Set_password")
             toolbar.icon_back.isHidden = true
             
-            change_code_view.titleOne.text =  defaultLocalizer.stringForKey(key: "password_code")
-            change_code_view.titleTwo.text =  defaultLocalizer.stringForKey(key: "Re-enter_password")
-            change_code_view.titleTwo.frame.origin.y = 110
-            change_code_view.new_code.frame.origin.y = 140
+            change_code_view.oldCodeLabel.text =  defaultLocalizer.stringForKey(key: "password_code")
+            change_code_view.newCodeLabel.text =  defaultLocalizer.stringForKey(key: "Re-enter_password")
+            // out of NSLayout
             change_code_view.gray_back.frame.origin.y = 220
             change_code_view.gray_back.frame.size.height = 60
-            change_code_view.titleThree.isHidden = true
+            change_code_view.codeConfirmLabel.isHidden = true
             change_code_view.confirm_code.isHidden = true
             change_code_view.button.setTitle(defaultLocalizer.stringForKey(key: "Set_password"), for: .normal)
+            // out of NSLayout
             change_code_view.button.frame.origin.y = UIScreen.main.bounds.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 130
             change_code_view.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
         }
-        else {
+        else
+        {
+         //this part for showing up in "Settings"
             toolbar.number_user_name.text = defaultLocalizer.stringForKey(key: "Change_PIN")
             toolbar.icon_back.addTarget(self, action: #selector(goBack), for: UIControl.Event.touchUpInside)
             let back = UITapGestureRecognizer(target: self, action: #selector(goBack))
@@ -195,16 +209,16 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
             toolbar.addGestureRecognizer(back)
             toolbar.icon_back.isHidden = false
             
-            change_code_view.titleOne.text = defaultLocalizer.stringForKey(key: "current_PIN")
-            change_code_view.titleTwo.text = defaultLocalizer.stringForKey(key: "New_PIN")
-            change_code_view.titleThree.text = defaultLocalizer.stringForKey(key: "Re-enter_PIN")
-            change_code_view.titleTwo.frame.origin.y = 110
-            change_code_view.new_code.frame.origin.y = 140
+            change_code_view.oldCodeLabel.text = defaultLocalizer.stringForKey(key: "current_PIN")
+            change_code_view.newCodeLabel.text = defaultLocalizer.stringForKey(key: "New_PIN")
+            change_code_view.codeConfirmLabel.text = defaultLocalizer.stringForKey(key: "Re-enter_PIN")
+            // out of NSLayout
             change_code_view.gray_back.frame.origin.y = 330
             change_code_view.gray_back.frame.size.height = 60
-            change_code_view.titleThree.isHidden = false
+            change_code_view.codeConfirmLabel.isHidden = false
             change_code_view.confirm_code.isHidden = false
             change_code_view.button.setTitle(defaultLocalizer.stringForKey(key: "Change_PIN"), for: .normal)
+            // out of NSLayout
             change_code_view.button.frame.origin.y = UIScreen.main.bounds.size.height - ContainerViewController().tabBar.frame.size.height - (bottomPadding ?? 0) - (topPadding ?? 0) - 130
             change_code_view.frame = CGRect(x: 0, y: 60 + (topPadding ?? 0), width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height - (ContainerViewController().tabBar.frame.size.height + 60 + (topPadding ?? 0) + (bottomPadding ?? 0)))
         }
@@ -218,78 +232,80 @@ class ChangeCodeController: UIViewController, UIScrollViewDelegate, UITextFieldD
         }
         print(change_code_view.old_code.text)
         print(change_code_view.new_code.text)
-        change_code_view.gray_back.frame.size.height = 110
-        change_code_view.title1.frame.origin.y = 20
+        
+        // out of NSLayout
+        change_code_view.gray_back.frame.size.height = 100
         
         if UserDefaults.standard.string(forKey: "PinCode") == "" || UserDefaults.standard.string(forKey: "PinCode") == nil {
-            
+            //this part for showing up afer autorisation
             change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             
             if change_code_view.old_code.text?.count != 4 {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
             else
             if change_code_view.new_code.text?.count != 4 && change_code_view.old_code.text != "" {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_confirmation_password")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_confirmation_password")
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
             else
             if change_code_view.old_code.text != change_code_view.new_code.text {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
             else
             if change_code_view.old_code.text == change_code_view.new_code.text && change_code_view.new_code.text != "" && change_code_view.old_code.text != "" {
-                change_code_view.title2.text = "✓  " + defaultLocalizer.stringForKey(key: "Password_saved!")
-                change_code_view.title2.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
+                change_code_view.errorInfo.text = "✓  " + defaultLocalizer.stringForKey(key: "Password_saved!")
+                change_code_view.errorInfo.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                 UserDefaults.standard.set(String(change_code_view.new_code.text!), forKey: "PinCode")
                 //UserDefaults.standard.set(true, forKey: "BiometricEnter")
                 goHome()
             }
         }
-        else {
+        else
+        { //this part for showing up in "Settings"
             change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             
             if change_code_view.old_code.text?.count != 4 || change_code_view.old_code.text != UserDefaults.standard.string(forKey: "PinCode") {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "enter_current_passcode")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "enter_current_passcode")
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
             else
             if change_code_view.new_code.text?.count != 4 {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
             }
             else
             if change_code_view.old_code.text == change_code_view.new_code.text {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
             }
             else
             if change_code_view.confirm_code.text?.count != 4  && change_code_view.new_code.text != "" {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_four-digit_password")
                 change_code_view.confirm_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
                 change_code_view.old_code.layer.borderColor = UIColor(red: 0.741, green: 0.741, blue: 0.741, alpha: 1).cgColor
             }
             else
             if change_code_view.new_code.text != change_code_view.confirm_code.text {
-                change_code_view.title2.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
+                change_code_view.errorInfo.text = "✖︎  " + defaultLocalizer.stringForKey(key: "Error_password_again")
                 change_code_view.new_code.layer.borderColor = UIColor(red: 0.92, green: 0.34, blue: 0.34, alpha: 1.00).cgColor
             }
             else
             if change_code_view.old_code.text == UserDefaults.standard.string(forKey: "PinCode") && change_code_view.new_code.text == change_code_view.confirm_code.text && change_code_view.new_code.text != "" && change_code_view.old_code.text != "" && change_code_view.confirm_code.text != "" &&  change_code_view.new_code.text?.count == 4 &&  change_code_view.confirm_code.text?.count == 4 {
                 
-                change_code_view.title2.text = "✓  " + defaultLocalizer.stringForKey(key: "Password_saved!")
-                change_code_view.title2.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
+                change_code_view.errorInfo.text = "✓  " + defaultLocalizer.stringForKey(key: "Password_saved!")
+                change_code_view.errorInfo.textColor = UIColor(red: 0.37, green: 0.76, blue: 0.36, alpha: 1.00)
                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 01.0) { [self] in
                     guard let window = UIApplication.shared.keyWindow else {
