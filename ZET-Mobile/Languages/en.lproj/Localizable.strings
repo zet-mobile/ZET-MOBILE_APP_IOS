@@ -343,3 +343,88 @@
 
 "help_title" = "Support";
 "help_title_content" = "Map of offices, hotline, links to our instant messengers – now  \"everything at hand\"!";
+
+"userOfferDocumentTitle" = "User Agreement";
+"userOfferDocument" = "Public offer
+Agreement on the use of the WEB-page or Application of the Operator «ZET-MOBILE» on the website of LLC «TAKOM» (ZET-MOBILE)
+
+1. Terms and definitions
+1.1. Operator - Limited Liability Company «TAKOM» (trademark ZET-MOBILE).
+1.2. Subscriber («ZET-Mobile Subscriber») - an individual who has entered into an agreement on the provision of communication services with the Operator (hereinafter referred to as the «Subscriber Agreement»).
+The subscriber is uniquely identified by the subscriber number.
+1.3. Application - a mobile application «ZET-MOBILE» (hereinafter referred to as the Application), installed on a subscriber device, allowing the Subscriber to access his personal data on his mobile device, connect / disconnect the Operator's services, and pay for these services from the balance of his number. The application allows you to manage services and services through the WEB-interface / WEB Api using Login and Password of the Personal Account. Personal account - a WEB-page or Application of the Operator, which provides an opportunity to register and use self-service services. The Personal Account can be used by the Subscriber only to meet their needs and interests and cannot be used for commercial purposes.
+1.4. Operator's website - https://my.zet-mobile.com
+1.5. Login - subscriber number allocated to the Subscriber under the Subscription Agreement
+1.6. Password — an alphanumeric code for accessing the Personal Account.
+1.7. Authorization in the Personal Account is the entry by the Subscriber of the Login and Password from the Personal Account for the purpose of using self-service services connected by the Subscriber within the Personal Account.
+1.8. Acceptance - acceptance by the Subscriber of the terms of the Agreement on the use of the WEB-page or Application of the Operator «ZET-MOBILE» on the website of LLC «TAKOM» (ZET-MOBILE) (hereinafter referred to as the «Agreement») by registering by the Subscriber performing any sequence of actions specified in clause 2.3 of Agreement.
+
+2. Subject of the Agreement.
+2.1. As part of the Personal Account on the Operator's WEB page or Application, the Operator offers and provides the Subscriber with the opportunity to register and use the services that were connected by the Subscriber through the Personal Account (or earlier in accordance with the rules for connecting a particular service/service), on the terms that are the subject of this Agreement, which is considered by the Operator as a public offer in accordance with Art. 469 of the Civil Code of the Republic of Tajikistan.
+2.2. Registration in the Personal Account is carried out on the basis of entering the Login and Password on the WEB-page or the Operator's Application. Registration in a specific service is carried out in accordance with the rules of the corresponding service. To use a specific service after registration, authorization in the Personal Account is sufficient.
+2.3. To register in the Personal Account, the Subscriber must perform the following sequence of implicit actions:
+- read the terms of this Agreement,
+- click the «I accept the terms of the agreement» button
+- enter the login and password given to the Subscriber in the appropriate fields.
+2.4. Acceptance (acceptance by the Subscriber of the terms of this Agreement) is carried out by the Subscriber performing the sequence of actions specified in clause 2.3 of present agreement.
+2.5. The fact of the Subscriber's Registration in the Personal Account means:
+- The Subscriber is familiar with the terms of the Agreement;
+- full and unconditional acceptance (acceptance) by the Subscriber of the terms of this Agreement from the relevant moment in time, in accordance with Article 470 of the Civil Code of the Republic of Tajikistan;
+- The Agreement has entered into force and has become binding on the Subscriber.
+2.6. By registering, the Subscriber confirms that he is fluent in Russian and that the drafting of the Agreement in Russian is acceptable to him.
+
+3. Rights and obligations of the parties
+3.1. The operator is obliged:
+3.1.1. Provide the Subscriber with access to the Personal Account, in accordance with clause 2.1., clause 2.2 of present agreement.
+3.1.2. Do not disclose, transfer information to third parties about the Subscriber and his operations in the Personal Account, except as otherwise provided by the current legislation of the Republic of Tajikistan.
+3.2. The operator has the right:
+3.2.1. Refuse to provide the Subscriber with access to the Personal Account, in case of violation by the Subscriber of his obligations.
+3.2.2. Deny the Subscriber registration in the Personal Account in case of repeated incorrect entering a password.
+3.2.3. Restrict access to the Personal Account (including using automated systems) in order to implement the obligations of the Operator to protect information established by the current legislation of the Republic of Tajikistan.
+3.2.4. Make changes to the Personal Account in connection with the introduction of new products and services, as well as provide access to new services without prior notice to the Subscriber.
+3.2.5. At any time, unilaterally change the terms of this Agreement.
+3.2.6. If the Operator suspects the Subscriber of committing illegal actions, including: distribution of spam, malware, other acts that violate the terms of this Agreement or the requirements of the current legislation of the Republic of Tajikistan, apply to the relevant state authorities with a statement and / or block and / or delete subscriber's access to the Personal Account
+3.3. The operator is not responsible:
+3.3.1. For the consequences of unauthorized use of the Personal Account by third parties, which happened through no fault of the Operator.
+3.3.2. For direct or indirect damage incurred by the Subscriber as a result of errors, omissions, interruptions in work, changes in functions, defects, delays in work that occurred through no fault of the Operator.
+3.4. The subscriber is obliged:
+3.4.1. To provide Internet access at its own expense, as well as to configure and protect against unauthorized use of its equipment, and to respond promptly when cases of such use are detected.
+3.4.2. Be responsible for the safety of the Password to the Personal Account set by the Subscriber and for losses that may arise due to unauthorized use of the Password.
+3.4.3. Accept full responsibility for all requests and actions taken through the Personal Account that took place after the Subscriber registered in the Personal Account under his account and password.
+3.4.4. Accept full responsibility for any violation of the obligations established by this Agreement, as well as for all consequences of such violations (including any loss or damage that the Operator may suffer).
+3.4.5. Do not use the services of the Personal Account to perform any actions that are contrary to the current legislation of the Republic of Tajikistan and interfere with the subscribers of the Operator and other telecom operators.
+3.5. The subscriber has the right:
+3.5.1. Use the Personal Account in accordance with the terms of this Agreement.
+3.5.2. In the event that the Subscriber has claims, wishes related to the provision of services of the Personal Account, issue a corresponding application.
+
+4. Terms of use
+4.1. The personal account allows the Subscriber to:
+4.1.1. Connect / disconnect and use the services of the Operator. The full list of services can be found on the Operator's website;
+4.1.2. Pay for the Operator's services connected from the Personal Account. In this case, payment is made by debiting the appropriate funds in the amount of the cost of the service from the electronic account of the Subscriber's subscriber number.
+4.1.3. Top up your electronic account.
+4.2. Conditions for using the services specified in clause 4.1. of this Agreement, the cost and conditions of their tariffication are indicated on the Operator's Website.
+When ordering these services, the Subscriber is considered to have read and agreed with the rules for their use, the cost and procedure for their tariffication.
+4.3. The application provides for the possibility of obtaining details of the Subscriber's activity by subscriber number within a specified period, which cannot be more than 180 calendar days. Detailing is provided at the request of the Subscriber.
+4.4. Details include information about calls made for the period, date and time of the call, information about outgoing SMS messages, the total volume of outgoing Internet traffic, as well as the total amount of charges.
+4.5. When making a Request, the Subscriber may specify an e-mail address for delivery of information on the Request. The Subscriber is responsible for the correctness, accuracy and completeness of the provided e-mail address.
+4.6. The provision of details through the Personal Account is carried out by the Operator free of charge.
+5. Limitations and Liability
+5.1. The Subscriber undertakes not to use the Personal Account to perform any actions that are contrary to the current legislation of the Republic of Tajikistan.
+5.2. When using the Personal Account, the Subscriber is prohibited from:
+- register as a Subscriber on behalf of or instead of another person (“false account”), at the same time, registration on behalf and on behalf of another person is possible, subject to obtaining the necessary powers in the manner and form provided for by the legislation of the Republic of Tajikistan;
+- in any way, including, but not limited to, by deception, breach of trust, hacking, try to gain access to the login and password of another Subscriber;
+- carry out illegal collection and processing of personal data of other persons;
+5.3. The Subscriber undertakes to take appropriate measures to prevent unfair use of the Subscriber's Personal Account by third parties, as well as promptly respond if such use is detected.
+5.4. The Operator is not responsible and does not compensate for losses incurred due to unauthorized use of the Subscriber's Personal Account by third parties.
+5.5. The Subscriber is responsible for the actions of third parties using the subscriber's number to use the Subscriber's Personal Account.
+5.6. Under no circumstances shall the Operator be liable for direct or indirect damage, interruptions in work, changes in functions, defects, delays in work that occurred through no fault of the Operator.
+5.7. The functions of the Personal Account are available to the Subscriber in full only if the Subscriber has access to the Internet in accordance with the terms of the Subscription Agreement and the tariff plan chosen by the Subscriber.
+
+6. Other terms
+6.1. The performance by the Subscriber of the actions provided for by this Agreement to start using the Personal Account is considered the full and unconditional consent of the Subscriber with this Agreement and the restrictions contained therein.
+6.2. The Operator reserves the right to change and/or supplement these Terms at any time. Further use of the Personal Account by the Subscriber after any such changes means the Subscriber's consent to such changes and / or additions.All changes, additions, annexes to this Agreement are an integral part of it and are binding from the moment they are published on the Operator's Website, unless otherwise specified by the Operator.
+6.3. In all other respects that are not expressly provided for by this Agreement, the Subscriber and the Operator are guided by the Subscription Agreement, the information posted on the Operator's website, as well as the current legislation of the Republic of Tajikistan.
+6.4. This Agreement shall enter into force for the Subscriber from the moment of authorization (registration) and is valid for an indefinite period or until the Operator makes changes and publishes the Agreement on the Operator's Website in a new edition.
+6.5. The current version of the Agreement is located at the following address: my.zet-mobile.com
+ "
+;

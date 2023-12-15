@@ -573,10 +573,10 @@ extension ReplyToZetViewController: ImagePickerDelegate {
                 let icon1 = UIButton()
                 icon1.setImage(UIImage(named: "correct"), for: .normal)
                 icon1.frame = CGRect(x: 20, y: y_pozition, width: 20, height: 20)
-              //  icon1.translatesAutoresizingMaskIntoConstraints = false
-             //   icon1.leadingAnchor.constraint(equalTo: reply_view.backgroundView.leadingAnchor, constant: 25).isActive = true
-             //   icon1.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-             //   icon1.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+               // icon1.translatesAutoresizingMaskIntoConstraints = false
+               // icon1.leadingAnchor.constraint(equalTo: reply_view.backgroundView.leadingAnchor, constant: 25).isActive = true
+              //  icon1.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+               // icon1.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
              
                 icon1.tag = screen_i
                 
